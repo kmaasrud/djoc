@@ -1,8 +1,9 @@
 import os
-import subprocess
+import sys
 import requests
 import tarfile
 from math import prod
+
 
 def program_exists(program):
     for path in os.environ["PATH"].split(os.pathsep):
@@ -11,9 +12,11 @@ def program_exists(program):
             return True
     return False
 
+
 def download_tectonic():
     TECTONIC_VER = "0.3.3"
     print(f"Downloading tectonic AppImage {TECTONIC_VER} from GitHub...")
+
     if os.name == "nt":
         pass #TODO
     else:
@@ -29,9 +32,11 @@ def download_tectonic():
 
     print("Tectonic downloaded!")
     
+
 def download_pandoc():
     PANDOC_VER = "2.11.3.1"
     print(f"Downloading pandoc {PANDOC_VER} from GitHub...")
+
     if os.name == "nt":
         pass #TODO
     else:
@@ -50,7 +55,8 @@ def download_pandoc():
 def download_pandoc_xnos():
     os.system("pip install pandoc-fignos pandoc-eqnos pandoc-tablenos pandoc-secnos")
 
-def ensure_program_availability():
+
+def download_dependencies():
     if not program_exists("pandoc"):
         download_pandoc()
 
@@ -62,7 +68,9 @@ def ensure_program_availability():
     if not check:
         download_pandoc_xnos()
         
+
 def check_program_availability():
-    for prog in ["pandoc", "tectonicu", "pandoc-xnos", "pandoc-fignos", "pandoc-eqnos", "pandoc-tablenos", "pandoc-secnos"]:
+    for prog in ["pandoc", "tectonic", "pandoc-xnos", "pandoc-fignos", "pandoc-eqnos", "pandoc-tablenos", "pandoc-secnos"]:
         if not program_exists(prog):
-            print(f"ERROR: {prog} does not exist or is not in PATH. Run 'kodb --install-dependencies' to install required dependencies.")
+            print(f"ERROR: {prog} does not exist or is not in PATH. Run 'sudo kodb --download-dependencies' to install required dependencies.")
+            sys.exit()
