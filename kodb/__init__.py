@@ -1,8 +1,11 @@
 import sys
 import os
+
 from kodb.download import check_program_availability, download_dependencies
 from kodb.build import build_document
 from kodb.make_project import make_project
+from kodb.add import add_section
+
 
 def main():
     if len(sys.argv) == 1:
@@ -25,9 +28,16 @@ def main():
             make_project(sys.argv[2])
         except IndexError:
             print("A directory name is required as an argument. Run this command like 'kodb new <name>'.")
+            
+    elif sys.argv[1] == "add":
+        try:
+            add_section(sys.argv[2])
+        except IndexError:
+            print("Add the name of the section you want to add. Run this command like 'kodb add <section name>'")
 
     elif sys.argv[1] == "--download-dependencies":
         download_dependencies()
         
+
 def help():
     print("""Welcome to kodb!""")
