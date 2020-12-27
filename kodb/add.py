@@ -1,30 +1,26 @@
 import os
+from kodb.utils import find_root
 
 
-def add_section(name):
+def add_section(name, index=None):
     # Find the kodb project root by searching for a directory containing 'src'
     # This might fail if multiple 'src' directories exist in the project, but since
     # this tool is opinionated, and I keep my code and document source separated, this
     # should be fine.
-    root_path = os.getcwd()
-    for _ in range(8):
-        if os.path.isdir(os.path.join(root_path, "src")):
-            break
-        root_path = os.path.dirname(root_path)
+    root_path = find_root()
         
     markdown_secs = []
-    for i, file in enumerate(os.listdir(os.path.join(root_path, "src"))):
-        sec_index, sec_name = file.replace(".md", "").split("_")
-        markdown_secs.append({"i": int(sec_index), "name": sec_name, "path": os.path.join(root_path, "src", file)})
+    # Loop over existing sections and add to list
+    if index:
+        for file in os.listdir(os.path.join(root_path, "src")):
+            sec_index, sec_filename = file.split("_")
+            # If file has index higher than the one we want to insert, increase its index by one
+            if int(sec_index) >= int(index):
+                new_filename = os.path.join(root_path, "src", str(int(sec_index) + 1).zfill(2) + "_" + sec_filename)
+                os.rename(os.path.join(root_path, "src", file), new_filename)
         
-    new_i = len(markdown_sources)
+    new_i = index if index else len(os.listdir(os.path.join(root_path, "src")))
     new_path = os.path.join(root_path, "src", str(new_i).zfill(2) + "_" + name + ".md")
-    markdown_secs.append({"i": new_i, "name": name, "path": new_path})
     
-    for sec in markdown_secs:
-        create_unless_exists(sec)
-    
-
-def create_unless_exists(section_dict):
-    if not os.path.isfile(section_dict["path"]):
-        with open(section_dict["path"], "w") as f: f.write("")
+    if not os.path.isfile(new_path):
+        with open(new_path, "w") as f: f.write(f"# {name.capitalize()}\n\n")

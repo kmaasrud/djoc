@@ -31,9 +31,12 @@ def main():
             
     elif sys.argv[1] == "add":
         try:
-            add_section(sys.argv[2])
+            add_section(sys.argv[2], sys.argv[3])
         except IndexError:
-            print("Add the name of the section you want to add. Run this command like 'kodb add <section name>'")
+            try:
+                add_section(sys.argv[2])
+            except IndexError:
+                print("Add the name of the section you want to add. Run this command like 'kodb add <section name>'")
 
     elif sys.argv[1] == "--download-dependencies":
         download_dependencies()
