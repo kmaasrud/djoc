@@ -72,5 +72,6 @@ def download_dependencies():
 def check_program_availability():
     for prog in ["pandoc", "tectonic", "pandoc-xnos", "pandoc-fignos", "pandoc-eqnos", "pandoc-tablenos", "pandoc-secnos"]:
         if not program_exists(prog):
-            print(f"ERROR: {prog} does not exist or is not in PATH. Run 'sudo kodb --download-dependencies' to install required dependencies.")
+            print(f"""ERROR: {prog} does not exist on this system or is not in PATH. Preferably download from the original source, or
+alternatively run 'sudo kodb --download-dependencies' to install required dependencies (may have varying success).""")
             sys.exit()
