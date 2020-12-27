@@ -1,4 +1,4 @@
-# :page_facing_up: `kodb` - [kmaasrud's](https://github.com/kmaasrud) Opinionated Document Builder
+# :page_facing_up: KODB - [kmaasrud's](https://github.com/kmaasrud) Opinionated Document Builder
 
 This is my personal and (extremely) opinionated document builder script, built around my personal document creation workflow.
 
