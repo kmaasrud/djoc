@@ -23,8 +23,8 @@ def build_document():
     command.append(os.path.join(root_path, "main.tex"))
 
     # Use metadatafile if it exists
-    if os.path.isfile(os.path.join(root_path, "meta.yaml")):
-        command.append(f"--metadata-file={os.path.join(root_path, 'meta.yaml')}")
+    if os.path.isfile(os.path.join(root_path, "kodb.yaml")):
+        command.append(f"--metadata-file={os.path.join(root_path, 'kodb.yaml')}")
         
     # Use pandoc-xnos
     command.append("--filter")

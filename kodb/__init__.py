@@ -43,4 +43,6 @@ def main():
         
 
 def help():
-    print("""Welcome to kodb!""")
+    print("""Welcome to kodb, a tool which will help you build documents quickly and easily!
+
+To start, create a document in the current directory with 'kodb init' or create a project directory with 'kodb new <project name>.'""")
