@@ -51,6 +51,11 @@ def main():
     elif sys.argv[1] == "--download-dependencies":
         download_dependencies()
         
+    elif sys.argv[1] == "--default-doc-structure":
+        from kodb.add import add_section
+        for section in ["abstract", "introduction", "theory", "results", "discussion", "conclusion", "references", "appendix"]:
+            add_section(section)
+        
     elif sys.argv[1]:
         print(f"'{sys.argv[1]}' is not a recognized command, run 'kodb --help' for instructions.")
         

@@ -24,4 +24,10 @@ def add_section(name, index=None):
     new_path = os.path.join(root_path, "src", str(new_i).zfill(2) + "_" + name + ".md")
     
     if not os.path.isfile(new_path):
-        with open(new_path, "w") as f: f.write(f"# {name.capitalize()}\n\n")
+        with open(new_path, "w") as f:
+            if name.lower() == "abstract":
+                f.write("\\begin{abstract}\n\n\\end{abstract}") 
+            elif name.lower() == "appendix":
+                f.write("\\clearpage\n\\appendix\n")
+            else:
+                f.write(f"# {name.capitalize()}\n\n")
