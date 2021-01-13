@@ -2,9 +2,7 @@ import sys
 import os
 
 from kodb.download import check_program_availability, download_dependencies
-from kodb.build import build_document
 from kodb.make_project import make_project
-from kodb.add import add_section
 
 
 def main():
@@ -16,6 +14,7 @@ def main():
         help()
 
     elif sys.argv[1] == "build":
+        from kodb.build import build_document
         check_program_availability()
         build_document()
 
@@ -30,6 +29,7 @@ def main():
             print("A directory name is required as an argument. Run this command like 'kodb new <name>'.")
             
     elif sys.argv[1] == "add":
+        from kodb.add import add_section
         try:
             add_section(sys.argv[2], sys.argv[3])
         except IndexError:
@@ -37,9 +37,22 @@ def main():
                 add_section(sys.argv[2])
             except IndexError:
                 print("Add the name of the section you want to add. Run this command like 'kodb add <section name>'")
+                
+    elif sys.argv[1] == "switch":
+        from kodb.switch_and_move import switch_sections
+        try:
+            switch_sections(sys.argv[2], sys.argv[3])
+        except IndexError:
+            print("To switch the position of two sections, please include the index or name of the two sections you want to switch place.")
+            
+    elif sys.argv[1] == "move":
+        pass
 
     elif sys.argv[1] == "--download-dependencies":
         download_dependencies()
+        
+    elif sys.argv[1]:
+        print(f"'{sys.argv[1]}' is not a recognized command, run 'kodb --help' for instructions.")
         
 
 def help():

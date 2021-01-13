@@ -13,7 +13,8 @@ def add_section(name, index=None):
     # Loop over existing sections and add to list
     if index:
         for file in os.listdir(os.path.join(root_path, "src")):
-            sec_index, sec_filename = file.split("_")
+            sec = file.split("_")
+            sec_index, sec_filename = (sec[0], "_".join(sec[1:]))
             # If file has index higher than the one we want to insert, increase its index by one
             if int(sec_index) >= int(index):
                 new_filename = os.path.join(root_path, "src", str(int(sec_index) + 1).zfill(2) + "_" + sec_filename)
