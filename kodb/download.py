@@ -58,10 +58,10 @@ def download_pandoc_xnos():
 
 def download_dependencies():
     if not program_exists("pandoc"):
-        download_pandoc()
+        print("Pandoc does not have an automatic installation implemented  yet. Follow the installation instructions on the Pandoc website.")
 
     if not program_exists("tectonic"):
-        download_tectonic()
+        print("Tectonic does not have an automatic installation implemented  yet. Follow the installation instructions on the Tectonic website.")
 
     check = prod([program_exists(prog) for prog in [
         "pandoc-xnos", "pandoc-fignos", "pandoc-eqnos", "pandoc-tablenos", "pandoc-secnos"]])
@@ -72,6 +72,6 @@ def download_dependencies():
 def check_program_availability():
     for prog in ["pandoc", "tectonic", "pandoc-xnos", "pandoc-fignos", "pandoc-eqnos", "pandoc-tablenos", "pandoc-secnos"]:
         if not program_exists(prog):
-            print(f"""ERROR: {prog} does not exist on this system or is not in PATH. Preferably download from the original source, or
-alternatively run 'sudo kodb --download-dependencies' to install required dependencies (may have varying success).""")
+            print(f"""ERROR: {prog} does not exist on this system or is not in PATH. Run 'sudo kodb --download-dependencies'
+to install required dependencies (may have varying success).""")
             sys.exit()

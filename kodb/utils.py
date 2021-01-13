@@ -8,3 +8,10 @@ def find_root():
         root_path = os.path.dirname(root_path)
         
     raise FileNotFoundError
+
+def cwd_is_proj():
+    try:
+        find_root()
+        return True
+    except FileNotFoundError:
+        return False
