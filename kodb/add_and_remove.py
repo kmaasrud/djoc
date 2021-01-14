@@ -13,9 +13,11 @@ def add_section(name, index=None):
     src_path = os.path.join(find_root(), "src")
 
     src_files = []
-    for file in os.listdir(os.path.join(root_path, "src")):
+    for file in os.listdir(src_path):
         sec = file.split("_")
         src_files.append({"index": int(sec[0]), "name": "_".join(sec[1:]), "path": os.path.join(src_path, file)})
+        
+    src_files.sort(key=lambda x: x["index"])
         
     if index:
         try:
@@ -33,14 +35,14 @@ def add_section(name, index=None):
                 
         new_i = index
     else:
+        new_i = 0
         for i, file in enumerate(src_files):
             if i != file["index"]:
                 new_i = i
                 break
-        else:
             new_i = i + 1
         
-    new_path = os.path.join(root_path, "src", str(new_i).zfill(2) + "_" + name + ".md")
+    new_path = os.path.join(src_path, str(new_i).zfill(2) + "_" + name + ".md")
     
     if not os.path.isfile(new_path):
         with open(new_path, "w") as f:
