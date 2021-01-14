@@ -2,10 +2,10 @@ import os
 import sys
 from kodb.utils import find_root, find_section, style
 
-add_usage = f"""Usage:
+ADD_USAGE = f"""Usage:
     {style('kodb add <section name> <section position (optional)>', 'bold')}"""
     
-remove_usage = f"""Usage:
+REMOVE_USAGE = f"""Usage:
     {style('kodb remove <section name or index>', 'bold')}"""
 
 
@@ -24,12 +24,12 @@ def add_section(name, index=None):
             index = int(index)
         except ValueError:
             print(f"{style('ERROR', ['red', 'bold'])}: The optional argument <section position> must be a parsable integer.")
-            print("\n" + add_usage)
+            print("\n" + ADD_USAGE)
             sys.exit()
 
         for file in src_files:
             if file["index"] >= index:
-                new_filename = os.path.join(src_path, str(int(file["index"]) + 1).zfill(2) + "_" + file["name"])
+                new_filename = os.path.join(src_path, str(file["index"] + 1).zfill(2) + "_" + file["name"])
                 os.rename(file["path"], new_filename)
                 file["path"] = new_filename
                 
@@ -54,6 +54,15 @@ def add_section(name, index=None):
                 f.write(f"# {name.capitalize()}\n\n")
                 
 def remove_section(sec):
-    sec_path = find_section(sec)
-    os.remove(sec_path)
-
+    src_path = os.path.join(find_root(), "src")
+    remove_path = find_section(sec)
+    renumber = False
+    for file in sorted(os.listdir(src_path)):
+        if renumber:
+            sec = file.split("_")
+            new_filename = os.path.join(src_path, str(int(sec[0]) - 1).zfill(2) + "_" + "_".join(sec[1:]))
+            os.rename(os.path.join(src_path, file), new_filename)
+            continue
+        if os.path.join(src_path, file) == remove_path:
+            os.remove(remove_path)
+            renumber = True
