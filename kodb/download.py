@@ -1,4 +1,5 @@
 import os
+import subprocess
 import sys
 import requests
 import tarfile
@@ -52,21 +53,21 @@ def download_pandoc():
     print("Pandoc downloaded!")
     
     
-def download_pandoc_xnos():
-    os.system("pip install pandoc-fignos pandoc-eqnos pandoc-tablenos pandoc-secnos")
+def install_pip():
+    for package in ["pandoc-fignos", "pandoc-eqnos", "pandoc-tablenos", "pandoc-secnos"]:
+        subprocess.check_call([sys.executable, "-m", "pip", "install", package])
 
 
-def download_dependencies():
+def download_dependencies(_):
     if not program_exists("pandoc"):
         print("Pandoc does not have an automatic installation implemented  yet. Follow the installation instructions on the Pandoc website.")
 
     if not program_exists("tectonic"):
         print("Tectonic does not have an automatic installation implemented  yet. Follow the installation instructions on the Tectonic website.")
 
-    check = prod([program_exists(prog) for prog in [
-        "pandoc-xnos", "pandoc-fignos", "pandoc-eqnos", "pandoc-tablenos", "pandoc-secnos"]])
-    if not check:
-        download_pandoc_xnos()
+    for package in ["pandoc-fignos", "pandoc-eqnos", "pandoc-tablenos", "pandoc-secnos"]:
+        if not program_exists(package):
+            install_pip(package)
         
 
 def check_program_availability():
