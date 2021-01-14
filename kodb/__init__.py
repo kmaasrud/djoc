@@ -25,14 +25,14 @@ def new(args):
         
 
 def add(args):
-    from kodb.add import add_section
+    from kodb.add_and_remove import add_section
     if not args:
         print("Add the name of the section you want to add. Run this command like 'kodb add <section name>'")
         sys.exit()
     elif len(args) == 1:
-        add_section(sys.argv[2])
+        add_section(args[0])
     else:
-        add_section(args[0], [1])
+        add_section(args[0], args[1])
         
 
 def switch(args):
@@ -48,11 +48,13 @@ def move(args):
 
 
 def remove(args):
-    pass
+    from kodb.add_and_remove import remove_section
+    for section in args:
+        remove_section(section)
     
 
 def default_doc_structure(_):
-    from kodb.add import add_section
+    from kodb.add_and_remove import add_section
     for section in ["abstract", "introduction", "theory", "results", "discussion", "conclusion", "references", "appendix"]:
         add_section(section)
 
@@ -62,6 +64,7 @@ def help(_):
 
 To start, create a document in the current directory with {style('kodb init', 'bold')} or create a project directory with {style('kodb new <project name>.', 'bold')}""")
     
+
 command_lookup = {
     "build": build,
     "init": init,

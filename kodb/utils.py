@@ -9,14 +9,31 @@ def find_root():
         
     raise FileNotFoundError
 
+
 def cwd_is_proj():
     try:
         find_root()
         return True
     except FileNotFoundError:
         return False
+        
+
+def find_section(section):
+    src_path = os.path.join(find_root(), "src")
+
+    for file in os.listdir(src_path):
+        sec = file.split("_")
+        sec_index, sec_filename = (int(sec[0]), "_".join(sec[1:]).replace(".md", ""))
+
+        try:
+            match = int(section) == sec_index
+        except ValueError:
+            match = section == sec_filename
+            
+        if match: return os.path.join(src_path, file)
     
-def style(text, color):
+
+def style(text, style):
     code = {
         'red': '31',
         'green': '32',
@@ -38,4 +55,10 @@ def style(text, color):
         'strike': '9'
     }
 
-    return '\033[' + code[color] + 'm' + text + '\033[0m'
+    if type(style) == list:
+        for stl in style:
+            text = "\033[" + code[stl] + "m" + text + "\033[0m"
+    else:
+        text = "\033[" + code[style] + "m" + text + "\033[0m"
+
+    return text

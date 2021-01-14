@@ -1,0 +1,6 @@
+title: "TITLE"
+author: "AUTHOR"
+date: \today
+
+# Reference equations with parentheses, e.g. '(1)'
+eqnos-eqref: True

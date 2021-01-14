@@ -13,7 +13,7 @@ def switch_sections(sec1, sec2):
     os.rename(file2_old, file2_new)
                     
 
-def find(src_path, not_found, found=None):
+def find(src_path, not_found, found=[]):
     for file in os.listdir(src_path):
         sec = file.split("_")
         sec_index, sec_filename = (int(sec[0]), "_".join(sec[1:]).replace(".md", ""))
