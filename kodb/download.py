@@ -53,9 +53,8 @@ def download_pandoc():
     print("Pandoc downloaded!")
     
     
-def install_pip():
-    for package in ["pandoc-fignos", "pandoc-eqnos", "pandoc-tablenos", "pandoc-secnos"]:
-        subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+def install_pip(package):
+    subprocess.check_call([sys.executable, "-m", "pip", "install", package])
 
 
 def download_dependencies(_):

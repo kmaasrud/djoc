@@ -20,8 +20,8 @@ def new(args):
     if not args:
         print("A directory name is required as an argument. Run this command like 'kodb new <name>'.")
         sys.exit()
-    os.mkdir(sys.argv[2])
-    make_project(sys.argv[2])
+    os.mkdir(args[0])
+    make_project(args[0])
         
 
 def add(args):
@@ -40,7 +40,7 @@ def switch(args):
         print("To switch the position of two sections, please include the index or name of the two sections you want to switch place.")
         sys.exit()
     from kodb.switch_and_move import switch_sections
-    switch_sections(sys.argv[2], sys.argv[3])
+    switch_sections(args[0], args[1])
     
 
 def move(args):
