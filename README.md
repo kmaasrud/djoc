@@ -10,7 +10,7 @@ In total, this leads to quite a convoluted process, and to keep my head clear, t
 
 To run KODB, a working Python installation, including `pip` must be available. Install by running
 
-    sudo pip install git+https://github.com/kmaasrud/kodb
+    sudo python -m pip install git+https://github.com/kmaasrud/kodb
     
 In addition, [Tectonic](https://tectonic-typesetting.github.io/en-US/index.html) and [Pandoc](https://pandoc.org/) need to be installed. On Debian-based systems, this can be done with these two commands (assuming a working rustup-installation is set up):
 
