@@ -29,6 +29,9 @@ def build_document():
     # Use pandoc-xnos
     command.append("--filter")
     command.append("pandoc-xnos")
+    
+    # Use citeproc. References are placed in the YAML file
+    command.append("--citeproc")
 
     subprocess.call(command)
     
