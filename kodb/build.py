@@ -15,7 +15,12 @@ def build_document():
     for f in os.listdir(os.path.join(root_path, "src")):
         path = os.path.join(root_path, "src", f)
         if os.path.isfile(path) and os.path.splitext(f)[-1] == ".md":
+            # Append a few newlines to ensure proper headers
+            with open(path, "a") as f:
+                f.write("\n\n")
+
             src_files.append(path)
+
     command += sorted(src_files, key=lambda x: x.split("_")[0].split(os.sep)[-1])
             
     # Convert to TeX
