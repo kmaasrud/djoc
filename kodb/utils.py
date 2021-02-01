@@ -1,4 +1,6 @@
 import os
+import sys
+import re
 
 def find_root():
     root_path = os.getcwd()
@@ -7,7 +9,25 @@ def find_root():
             return root_path
         root_path = os.path.dirname(root_path)
         
-    raise FileNotFoundError
+    print(f"{style('ERROR', 'red')}: Could not find the root of a project. Are you situated in a KODB project containing a {style('kodb.yaml', 'bold')} file?")
+    sys.exit()
+
+
+def program_exists(program):
+    for path in os.environ["PATH"].split(os.pathsep):
+        program_path = os.path.join(path, program)
+        if os.path.isfile(program_path) and os.access(program_path, os.X_OK):
+            return True
+    return False
+    
+
+def find_project_title():
+    yaml_path = os.path.join(find_root(), "kodb.yaml")
+    with open(yaml_path) as f:
+        yaml = f.read()
+        project_title = re.search(r"^title: (.*)", yaml, re.M).group(1).replace('"', "")
+        
+    return project_title
 
 
 def cwd_is_proj():
@@ -33,7 +53,7 @@ def find_section(section):
         if match: return os.path.join(src_path, file)
     
 
-def style(text, style):
+def style(text, *styles):
     code = {
         'red': '31',
         'green': '32',
@@ -55,10 +75,7 @@ def style(text, style):
         'strike': '9'
     }
 
-    if type(style) == list:
-        for stl in style:
-            text = "\033[" + code[stl] + "m" + text + "\033[0m"
-    else:
+    for style in styles:
         text = "\033[" + code[style] + "m" + text + "\033[0m"
 
     return text

@@ -4,14 +4,7 @@ import sys
 import requests
 import tarfile
 from math import prod
-
-
-def program_exists(program):
-    for path in os.environ["PATH"].split(os.pathsep):
-        program_path = os.path.join(path, program)
-        if os.path.isfile(program_path) and os.access(program_path, os.X_OK):
-            return True
-    return False
+from kodb.utils import program_exists
 
 
 def download_tectonic():

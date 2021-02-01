@@ -52,6 +52,7 @@ def add_section(name, index=None):
                 f.write("\\clearpage\n\\appendix\n")
             else:
                 f.write(f"# {name.capitalize()}\n\n")
+
                 
 def remove_section(sec):
     src_path = os.path.join(find_root(), "src")

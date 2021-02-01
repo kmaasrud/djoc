@@ -7,7 +7,7 @@ def build_document():
     root_path = find_root()
 
     command = ["pandoc"]
-    # Make a self-contained TeX document
+    # Make a self-contained .tex document
     command.append("--self-contained")
 
     # Find all markdown files in 'src' directory

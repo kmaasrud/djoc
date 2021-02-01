@@ -51,6 +51,19 @@ def remove(args):
     from kodb.add_and_remove import remove_section
     for section in args:
         remove_section(section)
+        
+
+def edit(args):
+    from kodb.edit_and_list import edit_project
+    if args:
+        edit_project(args[0])
+    else:
+        edit_project(args)
+        
+
+def list(args):
+    from kodb.edit_and_list import list_sections
+    list_sections()
     
 
 def default_doc_structure(_):
@@ -73,6 +86,8 @@ command_lookup = {
     "switch": switch,
     "move": move,
     "remove": remove,
+    "edit": edit,
+    "list": list,
     "help": help,
     "-h": help,
     "--help": help,
