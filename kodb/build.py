@@ -1,6 +1,7 @@
 import subprocess
 import os
 import sys
+import re
 from kodb.utils import find_root
 
 def build_document():
@@ -16,8 +17,9 @@ def build_document():
         path = os.path.join(root_path, "src", f)
         if os.path.isfile(path) and os.path.splitext(f)[-1] == ".md":
             # Append a few newlines to ensure proper headers
-            with open(path, "a") as f:
-                f.write("\n\n")
+            with open(path, "a+") as f:
+                if re.search(r"\n\n\Z", f.read(), re.MULTILINE):
+                    f.write("\n\n")
 
             src_files.append(path)
 

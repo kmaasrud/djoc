@@ -4,8 +4,8 @@ with open("README.md", "r", encoding="utf-8") as f:
     long_description = f.read()
 
 setuptools.setup(
-    name="kodb", # Replace with your own username
-    version="0.0.2",
+    name="kodb",
+    version="0.0.3",
     author="kmaasrud",
     author_email="km@aasrud.com",
     description="kmaasrud's opinionated document builder",
