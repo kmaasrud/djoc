@@ -32,4 +32,3 @@ The document sections are located in the `src` directory, and are written in Pan
 
 The metadata is described in the `kodb.yaml` file located in the root directory. Here the title of the document, the author(s), the date and more can be declared.
 
-<!-- This needs some work -->
