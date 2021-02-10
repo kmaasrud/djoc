@@ -11,9 +11,9 @@ In total, this leads to quite a convoluted process, and to keep my head clear, t
 To run KODB, a working Python installation, including `pip` must be available. Install by running
 
     sudo python -m pip install git+https://github.com/kmaasrud/kodb
-    
+
 If you have both Python 2 and 3 installed, be sure to run the above command with `python3`.
-    
+
 In addition, [Tectonic](https://tectonic-typesetting.github.io/en-US/index.html) and [Pandoc](https://pandoc.org/) need to be installed. On Debian-based systems, this can be done with these two commands (assuming a working rustup-installation is set up):
 
     sudo apt-get install libfontconfig1-dev libgraphite2-dev libharfbuzz-dev libicu-dev libssl-dev pandoc zlib1g-dev
@@ -31,3 +31,5 @@ Instructions for installing on other platforms is found on their respective webs
 The document sections are located in the `src` directory, and are written in Pandoc Markdown. They support cross-referencing through [pandoc-xnos](https://github.com/tomduck/pandoc-xnos). As a ground rule, do not rename the Markdown-files, as this may cause issues. Assets (pictures, figures and similar), should be placed in the `assets` directory.
 
 The metadata is described in the `kodb.yaml` file located in the root directory. Here the title of the document, the author(s), the date and more can be declared.
+
+<!-- This needs some work -->
