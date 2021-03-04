@@ -10,11 +10,11 @@ def build(_):
     from kodb.build import build_document
     check_program_availability()
     build_document()
-    
+
 
 def init(_):
     make_project(".")
-    
+
 
 def new(args):
     if not args:
@@ -22,7 +22,7 @@ def new(args):
         sys.exit()
     os.mkdir(args[0])
     make_project(args[0])
-        
+
 
 def add(args):
     from kodb.add_and_remove import add_section
@@ -33,7 +33,7 @@ def add(args):
         add_section(args[0])
     else:
         add_section(args[0], args[1])
-        
+
 
 def switch(args):
     if not len(args) == 2:
@@ -41,7 +41,7 @@ def switch(args):
         sys.exit()
     from kodb.switch_and_move import switch_sections
     switch_sections(args[0], args[1])
-    
+
 
 def move(args):
     pass
@@ -51,7 +51,7 @@ def remove(args):
     from kodb.add_and_remove import remove_section
     for section in args:
         remove_section(section)
-        
+
 
 def edit(args):
     from kodb.edit_and_list import edit_project
@@ -59,12 +59,17 @@ def edit(args):
         edit_project(args[0])
     else:
         edit_project(args)
-        
+
 
 def list(args):
     from kodb.edit_and_list import list_sections
     list_sections()
-    
+
+
+def ref(args):
+    from kodb.references import change_style
+    change_style(args[0])
+
 
 def default_doc_structure(_):
     from kodb.add_and_remove import add_section
@@ -76,7 +81,7 @@ def help(_):
     print(f"""Welcome to kodb, a tool which will help you build documents quickly and easily!
 
 To start, create a document in the current directory with {style('kodb init', 'bold')} or create a project directory with {style('kodb new <project name>.', 'bold')}""")
-    
+
 
 command_lookup = {
     "build": build,
@@ -88,6 +93,7 @@ command_lookup = {
     "remove": remove,
     "edit": edit,
     "list": list,
+    "ref": ref,
     "help": help,
     "-h": help,
     "--help": help,
