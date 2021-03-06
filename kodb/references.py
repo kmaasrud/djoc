@@ -2,9 +2,10 @@ import os
 import re
 import requests
 from kodb.utils import find_root, style
+from kodb import MSG
 
 STYLE_LOOKUP = {
-        "ieee": { "filename": "ieee.csl", "url": "https://raw.githubusercontent.com/kmaasrud/vmc-fys4411/main/doc/assets/ieee.csl" },
+        "ieee": { "filename": "ieee.csl", "url": "https://raw.githubusercontent.com/citation-style-language/styles/master/ieee.csl" },
         "apa": { "filename": "apa-6th-edition.csl", "url": "https://raw.githubusercontent.com/citation-style-language/styles/master/apa-6th-edition.csl" }
 }
 
@@ -14,33 +15,40 @@ def change_style(stylename):
     try:
         csl_name = STYLE_LOOKUP[stylename]["filename"]
     except KeyError:
-        print(f"{style('ERROR', 'bold', 'red')}: Could not find a CSL style matching the query \"{stylename}\"")
+        MSG.error(f"Could not find a CSL style matching the query {style(stylename, 'bold')}")
         return
+    MSG.success(f"Found a matching CSL file for {style(stylename, 'bold')}!")
 
-    try:
-        resp = requests.get(STYLE_LOOKUP[stylename]["url"])
-    except requests.exceptions.ConnectionError:
-        print(f"{style('ERROR', 'bold', 'red')}: You need to be connected to the internet to download the CSL file \"{STYLE_LOOKUP[stylename]['filename']}\"")
-        return
-
-    if resp.ok:
-        csl = resp.text
+    if not os.path.isfile(os.path.join(root, "assets", csl_name)):
+        MSG.info(f"Downloading {style(csl_name, 'bold')} from {style(STYLE_LOOKUP[stylename]['url'], 'italic')}...")
+        try:
+            resp = requests.get(STYLE_LOOKUP[stylename]["url"])
+        except requests.exceptions.ConnectionError:
+            MSG.error(f"You need to be connected to the internet to download the CSL file {style(csl_name, 'bold')}.")
+            return
+        MSG.success(f"{style(csl_name, 'bold')} successfully downloaded!")
+        if resp.ok:
+            csl = resp.text
+        else:
+            MSG.error(f"Invalid response. Could not download {style(csl_name, 'bold')} from the internet.")
+            return
+        with open(os.path.join(root, "assets", csl_name), "w") as f:
+            f.write(csl)
     else:
-        print(f"{style('ERROR', 'bold', 'yellow')}: Invalid response. Could not download \"{STYLE_LOOKUP[stylename]['filename']}\" from the internet.")
-        return
+        MSG.info(f"Found {style(csl_name, 'bold')} in assets directory.")
 
-    csl = requests.get(STYLE_LOOKUP[stylename]["url"]).text
-
-    with open(os.path.join(root, "assets", STYLE_LOOKUP[stylename]["filename"]), "w") as f:
-        f.write(csl)
 
     with open(os.path.join(root, "kodb.yaml"), "r+") as f:
         kodb_yaml = f.read()
 
         if match := re.search(r"^csl: (.*)", kodb_yaml, re.M):
+            MSG.info(f"Changing CSL style in {style('kodb.yaml', 'bold')}...")
             kodb_yaml = kodb_yaml.replace(f"csl: {match.group(1)}", f"csl: assets/{csl_name}")
         else:
+            MSG.info(f"Adding CSL style specification to {style('kodb.yaml', 'bold')}...")
             kodb_yaml += "\n" + f"csl: assets/{csl_name}"
 
         f.seek(0)
         f.write(kodb_yaml)
+
+    MSG.success("Reference style successfully updated!")

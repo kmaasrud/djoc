@@ -44,15 +44,16 @@ def build_document():
     # Use citeproc
     command.append("--citeproc")
 
-    MSG.info("Converting the Markdown source into LaTeX via Pandoc...")
     hr("Pandoc")
+    MSG.info("Converting the Markdown source into LaTeX via Pandoc...")
     execute(command)
     MSG.success(f"{style('main.tex', 'bold')} created!")
-    hr()
 
+    # Compile document with Tectonic. Only output necessary warnings and errors.
     command = ["tectonic", "--chatter", "minimal", os.path.join(root_path, "main.tex")]
-    MSG.info("Compiling document with Tectonic...")
+
     hr("Tectonic")
+    MSG.info("Compiling document with Tectonic...")
     execute(command)
     MSG.success("Successfully compiled the PDF!")
     hr()
