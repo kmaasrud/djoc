@@ -1,9 +1,11 @@
 import sys
 import os
 
-from kodb.download import check_program_availability, download_dependencies
-from kodb.make_project import make_project
-from kodb.utils import style
+from .log import Message
+MSG = Message("INFO")
+from .download import check_program_availability, download_dependencies
+from .make_project import make_project
+from .utils import style
 
 
 def build(_):
@@ -117,4 +119,4 @@ def main():
     try:
         command_lookup[command](command_args)
     except KeyError:
-        print(f"{style('Unknown command', 'red')}: {command}")
+        LOG.error(f"Unknown command \"{command}\"")

@@ -1,15 +1,18 @@
 import os
 import sys
 import re
+import subprocess
+import shutil
 
 def find_root():
+    from kodb import MSG
     root_path = os.getcwd()
     for _ in range(8):
         if os.path.isfile(os.path.join(root_path, "kodb.yaml")):
             return root_path
         root_path = os.path.dirname(root_path)
-        
-    print(f"{style('ERROR', 'red')}: Could not find the root of a project. Are you situated in a KODB project containing a {style('kodb.yaml', 'bold')} file?")
+
+    MSG.error(f"Could not find the root of a project. Are you situated in a KODB project containing a {style('kodb.yaml', 'bold')} file?")
     sys.exit()
 
 
@@ -19,14 +22,14 @@ def program_exists(program):
         if os.path.isfile(program_path) and os.access(program_path, os.X_OK):
             return True
     return False
-    
+
 
 def find_project_title():
     yaml_path = os.path.join(find_root(), "kodb.yaml")
     with open(yaml_path) as f:
         yaml = f.read()
         project_title = re.search(r"^title: (.*)", yaml, re.M).group(1).replace('"', "")
-        
+
     return project_title
 
 
@@ -36,7 +39,7 @@ def cwd_is_proj():
         return True
     except FileNotFoundError:
         return False
-        
+
 
 def find_section(section):
     src_path = os.path.join(find_root(), "src")
@@ -49,9 +52,9 @@ def find_section(section):
             match = int(section) == sec_index
         except ValueError:
             match = section == sec_filename
-            
+
         if match: return os.path.join(src_path, file)
-    
+
 
 def style(text, *styles):
     code = {
@@ -79,3 +82,18 @@ def style(text, *styles):
         text = "\033[" + code[style] + "m" + text + "\033[0m"
 
     return text
+
+
+def hr(text=""):
+    width = shutil.get_terminal_size()[0]
+    ruler = "-" * ((width - len(text)) // 2)
+    print(ruler + text + ruler)
+
+
+def execute(command):
+    from kodb import MSG
+    try:
+        subprocess.run(command, check=True)
+    except subprocess.CalledProcessError as e:
+        MSG.error("Could not build document.")
+        sys.exit()

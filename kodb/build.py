@@ -2,7 +2,9 @@ import subprocess
 import os
 import sys
 import re
-from kodb.utils import find_root
+from kodb.utils import find_root, execute, hr, style
+from kodb import MSG
+
 
 def build_document():
     root_path = find_root()
@@ -12,6 +14,7 @@ def build_document():
     command.append("--self-contained")
 
     # Find all markdown files in 'src' directory
+    MSG.info("Finding source files...")
     src_files = []
     for f in os.listdir(os.path.join(root_path, "src")):
         path = os.path.join(root_path, "src", f)
@@ -23,25 +26,36 @@ def build_document():
 
             src_files.append(path)
 
+    # Sort by the file numbers
     command += sorted(src_files, key=lambda x: x.split("_")[0].split(os.sep)[-1])
+    MSG.success(f"{len(src_files)} files found!")
 
     # Convert to TeX
     command.append("-o")
     command.append(os.path.join(root_path, "main.tex"))
 
     # Use metadatafile if it exists
-    if os.path.isfile(os.path.join(root_path, "kodb.yaml")):
-        command.append(f"--metadata-file={os.path.join(root_path, 'kodb.yaml')}")
+    if os.path.isfile(yaml := os.path.join(root_path, "kodb.yaml")):
+        command.append(f"--metadata-file={yaml}")
 
     # Use pandoc-xnos
-    command.append("--filter")
-    command.append("pandoc-xnos")
+    command += ["--filter", "pandoc-xnos"]
 
-    # Use citeproc. References are placed in the YAML file
+    # Use citeproc
     command.append("--citeproc")
 
-    subprocess.call(command)
+    MSG.info("Converting the Markdown source into LaTeX via Pandoc...")
+    hr("Pandoc")
+    execute(command)
+    MSG.success(f"{style('main.tex', 'bold')} created!")
+    hr()
 
-    # Compile outputted TeX document with tectonic and remove the TeX source
-    subprocess.call(["tectonic", os.path.join(root_path, "main.tex")])
+    command = ["tectonic", "--chatter", "minimal", os.path.join(root_path, "main.tex")]
+    MSG.info("Compiling document with Tectonic...")
+    hr("Tectonic")
+    execute(command)
+    MSG.success("Successfully compiled the PDF!")
+    hr()
+
+    MSG.info(f"Removing intermediary LaTeX file {style('main.tex', 'bold')}...")
     os.remove(os.path.join(root_path, "main.tex"))

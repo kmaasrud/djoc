@@ -5,6 +5,7 @@ import requests
 import tarfile
 from math import prod
 from kodb.utils import program_exists
+from kodb import MSG
 
 
 def download_tectonic():
@@ -25,7 +26,7 @@ def download_tectonic():
         os.chmod(exe_path, mode)
 
     print("Tectonic downloaded!")
-    
+
 
 def download_pandoc():
     PANDOC_VER = "2.11.3.1"
@@ -42,29 +43,29 @@ def download_pandoc():
         os.rename(f"pandoc-{PANDOC_VER}/bin/pandoc", "/usr/bin/pandoc")
         os.system(f"rm -rf pandoc-{PANDOC_VER}")
         os.remove("pandoc_temp.tar.gz")
-    
+
     print("Pandoc downloaded!")
-    
-    
+
+
 def install_pip(package):
     subprocess.check_call([sys.executable, "-m", "pip", "install", package])
 
 
 def download_dependencies(_):
     if not program_exists("pandoc"):
-        print("Pandoc does not have an automatic installation implemented  yet. Follow the installation instructions on the Pandoc website.")
+        MSG.warning("Pandoc does not have an automatic installation implemented  yet. Follow the installation instructions on the Pandoc website.")
 
     if not program_exists("tectonic"):
-        print("Tectonic does not have an automatic installation implemented  yet. Follow the installation instructions on the Tectonic website.")
+        MSG.warning("Tectonic does not have an automatic installation implemented  yet. Follow the installation instructions on the Tectonic website.")
 
     for package in ["pandoc-fignos", "pandoc-eqnos", "pandoc-tablenos", "pandoc-secnos"]:
         if not program_exists(package):
             install_pip(package)
-        
+
 
 def check_program_availability():
     for prog in ["pandoc", "tectonic", "pandoc-xnos", "pandoc-fignos", "pandoc-eqnos", "pandoc-tablenos", "pandoc-secnos"]:
         if not program_exists(prog):
-            print(f"""ERROR: {prog} does not exist on this system or is not in PATH. Run 'sudo kodb --download-dependencies'
+            MSG.error(f"""{prog} does not exist on this system or is not in PATH. Run 'kodb --download-dependencies'
 to install required dependencies (may have varying success).""")
             sys.exit()

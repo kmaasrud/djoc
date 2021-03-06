@@ -4,7 +4,8 @@ import requests
 from kodb.utils import find_root, style
 
 STYLE_LOOKUP = {
-        "ieee": { "filename": "ieee.csl", "url": "https://raw.githubusercontent.com/kmaasrud/vmc-fys4411/main/doc/assets/ieee.csl" }
+        "ieee": { "filename": "ieee.csl", "url": "https://raw.githubusercontent.com/kmaasrud/vmc-fys4411/main/doc/assets/ieee.csl" },
+        "apa": { "filename": "apa-6th-edition.csl", "url": "https://raw.githubusercontent.com/citation-style-language/styles/master/apa-6th-edition.csl" }
 }
 
 def change_style(stylename):
@@ -30,7 +31,7 @@ def change_style(stylename):
 
     csl = requests.get(STYLE_LOOKUP[stylename]["url"]).text
 
-    with open(os.path.join(root, "assets", "ieee.csl"), "w") as f:
+    with open(os.path.join(root, "assets", STYLE_LOOKUP[stylename]["filename"]), "w") as f:
         f.write(csl)
 
     with open(os.path.join(root, "kodb.yaml"), "r+") as f:
