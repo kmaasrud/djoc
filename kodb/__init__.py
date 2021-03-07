@@ -4,7 +4,7 @@ import os
 from .log import Message
 MSG = Message("INFO")
 from .download import check_program_availability, download_dependencies
-from .make_project import make_project
+from .make_project import make_project, make_dir_wrapper
 from .utils import style
 
 
@@ -20,9 +20,9 @@ def init(_):
 
 def new(args):
     if not args:
-        print("A directory name is required as an argument. Run this command like 'kodb new <name>'.")
+        MSG.error(f"A directory name is required as an argument. Run this command like {style('kodb new <name>', 'bold')}.")
         sys.exit()
-    os.mkdir(args[0])
+    make_dir_wrapper(args[0])
     make_project(args[0])
 
 
@@ -119,4 +119,4 @@ def main():
     try:
         command_lookup[command](command_args)
     except KeyError:
-        LOG.error(f"Unknown command \"{command}\"")
+        MSG.error(f"Unknown command \"{command}\"")

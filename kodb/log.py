@@ -1,6 +1,5 @@
 import inspect
-import shutil
-from kodb.utils import style
+from kodb.utils import style, right_align
 
 
 LEVELS = {
@@ -69,9 +68,3 @@ class Message:
 
     def critical(self, msg):
         self.print_message(msg, "C", "bold", "red", "underline")
-
-
-def right_align(text, left_align_len=0):
-    columns = shutil.get_terminal_size()[0]
-    if left_align_len + len(text) < columns:
-        return(text.rjust(columns))

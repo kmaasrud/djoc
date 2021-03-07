@@ -33,14 +33,6 @@ def find_project_title():
     return project_title
 
 
-def cwd_is_proj():
-    try:
-        find_root()
-        return True
-    except FileNotFoundError:
-        return False
-
-
 def find_section(section):
     src_path = os.path.join(find_root(), "src")
 
@@ -95,5 +87,11 @@ def execute(command):
     try:
         subprocess.run(command, check=True)
     except subprocess.CalledProcessError as e:
-        MSG.error("Could not build document.")
+        MSG.error(f"Command resulted in error: {style(' '.join(command), 'bold')}.")
         sys.exit()
+
+
+def right_align(text, left_align_len=0):
+    columns = shutil.get_terminal_size()[0]
+    if left_align_len + len(text) < columns:
+        return(text.rjust(columns))

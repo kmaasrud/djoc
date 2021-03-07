@@ -1,5 +1,8 @@
 import os
+import sys
 from kodb.references import change_style
+from kodb.utils import style
+from kodb import MSG
 
 initial_yaml = """title: "TITLE"
 author: "AUTHOR"
@@ -10,17 +13,28 @@ eqnos-eqref: True
 
 # Bibliography
 reference-section-title: "References"
-bibliography: references.bib
+bibliography: assets/references.bib
 """
 
 def make_project(directory):
-    os.mkdir(os.path.join(directory, "src"))
-    os.mkdir(os.path.join(directory, "assets"))
+    make_dir_wrapper(os.path.join(directory, "src/"))
 
-    with open(os.path.join(directory, "kodb.yaml"), "w") as f:
+    make_dir_wrapper(os.path.join(directory, "assets/"))
+
+    path = os.path.join(directory, "kodb.yaml")
+    with open(path, "w") as f:
         f.write(initial_yaml)
+    MSG.success(f"Created {style(path, 'bold')}.")
 
-    with open(os.path.join(directory, "references.bib"), "w") as f:
+    path = os.path.join(directory, "assets", "references.bib")
+    with open(path, "w") as f:
         f.write("")
+    MSG.success(f"Created {style(path, 'bold')}.")
 
-    change_style("ieee")
+def make_dir_wrapper(path):
+    try:
+        os.mkdir(path)
+    except FileExistsError:
+        MSG.error(f"Directory {style(path, 'bold')} already exists. Aborting...")
+        sys.exit()
+    MSG.success(f"Created {style(path, 'bold')} directory.")
