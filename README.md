@@ -1,5 +1,5 @@
 <h1 align="center">KODB<br>
-    <sup><a href="https://github.com/kmaasrud">Kmaasrud's</a> Opinionated Document Builder</sup>
+    <sup>Kmaasrud's Opinionated Document Builder</sup>
 </h2>
 
 <p align="center"><a href="https://github.com/kmaasrud/kodb/wiki/Installation">Installation</a> - <a href="https://github.com/kmaasrud/kodb/wiki/Creating-a-document">Getting started</a></p>
