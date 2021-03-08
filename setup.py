@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as f:
 
 setuptools.setup(
     name="kodb",
-    version="0.0.3",
+    version="0.1.2",
     author="kmaasrud",
     author_email="km@aasrud.com",
     description="kmaasrud's opinionated document builder",
@@ -20,7 +20,11 @@ setuptools.setup(
     ],
     python_requires='>=3.6',
     install_requires=[
-        "requests"
+        "pandoc-xnos",
+        "pandoc-fignos",
+        "pandoc-eqnos",
+        "pandoc-tablenos",
+        "pandoc-secnos"
     ],
     entry_points={
         "console_scripts": [

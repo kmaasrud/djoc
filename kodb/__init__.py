@@ -3,14 +3,13 @@ import os
 
 from .log import Message
 MSG = Message("INFO")
-from .download import check_program_availability, download_dependencies
 from .make_project import make_project, make_dir_wrapper
-from .utils import style
+from .utils import style, program_exists
 
 
 def build(_):
     from kodb.build import build_document
-    check_program_availability()
+    check_dependencies()
     build_document()
 
 
@@ -79,6 +78,15 @@ def default_doc_structure(_):
         add_section(section)
 
 
+def check_dependencies(_):
+    for prog in ["pandoc", "tectonic", "pandoc-xnos", "pandoc-fignos", "pandoc-eqnos", "pandoc-tablenos", "pandoc-secnos"]:
+        if not program_exists(prog):
+            MSG.error(f"{prog} does not exist on this system or is not in PATH.")
+            sys.exit()
+
+    MSG.success("All dependencies are installed and available in the PATH!")
+
+
 def help(_):
     print(f"""Welcome to kodb, a tool which will help you build documents quickly and easily!
 
@@ -99,7 +107,7 @@ command_lookup = {
     "help": help,
     "-h": help,
     "--help": help,
-    "--download-dependencies": download_dependencies,
+    "--check-dependencies": check_dependencies,
     "--default-doc-structure": default_doc_structure
 }
 
