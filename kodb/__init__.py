@@ -9,7 +9,7 @@ from .utils import style, program_exists
 
 def build(_):
     from kodb.build import build_document
-    check_dependencies()
+    check_dependencies(_, silent=True)
     build_document()
 
 
@@ -78,13 +78,14 @@ def default_doc_structure(_):
         add_section(section)
 
 
-def check_dependencies(_):
+def check_dependencies(_, silent=False):
     for prog in ["pandoc", "tectonic", "pandoc-xnos", "pandoc-fignos", "pandoc-eqnos", "pandoc-tablenos", "pandoc-secnos"]:
         if not program_exists(prog):
             MSG.error(f"{prog} does not exist on this system or is not in PATH.")
             sys.exit()
 
-    MSG.success("All dependencies are installed and available in the PATH!")
+    if not silent:
+        MSG.success("All dependencies are installed and available in the PATH!")
 
 
 def help(_):

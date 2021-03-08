@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as f:
 
 setuptools.setup(
     name="kodb",
-    version="0.1.2",
+    version="0.1.4",
     author="kmaasrud",
     author_email="km@aasrud.com",
     description="kmaasrud's opinionated document builder",

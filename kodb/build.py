@@ -1,5 +1,6 @@
 import subprocess
 import os
+import shutil
 import sys
 import re
 from kodb.utils import find_root, execute, hr, style
@@ -11,7 +12,7 @@ def build_document():
 
     command = ["pandoc"]
     # Make a self-contained .tex document
-    command.append("--self-contained")
+    command += ["--self-contained", "-s"]
 
     # Find all markdown files in 'src' directory
     MSG.info("Finding source files...")
@@ -29,6 +30,11 @@ def build_document():
     # Sort by the file numbers
     command += sorted(src_files, key=lambda x: x.split("_")[0].split(os.sep)[-1])
     MSG.success(f"{len(src_files)} files found!")
+
+    # Resources can be fetched from both root, assets and src. They are extracted into tmp for linking with main.tex
+    pathsep = ';' if os.name == 'nt' else ':'
+    command.append(f"--resource-path={root_path}{pathsep}{os.path.join(root_path, 'src')}{pathsep}{os.path.join(root_path, 'assets')}")
+    command.append(f"--extract-media={os.path.join(root_path, 'tmp')}")
 
     # Convert to TeX
     command.append("-o")
@@ -58,5 +64,6 @@ def build_document():
     MSG.success("Successfully compiled the PDF!")
     hr()
 
-    MSG.info(f"Removing intermediary LaTeX file {style('main.tex', 'bold')}...")
+    MSG.info("Removing intermediary files and folders...")
+    shutil.rmtree(os.path.join(root_path, 'tmp'))
     os.remove(os.path.join(root_path, "main.tex"))

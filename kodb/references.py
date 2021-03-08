@@ -41,14 +41,15 @@ def change_style(stylename):
     with open(os.path.join(root, "kodb.yaml"), "r+") as f:
         kodb_yaml = f.read()
 
-        if match := re.search(r"^csl: (.*)", kodb_yaml, re.M):
+        if match := re.search(r"^csl: (.*)\s*$", kodb_yaml, re.M):
             MSG.info(f"Changing CSL style in {style('kodb.yaml', 'bold')}...")
-            kodb_yaml = kodb_yaml.replace(f"csl: {match.group(1)}", f"csl: assets/{csl_name}")
+            kodb_yaml = kodb_yaml.replace(f"{match.group()}", f"csl: {csl_name}")
         else:
             MSG.info(f"Adding CSL style specification to {style('kodb.yaml', 'bold')}...")
-            kodb_yaml += "\n" + f"csl: assets/{csl_name}"
+            kodb_yaml += "\n" + f"csl: {csl_name}"
 
         f.seek(0)
         f.write(kodb_yaml)
+        f.truncate()
 
     MSG.success("Reference style successfully updated!")

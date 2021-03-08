@@ -13,7 +13,7 @@ eqnos-eqref: True
 
 # Bibliography
 reference-section-title: "References"
-bibliography: assets/references.bib
+bibliography: references.bib
 """
 
 def make_project(directory):
