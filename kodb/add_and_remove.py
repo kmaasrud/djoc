@@ -82,7 +82,6 @@ def remove_section(sec):
         remove_path = remove_path[0]
 
     renumber = False
-    MSG.info(f"Removing {style(remove_path, 'bold')}...")
     for file in sorted(os.listdir(src_path)):
         if renumber:
             sec = file.split("_")
@@ -90,6 +89,10 @@ def remove_section(sec):
             os.rename(os.path.join(src_path, file), new_filename)
             continue
         if os.path.join(src_path, file) == remove_path:
-            os.remove(remove_path)
-            renumber = True
-            MSG.info("Renumbering sections...")
+            confirmed = input(f"[{style('W', 'bold', 'yellow')}]: Are you sure you want to remove {style(remove_path, 'bold')}? (y/N) ").lower() == 'y'
+            if confirmed:
+                os.remove(remove_path)
+                MSG.success(f"{style(remove_path, 'bold')} removed!")
+                renumber = True
+                MSG.info("Renumbering sections...")
+            else: break
