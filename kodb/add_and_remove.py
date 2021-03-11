@@ -95,4 +95,6 @@ def remove_section(sec):
                 MSG.success(f"{style(remove_path, 'bold')} removed!")
                 renumber = True
                 MSG.info("Renumbering sections...")
-            else: break
+            else:
+                MSG.info("Nothing was deleted.")
+                break
