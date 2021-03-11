@@ -56,7 +56,31 @@ def add_section(name, index=None):
 
 def remove_section(sec):
     src_path = os.path.join(find_root(), "src")
-    remove_path = find_section(sec)
+    remove_path = list(find_section(sec))
+
+    # If multiple files are matching, enter interactive selection mode.
+    if len(remove_path) > 1:
+        MSG.warning(f"Found {len(remove_path)} files matching your query, which do you want to remove?")
+        print()
+        for i, path in enumerate(remove_path):
+            print(f"\t{style('(' + str(i) + ')', 'faint')} - {style(path, 'bold')}")
+        print()
+
+        wrong_input = True
+        while wrong_input:
+            selection = input(style("Select a number: ", "bold"))
+            try:
+                remove_path = remove_path[int(selection)]
+            except ValueError:
+                MSG.error("Cannot parse the input. Please input a valid integer.")
+                continue
+            except IndexError:
+                MSG.error("Not a valid selection.")
+                continue
+            wrong_input = False
+    else:
+        remove_path = remove_path[0]
+
     renumber = False
     MSG.info(f"Removing {style(remove_path, 'bold')}...")
     for file in sorted(os.listdir(src_path)):

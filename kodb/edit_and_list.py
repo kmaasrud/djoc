@@ -22,7 +22,7 @@ def edit_project(section):
     elif section.lower() in ["yaml", "kobd.yaml", "kodb"]:
         command.append(os.path.join(root_path, "kodb.yaml"))
     else:
-        section_path = find_section(section)
+        section_path = next(find_section(section))
         command.append(section_path)
 
     subprocess.call(command)

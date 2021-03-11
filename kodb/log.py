@@ -61,10 +61,10 @@ class Message:
 
 
     def error(self, msg):
-        from_frame = inspect.stack()[1]
-        file = inspect.getfile(from_frame[0])
-        self.print_message(msg, "E", "bold", "red", file=file)
+        self.print_message(msg, "E", "bold", "red")
 
 
     def critical(self, msg):
-        self.print_message(msg, "C", "bold", "red", "underline")
+        from_frame = inspect.stack()[1]
+        file = inspect.getfile(from_frame[0])
+        self.print_message(msg, "C", "bold", "red", "underline", file=file)

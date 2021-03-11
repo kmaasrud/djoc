@@ -126,6 +126,9 @@ def main():
         command_args = args[2:]
 
     try:
-        command_lookup[command](command_args)
+        try:
+            command_lookup[command](command_args)
+        except KeyboardInterrupt:
+            print(); sys.exit()
     except KeyError:
         MSG.error(f"Unknown command \"{command}\"")

@@ -45,7 +45,7 @@ def find_section(section):
         except ValueError:
             match = section == sec_filename
 
-        if match: return os.path.join(src_path, file)
+        if match: yield os.path.join(src_path, file)
 
 
 def style(text, *styles):
