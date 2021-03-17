@@ -64,6 +64,10 @@ def build_document():
     MSG.success("Successfully compiled the PDF!")
     hr()
 
-    MSG.info("Removing intermediary files and folders...")
-    shutil.rmtree(os.path.join(root_path, 'tmp'))
+    try:
+        shutil.rmtree(os.path.join(root_path, 'tmp'))
+        MSG.info(f"Removed temporary directory: {style(os.path.join(root_path, 'tmp'), 'bold')}")
+    except FileNotFoundError:
+        pass
     os.remove(os.path.join(root_path, "main.tex"))
+    MSG.info(f"Removed temporary TeX file: {style(os.path.join(root_path, 'main.tex'), 'bold')}")
