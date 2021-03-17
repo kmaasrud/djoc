@@ -1,5 +1,6 @@
 import sys
 import os
+import pkg_resources
 
 from .log import Message
 MSG = Message("INFO")
@@ -88,6 +89,10 @@ def check_dependencies(_, silent=False):
         MSG.success("All dependencies are installed and available in the PATH!")
 
 
+def version(_):
+    MSG.info(f"You're running version {pkg_resources.require('kodb')[0].version} of KODB.")
+
+
 def help(_):
     print(f"""Welcome to kodb, a tool which will help you build documents quickly and easily!
 
@@ -108,6 +113,8 @@ command_lookup = {
     "help": help,
     "-h": help,
     "--help": help,
+    "-v": version,
+    "--version": version,
     "--check-dependencies": check_dependencies,
     "--default-doc-structure": default_doc_structure
 }
