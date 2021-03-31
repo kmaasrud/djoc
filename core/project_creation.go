@@ -10,7 +10,7 @@ func createAt(path string) {
 	var f *os.File
 	var err error
 	new_file := "./test2"
-	if !utils.PathExists(new_file) {
+    if _, err := os.Stat(path); os.IsNotExist(err) {
 		f, err = os.Create(new_file)
 		f.WriteString("How are you dude?\n")
 	} else {
