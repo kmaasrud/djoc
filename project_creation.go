@@ -1,9 +1,9 @@
 package main
 
 import (
-    "fmt"
-    "os"
-    "github.com/kmaasrud/kodb/utils"
+	"fmt"
+	"github.com/kmaasrud/kodb/utils"
+	"os"
 )
 
 func createAt(path string) {
@@ -20,7 +20,8 @@ func createAt(path string) {
 
 	utils.CheckErr(err)
 	data := make([]byte, 100)
-	count, err2 := f.Read(data); utils.CheckErr(err2)
+	count, err2 := f.Read(data)
+	utils.CheckErr(err2)
 	if count > 1 {
 		fmt.Printf("Data read: %s", data)
 	}
