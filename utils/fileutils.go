@@ -9,7 +9,7 @@ import (
 // Searches up the directory tree to find a knutex.yaml file and returns the path
 // of the directory containing it. If it reaches the root directory without finding
 // anything, FindKnutexRoot returns an error.
-func FindKnutexRoot() (string, error) {
+func FindKodbRoot() (string, error) {
     path, err := os.Getwd(); CheckErr(err)
 
     for {
