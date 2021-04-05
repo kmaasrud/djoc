@@ -6,7 +6,6 @@ import (
 	"strings"
 	"github.com/kmaasrud/doctor/msg"
 	"github.com/kmaasrud/doctor/core"
-	// "github.com/kmaasrud/doctor/utils"
 	"github.com/thatisuday/clapper"
 )
 
@@ -36,12 +35,12 @@ func main() {
 
 	switch command.Name {
 	case "init":
-		core.CreateAt(".")
+		core.CreateDocumentAt(".")
 	case "new":
 		if val := command.Args["path"].Value; val != "" {
-			core.CreateAt(command.Args["path"].Value)
+			core.CreateDocumentAt(command.Args["path"].Value)
 		} else {
-			core.CreateAt(command.Args["path"].DefaultValue)
+			core.CreateDocumentAt(command.Args["path"].DefaultValue)
 		}
 	}
 }
