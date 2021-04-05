@@ -3,9 +3,9 @@ package msg
 import "fmt"
 
 // style takes the inputted text and styles it according to
-// the ANSI escape codes listed below. I think this is only
-// supported by Unix systems.
-func style(text string, styles ...string) string {
+// the ANSI escape codes listed below. I should perhaps check for
+// non-ANSI systems, but fuck that for now...
+func Style(text string, styles ...string) string {
     code := map[string]int {
         "Red": 31,
         "Green": 32,

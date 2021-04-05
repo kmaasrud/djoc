@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/kmaasrud/kodb/msg"
-	"github.com/kmaasrud/kodb/utils"
+	"github.com/kmaasrud/doctor/msg"
+	"github.com/kmaasrud/doctor/utils"
 	"time"
 	"fmt"
 	"os"
@@ -12,7 +12,7 @@ func main() {
 	/* done := make(chan struct{})
 	go thisTakesTime(done)
 	msg.Do("Doing stuff, wait a bit", "The stuff is done!", done) */
-	root, err := utils.FindKodbRoot()
+	root, err := utils.FindDoctorRoot()
 	if err != nil {
 		msg.Error(err.Error())
 		os.Exit(1)

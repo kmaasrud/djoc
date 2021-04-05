@@ -7,16 +7,20 @@ import (
 )
 
 func Error(text string) {
-    fmt.Printf("[%s]: %s\n", style("E", "Red", "Bold"), text)
+    fmt.Printf("[%s]: %s\n", Style("E", "Red", "Bold"), text)
 }
 
 func Info(text string) {
-    fmt.Printf("[%s]: %s\n", style("I", "Blue", "Bold"), text)
+    fmt.Printf("[%s]: %s\n", Style("I", "Blue", "Bold"), text)
+}
+
+func Success(text string) {
+    fmt.Printf("[%s]: %s\n", Style("✓", "Green", "Bold"), text)
 }
 
 func Do(doingText , doneText string, done chan struct{}) {
     ticker := time.NewTicker(500 * time.Millisecond)
-    defer fmt.Printf("\033[2K\r[%s]: %s\n", style("✓", "Green", "Bold"), doneText)
+    defer fmt.Printf("\033[2K\r[%s]: %s\n", Style("✓", "Green", "Bold"), doneText)
     defer ticker.Stop()
     for i := 0;; {
         select {
@@ -29,8 +33,4 @@ func Do(doingText , doneText string, done chan struct{}) {
                 return
         }
     }
-}
-
-func Success(text string) {
-    fmt.Printf("[%s]: %s\n", style("✓", "Green", "Bold"), text)
 }

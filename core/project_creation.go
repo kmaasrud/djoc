@@ -1,8 +1,8 @@
-package main
+package core
 
 import (
 	"fmt"
-	"github.com/kmaasrud/kodb/utils"
+	"github.com/kmaasrud/doctor/msg"
 	"os"
 )
 
@@ -17,11 +17,16 @@ func createAt(path string) {
 		f, err = os.Open(new_file)
 	}
 	defer f.Close()
+	if err != nil {
+		msg.Error(err.Error())
+	}
 
-	utils.CheckErr(err)
 	data := make([]byte, 100)
-	count, err2 := f.Read(data)
-	utils.CheckErr(err2)
+	count, err := f.Read(data)
+	if err != nil {
+		msg.Error(err.Error())
+	}
+
 	if count > 1 {
 		fmt.Printf("Data read: %s", data)
 	}
