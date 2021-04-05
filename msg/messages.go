@@ -18,6 +18,10 @@ func Success(text string) {
     fmt.Printf("[%s]: %s\n", Style("✓", "Green", "Bold"), text)
 }
 
+func Debug(text string) {
+    fmt.Printf("[%s]: %s\n", Style("D", "Bold"), text)
+}
+
 func Do(doingText , doneText string, done chan struct{}) {
     ticker := time.NewTicker(500 * time.Millisecond)
     defer fmt.Printf("\033[2K\r[%s]: %s\n", Style("✓", "Green", "Bold"), doneText)
