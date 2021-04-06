@@ -13,6 +13,7 @@ func Style(text string, styles ...string) string {
         "Blue": 34,
         "Magenta": 35,
         "Cyan": 36,
+        "Gray": 90,
         "BrightRed": 91,
         "BrightGreen": 92,
         "BrightYellow": 93,
