@@ -25,6 +25,8 @@ func main() {
 	newCommand.AddArg("path", ".")
 	newCommand.AddFlag("default", "d", true, "")
 
+	registry.Register("build")
+
 
     // Parse commands
 	command, err := registry.Parse(os.Args[1:])
@@ -46,14 +48,12 @@ func main() {
 	switch command.Name {
 	// Root command
 	case "":
-		for key, val := range command.Flags {
-			fmt.Printf("%s\n", key)
-			switch key {
-			case "check-dependencies":
-				if val.Value == "true" { core.CheckDependencies() }
-			}
+		// Can discard this err, command.Flags["check-dependencies"].Value will always be a parsable bool
+		if ok, _ := strconv.ParseBool(command.Flags["check-dependencies"].Value); ok {
+			core.CheckDependencies()
 		}
 
+	// Create new document command
 	case "new":
         var path string
 		if val := command.Args["path"].Value; val != "" {
@@ -61,7 +61,11 @@ func main() {
 		} else {
             path = command.Args["path"].DefaultValue
 		}
+		// Can discard this err, command.Flags["default"].Value will always be a parsable bool
 		makeDefault, _ := strconv.ParseBool(command.Flags["default"].Value)
         core.CreateDocumentAt(path, makeDefault)
+		
+	case "build":
+		core.Build()
 	}
 }

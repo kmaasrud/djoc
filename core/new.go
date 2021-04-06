@@ -8,13 +8,9 @@ import (
 	"io/ioutil"
 )
 
-const yamlFile string = `title: "TITLE"
-author: "AUTHOR"
-date: \today
-
-# Bibliography
-reference-section-title: "References"
-bibliography: references.bib
+const tomlFile string = `title = "TITLE"
+author = "AUTHOR"
+date = "today"
 `
 
 func CreateDocumentAt(path string, defaultStructure bool) {
@@ -44,12 +40,12 @@ func CreateDocumentAt(path string, defaultStructure bool) {
         msg.Info(fmt.Sprintf("The directory %s already exists, keeping it.", msg.Style(assetPath, "Bold")))
 	}
 
-	yamlPath := filepath.Join(rootPath, "doctor.yaml")
-	err = ioutil.WriteFile(yamlPath, []byte(yamlFile), 0666)
+	tomlPath := filepath.Join(rootPath, "doctor.toml")
+	err = ioutil.WriteFile(tomlPath, []byte(tomlFile), 0666)
     if err != nil {
         msg.Error("Unable to write file: " + err.Error())
 	} else {
-		msg.Info("Created " + msg.Style(filepath.Base(yamlPath), "Bold"))
+		msg.Info("Created " + msg.Style(filepath.Base(tomlPath), "Bold"))
 	}
 
 	refPath := filepath.Join(assetPath, "references.bib")
