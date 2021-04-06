@@ -14,6 +14,7 @@ import (
 )
 
 func Build() {
+    // Check for dependencies
     err := utils.CheckDependencies() 
     if err != nil {
         msg.Error("Build failed. " + err.Error())
