@@ -11,15 +11,10 @@ import (
 )
 
 func main() {
-	/* root, err := utils.FindDoctorRoot()
-	if err != nil {
-		msg.Error(err.Error())
-		os.Exit(1)
-	} */
 	registry := clapper.NewRegistry()
 
 	rootCommand, _ := registry.Register("")
-	rootCommand.AddFlag("check-dependencies", "", true, "")
+	rootCommand.AddFlag("dependencies", "", true, "")
 
 	newCommand, _ := registry.Register("new")
 	newCommand.AddArg("path", ".")
@@ -47,7 +42,7 @@ func main() {
 	// Root command
 	case "":
 		// Can discard this err, command.Flags["check-dependencies"].Value will always be a parsable bool
-		if ok, _ := strconv.ParseBool(command.Flags["check-dependencies"].Value); ok {
+		if ok, _ := strconv.ParseBool(command.Flags["dependencies"].Value); ok {
 			core.CheckDependencies()
 		}
 
