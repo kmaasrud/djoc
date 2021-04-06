@@ -1,0 +1,73 @@
+:root {
+	/* Animations */
+	--transition-length: 150ms;
+
+	--text-color: 0, 0, 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+body {
+	margin: 0;
+	display: grid;
+	grid-template-columns: 1fr 20em;
+}
+
+h1.title {
+	margin: 0;
+	padding: 100px 0 50px 0;
+	text-align: center;
+	font-size: 250%;
+	border-bottom: none;
+}
+
+nav {
+	position: sticky;
+	top: 2rem;
+	align-self: start;
+}
+nav {
+  padding-left: 0;
+  border-left: 1px solid #efefef;
+}
+
+nav a {
+  text-decoration: none;
+  display: block;
+  padding: .125rem 0;
+  color: #ccc;
+  transition: all 50ms ease-in-out; /* 💡 This small transition makes setting of the active state smooth */
+}
+nav ul li.active > a {
+	color: #333;
+	font-weight: 500;
+}
+nav a:hover,
+nav a:focus {
+  color: #666;
+}
+
+.content-container {
+	margin: 0 auto;
+}
+.content {
+	max-width: 800px;
+	padding: 0 15px;
+}
+
+h1 {
+	border-bottom: 1px solid #000;
+	padding-top: 3rem;
+}
+
+/* Link styling */
+a {
+  position: relative;
+  color: rgb(var(--text-color));
+  text-decoration-color: rgb(var(--text-color));
+  transition: text-decoration-color var(--transition-length);
+}
+a:hover {
+  text-decoration-color: rgba(var(--text-color), 0.0);
+}

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href="main.css" rel="stylesheet">
+	<title>$if(title-prefix)$$title-prefix$ – $endif$$pagetitle$</title>
+	$if(math)$
+	  $math$
+	$endif$
+	<!--[if lt IE 9]>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+	<![endif]-->
+  </head>
+  <body>
+	<div class="content-container">
+    <div class="content"
+	$if(title)$
+    <header id="title-block-header">
+    <h1 class="title">$title$</h1>
+    </header>
+	$endif$
+	$body$
+    </div>
+	</div>
+
+	$if(toc)$
+	<nav id="$idprefix$TOC" role="doc-toc">
+	  $if(toc-title)$
+	  <h2 id="$idprefix$toc-title">$toc-title$</h2>
+	  $endif$
+	  $table-of-contents$
+	</nav>
+	$endif$
+    <!-- <script>
+    window.addEventListener('DOMContentLoaded', () => {
+        const observer = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            const id = entry.target.getAttribute('id');
+            if (entry.intersectionRatio > 0) {
+              document.querySelector(`nav li a[href="#${id}"]`).parentElement.classList.add('active');
+            } else {
+              document.querySelector(`nav li a[href="#${id}"]`).parentElement.classList.remove('active');
+            }
+          });
+        });
+
+        // Track all sections that have an `id` applied
+        document.querySelectorAll('h1[id]').forEach((h1) => {
+          observer.observe(h1);
+        });
+    });
+    </script> -->
+  </body>
+</html>
