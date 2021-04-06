@@ -4,6 +4,7 @@ import (
 	"os"
 	"fmt"
 	"strings"
+	"strconv"
 	"github.com/kmaasrud/doctor/msg"
 	"github.com/kmaasrud/doctor/core"
 	"github.com/thatisuday/clapper"
@@ -20,11 +21,8 @@ func main() {
 	rootCommand, _ := registry.Register("")
 	rootCommand.AddFlag("check-dependencies", "", true, "")
 
-	initCommand, _ := registry.Register("init")
-	initCommand.AddFlag("default", "d", true, "")
-
 	newCommand, _ := registry.Register("new")
-	newCommand.AddArg("path", "")
+	newCommand.AddArg("path", ".")
 	newCommand.AddFlag("default", "d", true, "")
 
 
@@ -45,26 +43,16 @@ func main() {
 
 
 	// Run the correct command logic
-    commandLogic:
 	switch command.Name {
 	// Root command
 	case "":
 		for key, val := range command.Flags {
+			fmt.Printf("%s\n", key)
 			switch key {
 			case "check-dependencies":
 				if val.Value == "true" { core.CheckDependencies() }
 			}
 		}
-
-	case "init":
-        for key := range command.Flags {
-            switch key {
-            case "default":
-                core.CreateDocumentAt(".", true)
-            }
-			break commandLogic
-        }
-		core.CreateDocumentAt(".", false)
 
 	case "new":
         var path string
@@ -73,13 +61,7 @@ func main() {
 		} else {
             path = command.Args["path"].DefaultValue
 		}
-        for key := range command.Flags {
-            switch key {
-            case "default":
-                core.CreateDocumentAt(path, true)
-            }
-			break commandLogic
-        }
-        core.CreateDocumentAt(path, false)
+		makeDefault, _ := strconv.ParseBool(command.Flags["default"].Value)
+        core.CreateDocumentAt(path, makeDefault)
 	}
 }
