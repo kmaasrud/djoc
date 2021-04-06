@@ -7,11 +7,11 @@ import (
 )
 
 func Error(text string) {
-    fmt.Printf(" %s  %s\n", Style("E", "Red", "Bold"), text)
+    println(fmt.Sprintf(" %s  %s", Style("E", "Red", "Bold"), text))
 }
 
 func Warning(text string) {
-    fmt.Printf(" %s  %s\n", Style("W", "Yellow", "Bold"), text)
+    println(fmt.Sprintf(" %s  %s", Style("W", "Yellow", "Bold"), text))
 }
 
 func Info(text string) {
