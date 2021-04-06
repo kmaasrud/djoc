@@ -17,7 +17,7 @@ reference-section-title: "References"
 bibliography: references.bib
 `
 
-func CreateDocumentAt(path string) {
+func CreateDocumentAt(path string, defaultStructure bool) {
 	rootPath, err := filepath.Abs(path)
 	if err != nil {
 		msg.Error(err.Error())
@@ -59,4 +59,8 @@ func CreateDocumentAt(path string) {
 	} else {
 		msg.Info("Created " + msg.Style(filepath.Base(refPath), "Bold"))
 	}
+
+    if defaultStructure {
+        msg.Info("Creating default document structure")
+    }
 }
