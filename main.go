@@ -61,8 +61,8 @@ func main() {
             switch key {
             case "default":
                 core.CreateDocumentAt(".", true)
-                break commandLogic
             }
+			break commandLogic
         }
 		core.CreateDocumentAt(".", false)
 
@@ -77,8 +77,8 @@ func main() {
             switch key {
             case "default":
                 core.CreateDocumentAt(path, true)
-                break commandLogic
             }
+			break commandLogic
         }
         core.CreateDocumentAt(path, false)
 	}
