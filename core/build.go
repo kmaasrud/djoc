@@ -66,23 +66,22 @@ func Build() {
 
 
 func runPandocWith(cmdArgs []string, done chan struct{}) {
-    var stdout, stderr bytes.Buffer
+    var stderr bytes.Buffer
     cmd := exec.Command("pandoc", cmdArgs...)
-    cmd.Stdout = &stdout
     cmd.Stderr = &stderr
 
     err := cmd.Run()
-    // If fatal error, show it as Doctor error
+    // Fatal error, exit with 1
     if err != nil {
         fmt.Print("\033[2K\r")
-        if stderr := string(stderr.Bytes()); stderr != "" {
-            cleanStderrMsg(stderr)
+        if _, ok := err.(*exec.ExitError); ok {
+            cleanStderrMsg(string(stderr.Bytes()))
         } else {
             msg.Error("Could not run command. " + err.Error())
         }
         os.Exit(1)
     }
-    // If non-fatal error (warning), show it as Doctor warning
+    // Non-fatal, but stderr is not empty, so it includes warnings
     if stderr := string(stderr.Bytes()); stderr != "" {
         fmt.Print("\033[2K\r")
         cleanStderrMsg(stderr)
@@ -92,8 +91,9 @@ func runPandocWith(cmdArgs []string, done chan struct{}) {
 
 
 // Tectonic, TeX and even Pandoc produces A LOT of noise. This function runs through each line
-// of stderr and returns only those containing allowed prefixes. This cleans up a lot and
-// allows me to style the errors/warnings according to Doctor messages
+// of stderr and returns only those containing relevant information. This cleans up a lot and
+// allows me to style the errors/warnings according to Doctor messages. I admit it might be a bit
+// stupid, since I can never be sure to catch everything, but I think it is worth the debug time.
 func cleanStderrMsg(stderr string) {
     includeNext := false
     for _, line := range strings.Split(strings.TrimSuffix(stderr, "\n"), "\n") {
