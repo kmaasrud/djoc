@@ -59,7 +59,7 @@ func downloadPandoc(dlDir string, version string) error {
     // Check if dlDir exists, else make it
 	if _, existErr := os.Stat(dlDir); os.IsNotExist(existErr) {
         msg.Info("Could not find local Doctor storage directory, making it...")
-		err := os.Mkdir(dlDir, 0777)
+		err := os.Mkdir(dlDir, 0755)
 		if err != nil {
 			return errors.New("Could not create Doctor local storage directory: " + err.Error())
 		}
@@ -114,7 +114,6 @@ func downloadPandoc(dlDir string, version string) error {
 
 		// Check the file type
 		switch header.Typeflag {
-
 		// If its a dir and it doesn't exist create it
 		case tar.TypeDir:
 			if _, err := os.Stat(target); err != nil {
@@ -123,7 +122,6 @@ func downloadPandoc(dlDir string, version string) error {
 					return err
 				}
 			}
-
 		// If it's a file create it
 		case tar.TypeReg:
 			f, err := os.OpenFile(target, os.O_CREATE|os.O_RDWR, os.FileMode(header.Mode))
@@ -131,13 +129,11 @@ func downloadPandoc(dlDir string, version string) error {
                 msg.CloseDo(done)
 				return err
 			}
-
 			// Copy over contents
 			if _, err := io.Copy(f, tr); err != nil {
                 msg.CloseDo(done)
 				return err
 			}
-			
 			// Manually close here after each file operation; defering would cause each file close
 			// to wait until all operations have completed.
 			f.Close()
