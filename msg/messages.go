@@ -37,12 +37,12 @@ func Do(doingText string, done chan struct{}) {
 			fmt.Printf("\033[2K\r%s %s", Style(dots, "Gray"), doingText)
 			i += 1
 		case <-done:
-			return 
+			return
 		}
 	}
 }
 
 func CloseDo(done chan struct{}) {
-    close(done)
-    fmt.Printf("\033[2K\r")
+	close(done)
+	fmt.Printf("\033[2K\r")
 }

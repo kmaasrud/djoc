@@ -43,11 +43,11 @@ func main() {
 	case "":
 		// Can discard this err, command.Flags["check-dependencies"].Value will always be a parsable bool
 		if ok, _ := strconv.ParseBool(command.Flags["dependencies"].Value); ok {
-            err := core.CheckDependencies()
-            if err != nil {
-                msg.Error(err.Error())
-            }
-            msg.Success("All the dependencies are installed. You're ready to go!")
+			err := core.CheckDependencies()
+			if err != nil {
+				msg.Error(err.Error())
+			}
+			msg.Success("All the dependencies are installed. You're ready to go!")
 		}
 
 	// Create new document command

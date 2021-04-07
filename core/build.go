@@ -14,16 +14,19 @@ import (
 )
 
 type WarningError struct {
-    Stderr string
+	Stderr string
 }
+
 func (e *WarningError) Error() string {
-    return e.Stderr
+	return e.Stderr
 }
+
 type ExitError struct {
-    Stderr string
+	Stderr string
 }
+
 func (e *ExitError) Error() string {
-    return e.Stderr
+	return e.Stderr
 }
 
 func Build() {
@@ -76,20 +79,20 @@ func Build() {
 	done := make(chan struct{})
 	go msg.Do("Building document with Pandoc", done)
 	err = runPandocWith(cmdArgs)
-    msg.CloseDo(done)
-    if err != nil {
-        switch err.(type) {
-        case *ExitError:
+	msg.CloseDo(done)
+	if err != nil {
+		switch err.(type) {
+		case *ExitError:
 			cleanStderrMsg(string(err.(*ExitError).Stderr))
-        case *WarningError:
+		case *WarningError:
 			cleanStderrMsg(string(err.(*WarningError).Stderr))
-            msg.Success("Document built.")
-        default:
+			msg.Success("Document built.")
+		default:
 			msg.Error("Could not run command. " + err.Error())
-        }
+		}
 		os.Exit(1)
-    }
-    msg.Success("Document built.")
+	}
+	msg.Success("Document built.")
 }
 
 func runPandocWith(cmdArgs []string) error {
@@ -100,13 +103,13 @@ func runPandocWith(cmdArgs []string) error {
 	err := cmd.Run()
 	// Fatal error, send the error over the channel
 	if err != nil {
-        return &ExitError{string(stderr.Bytes())}
+		return &ExitError{string(stderr.Bytes())}
 	}
 	// Non-fatal, but stderr is not empty, so it includes warnings
 	if stderr := string(stderr.Bytes()); stderr != "" {
-        return &WarningError{stderr}
+		return &WarningError{stderr}
 	}
-    return nil
+	return nil
 }
 
 // Tectonic, TeX and even Pandoc produce A LOT of noise. This function runs through each line
@@ -128,6 +131,6 @@ func cleanStderrMsg(stderr string) {
 			msg.Warning(msg.Style("Pandoc: ", "Bold") + strings.TrimPrefix(line, "[WARNING] "))
 		} else if strings.HasPrefix(line, "[ERROR] ") {
 			msg.Error(msg.Style("Pandoc: ", "Bold") + strings.TrimPrefix(line, "[ERROR] "))
-        } 
+		}
 	}
 }
