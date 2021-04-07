@@ -28,7 +28,7 @@ func (e *ExitError) Error() string {
 
 func Build() {
 	// Check for dependencies
-	err := utils.CheckDependencies()
+	err := CheckDependencies()
 	if err != nil {
 		msg.Error("Build failed. " + err.Error())
 		os.Exit(1)
@@ -83,6 +83,7 @@ func Build() {
 			cleanStderrMsg(string(err.(*ExitError).Stderr))
         case *WarningError:
 			cleanStderrMsg(string(err.(*WarningError).Stderr))
+            msg.Success("Document built.")
         default:
 			msg.Error("Could not run command. " + err.Error())
         }
@@ -108,7 +109,7 @@ func runPandocWith(cmdArgs []string) error {
     return nil
 }
 
-// Tectonic, TeX and even Pandoc produces A LOT of noise. This function runs through each line
+// Tectonic, TeX and even Pandoc produce A LOT of noise. This function runs through each line
 // of stderr and returns only those containing relevant information. This cleans up a lot and
 // allows me to style the errors/warnings according to Doctor messages. I admit it might be a bit
 // stupid, since I can never be sure to catch everything, but I think it is worth the debug time.

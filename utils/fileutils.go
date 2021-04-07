@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/kmaasrud/doctor/msg"
 	"os"
-	"os/exec"
 	"path/filepath"
 )
 
@@ -49,16 +48,4 @@ func FindSrcFiles(rootPath string) ([]string, error) {
 	}
 
 	return files, nil
-}
-
-// Checks if the dependencies of Doctor are present.
-func CheckDependencies() error {
-	deps := [2]string{"pandoc", "tectonic"}
-	for _, dep := range deps {
-		_, err := exec.LookPath(dep)
-		if err != nil {
-			return errors.New("Could not find " + msg.Style(dep, "Bold") + " in your PATH.")
-		}
-	}
-	return nil
 }

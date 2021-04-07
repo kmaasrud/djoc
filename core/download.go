@@ -17,9 +17,7 @@ import (
 func CheckDependencies() error {
     deps := map[string]string{"pandoc": "2.13", "tectonic": "0.4.1"}
     home, err := os.UserHomeDir()
-    if err != nil {
-        msg.Error(err.Error())
-    }
+    if err != nil { return err }
 
     // This is Unix specific. TODO: Find paths for Windows too
     doctorPath := filepath.Join(home, ".local", "share", "doctor")
@@ -33,7 +31,7 @@ func CheckDependencies() error {
             if dep == "pandoc" {
                 err := downloadPandoc(filepath.Join(doctorPath), ver)
                 if err != nil {
-                    msg.Error("Could not download Pandoc: " + err.Error())
+                    return errors.New("Could not download Pandoc: " + err.Error())
                 }
             } else {
                 return errors.New("Could not find " + msg.Style(dep, "Bold") + " in your PATH.")
