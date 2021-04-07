@@ -26,9 +26,8 @@ func Debug(text string) {
 	fmt.Printf("%s %s\n", Style("DEBUG:", "Gray"), text)
 }
 
-func Do(doingText, doneText string, done chan struct{}) {
+func Do(doingText string, done chan struct{}) {
 	ticker := time.NewTicker(500 * time.Millisecond)
-	defer fmt.Printf("\033[2K\r %s  %s\n", Style("✓", "Green", "Bold"), doneText)
 	defer ticker.Stop()
 	for i := 0; ; {
 		select {
@@ -38,7 +37,12 @@ func Do(doingText, doneText string, done chan struct{}) {
 			fmt.Printf("\033[2K\r%s %s", Style(dots, "Gray"), doingText)
 			i += 1
 		case <-done:
-			return
+			return 
 		}
 	}
+}
+
+func CloseDo(done chan struct{}) {
+    close(done)
+    fmt.Printf("\033[2K\r")
 }

@@ -13,6 +13,19 @@ import (
 	"github.com/kmaasrud/doctor/utils"
 )
 
+type WarningError struct {
+    Stderr string
+}
+func (e *WarningError) Error() string {
+    return e.Stderr
+}
+type ExitError struct {
+    Stderr string
+}
+func (e *ExitError) Error() string {
+    return e.Stderr
+}
+
 func Build() {
 	// Check for dependencies
 	err := utils.CheckDependencies()
@@ -29,7 +42,7 @@ func Build() {
 	}
 
 	// Initialize command slice with options always present
-	cmdArgs := []string{"-s", "--pdf-engine=tectonic", "--pdf-engine-opt=-c=minimal", "-o", "main.pdf"}
+	cmdArgs := []string{"-s", "--pdf-engine=tectonic", "--pdf-engine-opt=-c=minimal", "-o", filepath.Join(rootPath, "main.pdf")}
 
 	// If references.bib exists, run with citeproc and add bibliography
 	if _, err := os.Stat(filepath.Join(rootPath, "assets", "references.bib")); err == nil {
@@ -61,32 +74,38 @@ func Build() {
 
 	// Execute command
 	done := make(chan struct{})
-	go runPandocWith(cmdArgs, done)
-	msg.Do("Building document with Pandoc", "Document built!", done)
+	go msg.Do("Building document with Pandoc", done)
+	err = runPandocWith(cmdArgs)
+    msg.CloseDo(done)
+    if err != nil {
+        switch err.(type) {
+        case *ExitError:
+			cleanStderrMsg(string(err.(*ExitError).Stderr))
+        case *WarningError:
+			cleanStderrMsg(string(err.(*WarningError).Stderr))
+        default:
+			msg.Error("Could not run command. " + err.Error())
+        }
+		os.Exit(1)
+    }
+    msg.Success("Document built.")
 }
 
-func runPandocWith(cmdArgs []string, done chan struct{}) {
+func runPandocWith(cmdArgs []string) error {
 	var stderr bytes.Buffer
 	cmd := exec.Command("pandoc", cmdArgs...)
 	cmd.Stderr = &stderr
 
 	err := cmd.Run()
-	// Fatal error, exit with 1
+	// Fatal error, send the error over the channel
 	if err != nil {
-		fmt.Print("\033[2K\r")
-		if _, ok := err.(*exec.ExitError); ok {
-			cleanStderrMsg(string(stderr.Bytes()))
-		} else {
-			msg.Error("Could not run command. " + err.Error())
-		}
-		os.Exit(1)
+        return &ExitError{string(stderr.Bytes())}
 	}
 	// Non-fatal, but stderr is not empty, so it includes warnings
 	if stderr := string(stderr.Bytes()); stderr != "" {
-		fmt.Print("\033[2K\r")
-		cleanStderrMsg(stderr)
+        return &WarningError{stderr}
 	}
-	close(done)
+    return nil
 }
 
 // Tectonic, TeX and even Pandoc produces A LOT of noise. This function runs through each line
@@ -108,6 +127,6 @@ func cleanStderrMsg(stderr string) {
 			msg.Warning(msg.Style("Pandoc: ", "Bold") + strings.TrimPrefix(line, "[WARNING] "))
 		} else if strings.HasPrefix(line, "[ERROR] ") {
 			msg.Error(msg.Style("Pandoc: ", "Bold") + strings.TrimPrefix(line, "[ERROR] "))
-		}
+        } 
 	}
 }
