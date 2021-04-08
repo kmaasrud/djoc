@@ -2,13 +2,19 @@ package main
 
 import (
 	"fmt"
-	"github.com/kmaasrud/doctor/core"
-	"github.com/kmaasrud/doctor/msg"
-	"github.com/thatisuday/clapper"
 	"os"
 	"strconv"
 	"strings"
+	_ "embed"
+
+	"github.com/kmaasrud/doctor/core"
+	"github.com/kmaasrud/doctor/msg"
+    "github.com/kmaasrud/doctor/global"
+	"github.com/thatisuday/clapper"
 )
+
+//go:embed lua/crossref.lua
+var luaCrossref string
 
 func main() {
 	registry := clapper.NewRegistry()
@@ -21,6 +27,7 @@ func main() {
 	newCommand.AddFlag("default", "d", true, "")
 
 	registry.Register("build")
+	registry.Register("test")
 
 	// Parse commands
 	command, err := registry.Parse(os.Args[1:])
@@ -64,5 +71,8 @@ func main() {
 
 	case "build":
 		core.Build()
+	case "test":
+		fmt.Println(luaCrossref)
 	}
+    os.Exit(*global.ExitCode)
 }
