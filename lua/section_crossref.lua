@@ -23,6 +23,6 @@ function resolve_section_ref(cite)
 end
 
 return {
-  {Pandoc = populate_section_numbers},
+  {Pandoc = find_sections},
   {Cite = resolve_section_ref}
 }
