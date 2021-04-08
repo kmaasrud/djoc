@@ -27,7 +27,6 @@ func main() {
 	newCommand.AddFlag("default", "d", true, "")
 
 	registry.Register("build")
-	registry.Register("test")
 
 	// Parse commands
 	command, err := registry.Parse(os.Args[1:])
@@ -71,8 +70,6 @@ func main() {
 
 	case "build":
 		core.Build()
-	case "test":
-		fmt.Println(luaCrossref)
 	}
     os.Exit(*global.ExitCode)
 }
