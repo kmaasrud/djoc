@@ -66,12 +66,10 @@ func Build() {
 	msg.Info("Looking for source files...")
 	files, err := utils.FindSrcFiles(rootPath)
 	if err != nil {
-		msg.Error("Build failed! " + err.Error())
+		msg.Error(err.Error())
 		os.Exit(1)
-	} else if len(files) < 1 {
-		msg.Warning("Could not find any source files. Aborting build.")
-		os.Exit(0)
-	}
+	} 
+
 	cmdArgs = append(cmdArgs, files...)
 	msg.Info(fmt.Sprintf("Found %d source files!", len(files)))
 
