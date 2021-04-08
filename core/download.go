@@ -9,20 +9,20 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+    "runtime"
 
 	"github.com/kmaasrud/doctor/msg"
+	"github.com/kmaasrud/doctor/utils"
 )
 
 // Checks if the dependencies of Doctor are present.
 func CheckDependencies() error {
 	deps := map[string]string{"pandoc": "2.13", "tectonic": "0.4.1"}
-	home, err := os.UserHomeDir()
-	if err != nil {
-		return err
-	}
 
-	// This is Unix specific. TODO: Find paths for Windows too
-	doctorPath := filepath.Join(home, ".local", "share", "doctor")
+    doctorPath, err := utils.FindDoctorDataDir()
+    if err != nil {
+        return err
+    }
 
 	for dep, ver := range deps {
 		if _, err := os.Stat(filepath.Join(doctorPath, dep+"-"+ver, "bin", dep)); err == nil {
@@ -30,13 +30,13 @@ func CheckDependencies() error {
 		}
 		_, err := exec.LookPath(dep)
 		if err != nil {
-			if dep == "pandoc" {
+            if dep == "pandoc" && runtime.GOOS != "windows" {
 				err := downloadPandoc(filepath.Join(doctorPath), ver)
 				if err != nil {
 					return errors.New("Could not download Pandoc: " + err.Error())
 				}
 			} else {
-				return errors.New("Could not find " + msg.Style(dep, "Bold") + " in your PATH.")
+				return errors.New("Could not find" + dep + "in your PATH.")
 			}
 		}
 	}
@@ -44,9 +44,10 @@ func CheckDependencies() error {
 }
 
 func downloadPandoc(dlDir string, version string) error {
+    // Init loader
 	done := make(chan struct{})
-
 	go msg.Do("Downloading Pandoc tarball", done)
+    // First download the tarball of Pandoc <version> from GitHub
 	url := "https://github.com/jgm/pandoc/releases/download/" + version + "/pandoc-" + version + "-linux-amd64.tar.gz"
 	resp, err := http.Get(url)
 	if err != nil {
@@ -58,42 +59,48 @@ func downloadPandoc(dlDir string, version string) error {
 
 	// Check if dlDir exists, else make it
 	if _, existErr := os.Stat(dlDir); os.IsNotExist(existErr) {
-		msg.Info("Could not find local Doctor storage directory, making it...")
 		err := os.Mkdir(dlDir, 0755)
 		if err != nil {
+            msg.CloseDo(done)
 			return errors.New("Could not create Doctor local storage directory: " + err.Error())
 		}
 	}
-	f, err := os.Create(filepath.Join(dlDir, "pandoc.tar.gz"))
+
+    // Create file to copy the URL response into
+	f, err := os.Create(filepath.Join(dlDir, "pandoc-" + version + ".tar.gz"))
 	if err != nil {
 		msg.CloseDo(done)
 		msg.Error(err.Error())
 		os.Exit(1)
 	}
 
+    // Copy URL response into file
 	_, err = io.Copy(f, resp.Body)
 	if err != nil {
 		msg.CloseDo(done)
 		msg.Error(err.Error())
 		os.Exit(1)
 	}
+    // Success! Stop loader and print success message
 	msg.CloseDo(done)
 	msg.Success("Pandoc tarball downloaded.")
 
+    // File is still open, seek to the beginning and create a gzip reader
 	f.Seek(0, 0)
 	gzr, err := gzip.NewReader(f)
 	if err != nil {
-		msg.Debug("You're here")
+        msg.CloseDo(done)
 		return err
 	}
 	defer gzr.Close()
 
+    // Init loader
 	done = make(chan struct{})
 	go msg.Do("Untarring Pandoc tarball", done)
+    // Begin untarring the tarball
 	tr := tar.NewReader(gzr)
 	for {
 		header, err := tr.Next()
-
 		switch {
 		// If no more files are found, mark as done and return
 		case err == io.EOF:
