@@ -6,6 +6,7 @@ import (
 	"github.com/kmaasrud/doctor/msg"
 	"os"
 	"path/filepath"
+    "runtime"
 )
 
 // Searches up the directory tree to find a doctor.yaml file and returns the path
@@ -48,4 +49,22 @@ func FindSrcFiles(rootPath string) ([]string, error) {
 	}
 
 	return files, nil
+}
+
+// Returns the path where Doctor stores it's data. Supports both Windows and Unix.
+// TODO: Accept variables like XDG_DATA_DIR and %DATADIR% (or whatever it's called on Windows).
+func FindDoctorDataDir() (string, error) {
+	home, err := os.UserHomeDir()
+	if err != nil {
+		return " ", err
+	}
+
+    var doctorPath string
+    if runtime.GOOS == "windows" {
+        doctorPath = filepath.Join(home, "AppData", "Roaming", "doctor")
+    } else {
+        doctorPath = filepath.Join(home, ".local", "share", "doctor")
+    }
+
+    return doctorPath, nil
 }
