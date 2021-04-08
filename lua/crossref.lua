@@ -17,6 +17,11 @@ local figure_count = 1
 local equations = {}
 local eq_count = 1
 local tables = {}
+local table_count = 1
+
+-- Whether to put parentheses around equation numbers or not.
+-- This should be configured as a metadata thing, but hardcoding for now
+local eq_surround_paren = false
 
 -- Poplate sections table with ID and number
 function populate_sections(doc)
@@ -48,7 +53,11 @@ function populate_equations(para)
     for _, v in pairs(para.content) do
       if v.t == "Str" and v.text:match("{#eq:.*}") then
         id = v.text:gsub("{#", ""):gsub("}", "") -- Strip the prefix and brackets
-        equations[id] = eq_count
+        if eq_surround_paren then
+          equations[id] = "(" .. eq_count .. ")"
+        else
+          equations[id] = eq_count
+        end
         eq_count = eq_count + 1
       end
     end
@@ -57,7 +66,7 @@ function populate_equations(para)
         return pandoc.RawBlock("latex", "\\begin{equation}\n" .. para.content[1].text .. "\n\\label{" .. id .. "}\n\\end{equation}")
       else
         -- I'm mostly interested in HTML, in which this is the same behavior as pandoc-crossref.
-        -- For some other formats, there is probably a better solution than this
+        -- For other formats, there is probably a better solution than using \qquad
         return pandoc.Para(pandoc.Span(pandoc.Math("DisplayMath", para.content[1].text .. "\\qquad\\text{(" .. eq_count .. ")}"), {id = id}))
       end
     end
@@ -65,16 +74,39 @@ function populate_equations(para)
 end
 
 
+function populate_tables(table)
+  if table.caption then
+    -- Caption might contain several blocks, extract ID from last block
+    caption = table.caption.long[#table.caption.long].content
+    for i=1,#caption do
+      j = #caption - i + 1 -- This is why indices start on 0...
+      if caption[j].t == "Str" and caption[j].text:match("^{#tbl:.*}") then
+        id = caption[j].text:gsub("{#", ""):gsub("}", "") -- Strip the prefix and brackets
+        tables[id] = table_count
+        table_count = table_count + 1
+        caption:remove(j); caption:remove(j-1) -- Remove ID definition and the space before
+        break
+      end
+    end
+    if id then
+      return pandoc.Div(table, {id = id})
+    end
+  end
+end
+
+
 function refs(cite)
   id = cite.citations[1].id
-  if id:match("^sec:.*") then
+  sec = id:match("^sec:.*"); fig = id:match("^fig:.*"); tbl = id:match("^tbl:.*"); eq = id:match("^eq:.*")
+  if FORMAT == "latex" and sec and fig and tbl and eq then
+    return pandoc.RawInline("latex", "\\autoref{" .. id .. "}")
+  elseif sec then
     link_text = pandoc.Str(sections[id])
-  elseif id:match("^fig:.*") then
+  elseif fig then
     link_text = pandoc.Str(figures[id])
-  elseif id:match("^eq:.*") then
-    if FORMAT == "latex" then
-      return pandoc.RawInline("latex", "\\ref{" .. id .. "}")
-    end
+  elseif tbl then
+    link_text = pandoc.Str(tables[id])
+  elseif eq then
     link_text = pandoc.Str(equations[id])
   else
     return nil
@@ -86,5 +118,6 @@ return {
   {Pandoc = populate_sections},
   {Para = populate_figures},
   {Para = populate_equations},
+  {Table = populate_tables},
   {Cite = refs},
 }

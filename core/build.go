@@ -8,9 +8,12 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
+    _ "embed"
 
 	"github.com/kmaasrud/doctor/msg"
 	"github.com/kmaasrud/doctor/utils"
+    "github.com/kmaasrud/doctor/lua"
+    "github.com/kmaasrud/doctor/global"
 )
 
 type WarningError struct {
@@ -34,18 +37,34 @@ func Build() {
 	err := CheckDependencies()
 	if err != nil {
 		msg.Error("Build failed. " + err.Error())
-		os.Exit(1)
+        *global.ExitCode = 1; return
 	}
 
 	// Find root
 	rootPath, err := utils.FindDoctorRoot()
 	if err != nil {
 		msg.Error("Build failed. " + err.Error())
-		os.Exit(1)
+        *global.ExitCode = 1; return
 	}
 
 	// Initialize command slice with options always present
 	cmdArgs := []string{"-s", "--pdf-engine=tectonic", "--pdf-engine-opt=-c=minimal", "-o", filepath.Join(rootPath, "main.pdf")}
+
+    // Temporarily write any Lua filters to file and add them to command
+    for filename, filter := range lua.Filters {
+        f, err := os.Create(filepath.Join(rootPath, filename))
+        if err != nil {
+            msg.Error("Build failed. " + err.Error())
+            *global.ExitCode = 1; return
+        }
+        _, err = f.Write(filter)
+        if err != nil {
+            msg.Error("Could not write Lua file. " + err.Error())
+            *global.ExitCode = 1; return
+        }
+        cmdArgs = append(cmdArgs, "-L", filename)
+    }
+    defer cleanUpLuaFilters(rootPath)
 
 	// If references.bib exists, run with citeproc and add bibliography
 	if _, err := os.Stat(filepath.Join(rootPath, "assets", "references.bib")); err == nil {
@@ -67,7 +86,7 @@ func Build() {
 	files, err := utils.FindSrcFiles(rootPath)
 	if err != nil {
 		msg.Error(err.Error())
-		os.Exit(1)
+        *global.ExitCode = 1; return
 	} 
 
 	cmdArgs = append(cmdArgs, files...)
@@ -81,14 +100,14 @@ func Build() {
 	if err != nil {
 		switch err.(type) {
 		case *ExitError:
-			cleanStderrMsg(string(err.(*ExitError).Stderr))
+			cleanStderrMsg(err.(*ExitError).Stderr)
 		case *WarningError:
-			cleanStderrMsg(string(err.(*WarningError).Stderr))
+			cleanStderrMsg(err.(*WarningError).Stderr)
 			msg.Success("Document built.")
 		default:
 			msg.Error("Could not run command. " + err.Error())
 		}
-		os.Exit(1)
+        *global.ExitCode = 1; return
 	}
 	msg.Success("Document built.")
 }
@@ -104,8 +123,8 @@ func runPandocWith(cmdArgs []string) error {
 		return &ExitError{string(stderr.Bytes())}
 	}
 	// Non-fatal, but stderr is not empty, so it includes warnings
-	if stderr := string(stderr.Bytes()); stderr != "" {
-		return &WarningError{stderr}
+	if stderr := string(stderr.Bytes()); len(stderr) != 0 {
+		return &WarningError{string(stderr)}
 	}
 	return nil
 }
@@ -131,4 +150,16 @@ func cleanStderrMsg(stderr string) {
 			msg.Error(msg.Style("Pandoc: ", "Bold") + strings.TrimPrefix(line, "[ERROR] "))
 		}
 	}
+}
+
+func cleanUpLuaFilters(rootPath string) {
+    if len(lua.Filters) > 0 {
+        msg.Info("Cleaning up Lua filters...")
+        for filename := range lua.Filters {
+            err := os.Remove(filepath.Join(rootPath, filename))
+            if err != nil {
+                msg.Error("Failed to remove Lua filter " + filename + ". " + err.Error())
+            }
+        }
+    }
 }
