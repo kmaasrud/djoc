@@ -4,6 +4,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link href="main.css" rel="stylesheet">
+	<link rel="icon" type="image/svg" href="favicon.svg">
 	<title>$if(title-prefix)$$title-prefix$ – $endif$$pagetitle$</title>
 	$if(math)$
 	  $math$
@@ -14,12 +15,8 @@
   </head>
   <body>
 	<div class="content-container">
+	<img id="main-logo" src="logo.svg">
     <div class="content"
-	$if(title)$
-    <header id="title-block-header">
-    <h1 class="title">$title$</h1>
-    </header>
-	$endif$
 	$body$
     </div>
 	</div>
@@ -51,5 +48,11 @@
         });
     });
     </script> -->
+
+	<!-- $if(title)$
+    <header id="title-block-header">
+    <h1 class="title">$title$</h1>
+    </header>
+	$endif$ -->
   </body>
 </html>

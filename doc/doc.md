@@ -2,20 +2,27 @@
 title: Doctor documentation
 ---
 
-This wiki contains guides on getting started, documentation on using KODB and also acts as a general wiki for writing texts using this tool. Beware that this wiki is very much under construction, but hopefully the pages here prove useful.
+Welcome to the Doctor documentation! Here you will find everything you need to know about writing documents with Doctor.
 
 # Installation
 
-KODB depends on [Pandoc](https://pandoc.org/) for parsing the Markdown documents and [Tectonic](https://tectonic-typesetting.github.io/) for producing the PDF output. Thus, they need to be installed and available in the PATH for KODB to work.
+To download Doctor, either take a look at one of the pre-compiled binaries on [GitHub](/), or download it with the [Go tool](https://golang.org/doc/install) by running
 
-- Pandoc has lots of installation options for almost every platform. See [Installing pandoc](https://pandoc.org/installing.html) and follow the instructions for your platform.
-- Tectonic is quite a young software and not as easy to install, but it should work for Windows, Mac and most Linux distributions. See [Installing Tectonic](https://tectonic-typesetting.github.io/en-US/install.html) and find the installation method best suited for you. (Quick-tip: On Windows, an older version of Tectonic is available on [Chocolatey](https://chocolatey.org/packages/tectonic))
+	go install github.com/kmaasrud/doctor
+
+Doctor needs one crucial component in order to work correctly, namely [Pandoc](https://pandoc.org/). Pandoc is actually so important that Doctor automatically downloads it for you if it is not already present in your system. Don't worry, if you have it installed already, you will not get a double.
+
+Additionally, if you want to produce PDFs, you will need a $\LaTeX$ engine. The fastest alternative is [TeXLive's](https://tug.org/texlive/) `pdflatex`, which you probably already have installed. For a lighter alternative, which is almost as fast and automatically installs missing packages for you, have a look at downloading [Tectonic](https://tectonic-typesetting.github.io/)
 
 When this is done make sure you have a working installation of Python (version 3 is required) and its package manager, PIP. Now you can do the final step and install KODB:
 
     pip install kodb
 
 To verify that everything works correctly, run `kodb --check-dependencies`.
+
+# About Pandoc
+
+Pandoc is perhaps the best document converter one can find, and also sports one of the most thorough and well thought out Markdown specifications. 
 
 # Creating a document
 

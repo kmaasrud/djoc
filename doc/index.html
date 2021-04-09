@@ -4,60 +4,77 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link href="main.css" rel="stylesheet">
+	<link rel="icon" type="image/svg" href="favicon.svg">
 	<title>Doctor documentation</title>
+		  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.js"></script>
+    <script>document.addEventListener("DOMContentLoaded", function () {
+     var mathElements = document.getElementsByClassName("math");
+     var macros = [];
+     for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+       katex.render(texText.data, mathElements[i], {
+        displayMode: mathElements[i].classList.contains('display'),
+        throwOnError: false,
+        macros: macros,
+        fleqn: false
+       });
+    }}});
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css" />
 		<!--[if lt IE 9]>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
 	<![endif]-->
   </head>
   <body>
 	<div class="content-container">
+	<img id="main-logo" src="logo.svg">
     <div class="content"
-	    <header id="title-block-header">
-    <h1 class="title">Doctor documentation</h1>
-    </header>
-		<p>This wiki contains guides on getting started, documentation on using KODB and also acts as a general wiki for writing texts using this tool. Beware that this wiki is very much under construction, but hopefully the pages here prove useful.</p>
-  <h1 id="installation">Installation</h1>
-  <p>KODB depends on <a href="https://pandoc.org/">Pandoc</a> for parsing the Markdown documents and <a href="https://tectonic-typesetting.github.io/">Tectonic</a> for producing the PDF output. Thus, they need to be installed and available in the PATH for KODB to work.</p>
-  <ul>
-  <li>Pandoc has lots of installation options for almost every platform. See <a href="https://pandoc.org/installing.html">Installing pandoc</a> and follow the instructions for your platform.</li>
-  <li>Tectonic is quite a young software and not as easy to install, but it should work for Windows, Mac and most Linux distributions. See <a href="https://tectonic-typesetting.github.io/en-US/install.html">Installing Tectonic</a> and find the installation method best suited for you. (Quick-tip: On Windows, an older version of Tectonic is available on <a href="https://chocolatey.org/packages/tectonic">Chocolatey</a>)</li>
-  </ul>
-  <p>When this is done make sure you have a working installation of Python (version 3 is required) and its package manager, PIP. Now you can do the final step and install KODB:</p>
-  <pre><code>pip install kodb</code></pre>
-  <p>To verify that everything works correctly, run <code>kodb --check-dependencies</code>.</p>
-  <h1 id="creating-a-document">Creating a document</h1>
-  <p>To get started with a document, run</p>
-  <pre><code>kodb new &lt;name&gt;</code></pre>
-  <p>to create a directory with the supplied name, containing the structure of a KODB document workspace. You can also run</p>
-  <pre><code>kodb init</code></pre>
-  <p>to use the current working directory as a root of the document workspace. This command will create the following structure inside the workspace:</p>
-  <ul>
-  <li><code>src/</code>: This directory will contain the Markdown-files that make up your project.</li>
-  <li><code>assets/</code>: This is a directory for all the assets needed by your document. This could be everything from figures to CSL styles.</li>
-  <li><code>kodb.yaml</code>: This is a YAML file that holds all your document’s configuration. It serves the purpose as Pandoc’s YAML file, but with some extensions specific to KODB.</li>
-  </ul>
-  <p>KODB also makes a <code>references.bib</code> file in the <code>assets</code> directory for you to place your references in. See <a href="https://github.com/kmaasrud/kodb/wiki/Citation">Citation</a> for more details on this.</p>
-  <p>As a rule, you should not manually create, rename or move files in the KODB document workspace - with the exception of adding files to the <code>assets</code> directory. Rather, you should let KODB handle the dirty work of maintaining the workspace, and focus on what you’re best at: Writing amazing content! However, you might notice that the document is a bit empty for the time being. To solve this, see <a href="https://github.com/kmaasrud/kodb/wiki/Adding-and-removing-sections">Adding and removing sections</a>.</p>
-  <h1 id="adding-and-removing-sections">Adding and removing sections</h1>
-  <p>A <em>section</em> in a KODB document is just a single Markdown file in the <code>src</code> directory, but that file should also represent only <strong>one</strong> single section of the document. A good rule of thumb is to start each section with a top level header (a single <code>#</code>), and only use subheaders below it. This ensures a consistent file structure that accurately depicts your document.</p>
-  <h2 id="adding-a-section">Adding a section</h2>
-  <p>To create a section, use the <code>add</code> command:</p>
-  <pre><code>kodb add &lt;title of section&gt;</code></pre>
-  <p>This will add a Markdown file to your <code>src</code> directory with a header and filename corresponding to the supplied section title. To include spaces in your title, simply wrap it in quotes, for example <code>kodb add "Results and discussion"</code>. By default, every time the <code>add</code> command is run, the section is appended to the document. If you want to add a section to a specific position however, you need only supply the index of your desired position after the title, like this:</p>
-  <pre><code>kodb add &lt;title of section&gt; &lt;index&gt;</code></pre>
-  <p>To get an overview of the document before adding a section at a specific position, see <a href="https://github.com/kmaasrud/kodb/wiki/Listing-the-document-structure">Listing the document structure</a>.</p>
-  <h3 id="special-sections">Special sections</h3>
-  <p>When adding a secion named either “Abstract” or “Appendix”, it will be prepopulated with some formatting that reflect these special section types. Try it out, I’m sure you’ll be delighted!</p>
-  <h2 id="removing-sections">Removing sections</h2>
-  <p>To remove a section, run the following</p>
-  <pre><code>kodb remove &lt;identifier&gt;</code></pre>
-  <p>Here, <code>&lt;identifier&gt;</code> can be either the index of the section you want to remove or the name of the section. See <a href="https://github.com/kmaasrud/kodb/wiki/Listing-the-document-structure">Listing the document structure</a> for a description on how to get an overview of the project.</p>
+	<p>Welcome to the Doctor documentation! Here you will find everything you need to know about writing documents with Doctor.</p>
+ <h1 id="installation">Installation</h1>
+ <p>To download Doctor, either take a look at one of the pre-compiled binaries on <a href="/">GitHub</a>, or download it with the <a href="https://golang.org/doc/install">Go tool</a> by running</p>
+ <pre><code>go install github.com/kmaasrud/doctor</code></pre>
+ <p>Doctor needs one crucial component in order to work correctly, namely <a href="https://pandoc.org/">Pandoc</a>. Pandoc is actually so important that Doctor automatically downloads it for you if it is not already present in your system. Don’t worry, if you have it installed already, you will not get a double.</p>
+ <p>Additionally, if you want to produce PDFs, you will need a <span class="math inline">\LaTeX</span> engine. The fastest alternative is <a href="https://tug.org/texlive/">TeXLive’s</a> <code>pdflatex</code>, which you probably already have installed. For a lighter alternative, which is almost as fast and automatically installs missing packages for you, have a look at downloading <a href="https://tectonic-typesetting.github.io/">Tectonic</a></p>
+ <p>When this is done make sure you have a working installation of Python (version 3 is required) and its package manager, PIP. Now you can do the final step and install KODB:</p>
+ <pre><code>pip install kodb</code></pre>
+ <p>To verify that everything works correctly, run <code>kodb --check-dependencies</code>.</p>
+ <h1 id="about-pandoc">About Pandoc</h1>
+ <p>Pandoc is perhaps the best document converter one can find, and also sports one of the most thorough and well thought out Markdown specifications.</p>
+ <h1 id="creating-a-document">Creating a document</h1>
+ <p>To get started with a document, run</p>
+ <pre><code>kodb new &lt;name&gt;</code></pre>
+ <p>to create a directory with the supplied name, containing the structure of a KODB document workspace. You can also run</p>
+ <pre><code>kodb init</code></pre>
+ <p>to use the current working directory as a root of the document workspace. This command will create the following structure inside the workspace:</p>
+ <ul>
+ <li><code>src/</code>: This directory will contain the Markdown-files that make up your project.</li>
+ <li><code>assets/</code>: This is a directory for all the assets needed by your document. This could be everything from figures to CSL styles.</li>
+ <li><code>kodb.yaml</code>: This is a YAML file that holds all your document’s configuration. It serves the purpose as Pandoc’s YAML file, but with some extensions specific to KODB.</li>
+ </ul>
+ <p>KODB also makes a <code>references.bib</code> file in the <code>assets</code> directory for you to place your references in. See <a href="https://github.com/kmaasrud/kodb/wiki/Citation">Citation</a> for more details on this.</p>
+ <p>As a rule, you should not manually create, rename or move files in the KODB document workspace - with the exception of adding files to the <code>assets</code> directory. Rather, you should let KODB handle the dirty work of maintaining the workspace, and focus on what you’re best at: Writing amazing content! However, you might notice that the document is a bit empty for the time being. To solve this, see <a href="https://github.com/kmaasrud/kodb/wiki/Adding-and-removing-sections">Adding and removing sections</a>.</p>
+ <h1 id="adding-and-removing-sections">Adding and removing sections</h1>
+ <p>A <em>section</em> in a KODB document is just a single Markdown file in the <code>src</code> directory, but that file should also represent only <strong>one</strong> single section of the document. A good rule of thumb is to start each section with a top level header (a single <code>#</code>), and only use subheaders below it. This ensures a consistent file structure that accurately depicts your document.</p>
+ <h2 id="adding-a-section">Adding a section</h2>
+ <p>To create a section, use the <code>add</code> command:</p>
+ <pre><code>kodb add &lt;title of section&gt;</code></pre>
+ <p>This will add a Markdown file to your <code>src</code> directory with a header and filename corresponding to the supplied section title. To include spaces in your title, simply wrap it in quotes, for example <code>kodb add "Results and discussion"</code>. By default, every time the <code>add</code> command is run, the section is appended to the document. If you want to add a section to a specific position however, you need only supply the index of your desired position after the title, like this:</p>
+ <pre><code>kodb add &lt;title of section&gt; &lt;index&gt;</code></pre>
+ <p>To get an overview of the document before adding a section at a specific position, see <a href="https://github.com/kmaasrud/kodb/wiki/Listing-the-document-structure">Listing the document structure</a>.</p>
+ <h3 id="special-sections">Special sections</h3>
+ <p>When adding a secion named either “Abstract” or “Appendix”, it will be prepopulated with some formatting that reflect these special section types. Try it out, I’m sure you’ll be delighted!</p>
+ <h2 id="removing-sections">Removing sections</h2>
+ <p>To remove a section, run the following</p>
+ <pre><code>kodb remove &lt;identifier&gt;</code></pre>
+ <p>Here, <code>&lt;identifier&gt;</code> can be either the index of the section you want to remove or the name of the section. See <a href="https://github.com/kmaasrud/kodb/wiki/Listing-the-document-structure">Listing the document structure</a> for a description on how to get an overview of the project.</p>
     </div>
 	</div>
 
 		<nav id="TOC" role="doc-toc">
 	  	  <ul>
       <li><a href="#installation">Installation</a></li>
+      <li><a href="#about-pandoc">About Pandoc</a></li>
       <li><a href="#creating-a-document">Creating a document</a></li>
       <li><a href="#adding-and-removing-sections">Adding and removing sections</a>
       <ul>
@@ -85,5 +102,10 @@
         });
     });
     </script> -->
+
+	<!--     <header id="title-block-header">
+    <h1 class="title">Doctor documentation</h1>
+    </header>
+	 -->
   </body>
 </html>
