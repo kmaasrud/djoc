@@ -1,4 +1,4 @@
-<img src="doc/favicon.png" align="right" height="110">
+<img src="https://raw.githubusercontent.com/kmaasrud/kodb/rewrite-in-go/doc/favicon.svg" align="right" height="110">
 
 # Doctor
 
