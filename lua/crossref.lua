@@ -57,7 +57,7 @@ end
 
 
 function populate_tables(table)
-  if table.caption then
+  if table.caption and #table.caption.long > 0 then
     -- Caption might contain several blocks, extract ID from last block
     caption = table.caption.long[#table.caption.long].content
     for i=#caption,1,-1 do -- Iterating backwards to limit number of loops (ID often placed after the caption)
