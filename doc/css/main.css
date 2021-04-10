@@ -12,6 +12,7 @@
 }
 body {
 	margin: 0;
+	margin-bottom: 200px;
 	display: grid;
 	grid-template-columns: 1fr 20em;
 	font-family: "Roboto";
@@ -60,6 +61,7 @@ nav a:focus {
 h1 {
 	border-bottom: 1px solid rgba(var(--text-color), 0.2);
 	padding-top: 3rem;
+	font-family: "MADE TOMMY";
 }
 
 /* Link styling */
