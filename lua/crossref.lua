@@ -1,16 +1,3 @@
-local function dump(o)
-   if type(o) == 'table' then
-      local s = '{ '
-      for k,v in pairs(o) do
-         if type(k) ~= 'number' then k = '"'..k..'"' end
-         s = s .. '['..k..'] = ' .. dump(v) .. ','
-      end
-      return s .. '} '
-   else
-      return tostring(o)
-   end
-end
-
 local sections = {}
 local figures = {}
 local figure_count = 1
@@ -18,10 +5,6 @@ local equations = {}
 local eq_count = 1
 local tables = {}
 local table_count = 1
-
--- Whether to put parentheses around equation numbers or not.
--- TODO: This should be configured as a metadata thing, but hardcoding for now
-local eq_surround_paren = false
 
 -- Poplate sections table with ID and number
 function populate_sections(doc)
@@ -47,15 +30,17 @@ end
 -- Populate equations table with ID and number, and transform into Div with ID containing numbered equation
 function populate_equations(para)
   if para.content[1].t == "Math" and para.content[1].mathtype == "DisplayMath" then
-    for _, v in pairs(para.content) do
-      if v.t == "Str" and v.text:match("{#eq:.*}") then
-        id = v.text:gsub("{#", ""):gsub("}", "") -- Strip the prefix and brackets
+    for i=#para.content,1,-1 do -- Iterating backwards to limit number of loops (ID often placed after the caption)
+      el = para.content[i]
+      if el.t == "Str" and el.text:match("{#eq:.*}") then
+        id = el.text:gsub("{#", ""):gsub("}", "") -- Strip the prefix and brackets
         if eq_surround_paren then
           equations[id] = "(" .. eq_count .. ")"
         else
           equations[id] = eq_count
         end
         eq_count = eq_count + 1
+        break
       end
     end
     if id then
@@ -75,13 +60,14 @@ function populate_tables(table)
   if table.caption then
     -- Caption might contain several blocks, extract ID from last block
     caption = table.caption.long[#table.caption.long].content
-    for j=#caption,1,-1 do -- Iterate backwards to allow ID to be placed basically anywhere
-      if caption[j].t == "Str" and caption[j].text:match("^{#tbl:.*}") then
-        id = caption[j].text:gsub("{#", ""):gsub("}", "") -- Strip the prefix and brackets (FIXME: Other attributes should perhaps be allowed...)
+    for i=#caption,1,-1 do -- Iterating backwards to limit number of loops (ID often placed after the caption)
+      if caption[i].t == "Str" and caption[j].text:match("^{#tbl:.*}") then
+        id = caption[i].text:gsub("{#", ""):gsub("}", "") -- Strip the prefix and brackets (FIXME: Other attributes should perhaps be allowed...)
         tables[id] = table_count
         table.identifier = id
-        caption:remove(j); caption:remove(j-1) -- Remove ID definition and the space before
         table_count = table_count + 1
+        -- Remove ID definition and the space before from caption
+        caption:remove(i); if i > 2 then caption:remove(i-1) end
         break
       end
     end
@@ -105,8 +91,6 @@ function refs(cite)
     return pandoc.Link({pandoc.Str(tables[id])}, '#' .. id, "", "")
   elseif eq then
     return pandoc.Link({pandoc.Str(equations[id])}, '#' .. id, "", "")
-  else
-    return nil
   end
 end
 
