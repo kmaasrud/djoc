@@ -25,6 +25,9 @@ func main() {
 
 	registry.Register("build")
 
+	addCommand, _ := registry.Register("add")
+	addCommand.AddArg("name", "")
+
 	// Parse commands
 	command, err := registry.Parse(os.Args[1:])
 	// Handle command parsing errors
@@ -49,6 +52,7 @@ func main() {
 			err := core.CheckDependencies()
 			if err != nil {
 				msg.Error(err.Error())
+				*global.ExitCode = 1; break
 			}
 			msg.Success("All the dependencies are installed. You're ready to go!")
 		}
@@ -67,6 +71,12 @@ func main() {
 
 	case "build":
 		core.Build()
+	case "add":
+		if command.Args["name"].Value == "" {
+			msg.Error("Please supply a name for your section.")
+			*global.ExitCode = 1; break
+		}
+		core.Add(command.Args["name"].Value)
 	}
     os.Exit(*global.ExitCode)
 }

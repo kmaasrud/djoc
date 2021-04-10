@@ -33,7 +33,7 @@ func FindDoctorRoot() (string, error) {
 func FindSrcFiles(rootPath string) ([]string, error) {
 	var files []string
 
-    if _, err := os.Stat(filepath.Join(rootPath, "src")); os.IsNotExist(err) {
+    if _, err := os.Stat(filepath.Join(rootPath, "secs")); os.IsNotExist(err) {
         return nil, errors.New("Empty Doctor document. Consider adding a couple of source files with " + msg.Style("doctor add <section name>", "Bold"))
     }
 	// Walk should walk through dirs in lexical order, making sorting unecessary (luckily)

@@ -46,3 +46,26 @@ func CloseDo(done chan struct{}) {
 	close(done)
 	fmt.Printf("\033[2K\r")
 }
+
+// Tectonic, TeX and even Pandoc produce A LOT of noise. This function runs through each line
+// of stderr and returns only those containing relevant information. This cleans up a lot and
+// allows me to style the errors/warnings according to Doctor messages. I admit it might be a bit
+// stupid, since I can never be sure to catch everything, but I think it is worth the debug time.
+func CleanStderrMsg(stderr string) {
+	includeNext := false
+	for _, line := range strings.Split(strings.TrimSuffix(stderr, "\n"), "\n") {
+		if includeNext {
+			fmt.Println("         " + line)
+			includeNext = false
+		} else if strings.HasPrefix(line, "! ") {
+			Error(Style("TeX: ", "Bold") + strings.TrimPrefix(line, "! "))
+			includeNext = true
+		} else if strings.HasPrefix(line, "error: ") {
+			Error(Style("Tectonic: ", "Bold") + strings.TrimPrefix(line, "error: "))
+		} else if strings.HasPrefix(line, "[WARNING] ") {
+			Warning(Style("Pandoc: ", "Bold") + strings.TrimPrefix(line, "[WARNING] "))
+		} else if strings.HasPrefix(line, "[ERROR] ") {
+			Error(Style("Pandoc: ", "Bold") + strings.TrimPrefix(line, "[ERROR] "))
+		}
+	}
+}

@@ -52,8 +52,7 @@ func downloadPandoc(dlDir string, version string) error {
 	resp, err := http.Get(url)
 	if err != nil {
 		msg.CloseDo(done)
-		msg.Error(err.Error())
-		os.Exit(1)
+		return err
 	}
 	defer resp.Body.Close()
 
@@ -70,16 +69,14 @@ func downloadPandoc(dlDir string, version string) error {
 	f, err := os.Create(filepath.Join(dlDir, "pandoc-" + version + ".tar.gz"))
 	if err != nil {
 		msg.CloseDo(done)
-		msg.Error(err.Error())
-		os.Exit(1)
+        return err
 	}
 
     // Copy URL response into file
 	_, err = io.Copy(f, resp.Body)
 	if err != nil {
 		msg.CloseDo(done)
-		msg.Error(err.Error())
-		os.Exit(1)
+        return err
 	}
     // Success! Stop loader and print success message
 	msg.CloseDo(done)

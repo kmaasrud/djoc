@@ -100,9 +100,9 @@ func Build() {
 	if err != nil {
 		switch err.(type) {
 		case *ExitError:
-			cleanStderrMsg(err.(*ExitError).Stderr)
+			msg.CleanStderrMsg(err.(*ExitError).Stderr)
 		case *WarningError:
-			cleanStderrMsg(err.(*WarningError).Stderr)
+			msg.CleanStderrMsg(err.(*WarningError).Stderr)
 			msg.Success("Document built.")
 		default:
 			msg.Error("Could not run command. " + err.Error())
@@ -127,29 +127,6 @@ func runPandocWith(cmdArgs []string) error {
 		return &WarningError{string(stderr)}
 	}
 	return nil
-}
-
-// Tectonic, TeX and even Pandoc produce A LOT of noise. This function runs through each line
-// of stderr and returns only those containing relevant information. This cleans up a lot and
-// allows me to style the errors/warnings according to Doctor messages. I admit it might be a bit
-// stupid, since I can never be sure to catch everything, but I think it is worth the debug time.
-func cleanStderrMsg(stderr string) {
-	includeNext := false
-	for _, line := range strings.Split(strings.TrimSuffix(stderr, "\n"), "\n") {
-		if includeNext {
-			fmt.Println("         " + line)
-			includeNext = false
-		} else if strings.HasPrefix(line, "! ") {
-			msg.Error(msg.Style("TeX: ", "Bold") + strings.TrimPrefix(line, "! "))
-			includeNext = true
-		} else if strings.HasPrefix(line, "error: ") {
-			msg.Error(msg.Style("Tectonic: ", "Bold") + strings.TrimPrefix(line, "error: "))
-		} else if strings.HasPrefix(line, "[WARNING] ") {
-			msg.Warning(msg.Style("Pandoc: ", "Bold") + strings.TrimPrefix(line, "[WARNING] "))
-		} else if strings.HasPrefix(line, "[ERROR] ") {
-			msg.Error(msg.Style("Pandoc: ", "Bold") + strings.TrimPrefix(line, "[ERROR] "))
-		}
-	}
 }
 
 func cleanUpLuaFilters(rootPath string) {
