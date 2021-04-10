@@ -13,9 +13,6 @@ import (
 	"github.com/thatisuday/clapper"
 )
 
-//go:embed lua/crossref.lua
-var luaCrossref string
-
 func main() {
 	registry := clapper.NewRegistry()
 
@@ -47,7 +44,7 @@ func main() {
 	switch command.Name {
 	// Root command
 	case "":
-		// Can discard this err, command.Flags["check-dependencies"].Value will always be a parsable bool
+		// Can discard this err, command.Flags["dependencies"].Value will always be a parsable bool
 		if ok, _ := strconv.ParseBool(command.Flags["dependencies"].Value); ok {
 			err := core.CheckDependencies()
 			if err != nil {
