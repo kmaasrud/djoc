@@ -1,4 +1,4 @@
-package core
+package cmd
 
 import (
 	"archive/tar"

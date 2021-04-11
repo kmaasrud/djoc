@@ -7,7 +7,7 @@ import (
 	"strings"
 	_ "embed"
 
-	"github.com/kmaasrud/doctor/core"
+	"github.com/kmaasrud/doctor/cmd"
 	"github.com/kmaasrud/doctor/msg"
     "github.com/kmaasrud/doctor/global"
 	"github.com/thatisuday/clapper"
@@ -27,6 +27,7 @@ func main() {
 
 	addCommand, _ := registry.Register("add")
 	addCommand.AddArg("name", "")
+	addCommand.AddFlag("at", "i", false, "")
 
 	// Parse commands
 	command, err := registry.Parse(os.Args[1:])
@@ -49,7 +50,7 @@ func main() {
 	case "":
 		// Can discard this err, command.Flags["dependencies"].Value will always be a parsable bool
 		if ok, _ := strconv.ParseBool(command.Flags["dependencies"].Value); ok {
-			err := core.CheckDependencies()
+			err := cmd.CheckDependencies()
 			if err != nil {
 				msg.Error(err.Error())
 				*global.ExitCode = 1; break
@@ -67,16 +68,18 @@ func main() {
 		}
 		// Can discard this err, command.Flags["default"].Value will always be a parsable bool
 		makeDefault, _ := strconv.ParseBool(command.Flags["default"].Value)
-		core.CreateDocumentAt(path, makeDefault)
+		cmd.CreateDocumentAt(path, makeDefault)
 
 	case "build":
-		core.Build()
+		cmd.Build()
 	case "add":
 		if command.Args["name"].Value == "" {
 			msg.Error("Please supply a name for your section.")
 			*global.ExitCode = 1; break
 		}
-		core.Add(command.Args["name"].Value)
+		if command.Flags["at"].Value == "" {
+			cmd.Add(command.Args["name"].Value, -1)
+		}
 	}
     os.Exit(*global.ExitCode)
 }

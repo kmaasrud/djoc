@@ -3,10 +3,11 @@ package utils
 import (
 	"errors"
 	"fmt"
-	"github.com/kmaasrud/doctor/msg"
 	"os"
 	"path/filepath"
     "runtime"
+
+	"github.com/kmaasrud/doctor/msg"
 )
 
 type NoSectionsError struct {
