@@ -14,6 +14,7 @@ import (
 	"github.com/kmaasrud/doctor/utils"
     "github.com/kmaasrud/doctor/lua"
     "github.com/kmaasrud/doctor/global"
+    "github.com/kmaasrud/doctor/core"
 )
 
 type WarningError struct {
@@ -52,14 +53,14 @@ func Build() {
 
 	// Find source files
 	msg.Info("Looking for source files...")
-	files, err := utils.FindSections(rootPath)
+	secs, err := utils.FindSections(rootPath)
 	if err != nil {
 		msg.Error(err.Error())
         *global.ExitCode = 1; return
 	} 
 
-	cmdArgs = append(cmdArgs, files...)
-	msg.Info(fmt.Sprintf("Found %d source files!", len(files)))
+	cmdArgs = append(cmdArgs, core.PathsFromSections(secs)...)
+	msg.Info(fmt.Sprintf("Found %d source files!", len(secs)))
 
     // Temporarily write any Lua filters to file and add them to command
     for filename, filter := range lua.Filters {

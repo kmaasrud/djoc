@@ -8,6 +8,7 @@ import (
     "runtime"
 
 	"github.com/kmaasrud/doctor/msg"
+    "github.com/kmaasrud/doctor/core"
 )
 
 type NoSectionsError struct {
@@ -39,8 +40,8 @@ func FindDoctorRoot() (string, error) {
 }
 
 // Returns a slice containing the paths of the source Markdown-files in the document.
-func FindSections(rootPath string) ([]string, error) {
-	var files []string
+func FindSections(rootPath string) ([]core.Section, error) {
+    var files []core.Section
 
     if _, err := os.Stat(filepath.Join(rootPath, "secs")); os.IsNotExist(err) {
         return nil, &NoSectionsError{"Empty Doctor document. Consider adding a couple of source files with " + msg.Style("doctor add <section name>", "Bold")}
@@ -52,7 +53,11 @@ func FindSections(rootPath string) ([]string, error) {
 		}
 		if !info.IsDir() && filepath.Ext(path) == ".md" {
 			// TODO: Make sure the file ends in a couple of newlines (Lua filter?)
-			files = append(files, path)
+            sec, err := core.SectionFromPath(path)
+            if err != nil {
+                return err
+            }
+			files = append(files, sec)
 		}
 		return nil
 	})
