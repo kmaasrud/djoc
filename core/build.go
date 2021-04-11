@@ -47,8 +47,19 @@ func Build() {
         *global.ExitCode = 1; return
 	}
 
-	// Initialize command slice with options always present
+    // Initialize the command
 	cmdArgs := []string{"-s", "--pdf-engine=tectonic", "--pdf-engine-opt=-c=minimal", "-o", filepath.Join(rootPath, "main.pdf")}
+
+	// Find source files
+	msg.Info("Looking for source files...")
+	files, err := utils.FindSections(rootPath)
+	if err != nil {
+		msg.Error(err.Error())
+        *global.ExitCode = 1; return
+	} 
+
+	cmdArgs = append(cmdArgs, files...)
+	msg.Info(fmt.Sprintf("Found %d source files!", len(files)))
 
     // Temporarily write any Lua filters to file and add them to command
     for filename, filter := range lua.Filters {
@@ -82,16 +93,6 @@ func Build() {
 	resourcePaths := strings.Join([]string{rootPath, filepath.Join(rootPath, "assets"), filepath.Join(rootPath, "src")}, sep)
 	cmdArgs = append(cmdArgs, "--resource-path="+resourcePaths)
 
-	// Find source files
-	msg.Info("Looking for source files...")
-	files, err := utils.FindSections(rootPath)
-	if err != nil {
-		msg.Error(err.Error())
-        *global.ExitCode = 1; return
-	} 
-
-	cmdArgs = append(cmdArgs, files...)
-	msg.Info(fmt.Sprintf("Found %d source files!", len(files)))
 
 	// Execute command
 	done := make(chan struct{})
