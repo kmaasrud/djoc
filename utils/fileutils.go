@@ -9,6 +9,14 @@ import (
     "runtime"
 )
 
+type NoSectionsError struct {
+    ErrorMsg string
+}
+
+func (e *NoSectionsError) Error() string {
+    return e.ErrorMsg
+}
+
 // Searches up the directory tree to find a doctor.yaml file and returns the path
 // of the directory containing it. If it reaches the root directory without finding
 // anything, the function returns an error.
@@ -30,19 +38,19 @@ func FindDoctorRoot() (string, error) {
 }
 
 // Returns a slice containing the paths of the source Markdown-files in the document.
-func FindSrcFiles(rootPath string) ([]string, error) {
+func FindSections(rootPath string) ([]string, error) {
 	var files []string
 
     if _, err := os.Stat(filepath.Join(rootPath, "secs")); os.IsNotExist(err) {
-        return nil, errors.New("Empty Doctor document. Consider adding a couple of source files with " + msg.Style("doctor add <section name>", "Bold"))
+        return nil, &NoSectionsError{"Empty Doctor document. Consider adding a couple of source files with " + msg.Style("doctor add <section name>", "Bold")}
     }
 	// Walk should walk through dirs in lexical order, making sorting unecessary (luckily)
-	err := filepath.Walk(filepath.Join(rootPath, "src"), func(path string, info os.FileInfo, err error) error {
+	err := filepath.Walk(filepath.Join(rootPath, "secs"), func(path string, info os.FileInfo, err error) error {
 		if err != nil {
-			msg.Error(err.Error())
+			return err
 		}
 		if !info.IsDir() && filepath.Ext(path) == ".md" {
-			// TODO: Make sure the file ends in a couple of newlines
+			// TODO: Make sure the file ends in a couple of newlines (Lua filter?)
 			files = append(files, path)
 		}
 		return nil

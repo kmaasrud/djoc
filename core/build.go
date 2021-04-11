@@ -54,7 +54,7 @@ func Build() {
     for filename, filter := range lua.Filters {
         f, err := os.Create(filepath.Join(rootPath, filename))
         if err != nil {
-            msg.Error("Build failed. " + err.Error())
+            msg.Error("Could not create Lua file. " + err.Error())
             *global.ExitCode = 1; return
         }
         _, err = f.Write(filter)
@@ -68,6 +68,7 @@ func Build() {
 
 	// If references.bib exists, run with citeproc and add bibliography
 	if _, err := os.Stat(filepath.Join(rootPath, "assets", "references.bib")); err == nil {
+        msg.Info("Running with citeproc. Bibliography: " + filepath.Join(rootPath, "assets", "references.bib"))
 		cmdArgs = append(cmdArgs, "-C", "--bibliography=references.bib")
 	}
 
@@ -83,7 +84,7 @@ func Build() {
 
 	// Find source files
 	msg.Info("Looking for source files...")
-	files, err := utils.FindSrcFiles(rootPath)
+	files, err := utils.FindSections(rootPath)
 	if err != nil {
 		msg.Error(err.Error())
         *global.ExitCode = 1; return
