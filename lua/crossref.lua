@@ -34,22 +34,15 @@ function populate_equations(para)
       el = para.content[i]
       if el.t == "Str" and el.text:match("{#eq:.*}") then
         id = el.text:gsub("{#", ""):gsub("}", "") -- Strip the prefix and brackets
-        if eq_surround_paren then
-          equations[id] = "(" .. eq_count .. ")"
-        else
-          equations[id] = eq_count
-        end
+        equations[id] = eq_count
         eq_count = eq_count + 1
-        break
-      end
-    end
-    if id then
-      if FORMAT == "latex" then
-        return pandoc.RawBlock("latex", "\\begin{equation}\n" .. para.content[1].text .. "\n\\label{" .. id .. "}\n\\end{equation}")
-      else
-        -- I'm mostly interested in HTML, in which this is the same behavior as pandoc-crossref.
-        -- For other formats, there is probably a better solution than using \qquad
-        return pandoc.Para(pandoc.Span(pandoc.Math("DisplayMath", para.content[1].text .. "\\qquad\\text{(" .. eq_count .. ")}"), {id = id}))
+        if FORMAT == "latex" then
+          return pandoc.RawBlock("latex", "\\begin{equation}\n" .. para.content[1].text .. "\n\\label{" .. id .. "}\n\\end{equation}")
+        else
+          -- I'm mostly interested in HTML, in which this is the same behavior as pandoc-crossref.
+          -- For other formats, there is probably a better solution than using \qquad
+          return pandoc.Para(pandoc.Span(pandoc.Math("DisplayMath", para.content[1].text .. "\\qquad\\text{(" .. equations[id] .. ")}"), {id = id}))
+        end
       end
     end
   end
