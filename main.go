@@ -36,7 +36,7 @@ func main() {
 		if _, ok := err.(clapper.ErrorUnknownCommand); ok {
 			msg.Error(fmt.Sprintf("Unknown command %s. Run %s to see a list of available commands.", msg.Style(os.Args[1], "Bold"), msg.Style("doctor --help", "Bold")))
 		} else if _, ok := err.(clapper.ErrorUnknownFlag); ok {
-			errorString := fmt.Sprintf("%s%s", strings.ToUpper(string(err.Error()[0])), string(err.Error()[1:]))
+			errorString := strings.ToUpper(string(err.Error()[0])) + string(err.Error()[1:])
 			msg.Error(fmt.Sprintf("%s. Run %s for further help.", errorString, msg.Style("kodb"+" --help", "Bold")))
 		} else {
 			msg.Error(err.Error())
@@ -53,7 +53,7 @@ func main() {
 			err := cmd.CheckDependencies()
 			if err != nil {
 				msg.Error(err.Error())
-				*global.ExitCode = 1; break
+				os.Exit(1)
 			}
 			msg.Success("All the dependencies are installed. You're ready to go!")
 		}
@@ -73,12 +73,23 @@ func main() {
 	case "build":
 		cmd.Build()
 	case "add":
+		var err error
 		if command.Args["name"].Value == "" {
 			msg.Error("Please supply a name for your section.")
-			*global.ExitCode = 1; break
-		}
-		if command.Flags["at"].Value == "" {
-			cmd.Add(command.Args["name"].Value, -1)
+			os.Exit(1)
+		} else if indexString := command.Flags["at"].Value; indexString != "" {
+			index, err := strconv.Atoi(indexString)
+			if err != nil {
+				msg.Error("Could not parse index: " + indexString + ". " + err.Error())
+				os.Exit(1)
+			}
+			err = cmd.Add(command.Args["name"].Value, index)
+		} else {
+			err = cmd.Add(command.Args["name"].Value, -1)
+			if err != nil {
+				msg.Error(err.Error())
+				os.Exit(1)
+			}
 		}
 	}
     os.Exit(*global.ExitCode)
