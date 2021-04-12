@@ -45,9 +45,10 @@ func Build() error {
 	if err != nil {
 		return errors.New("Build failed. " + err.Error())
 	}
+	defer cleanUp(rootPath)
 
 	// Initialize the command
-	cmdArgs := []string{"-s", "--pdf-engine=tectonic", "--pdf-engine-opt=-c=minimal", "-o", filepath.Join(rootPath, "main.pdf")}
+	cmdArgs := []string{"-s", "-o", filepath.Join(rootPath, "main.pdf")}
 	// cmdArgs := []string{"-s", "--pdf-engine=pdflatex", "-o", filepath.Join(rootPath, "main.pdf")}
 
 	// Find source files
@@ -56,9 +57,28 @@ func Build() error {
 	if err != nil {
 		return err
 	}
-
 	cmdArgs = append(cmdArgs, core.PathsFromSections(secs)...)
 	msg.Info(fmt.Sprintf("Found %d source files!", len(secs)))
+
+	// Add Pandoc options from config. TODO: Clean this up a bit
+	msg.Info("Applying configuration from doctor.toml...")
+	conf, err := core.ConfigFromFile(filepath.Join(rootPath, "doctor.toml"))
+	if err != nil {
+		return err
+	}
+	jsonFilename := filepath.Join(rootPath, ".metadata.json")
+	err = conf.WritePandocJson(jsonFilename)
+	if err != nil {
+		return err
+	}
+	cmdArgs = append(cmdArgs, "--metadata-file="+jsonFilename)
+	// Specify PDF engine
+	if engine := conf.Tree.Get("build.engine"); engine != nil {
+		cmdArgs = append(cmdArgs, fmt.Sprintf("--pdf-engine=%s", engine))
+		if engine == "tectonic" {
+			cmdArgs = append(cmdArgs, "--pdf-engine-opt=-c=minimal")
+		}
+	}
 
 	// Temporarily write any Lua filters to file and add them to command
 	for filename, filter := range lua.Filters {
@@ -68,7 +88,6 @@ func Build() error {
 		}
 		cmdArgs = append(cmdArgs, "-L", filename)
 	}
-	defer cleanUpLuaFilters(rootPath)
 
 	// If references.bib exists, run with citeproc and add bibliography
 	if _, err := os.Stat(filepath.Join(rootPath, "assets", "references.bib")); err == nil {
@@ -126,14 +145,19 @@ func runPandocWith(cmdArgs []string) error {
 	return nil
 }
 
-func cleanUpLuaFilters(rootPath string) {
+func cleanUp(rootPath string) {
+	msg.Info("Cleaning up temporary files...")
 	if len(lua.Filters) > 0 {
-		msg.Info("Cleaning up Lua filters...")
 		for filename := range lua.Filters {
 			err := os.Remove(filepath.Join(rootPath, filename))
 			if err != nil {
 				msg.Error("Failed to remove Lua filter " + filename + ". " + err.Error())
 			}
 		}
+	}
+
+	err := os.Remove(filepath.Join(rootPath, ".metadata.json"))
+	if err != nil {
+		msg.Error("Failed to remove JSON metadata file. " + err.Error())
 	}
 }
