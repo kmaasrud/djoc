@@ -44,7 +44,7 @@ func FindSections(rootPath string) ([]core.Section, error) {
     var files []core.Section
 
     if _, err := os.Stat(filepath.Join(rootPath, "secs")); os.IsNotExist(err) {
-        return nil, &NoSectionsError{"Empty Doctor document. Consider adding a couple of source files with " + msg.Style("doctor add <section name>", "Bold")}
+        return nil, &NoSectionsError{"Empty Doctor document.\n\tConsider adding a couple of source files with " + msg.Style("doctor add <section name>", "Bold")}
     }
 	// Walk should walk through dirs in lexical order, making sorting unecessary (luckily)
 	err := filepath.Walk(filepath.Join(rootPath, "secs"), func(path string, info os.FileInfo, err error) error {
@@ -62,7 +62,7 @@ func FindSections(rootPath string) ([]core.Section, error) {
 		return nil
 	})
     if len(files) < 1 {
-        return nil, errors.New("Empty Doctor document. Consider adding a couple of source files with " + msg.Style("doctor add <section name>", "Bold"))
+        return nil, &NoSectionsError{"Empty Doctor document.\n\tConsider adding a couple of source files with " + msg.Style("doctor add <section name>", "Bold")}
     } else if err != nil {
 		return nil, err
 	}
