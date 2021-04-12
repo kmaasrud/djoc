@@ -44,7 +44,7 @@ func Add(sectionName string, index int) error {
     if index >= 0 {
         // If index is specified, bump the index of all files above it by 1
         addIndex = index
-        for i := index + 1; i < len(secs); i++ {
+        for i := index; i < len(secs); i++ {
             err := secs[i].ChangeIndex(i+1)
             if err != nil {
                 return errors.New("Could not bump index of existing section. " + err.Error())
@@ -69,7 +69,7 @@ func Add(sectionName string, index int) error {
 	if err != nil {
         return errors.New("Could not create new section. " + err.Error())
 	}
-    msg.Success("Created new section: " + msg.Style(addTitle, "Bold") + " with index " + msg.Style(string(addIndex), "Bold") + ".")
+    msg.Success(fmt.Sprintf("Created new section %s with index %d.", msg.Style(addTitle, "Bold"), addIndex))
 
     return nil
 }
