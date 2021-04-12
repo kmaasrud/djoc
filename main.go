@@ -29,7 +29,7 @@ func main() {
 	addCommand.AddFlag("at", "i", false, "")
 
 	removeCommand, _ := registry.Register("remove")
-	removeCommand.AddArg("section", "")
+	removeCommand.AddArg("sections...", "")
 	removeCommand.AddFlag("confirm", "c", true, "")
 
 	// Parse commands
@@ -37,7 +37,7 @@ func main() {
 	// Handle command parsing errors
 	if err != nil {
 		if _, ok := err.(clapper.ErrorUnknownCommand); ok {
-			msg.Error(fmt.Sprintf("Unknown command %s. Run %s to see a list of available commands.", msg.Style(os.Args[1], "Bold"), msg.Style("doctor --help", "Bold")))
+			msg.Error("Unknown command " + msg.Style(os.Args[1], "Bold") + ". Run " + msg.Style("doctor --help", "Bold") + " to see a list of available commands.")
 		} else if _, ok := err.(clapper.ErrorUnknownFlag); ok {
 			errorString := strings.ToUpper(string(err.Error()[0])) + string(err.Error()[1:])
 			msg.Error(fmt.Sprintf("%s. Run %s for further help.", errorString, msg.Style("kodb"+" --help", "Bold")))
@@ -69,8 +69,10 @@ func main() {
 		} else {
 			path = command.Args["path"].DefaultValue
 		}
+
 		// Can discard this err, command.Flags["default"].Value will always be a parsable bool
 		makeDefault, _ := strconv.ParseBool(command.Flags["default"].Value)
+
 		err := cmd.CreateDocumentAt(path, makeDefault)
 		if err != nil {
 			msg.Error(err.Error())
@@ -81,6 +83,7 @@ func main() {
 	case "build":
 		err := cmd.Build()
 		if err != nil {
+			// Some error messages are handled within the build function and just return an empty error
 			if err.Error() != "" {
 				msg.Error(err.Error())
 			}
@@ -110,10 +113,18 @@ func main() {
 
 	// Remove a section from the document
 	case "remove":
-		if command.Args["section"].Value == "" {
-			msg.Error("Please supply the name or index of the section you want to remove.")
+		if command.Args["sections"].Value == "" {
+			msg.Error("Please supply the name or index of the section(s) you want to remove.")
 			os.Exit(1)
 		}
-		cmd.Remove(command.Args["section"].Value, false)
+
+		// Can discard this err, command.Flags["confirm"].Value will always be a parsable bool
+		confirm, _ := strconv.ParseBool(command.Flags["confirm"].Value)
+
+		err := cmd.Remove(strings.Split(command.Args["sections"].Value, ","), confirm)
+		if err != nil {
+			msg.Error(err.Error())
+			os.Exit(1)
+		}
 	}
 }
