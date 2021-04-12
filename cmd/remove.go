@@ -30,6 +30,7 @@ func Remove(inputs []string, confirm bool) error {
     }
 
     // Loop over supplied inputs and delete if they match
+    SectionLoop:
     for i, input := range inputs {
         var matches []core.Section
         index, err := strconv.Atoi(input)
@@ -56,11 +57,29 @@ func Remove(inputs []string, confirm bool) error {
             // Only one match, set is as the section to remove
             removeThis = matches[0]
         } else if len(matches) > 1 {
-            // TODO: More than 1 match, enter interactive selection mode
+            // More than 1 match, enter interactive selection mode
+            msg.Info(fmt.Sprintf("Found %d matches.", len(matches)))
+            var chosenIndex string
+            for true {
+                for j, match := range matches {
+                    fmt.Printf(" %d. %s\n", j+1, match.Title)
+                }
+                fmt.Print("Which one do you want to delete? (q to quit) ")
+                fmt.Scanln(&chosenIndex)
+                index, err := strconv.Atoi(chosenIndex)
+                if err == nil && index > 0 && index <= len(matches){
+                    removeThis = matches[index-1]
+                    break
+                } else if strings.ToLower(chosenIndex) == "q" {
+                    continue SectionLoop
+                } else {
+                    msg.Info("That is not a valid option. Please enter the number of the section you want to remove.")
+                }
+            }
         } else {
             // No matches found
             msg.Error("Could not find any sections matching " + msg.Style(input, "Bold") + ".")
-            continue
+            continue SectionLoop
         }
 
         // Confirmation of deletion if not already supplied on the command line
@@ -70,7 +89,7 @@ func Remove(inputs []string, confirm bool) error {
             fmt.Scanln(&confirmString)
             if strings.ToLower(confirmString) != "y" {
                 msg.Info("Skipping deletion of " + removeThis.Title + ".")
-                continue
+                continue SectionLoop
             }
         }
 
@@ -78,15 +97,18 @@ func Remove(inputs []string, confirm bool) error {
         err = os.Remove(removeThis.Path)
         if err != nil {
             msg.Error("Could not remove section " + msg.Style(removeThis.Title, "Bold") + ". " + err.Error())
-            continue
+            continue SectionLoop
         }
-
         msg.Success("Deleted section " + msg.Style(removeThis.Title, "Bold") + ".")
 
         // Decrement the sections above the removed one
         msg.Info("Reordering existing sections...")
         for j := removeThis.Index + 1; j < len(secs); j++ {
-            err := secs[j].ChangeIndex(j-1)
+            // Make sure we're not trying to renumber removeThis itself (if multiple sections previously shared indices)
+            if secs[j].IsEqual(removeThis) {
+                continue
+            } 
+            err = secs[j].ChangeIndex(j-1)
             if err != nil {
                 return errors.New("Could not bump index of existing section.\n        " + err.Error())
             }
