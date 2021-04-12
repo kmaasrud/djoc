@@ -39,7 +39,7 @@ func FindDoctorRoot() (string, error) {
 	}
 }
 
-// Returns a slice containing the paths of the source Markdown-files in the document.
+// Returns a slice containing core.Sections corresponding to this document
 func FindSections(rootPath string) ([]core.Section, error) {
     var files []core.Section
 

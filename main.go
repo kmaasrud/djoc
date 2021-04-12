@@ -28,6 +28,10 @@ func main() {
 	addCommand.AddArg("name", "")
 	addCommand.AddFlag("at", "i", false, "")
 
+	removeCommand, _ := registry.Register("remove")
+	removeCommand.AddArg("section", "")
+	removeCommand.AddFlag("confirm", "c", true, "")
+
 	// Parse commands
 	command, err := registry.Parse(os.Args[1:])
 	// Handle command parsing errors
@@ -103,5 +107,13 @@ func main() {
 				os.Exit(1)
 			}
 		}
+
+	// Remove a section from the document
+	case "remove":
+		if command.Args["section"].Value == "" {
+			msg.Error("Please supply the name or index of the section you want to remove.")
+			os.Exit(1)
+		}
+		cmd.Remove(command.Args["section"].Value, false)
 	}
 }
