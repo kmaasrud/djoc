@@ -38,12 +38,7 @@ func Remove(input string, confirm bool) error {
         }
     } else {
         // The input is parsable as int, handle it as a section index
-        for _, sec := range secs {
-            if sec.Index == index {
-                removeThis = sec
-                break
-            } 
-        }
+        removeThis = secs[index]
     }
 
     // Remove the file
