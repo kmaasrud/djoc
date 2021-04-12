@@ -5,6 +5,7 @@ import (
     "strings"
     "strconv"
     "fmt"
+    "os"
 )
 
 var SectionSep string = "_"
@@ -15,10 +16,17 @@ type Section struct {
     Index int
 }
 
-func (s *Section) ChangeIndex(i int) {
+func (s *Section) ChangeIndex(i int) error {
     s.Index = i
     newFilename := fmt.Sprintf("%02d_", i) + strings.Join(strings.Split(filepath.Base(s.Path), SectionSep)[1:], "")
-    s.Path = filepath.Join(filepath.Dir(s.Path), newFilename)
+    newPath := filepath.Join(filepath.Dir(s.Path), newFilename)
+
+    err := os.Rename(s.Path, newPath)
+    if err != nil {
+        return err
+    }
+    s.Path = newPath
+    return nil
 }
 
 func SectionFromPath(path string) (Section, error) {
