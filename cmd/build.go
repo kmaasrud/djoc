@@ -50,6 +50,7 @@ func Build() {
 
     // Initialize the command
 	cmdArgs := []string{"-s", "--pdf-engine=tectonic", "--pdf-engine-opt=-c=minimal", "-o", filepath.Join(rootPath, "main.pdf")}
+	// cmdArgs := []string{"-s", "--pdf-engine=pdflatex", "-o", filepath.Join(rootPath, "main.pdf")}
 
 	// Find source files
 	msg.Info("Looking for source files...")
