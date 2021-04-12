@@ -20,7 +20,7 @@ func CreateDocumentAt(path string, defaultStructure bool) {
 	}
 
 	if _, existErr := os.Stat(rootPath); os.IsNotExist(existErr) {
-		err := os.Mkdir(rootPath, 0777)
+		err := os.Mkdir(rootPath, 0755)
 		if err != nil {
 			msg.Error("Could not create root directory: " + err.Error())
 		}
@@ -31,7 +31,7 @@ func CreateDocumentAt(path string, defaultStructure bool) {
 
 	assetPath := filepath.Join(rootPath, "assets")
 	if _, existErr := os.Stat(assetPath); os.IsNotExist(existErr) {
-		err := os.Mkdir(assetPath, 0777)
+		err := os.Mkdir(assetPath, 0755)
 		if err != nil {
 			msg.Error("Could not create assets directory: " + err.Error())
 		}
