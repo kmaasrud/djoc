@@ -8,12 +8,12 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
+    "errors"
     _ "embed"
 
 	"github.com/kmaasrud/doctor/msg"
 	"github.com/kmaasrud/doctor/utils"
     "github.com/kmaasrud/doctor/lua"
-    "github.com/kmaasrud/doctor/global"
     "github.com/kmaasrud/doctor/core"
 )
 
@@ -33,19 +33,17 @@ func (e *FatalError) Error() string {
 	return e.Stderr
 }
 
-func Build() {
+func Build() error {
 	// Check for dependencies
 	err := CheckDependencies()
 	if err != nil {
-		msg.Error("Build failed. " + err.Error())
-        *global.ExitCode = 1; return
+		return errors.New("Build failed. " + err.Error())
 	}
 
 	// Find root
 	rootPath, err := utils.FindDoctorRoot()
 	if err != nil {
-		msg.Error("Build failed. " + err.Error())
-        *global.ExitCode = 1; return
+		return errors.New("Build failed. " + err.Error())
 	}
 
     // Initialize the command
@@ -56,8 +54,7 @@ func Build() {
 	msg.Info("Looking for source files...")
 	secs, err := utils.FindSections(rootPath)
 	if err != nil {
-		msg.Error(err.Error())
-        *global.ExitCode = 1; return
+		return err
 	} 
 
 	cmdArgs = append(cmdArgs, core.PathsFromSections(secs)...)
@@ -67,8 +64,7 @@ func Build() {
     for filename, filter := range lua.Filters {
         err := os.WriteFile(filepath.Join(rootPath, filename), filter, 0644)
         if err != nil {
-            msg.Error("Could not create Lua file. " + err.Error())
-            *global.ExitCode = 1; return
+            return errors.New("Could not create Lua file. " + err.Error())
         }
         cmdArgs = append(cmdArgs, "-L", filename)
     }
@@ -108,9 +104,10 @@ func Build() {
 		default:
 			msg.Error("Could not run command. " + err.Error())
 		}
-        *global.ExitCode = 1; return
+        return errors.New("")
 	}
 	msg.Success("Document built.")
+    return nil
 }
 
 func runPandocWith(cmdArgs []string) error {

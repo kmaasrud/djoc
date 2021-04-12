@@ -9,7 +9,6 @@ import (
 
 	"github.com/kmaasrud/doctor/cmd"
 	"github.com/kmaasrud/doctor/msg"
-    "github.com/kmaasrud/doctor/global"
 	"github.com/thatisuday/clapper"
 )
 
@@ -68,10 +67,23 @@ func main() {
 		}
 		// Can discard this err, command.Flags["default"].Value will always be a parsable bool
 		makeDefault, _ := strconv.ParseBool(command.Flags["default"].Value)
-		cmd.CreateDocumentAt(path, makeDefault)
+		err := cmd.CreateDocumentAt(path, makeDefault)
+		if err != nil {
+			msg.Error(err.Error())
+			os.Exit(1)
+		}
 
+	// Build the document command
 	case "build":
-		cmd.Build()
+		err := cmd.Build()
+		if err != nil {
+			if err.Error() != "" {
+				msg.Error(err.Error())
+			}
+			os.Exit(1)
+		}
+
+	// Add a new section to the document
 	case "add":
 		var err error
 		if command.Args["name"].Value == "" {
@@ -92,5 +104,4 @@ func main() {
 			}
 		}
 	}
-    os.Exit(*global.ExitCode)
 }

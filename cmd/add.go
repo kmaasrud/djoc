@@ -69,7 +69,7 @@ func Add(sectionName string, index int) error {
 	if err != nil {
         return errors.New("Could not create new section. " + err.Error())
 	}
-    msg.Success("Created new section: " + msg.Style(addTitle, "Bold"))
+    msg.Success("Created new section: " + msg.Style(addTitle, "Bold") + " with index " + msg.Style(string(addIndex), "Bold") + ".")
 
     return nil
 }
