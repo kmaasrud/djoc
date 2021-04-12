@@ -5,6 +5,7 @@ import (
     "errors"
     "strings"
     "os"
+    "fmt"
 
     "github.com/kmaasrud/doctor/utils"
     "github.com/kmaasrud/doctor/core"
@@ -59,6 +60,15 @@ func Remove(inputs []string, confirm bool) error {
         } else {
             // No matches found
             msg.Error("Could not find any sections matching " + msg.Style(input, "Bold") + ".")
+            continue
+        }
+
+        // Confirmation of deletion
+        var confirmString string
+        fmt.Printf("Are you sure you want to delete %s? (y/N)", msg.Style(removeThis.Title, "Bold"))
+        fmt.Scanln(&confirmString)
+        if strings.ToLower(confirmString) != "y" {
+            msg.Info("Skipping deletion of " + removeThis.Title + ".")
             continue
         }
 
