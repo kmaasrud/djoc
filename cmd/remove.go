@@ -63,13 +63,15 @@ func Remove(inputs []string, confirm bool) error {
             continue
         }
 
-        // Confirmation of deletion
-        var confirmString string
-        fmt.Printf("Are you sure you want to delete %s? (y/N)", msg.Style(removeThis.Title, "Bold"))
-        fmt.Scanln(&confirmString)
-        if strings.ToLower(confirmString) != "y" {
-            msg.Info("Skipping deletion of " + removeThis.Title + ".")
-            continue
+        // Confirmation of deletion if not already supplied on the command line
+        if !confirm {
+            var confirmString string
+            fmt.Printf("Are you sure you want to delete %s? (y/N) ", msg.Style(removeThis.Title, "Bold"))
+            fmt.Scanln(&confirmString)
+            if strings.ToLower(confirmString) != "y" {
+                msg.Info("Skipping deletion of " + removeThis.Title + ".")
+                continue
+            }
         }
 
         // Remove the file
@@ -90,7 +92,13 @@ func Remove(inputs []string, confirm bool) error {
             }
         }
 
-        secs = append(secs[:removeThis.Index], secs[removeThis.Index+1:]...)
+        if removeThis.Index > len(secs) - 2 {
+            // If the removed section has the highest index, just slice away the last element of secs
+            secs = secs[:len(secs)-2]
+        } else {
+            // Else, remove the element pertaining to this index and keep the order by reslicing
+            secs = append(secs[:removeThis.Index], secs[removeThis.Index+1:]...)
+        }
     }
 
     return nil
