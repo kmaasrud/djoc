@@ -25,11 +25,11 @@ func (e *WarningError) Error() string {
 	return e.Stderr
 }
 
-type ExitError struct {
+type FatalError struct {
 	Stderr string
 }
 
-func (e *ExitError) Error() string {
+func (e *FatalError) Error() string {
 	return e.Stderr
 }
 
@@ -64,14 +64,9 @@ func Build() {
 
     // Temporarily write any Lua filters to file and add them to command
     for filename, filter := range lua.Filters {
-        f, err := os.Create(filepath.Join(rootPath, filename))
+        err := os.WriteFile(filepath.Join(rootPath, filename), filter, 0644)
         if err != nil {
             msg.Error("Could not create Lua file. " + err.Error())
-            *global.ExitCode = 1; return
-        }
-        _, err = f.Write(filter)
-        if err != nil {
-            msg.Error("Could not write Lua file. " + err.Error())
             *global.ExitCode = 1; return
         }
         cmdArgs = append(cmdArgs, "-L", filename)
@@ -100,12 +95,14 @@ func Build() {
 	go msg.Do("Building document with Pandoc", done)
 	err = runPandocWith(cmdArgs)
 	msg.CloseDo(done)
+
+    // Handle errors
 	if err != nil {
-		switch err.(type) {
-		case *ExitError:
-			msg.CleanStderrMsg(err.(*ExitError).Stderr)
+        switch thisErr := err.(type) {
+		case *FatalError:
+			msg.CleanStderrMsg(thisErr.Stderr)
 		case *WarningError:
-			msg.CleanStderrMsg(err.(*WarningError).Stderr)
+			msg.CleanStderrMsg(thisErr.Stderr)
 			msg.Success("Document built.")
 		default:
 			msg.Error("Could not run command. " + err.Error())
@@ -121,9 +118,9 @@ func runPandocWith(cmdArgs []string) error {
 	cmd.Stderr = &stderr
 
 	err := cmd.Run()
-	// Fatal error, send the error over the channel
+	// Fatal error
 	if err != nil {
-		return &ExitError{string(stderr.Bytes())}
+		return &FatalError{string(stderr.Bytes())}
 	}
 	// Non-fatal, but stderr is not empty, so it includes warnings
 	if stderr := string(stderr.Bytes()); len(stderr) != 0 {
