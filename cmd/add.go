@@ -44,6 +44,7 @@ func Add(sectionName string, index int) error {
     if index >= 0 {
         // If index is specified, bump the index of all files above it by 1
         addIndex = index
+        msg.Info("Reordering existing sections...")
         for i := index; i < len(secs); i++ {
             err := secs[i].ChangeIndex(i+1)
             if err != nil {
