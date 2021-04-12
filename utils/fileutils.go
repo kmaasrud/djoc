@@ -5,18 +5,18 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-    "runtime"
+	"runtime"
 
+	"github.com/kmaasrud/doctor/core"
 	"github.com/kmaasrud/doctor/msg"
-    "github.com/kmaasrud/doctor/core"
 )
 
 type NoSectionsError struct {
-    ErrorMsg string
+	ErrorMsg string
 }
 
 func (e *NoSectionsError) Error() string {
-    return e.ErrorMsg
+	return e.ErrorMsg
 }
 
 // Searches up the directory tree to find a doctor.yaml file and returns the path
@@ -41,11 +41,11 @@ func FindDoctorRoot() (string, error) {
 
 // Returns a slice containing core.Sections corresponding to this document
 func FindSections(rootPath string) ([]core.Section, error) {
-    var files []core.Section
+	var files []core.Section
 
-    if _, err := os.Stat(filepath.Join(rootPath, "secs")); os.IsNotExist(err) {
-        return nil, &NoSectionsError{"Empty Doctor document.\n\tConsider adding a couple of source files with " + msg.Style("doctor add <section name>", "Bold")}
-    }
+	if _, err := os.Stat(filepath.Join(rootPath, "secs")); os.IsNotExist(err) {
+		return nil, &NoSectionsError{"Empty Doctor document.\n\tConsider adding a couple of source files with " + msg.Style("doctor add <section name>", "Bold")}
+	}
 	// Walk should walk through dirs in lexical order, making sorting unecessary (luckily)
 	err := filepath.Walk(filepath.Join(rootPath, "secs"), func(path string, info os.FileInfo, err error) error {
 		if err != nil {
@@ -53,17 +53,17 @@ func FindSections(rootPath string) ([]core.Section, error) {
 		}
 		if !info.IsDir() && filepath.Ext(path) == ".md" {
 			// TODO: Make sure the file ends in a couple of newlines (Lua filter?)
-            sec, err := core.SectionFromPath(path)
-            if err != nil {
-                return err
-            }
+			sec, err := core.SectionFromPath(path)
+			if err != nil {
+				return err
+			}
 			files = append(files, sec)
 		}
 		return nil
 	})
-    if len(files) < 1 {
-        return nil, &NoSectionsError{"Empty Doctor document.\n\tConsider adding a couple of source files with " + msg.Style("doctor add <section name>", "Bold")}
-    } else if err != nil {
+	if len(files) < 1 {
+		return nil, &NoSectionsError{"Empty Doctor document.\n\tConsider adding a couple of source files with " + msg.Style("doctor add <section name>", "Bold")}
+	} else if err != nil {
 		return nil, err
 	}
 
@@ -78,12 +78,12 @@ func FindDoctorDataDir() (string, error) {
 		return " ", err
 	}
 
-    var doctorPath string
-    if runtime.GOOS == "windows" {
-        doctorPath = filepath.Join(home, "AppData", "Roaming", "doctor")
-    } else {
-        doctorPath = filepath.Join(home, ".local", "share", "doctor")
-    }
+	var doctorPath string
+	if runtime.GOOS == "windows" {
+		doctorPath = filepath.Join(home, "AppData", "Roaming", "doctor")
+	} else {
+		doctorPath = filepath.Join(home, ".local", "share", "doctor")
+	}
 
-    return doctorPath, nil
+	return doctorPath, nil
 }

@@ -2,19 +2,19 @@ package cmd
 
 import (
 	"bytes"
+	_ "embed"
+	"errors"
 	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"runtime"
 	"strings"
-    "errors"
-    _ "embed"
 
+	"github.com/kmaasrud/doctor/core"
+	"github.com/kmaasrud/doctor/lua"
 	"github.com/kmaasrud/doctor/msg"
 	"github.com/kmaasrud/doctor/utils"
-    "github.com/kmaasrud/doctor/lua"
-    "github.com/kmaasrud/doctor/core"
 )
 
 type WarningError struct {
@@ -46,7 +46,7 @@ func Build() error {
 		return errors.New("Build failed. " + err.Error())
 	}
 
-    // Initialize the command
+	// Initialize the command
 	cmdArgs := []string{"-s", "--pdf-engine=tectonic", "--pdf-engine-opt=-c=minimal", "-o", filepath.Join(rootPath, "main.pdf")}
 	// cmdArgs := []string{"-s", "--pdf-engine=pdflatex", "-o", filepath.Join(rootPath, "main.pdf")}
 
@@ -55,24 +55,24 @@ func Build() error {
 	secs, err := utils.FindSections(rootPath)
 	if err != nil {
 		return err
-	} 
+	}
 
 	cmdArgs = append(cmdArgs, core.PathsFromSections(secs)...)
 	msg.Info(fmt.Sprintf("Found %d source files!", len(secs)))
 
-    // Temporarily write any Lua filters to file and add them to command
-    for filename, filter := range lua.Filters {
-        err := os.WriteFile(filepath.Join(rootPath, filename), filter, 0644)
-        if err != nil {
-            return errors.New("Could not create Lua file. " + err.Error())
-        }
-        cmdArgs = append(cmdArgs, "-L", filename)
-    }
-    defer cleanUpLuaFilters(rootPath)
+	// Temporarily write any Lua filters to file and add them to command
+	for filename, filter := range lua.Filters {
+		err := os.WriteFile(filepath.Join(rootPath, filename), filter, 0644)
+		if err != nil {
+			return errors.New("Could not create Lua file. " + err.Error())
+		}
+		cmdArgs = append(cmdArgs, "-L", filename)
+	}
+	defer cleanUpLuaFilters(rootPath)
 
 	// If references.bib exists, run with citeproc and add bibliography
 	if _, err := os.Stat(filepath.Join(rootPath, "assets", "references.bib")); err == nil {
-        msg.Info("Running with citeproc. Bibliography: " + filepath.Join(rootPath, "assets", "references.bib"))
+		msg.Info("Running with citeproc. Bibliography: " + filepath.Join(rootPath, "assets", "references.bib"))
 		cmdArgs = append(cmdArgs, "-C", "--bibliography=references.bib")
 	}
 
@@ -86,16 +86,15 @@ func Build() error {
 	resourcePaths := strings.Join([]string{rootPath, filepath.Join(rootPath, "assets"), filepath.Join(rootPath, "src")}, sep)
 	cmdArgs = append(cmdArgs, "--resource-path="+resourcePaths)
 
-
 	// Execute command
 	done := make(chan struct{})
 	go msg.Do("Building document with Pandoc", done)
 	err = runPandocWith(cmdArgs)
 	msg.CloseDo(done)
 
-    // Handle errors
+	// Handle errors
 	if err != nil {
-        switch thisErr := err.(type) {
+		switch thisErr := err.(type) {
 		case *FatalError:
 			msg.CleanStderrMsg(thisErr.Stderr)
 		case *WarningError:
@@ -104,10 +103,10 @@ func Build() error {
 		default:
 			msg.Error("Could not run command. " + err.Error())
 		}
-        return errors.New("")
+		return errors.New("")
 	}
 	msg.Success("Document built.")
-    return nil
+	return nil
 }
 
 func runPandocWith(cmdArgs []string) error {
@@ -128,13 +127,13 @@ func runPandocWith(cmdArgs []string) error {
 }
 
 func cleanUpLuaFilters(rootPath string) {
-    if len(lua.Filters) > 0 {
-        msg.Info("Cleaning up Lua filters...")
-        for filename := range lua.Filters {
-            err := os.Remove(filepath.Join(rootPath, filename))
-            if err != nil {
-                msg.Error("Failed to remove Lua filter " + filename + ". " + err.Error())
-            }
-        }
-    }
+	if len(lua.Filters) > 0 {
+		msg.Info("Cleaning up Lua filters...")
+		for filename := range lua.Filters {
+			err := os.Remove(filepath.Join(rootPath, filename))
+			if err != nil {
+				msg.Error("Failed to remove Lua filter " + filename + ". " + err.Error())
+			}
+		}
+	}
 }

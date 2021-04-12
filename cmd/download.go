@@ -9,7 +9,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-    "runtime"
+	"runtime"
 
 	"github.com/kmaasrud/doctor/msg"
 	"github.com/kmaasrud/doctor/utils"
@@ -19,10 +19,10 @@ import (
 func CheckDependencies() error {
 	deps := map[string]string{"pandoc": "2.13", "tectonic": "0.4.1"}
 
-    doctorPath, err := utils.FindDoctorDataDir()
-    if err != nil {
-        return err
-    }
+	doctorPath, err := utils.FindDoctorDataDir()
+	if err != nil {
+		return err
+	}
 
 	for dep, ver := range deps {
 		if _, err := os.Stat(filepath.Join(doctorPath, dep+"-"+ver, "bin", dep)); err == nil {
@@ -30,7 +30,7 @@ func CheckDependencies() error {
 		}
 		_, err := exec.LookPath(dep)
 		if err != nil {
-            if dep == "pandoc" && runtime.GOOS != "windows" {
+			if dep == "pandoc" && runtime.GOOS != "windows" {
 				err := downloadPandoc(filepath.Join(doctorPath), ver)
 				if err != nil {
 					return errors.New("Could not download Pandoc: " + err.Error())
@@ -44,10 +44,10 @@ func CheckDependencies() error {
 }
 
 func downloadPandoc(dlDir string, version string) error {
-    // Init loader
+	// Init loader
 	done := make(chan struct{})
 	go msg.Do("Downloading Pandoc tarball", done)
-    // First download the tarball of Pandoc <version> from GitHub
+	// First download the tarball of Pandoc <version> from GitHub
 	url := "https://github.com/jgm/pandoc/releases/download/" + version + "/pandoc-" + version + "-linux-amd64.tar.gz"
 	resp, err := http.Get(url)
 	if err != nil {
@@ -60,41 +60,41 @@ func downloadPandoc(dlDir string, version string) error {
 	if _, existErr := os.Stat(dlDir); os.IsNotExist(existErr) {
 		err := os.Mkdir(dlDir, 0755)
 		if err != nil {
-            msg.CloseDo(done)
+			msg.CloseDo(done)
 			return errors.New("Could not create Doctor local storage directory: " + err.Error())
 		}
 	}
 
-    // Create file to copy the URL response into
-	f, err := os.Create(filepath.Join(dlDir, "pandoc-" + version + ".tar.gz"))
+	// Create file to copy the URL response into
+	f, err := os.Create(filepath.Join(dlDir, "pandoc-"+version+".tar.gz"))
 	if err != nil {
 		msg.CloseDo(done)
-        return err
+		return err
 	}
 
-    // Copy URL response into file
+	// Copy URL response into file
 	_, err = io.Copy(f, resp.Body)
 	if err != nil {
 		msg.CloseDo(done)
-        return err
+		return err
 	}
-    // Success! Stop loader and print success message
+	// Success! Stop loader and print success message
 	msg.CloseDo(done)
 	msg.Success("Pandoc tarball downloaded.")
 
-    // File is still open, seek to the beginning and create a gzip reader
+	// File is still open, seek to the beginning and create a gzip reader
 	f.Seek(0, 0)
 	gzr, err := gzip.NewReader(f)
 	if err != nil {
-        msg.CloseDo(done)
+		msg.CloseDo(done)
 		return err
 	}
 	defer gzr.Close()
 
-    // Init loader
+	// Init loader
 	done = make(chan struct{})
 	go msg.Do("Untarring Pandoc tarball", done)
-    // Begin untarring the tarball
+	// Begin untarring the tarball
 	tr := tar.NewReader(gzr)
 	for {
 		header, err := tr.Next()

@@ -1,11 +1,11 @@
 package main
 
 import (
+	_ "embed"
 	"fmt"
 	"os"
 	"strconv"
 	"strings"
-	_ "embed"
 
 	"github.com/kmaasrud/doctor/cmd"
 	"github.com/kmaasrud/doctor/msg"
