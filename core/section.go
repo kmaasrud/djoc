@@ -16,6 +16,10 @@ type Section struct {
     Index int
 }
 
+func (s Section) IsEqual(other Section) bool {
+    return s.Path == other.Path
+}
+
 func (s *Section) ChangeIndex(i int) error {
     s.Index = i
     newFilename := fmt.Sprintf("%02d_", i) + strings.Join(strings.Split(filepath.Base(s.Path), SectionSep)[1:], "")
