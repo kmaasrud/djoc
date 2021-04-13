@@ -14,9 +14,10 @@ type BuildConfig struct {
 
 type DocumentConfig struct {
 	Title			string			`toml:"title" json:"title"`
-	Author			interface{}		`toml:"author" json:"author"`
+	Author			interface{}		`toml:"author" json:"author"` // String or list of strings
 	Date			string			`toml:"date" json:"date"`
-	BlockHeadings	bool			`toml:"block-headings" json:"block-headings"`
+	DocumentClass	string			`toml:"document-class" json:"documentclass"`
+	ClassOption		interface{}		`toml:"class-option" json:"classoption"` // String or list of strings
 }
 
 type Config struct {
