@@ -2,7 +2,7 @@
 
 <h2 align="center">A blazingly fast document builder that makes scientific writing a breeze</h2>
 
-<p align="center"><a href="https://www.kmaasrud.com/doctor/installation">Installation</a> - <a href="https://www.kmaasrud.com/docs">Getting started</a> - <a href="https://www.kmaasrud.com/docs">Documentation</a></p>
+<p align="center"><a href="https://www.kmaasrud.com/doctor/install">Installation</a> - <a href="https://www.kmaasrud.com/doctor/docs">Getting started</a> - <a href="https://www.kmaasrud.com/doctor/docs">Documentation</a></p>
 
 Doctor is a document builder and command line tool that uses [Pandoc](https://pandoc.org) coupled with a TeX engine to produce high-quality documents.
 
