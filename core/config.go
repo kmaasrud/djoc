@@ -8,41 +8,48 @@ import (
 	"github.com/pelletier/go-toml"
 )
 
-var pandocConfig = map[string]string{
-	"document.title":  "title",
-	"document.author": "author",
-	"document.date":   "date",
+type BuildConfig struct {
+	Engine			string			`toml:"engine" default:"tectonic"`
+}
+
+type DocumentConfig struct {
+	Title			string			`toml:"title" json:"title"`
+	Author			interface{}		`toml:"author" json:"author"`
+	Date			string			`toml:"date" json:"date"`
+	BlockHeadings	bool			`toml:"block-headings" json:"block-headings"`
 }
 
 type Config struct {
-	Tree *toml.Tree
+	Document		DocumentConfig	`toml:"document"`
+	Build			BuildConfig		`toml:"build"`
 }
 
 func (c *Config) WritePandocJson(path string) error {
-	metaMap := make(map[string]interface{})
-	for key, metadataName := range pandocConfig {
-		if c.Tree.Has(key) {
-			metaMap[metadataName] = c.Tree.Get(key)
-		}
+	if c.Document.Date == "today" {
+		c.Document.Date = "\\today"
 	}
-
-	jsonStr, err := json.Marshal(metaMap)
+	jsonBytes, err := json.Marshal(c.Document)
 	if err != nil {
 		return errors.New("Could not marshal metadata into JSON. " + err.Error())
 	}
 
-	err = os.WriteFile(path, jsonStr, 0644)
+	err = os.WriteFile(path, jsonBytes, 0644)
 	if err != nil {
 		return errors.New("Could not create JSON file. " + err.Error())
 	}
+
 	return nil
 }
 
 func ConfigFromFile(path string) (Config, error) {
-	tree, err := toml.LoadFile(path)
+	conf := Config{}
+	tomlBytes, err := os.ReadFile(path)
 	if err != nil {
-		return Config{}, errors.New("Could not load config file. " + err.Error())
+		return conf, errors.New("Could not read config file. " + err.Error())
 	}
-
-	return Config{tree}, nil
+	err = toml.Unmarshal(tomlBytes, &conf)
+	if err != nil {
+		return conf, errors.New("Could not unmarshal config file. " + err.Error())
+	}
+	return conf, nil
 }
