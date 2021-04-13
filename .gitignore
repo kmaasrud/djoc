@@ -16,3 +16,6 @@
 
 # Sandbox directory
 sandbox/
+
+# Ignore produced binaries
+bin/
