@@ -88,9 +88,17 @@ code {
     background: #f3f3f3;
     border-radius: 0.3125rem;
     padding: 0.28rem;
-    font-size: 0.95rem;
+    font-size: 0.85em;
     white-space: nowrap;
 }
 pre code {
 	font-size: 1rem;
+}
+
+/* Line blocks */
+.line-block {
+    padding: 0 0.625rem;
+    font-size: 90%;
+    color: rgba(var(--text-color), 0.8);
+    border-left: 2px solid rgba(var(--text-color), 0.1);
 }
