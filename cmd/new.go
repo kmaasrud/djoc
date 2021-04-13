@@ -9,9 +9,13 @@ import (
 	"github.com/kmaasrud/doctor/msg"
 )
 
-const tomlFile string = `title = "TITLE"
+const tomlFile string = `[document]
+title = "TITLE"
 author = "AUTHOR"
 date = "today"
+
+[build]
+engine = "pdflatex"
 `
 
 func CreateDocumentAt(path string, defaultStructure bool) error {

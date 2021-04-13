@@ -74,10 +74,10 @@ func Build() error {
 	cmdArgs = append(cmdArgs, "--metadata-file="+jsonFilename)
 
 	// Specify PDF engine and add options for specific engines
-    cmdArgs = append(cmdArgs, fmt.Sprintf("--pdf-engine=%s", conf.Build.Engine))
-    if conf.Build.Engine == "tectonic" {
-        cmdArgs = append(cmdArgs, "--pdf-engine-opt=-c=minimal")
-    }
+	cmdArgs = append(cmdArgs, fmt.Sprintf("--pdf-engine=%s", conf.Build.Engine))
+	if conf.Build.Engine == "tectonic" {
+		cmdArgs = append(cmdArgs, "--pdf-engine-opt=-c=minimal")
+	}
 
 	// Temporarily write any Lua filters to file and add them to command
 	for filename, filter := range lua.Filters {
@@ -96,7 +96,11 @@ func Build() error {
 
 	// Add resource paths
 	var sep string
-	if runtime.GOOS == "windows" { sep = ";" } else { sep = ":" }
+	if runtime.GOOS == "windows" {
+		sep = ";"
+	} else {
+		sep = ":"
+	}
 	resourcePaths := strings.Join([]string{rootPath, filepath.Join(rootPath, "assets"), filepath.Join(rootPath, "src")}, sep)
 	cmdArgs = append(cmdArgs, "--resource-path="+resourcePaths)
 
