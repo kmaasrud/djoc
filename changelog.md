@@ -1,4 +1,21 @@
-# Changelogs for Doctor
+# Changelogs
+
+## Doctor v0.2.0 (Unreleased)
+
+### New features
+
+- [ ] Command: `doctor move` to change the position of sections
+- [ ] Command: `doctor list` to list the sections of your document, along with their index
+- [ ] Command: `doctor edit` to open a section directly in your preferred text editor.
+
+### Improvements
+
+- [ ] Include custom content in the header of your LaTeX document with the `latex-header` option in `doctor.toml`
+- [ ] Allow turning cross-referencing and other Lua filters on or off with the `cross-referencing` and `abstract-parsing` option in `doctor.toml`
+
+### Bug fixes
+
+- [ ] Important error messages should no longer be swallowed by the Doctor messaging system.
 
 ## Doctor v0.1.1 (2020-04-14)
 
