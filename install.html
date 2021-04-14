@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href="css/fonts.css" rel="stylesheet" type="text/css">
+	<link href="css/main.css" rel="stylesheet" type="text/css">
+	<link rel="icon" type="image/svg" href="assets/favicon.svg">
+	<title>Install Doctor</title>
+		  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.js"></script>
+    <script>document.addEventListener("DOMContentLoaded", function () {
+     var mathElements = document.getElementsByClassName("math");
+     var macros = [];
+     for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+       katex.render(texText.data, mathElements[i], {
+        displayMode: mathElements[i].classList.contains('display'),
+        throwOnError: false,
+        macros: macros,
+        fleqn: false
+       });
+    }}});
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css" />
+		<!--[if lt IE 9]>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+	<![endif]-->
+  </head>
+  <body>
+	<div class="content-container">
+	<img id="main-logo" src="assets/logo.svg">
+	<div class="content">
+	<h1 id="installation">Installation</h1>
+ <p>To download Doctor, either take a look at one of the pre-compiled binaries on <a href="https://github.com/kmaasrud/doctor/releases" target="_blank" rel="noopener noreferrer">GitHub</a>, or download it with the <a href="https://golang.org/doc/install" target="_blank" rel="noopener noreferrer">Go tool</a> by running</p>
+ <pre><code>go install github.com/kmaasrud/doctor</code></pre>
+ <p>Doctor needs one crucial component in order to work correctly, namely <a href="https://pandoc.org/" target="_blank" rel="noopener noreferrer">Pandoc</a><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. Have a look at <a href="https://pandoc.org/installing.html" target="_blank" rel="noopener noreferrer">Installing Pandoc</a> and make sure it is available in your PATH by running <code>pandoc -v</code>.</p>
+ <p>Additionally, if you want to produce PDFs, you will need a <span class="math inline">\TeX</span> distribution containing a PDF engine. The fastest alternative is <a href="https://tug.org/texlive/" target="_blank" rel="noopener noreferrer">TeXLive’s</a> <code>pdflatex</code>, but beware that it does not support Unicode. TeXLive also contains <code>lualatex</code> and <code>xelatex</code>, both of which support scripting, better font coverage and full Unicode. <a href="https://miktex.org/" target="_blank" rel="noopener noreferrer">MikTeX</a> is also a great distribution, containing all of the aforementioned engines. The lightest alternative is probably <a href="https://tectonic-typesetting.github.io/" target="_blank" rel="noopener noreferrer">Tectonic</a>. It is almost as fast as <code>pdflatex</code> and automatically downloads packages for you, which means you can avoid the multiple gigabyte install of TeXLive. Beware that this is beta software, and not as stable as other alternatives.</p>
+ <p>With all this covered, you are ready to write your first document! A “Getting started guide” will soon be available to get you flying, but for now you can just have a look at the <a href="docs">documentation</a> to figure out how Doctor works.</p>
+ <section class="footnotes" role="doc-endnotes">
+ <hr />
+ <ol>
+ <li id="fn1" role="doc-endnote"><p>Pandoc is actually so important that I’m working on having Doctor automatically install it for you if it is not already present in your system.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+ </ol>
+ </section>
+    </div>
+	</div>
+
+	  </body>
+</html>
