@@ -1,4 +1,4 @@
-![](https://raw.githubusercontent.com/kmaasrud/kodb/rewrite-in-go/docs/assets/card_header.png)
+![](https://raw.githubusercontent.com/kmaasrud/doctor/master/docs/assets/card_header.png)
 
 <h2 align="center">A blazingly fast document builder that makes scientific writing a breeze</h2>
 
