@@ -123,8 +123,10 @@ esac
 # Ensuring directories exist
 mkdir -p "${GOPATH}/"{src,pkg,bin}
 
+
 # Install Doctor
 echo "Installing Doctor with Go tool..."
+source $shell_profile
 go install github.com/kmaasrud/doctor@latest
 
 if [ -e "$GOPATH/bin/doctor" ]
