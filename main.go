@@ -67,7 +67,7 @@ func main() {
 					msg.Success("All the dependencies are installed. You're ready to go!")
 
 				case "version":
-					msg.Info("You are running Doctor " + VERSION)
+					fmt.Println("You are running Doctor " + VERSION)
 				}
 			}
 		}
