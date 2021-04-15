@@ -12,11 +12,14 @@ import (
 	"github.com/thatisuday/clapper"
 )
 
+var VERSION = "v0.1.2"
+
 func main() {
 	registry := clapper.NewRegistry()
 
 	rootCommand, _ := registry.Register("")
 	rootCommand.AddFlag("dependencies", "", true, "")
+	rootCommand.AddFlag("version", "v", true, "")
 
 	newCommand, _ := registry.Register("new")
 	newCommand.AddArg("path", ".")
@@ -51,14 +54,22 @@ func main() {
 	switch command.Name {
 	// Root command
 	case "":
-		// Can discard this err, command.Flags["dependencies"].Value will always be a parsable bool
-		if ok, _ := strconv.ParseBool(command.Flags["dependencies"].Value); ok {
-			err := cmd.CheckDependencies()
-			if err != nil {
-				msg.Error(err.Error())
-				os.Exit(1)
+		for flag, val := range command.Flags {
+			// Can discard this err, the root command's flags will always be parsable bools
+			if ok, _ := strconv.ParseBool(val.Value); ok {
+				switch flag {
+				case "dependencies":
+					err := cmd.CheckDependencies()
+					if err != nil {
+						msg.Error(err.Error())
+						os.Exit(1)
+					}
+					msg.Success("All the dependencies are installed. You're ready to go!")
+
+				case "version":
+					msg.Info("You are running Doctor " + VERSION)
+				}
 			}
-			msg.Success("All the dependencies are installed. You're ready to go!")
 		}
 
 	// Create new document command
