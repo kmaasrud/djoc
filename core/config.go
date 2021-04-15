@@ -16,13 +16,22 @@ type DocumentConfig struct {
 	Title         string      `toml:"title" json:"title"`
 	Author        interface{} `toml:"author" json:"author"` // String or list of strings
 	Date          string      `toml:"date" json:"date"`
-	DocumentClass string      `toml:"document-class" json:"documentclass"`
+	DocumentClass string      `toml:"document-class" default:"article" json:"documentclass"`
 	ClassOption   interface{} `toml:"class-option" json:"classoption"` // String or list of strings
 }
 
 type Config struct {
-	Document DocumentConfig `toml:"document"`
-	Build    BuildConfig    `toml:"build"`
+	Document struct {
+        Title           string          `toml:"title" json:"title"`
+        Author          interface{}     `toml:"author" json:"author"` // String or list of strings
+        Date            string          `toml:"date" json:"date"`
+        DocumentClass   string          `toml:"document-class" default:"article" json:"documentclass"`
+        ClassOption     interface{}     `toml:"class-option" json:"classoption"` // String or list of strings
+    }                                   `toml:"document"`
+	Build struct {
+        Engine          string          `toml:"engine" default:"tectonic"`
+        LuaFilters      bool            `toml:"lua-filters" default:"true"`
+    }                                   `toml:"build"`
 }
 
 func (c *Config) WritePandocJson(path string) error {

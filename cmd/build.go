@@ -45,11 +45,14 @@ func Build() error {
 	if err != nil {
 		return errors.New("Build failed. " + err.Error())
 	}
-	defer cleanUp(rootPath)
 
 	// Initialize the command
 	cmdArgs := []string{"-s", "-o", filepath.Join(rootPath, "main.pdf")}
-	// cmdArgs := []string{"-s", "--pdf-engine=pdflatex", "-o", filepath.Join(rootPath, "main.pdf")}
+
+	// Add resource paths
+	var sep string; if runtime.GOOS == "windows" { sep = ";" } else { sep = ":" }
+	resourcePaths := strings.Join([]string{rootPath, filepath.Join(rootPath, "assets"), filepath.Join(rootPath, "secs")}, sep)
+	cmdArgs = append(cmdArgs, "--resource-path="+resourcePaths)
 
 	// Find source files
 	msg.Info("Looking for source files...")
@@ -79,30 +82,26 @@ func Build() error {
 		cmdArgs = append(cmdArgs, "--pdf-engine-opt=-c=minimal")
 	}
 
-	// Temporarily write any Lua filters to file and add them to command
-	for filename, filter := range lua.Filters {
-		err := os.WriteFile(filepath.Join(rootPath, filename), filter, 0644)
-		if err != nil {
-			return errors.New("Could not create Lua file. " + err.Error())
-		}
-		cmdArgs = append(cmdArgs, "-L", filename)
-	}
-
 	// If references.bib exists, run with citeproc and add bibliography
 	if _, err := os.Stat(filepath.Join(rootPath, "assets", "references.bib")); err == nil {
-		msg.Info("Running with citeproc. Bibliography: " + filepath.Join(rootPath, "assets", "references.bib"))
+		msg.Info("Running with citeproc. Bibliography: " + filepath.Join("assets", "references.bib"))
 		cmdArgs = append(cmdArgs, "-C", "--bibliography=references.bib")
 	}
 
-	// Add resource paths
-	var sep string
-	if runtime.GOOS == "windows" {
-		sep = ";"
-	} else {
-		sep = ":"
-	}
-	resourcePaths := strings.Join([]string{rootPath, filepath.Join(rootPath, "assets"), filepath.Join(rootPath, "src")}, sep)
-	cmdArgs = append(cmdArgs, "--resource-path="+resourcePaths)
+    // Make sure all temporary files are cleaned up after function is run
+	defer cleanUp(rootPath, &conf)
+
+	// Temporarily write any Lua filters to file and add them to command
+    if conf.Build.LuaFilters {
+        msg.Info("Adding Lua filters...")
+        for filename, filter := range lua.Filters {
+            err := os.WriteFile(filepath.Join(rootPath, filename), filter, 0644)
+            if err != nil {
+                return errors.New("Could not create Lua file. " + err.Error())
+            }
+            cmdArgs = append(cmdArgs, "-L", filename)
+        }
+    }
 
 	// Execute command
 	done := make(chan struct{})
@@ -144,9 +143,9 @@ func runPandocWith(cmdArgs []string) error {
 	return nil
 }
 
-func cleanUp(rootPath string) {
+func cleanUp(rootPath string, conf *core.Config) {
 	msg.Info("Cleaning up temporary files...")
-	if len(lua.Filters) > 0 {
+	if conf.Build.LuaFilters {
 		for filename := range lua.Filters {
 			err := os.Remove(filepath.Join(rootPath, filename))
 			if err != nil {
