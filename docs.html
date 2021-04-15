@@ -30,7 +30,7 @@
  </ul>
  <!-- TODO: Line-block here about default doc structure, when that is implemented -->
  <p>As a rule, you should not manually create, rename or move files in a document - the exception being to place assets in the <code>assets</code> directory. Rather, you should let Doctor handle the dirty work of maintaining the workspace, and focus on what you’re best at: Writing amazing content!</p>
- <h2 id="doctor-add">Adding and removing sections</h2>
+ <h2 id="doctor-add">Adding sections</h2>
  <p>A <em>section</em> in a Doctor document is just a single Markdown file in the <code>secs</code> directory. By design, this file should represent only <strong>one</strong> single section of the document. This ensures a consistent structure that is simple to maintain. A good rule of thumb is to start each section with the title of that section as a top level header, and only use subheaders below it.</p>
  <p>To add a section, run</p>
  <pre><code>doctor add &lt;name of section&gt;</code></pre>
@@ -39,10 +39,14 @@
  <p>By default, every time the <code>add</code> command is run, the section is appended to the document. If you want to add a section to a specific position however, you need only use the <code>--at</code> flag to supply the index of your desired position after the title, like this:</p>
  <pre><code>doctor add &lt;title of section&gt; --at &lt;index&gt;</code></pre>
  <div class="line-block">You may also use <code>doctor add &lt;name&gt; -i &lt;index&gt;</code>, <code>doctor add &lt;name&gt; --at=&lt;index&gt;</code> or <code>doctor add &lt;name&gt; -i=&lt;index&gt;</code>.</div>
- <h2 id="removing-sections">Removing sections</h2>
+ <h2 id="doctor-remove">Removing sections</h2>
  <p>To remove a section, run the following</p>
  <pre><code>doctor remove &lt;identifier&gt;</code></pre>
  <p><code>&lt;identifier&gt;</code> can be either the index of the section you want to remove or the name of the section. Doctor will ask you for confirmation each time you remove a section. If you want to skip this, you can add the <code>--confirm</code> or <code>-c</code> flag to your command.</p>
+ <h2 id="doctor-build">Building the document</h2>
+ <p>To get your document built into a PDF, simply run</p>
+ <pre><code>doctor build</code></pre>
+ <p>This will produce <code>main.pdf</code> in your root directory.</p>
  <h2 id="config">Configuring with the TOML file</h2>
  <p>To configure your document, use the <code>doctor.toml</code> file at the document root. It uses the <a href="https://toml.io/en/">TOML</a> specification, which has a friendly and readable syntax. At the moment, Doctor only has a limited selection of configuration options. You do not need to specify any of them, but keep the <code>doctor.toml</code> file around - Doctor will not function if you delete it.</p>
  <h4 id="document"><code>[document]</code></h4>
@@ -85,8 +89,9 @@
       <li><a href="#getting-started">Getting started</a>
       <ul>
       <li><a href="#doctor-new">Creating a document</a></li>
-      <li><a href="#doctor-add">Adding and removing sections</a></li>
-      <li><a href="#removing-sections">Removing sections</a></li>
+      <li><a href="#doctor-add">Adding sections</a></li>
+      <li><a href="#doctor-remove">Removing sections</a></li>
+      <li><a href="#doctor-build">Building the document</a></li>
       <li><a href="#config">Configuring with the TOML file</a></li>
       </ul></li>
       </ul>
