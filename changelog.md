@@ -10,12 +10,19 @@
 
 ### Improvements
 
-- [ ] Include custom content in the header of your LaTeX document with the `latex-header` option in `doctor.toml`
-- [ ] Allow turning cross-referencing and other Lua filters on or off with the `cross-referencing` and `abstract-parsing` option in `doctor.toml`
+- [x] Added options to `doctor.toml`:
+    - [x] Boolean option: Allow turning off all Lua filters with the `lua-filters`.
+    - [x] Boolean option: Specify if you want numbered sections or not with `number-sections`.
+    - [x] Specify an inclusion into the LaTeX header with `latex-header`.
+        
+        > This option only has an effect when the output format is `pdf`. For now that is the only option, so you won't have to worry about this just yet.
+
+- [x] Even though it is mostly unused for now, the Doctor data dir now respects `$XDG_DATA_DIR` and `%APPDATA%`
 
 ### Bug fixes
 
 - [ ] Important error messages should no longer be swallowed by the Doctor messaging system.
+- [x] Directory `src` was added as a resource path. This is now changed to `secs`.
 
 ## Doctor v0.1.2 (2020-04-15)
 
