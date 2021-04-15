@@ -17,6 +17,10 @@
 
 - [ ] Important error messages should no longer be swallowed by the Doctor messaging system.
 
+## Doctor v0.1.2 (2020-04-15)
+
+-  Added versioning feature. Run `doctor --version` or `doctor -v` to see which version you are currently on.
+
 ## Doctor v0.1.1 (2020-04-14)
 
 Fixes issue with a malformed file `'` being part of the repo. You should now be able to install with
