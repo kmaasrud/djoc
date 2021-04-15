@@ -1,4 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700&display=swap');
+@font-face {
+	font-family: "TOMMY";
+	src: url(../assets/TOMMY_Bold.otf)
+}
+@font-face {
+	font-family: "TOMMY Extra Bold";
+	src: url(../assets/TOMMY_ExtraBold.otf)
+}
 
 :root {
 	/* Animations */
@@ -62,7 +70,7 @@ h1 {
 	border-bottom: 1px solid rgba(var(--text-color), 0.2);
 	padding-top: 3rem;
 }
-h1, h2, h3, h4, h5, h6 { font-family: "MADE TOMMY"; }
+h1, h2, h3, h4, h5, h6 { font-family: "TOMMY"; }
 
 /* Link styling */
 a {
