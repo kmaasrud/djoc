@@ -17,14 +17,14 @@ func Remove(inputs []string, confirm bool) error {
 
 	rootPath, err := utils.FindDoctorRoot()
 	if err != nil {
-		return errors.New("Could not remove section. " + err.Error())
+		return err
 	}
 
 	// Find all existing sections
 	secs, err := utils.FindSections(rootPath)
 	if err != nil {
 		if _, ok := err.(*utils.NoSectionsError); !ok {
-			return errors.New("There are no sections in this document.")
+			return err
 		}
 		return errors.New("Could not load section list. " + err.Error())
 	}
