@@ -7,8 +7,6 @@ import (
 	"strconv"
 	"strings"
     "errors"
-
-    "github.com/kmaasrud/doctor/msg"
 )
 
 // The string separating the index and the name. If changed, make a due notice to users and
@@ -88,7 +86,7 @@ func FindSectionMatches(input string, secs []Section, minus int) ([]Section, err
     }
 
     if len(matches) < 1 {
-        return matches, errors.New("Could not find any sections matching " + msg.Style(input, "Bold") + ".")
+        return matches, errors.New("Could not find any sections matching " + input + ".")
     }
     return matches, nil
 }

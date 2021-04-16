@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"os"
-	"strconv"
 	"strings"
 
 	"github.com/kmaasrud/doctor/core"
@@ -30,7 +29,6 @@ func Remove(inputs []string, confirm bool) error {
 	}
 
 	// Loop over supplied inputs and delete if they match
-SectionLoop:
 	for i, input := range inputs {
         matches, err := core.FindSectionMatches(input, secs, i)
         if err != nil {
@@ -43,24 +41,11 @@ SectionLoop:
 			removeThis = matches[0]
 		} else if len(matches) > 1 {
 			// More than 1 match, enter interactive selection mode
-			msg.Info(fmt.Sprintf("Found %d matches.", len(matches)))
-			var chosenIndex string
-			for true {
-				for j, match := range matches {
-					fmt.Printf(" %d. %s\n", j+1, match.Title)
-				}
-				fmt.Print("Which one do you want to delete? (q to quit) ")
-				fmt.Scanln(&chosenIndex)
-				index, err := strconv.Atoi(chosenIndex)
-				if err == nil && index > 0 && index <= len(matches) {
-					removeThis = matches[index-1]
-					break
-				} else if strings.ToLower(chosenIndex) == "q" {
-					continue SectionLoop
-				} else {
-					msg.Info("That is not a valid option. Please enter the number of the section you want to remove.")
-				}
-			}
+            var quit bool
+            removeThis, quit = msg.ChooseSection(matches, fmt.Sprintf("Found %d matches", len(matches)), "Which one do you want to delete?")
+            if quit {
+                continue
+            }
 		}
 
 		// Confirmation of deletion if not already supplied on the command line
@@ -70,7 +55,7 @@ SectionLoop:
 			fmt.Scanln(&confirmString)
 			if strings.ToLower(confirmString) != "y" {
 				msg.Info("Skipping deletion of " + removeThis.Title + ".")
-				continue SectionLoop
+				continue
 			}
 		}
 
@@ -78,7 +63,7 @@ SectionLoop:
 		err = os.Remove(removeThis.Path)
 		if err != nil {
 			msg.Error("Could not remove section " + msg.Style(removeThis.Title, "Bold") + ". " + err.Error())
-			continue SectionLoop
+			continue
 		}
 		msg.Success("Deleted section " + msg.Style(removeThis.Title, "Bold") + ".")
 
