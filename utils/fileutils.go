@@ -10,6 +10,9 @@ import (
 	"github.com/kmaasrud/doctor/msg"
 )
 
+// Error type returned when no sections are found from the root path.
+// Mainly used for not throwing an error in 'doctor add' when there are no sections,
+// but also useful to specify messages.
 type NoSectionsError struct {
 	ErrorMsg string
 }
@@ -43,7 +46,7 @@ func FindSections(rootPath string) ([]core.Section, error) {
 	var files []core.Section
 
 	if _, err := os.Stat(filepath.Join(rootPath, "secs")); os.IsNotExist(err) {
-		return nil, &NoSectionsError{"Empty Doctor document.\n\tConsider adding a couple of source files with " + msg.Style("doctor add <section name>", "Bold")}
+		return nil, &NoSectionsError{"Empty Doctor document."}
 	}
 	// Walk should walk through dirs in lexical order, making sorting unecessary (luckily)
 	err := filepath.Walk(filepath.Join(rootPath, "secs"), func(path string, info os.FileInfo, err error) error {
@@ -51,7 +54,6 @@ func FindSections(rootPath string) ([]core.Section, error) {
 			return err
 		}
 		if !info.IsDir() && filepath.Ext(path) == ".md" {
-			// TODO: Make sure the file ends in a couple of newlines (Lua filter?)
 			sec, err := core.SectionFromPath(path)
 			if err != nil {
 				return err
@@ -60,10 +62,10 @@ func FindSections(rootPath string) ([]core.Section, error) {
 		}
 		return nil
 	})
-	if len(files) < 1 {
-		return nil, &NoSectionsError{"Empty Doctor document.\n\tConsider adding a couple of source files with " + msg.Style("doctor add <section name>", "Bold")}
-	} else if err != nil {
+	if err != nil {
 		return nil, err
+	} else if len(files) < 1 {
+		return nil, &NoSectionsError{"Empty Doctor document."}
 	}
 
 	return files, nil
