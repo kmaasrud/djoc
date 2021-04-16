@@ -32,26 +32,11 @@ func Remove(inputs []string, confirm bool) error {
 	// Loop over supplied inputs and delete if they match
 SectionLoop:
 	for i, input := range inputs {
-		var matches []core.Section
-		index, err := strconv.Atoi(input)
-		if err != nil {
-			// The input is not parsable as int, handle it as a section name
-			for _, sec := range secs {
-				if strings.ToLower(sec.Title) == strings.ToLower(input) {
-					matches = append(matches, sec)
-				}
-			}
-		} else {
-			// The input is parsable as int, handle it as a section index
-			// Index matching is a bit difficult, since the indices change around a lot
-			// when removing multiple sections. To solve this, subtract the number of sections
-			// deleted from the index matched against.
-			for _, sec := range secs {
-				if sec.Index == index-i {
-					matches = append(matches, sec)
-				}
-			}
-		}
+        matches, err := core.FindSectionMatches(input, secs, i)
+        if err != nil {
+            msg.Error(err.Error())
+            continue
+        }
 
 		if len(matches) == 1 {
 			// Only one match, set is as the section to remove
@@ -76,10 +61,6 @@ SectionLoop:
 					msg.Info("That is not a valid option. Please enter the number of the section you want to remove.")
 				}
 			}
-		} else {
-			// No matches found
-			msg.Error("Could not find any sections matching " + msg.Style(input, "Bold") + ".")
-			continue SectionLoop
 		}
 
 		// Confirmation of deletion if not already supplied on the command line
