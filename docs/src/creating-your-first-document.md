@@ -1,8 +1,8 @@
 ---
-title: Doctor documentation
+title: Creating your first document
+toc: true
+toc-depth: 2
 ---
-
-Welcome to the Doctor documentation! Here you will find everything you need to know about writing documents with Doctor.
 
 # Getting started
 

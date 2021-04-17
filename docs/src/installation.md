@@ -1,5 +1,6 @@
 ---
 title: Install Doctor
+toc: false
 ---
 
 # Installation
