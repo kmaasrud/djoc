@@ -11,9 +11,12 @@
     width: 6rem;
     margin: 4rem;
 }
-
 .book-toc-content {
     padding-top: 15rem !important;
+}
+article {
+	padding-top: 4rem;
+    padding-bottom: 10rem;
 }
 
 /* Header styling */

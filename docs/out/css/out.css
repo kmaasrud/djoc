@@ -611,10 +611,6 @@ ul.pagination {
     display: none; }
   .book-header {
     display: block; }
-  /* #menu-control:focus ~ main label[for="menu-control"] {
-    outline-style: auto;
-    outline-color: currentColor;
-    outline-color: -webkit-focus-ring-color; } */
   #menu-control:checked ~ main .book-menu {
     visibility: initial; }
   #menu-control:checked ~ main .book-menu .book-menu-content {
@@ -629,20 +625,20 @@ ul.pagination {
     bottom: 0;
     left: 0;
     right: 0; }
-  /* #toc-control:focus ~ main label[for="toc-control"] {
-    outline-style: auto;
-    outline-color: currentColor;
-    outline-color: -webkit-focus-ring-color; } */
   #toc-control:checked ~ main .book-header aside {
     display: block; }
   body[dir="rtl"] #menu-control:checked + main .book-menu .book-menu-content {
-    transform: translateX(-16rem); } }
+    transform: translateX(-16rem); }
+  article { padding-top: 0rem; }
+  .page-title { display: none; }
+}
 
 @media screen and (min-width: 80rem) {
   .book-page,
   .book-menu .book-menu-content,
   .book-toc .book-toc-content {
-    padding: 2rem 1rem; } }
+    padding: 2rem 1rem; }
+}
 
 /* roboto-300italic - latin */
 @font-face {

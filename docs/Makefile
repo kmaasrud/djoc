@@ -1,13 +1,14 @@
 source := src
 output := out
-sources := $(wildcard $(source)/*.md)
-
-objects := $(patsubst %.md,%.html,$(subst $(source),$(output),$(sources)))
+sources := $(shell find src/ -type f -name '*.md')
+objects := $(addprefix out/,$(patsubst %.md,%.html,$(notdir $(sources))))
 
 all: $(objects)
 
-$(output)/%.html: $(source)/%.md
-	pandoc $< -s -o $@ --template=template.html --katex --toc
+$(output)/%.html: src/%.md
+	pandoc $< -s -o $@ --template=template.html --katex --toc --shift-heading-level-by=1
+$(output)/%.html: src/markdown/%.md
+	pandoc $< -s -o $@ --template=template.html --katex --toc --shift-heading-level-by=1 --no-highlight
 
 .PHONY : clean
 

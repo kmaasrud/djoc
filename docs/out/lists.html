@@ -7,11 +7,8 @@
 	<link href="css/normalize.css" rel="stylesheet" type="text/css">
 	<link href="css/out.css" rel="stylesheet" type="text/css">
 	<link rel="icon" type="image/svg" href="assets/favicon.svg">
-	<title>Doctor documentation - $pagetitle$</title>
-	$if(math)$
-	  $math$
-	$endif$
-	<!--[if lt IE 9]>
+	<title>Doctor documentation - Lists</title>
+		<!--[if lt IE 9]>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
 	<![endif]-->
   </head>
@@ -19,7 +16,7 @@
 		<input type="checkbox" class="hidden toggle" id="menu-control">
 		<input type="checkbox" class="hidden toggle" id="toc-control">
 		<main class="container flex">
-		<aside class="book-menu" id="$idprefix$TOC" role="doc-toc">
+		<aside class="book-menu" id="TOC" role="doc-toc">
 			<div class="book-menu-content">
 				<nav>
 					<img class="book-brand" id="main-logo" src="assets/favicon.svg">
@@ -57,37 +54,46 @@
 <label for="menu-control">
 <img src="https://themes.gohugo.io//theme/hugo-book/svg/menu.svg" class="book-icon" alt="Menu">
 </label>
-<strong>$pagetitle$</strong>
+<strong>Lists</strong>
 <label for="toc-control">
 <img src="https://themes.gohugo.io//theme/hugo-book/svg/toc.svg" class="book-icon" alt="Table of Contents">
 </label>
 </div>
-$if(toc)$
 <aside class="hidden clearfix">
 <nav id="TableOfContents">
-$table-of-contents$
+<ul>
+<li><a href="#ordered-lists">Ordered lists</a></li>
+<li><a href="#unordered-lists">Unordered lists</a></li>
+<li><a href="#task-lists">Task lists</a></li>
+<li><a href="#block-content-in-lists">Block content in lists</a></li>
+</ul>
 </nav>
 </aside>
-$endif$
 </header>
 <article class="markdown">
-<h1 class="page-title">$pagetitle$</h1>
-$body$
+<h1 class="page-title">Lists</h1>
+<h2 id="ordered-lists">Ordered lists</h2>
+<h2 id="unordered-lists">Unordered lists</h2>
+<h2 id="task-lists">Task lists</h2>
+<h2 id="block-content-in-lists">Block content in lists</h2>
 </article>
 <div class="book-comments">
 <label for="menu-control" class="hidden book-menu-overlay"></label>
 </div>
 </div>
-		$if(toc)$
-		<aside class="book-toc">
+				<aside class="book-toc">
 		  <div class="book-toc-content">
 			<nav id="TableOfContents">
-				$table-of-contents$
+				<ul>
+    <li><a href="#ordered-lists">Ordered lists</a></li>
+    <li><a href="#unordered-lists">Unordered lists</a></li>
+    <li><a href="#task-lists">Task lists</a></li>
+    <li><a href="#block-content-in-lists">Block content in lists</a></li>
+    </ul>
 			</nav>
 		  </div>
 		</aside>
-		$endif$
-	  </main>
+			  </main>
 	  <script>
 		(function() {
 		  var menu = document.querySelector("aside.book-menu nav");

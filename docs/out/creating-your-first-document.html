@@ -7,7 +7,7 @@
 	<link href="css/normalize.css" rel="stylesheet" type="text/css">
 	<link href="css/out.css" rel="stylesheet" type="text/css">
 	<link rel="icon" type="image/svg" href="assets/favicon.svg">
-	<title>Creating your first document</title>
+	<title>Doctor documentation - Creating your first document</title>
 		<!--[if lt IE 9]>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
 	<![endif]-->
@@ -24,14 +24,18 @@
 						<li class="book-section-flat">
 							<span>Getting started</span>
 							<ul>
-								<li><a href="installation">Installation</a></li>
+								<li><a href="installing">Installing</a></li>
 								<li><a href="creating-your-first-document">Creating your first document</a></li>
 							</ul>
 						</li>
 						<li class="book-section-flat">
 							<a href="markdown">Markdown</span>
 							<ul>
-								<li><a href="placeholder">Placeholder</a></li>
+								<li><a href="paragraphs">Paragraphs</a></li>
+								<li><a href="headings">Headings</a></li>
+								<li><a href="lists">Lists</a></li>
+								<li><a href="code">Code</a></li>
+								<li><a href="block-quotes">Block quotes</a></li>
 							</ul>
 						</li>
 						<li class="book-section-flat">
@@ -44,115 +48,106 @@
 				</nav>
 			</div>
 		</aside>
-		<div class="book-page">
-			<header class="book-header">
-				<div class="flex align-center justify-between">
-				  <label for="menu-control">
-					<img src="https://themes.gohugo.io//theme/hugo-book/svg/menu.svg" class="book-icon" alt="Menu">
-				  </label>
-				  <strong>Creating your first document</strong>
-				  <label for="toc-control">
-					<img src="https://themes.gohugo.io//theme/hugo-book/svg/toc.svg" class="book-icon" alt="Table of Contents">
-				  </label>
-				</div>
-								<aside class="hidden clearfix">
-					<nav id="TableOfContents">
-						<ul>
-      <li><a href="#getting-started">Getting started</a>
-      <ul>
-      <li><a href="#doctor-new">Creating a document</a></li>
-      <li><a href="#doctor-add">Adding sections</a></li>
-      <li><a href="#doctor-remove">Removing sections</a></li>
-      <li><a href="#doctor-build">Building the document</a></li>
-      <li><a href="#config">Configuring with the TOML file</a></li>
-      </ul></li>
-      </ul>
-					</nav>
-				</aside>
-							</header>
-			<article class="markdown">
-				<h1 id="getting-started">Getting started</h1>
-    <h2 id="doctor-new">Creating a document</h2>
-    <p>In Doctor terminology, a <em>document</em> is simply a directory containing everything needed for Doctor to produce your desired output. To get started, run</p>
-    <pre><code>doctor new &lt;name&gt;</code></pre>
-    <p>This will create a new document inside a directory with the specified name. Omitting <code>&lt;name&gt;</code> creates a document in the current directory.</p>
-    <p>The <code>new</code> command will create the following file structure inside your document:</p>
-    <ul>
-    <li><code>secs/</code>: This directory will contain the sections of your document, each represented by a Markdown file.</li>
-    <li><code>assets/</code>: This is a directory for all the assets needed by your document. This could be everything from figures to CSL styles.</li>
-    <li><code>references.bib</code>: This is a BibTeX file containing the document’s bibliography. See <a href="#citation">Citation</a> for more info on how this is handled.</li>
-    <li><code>doctor.toml</code>: This configuration file specifies key aspects of your document, like the title, author(s), and more. For more info, see <a href="#config">Configuring with the TOML file</a></li>
-    </ul>
-    <!-- TODO: Line-block here about default doc structure, when that is implemented -->
-    <p>As a rule, you should not manually create, rename or move files in a document - the exception being to place assets in the <code>assets</code> directory. Rather, you should let Doctor handle the dirty work of maintaining the workspace, and focus on what you’re best at: Writing amazing content!</p>
-    <h2 id="doctor-add">Adding sections</h2>
-    <p>A <em>section</em> in a Doctor document is just a single Markdown file in the <code>secs</code> directory. By design, this file should represent only <strong>one</strong> single section of the document. This ensures a consistent structure that is simple to maintain. A good rule of thumb is to start each section with the title of that section as a top level header, and only use subheaders below it.</p>
-    <p>To add a section, run</p>
-    <pre><code>doctor add &lt;name of section&gt;</code></pre>
-    <p>This will create a new Markdown file under <code>secs</code> and adds a top level header with the specified name. To include spaces in your section name, simply wrap it in quotes, for example <code>doctor add "Results and discussion"</code>.</p>
-    <p>Doctor automatically assigns an index to your new sections. The indices are used to determine the order in which the sections appear in the final output. If you insist, you can rename the files to reorder the sections yourself, but it is adviced to use the Doctor command line tool for this task. It will make sure the correct order is kept when adding, removing or moving sections.</p>
-    <p>By default, every time the <code>add</code> command is run, the section is appended to the document. If you want to add a section to a specific position however, you need only use the <code>--at</code> flag to supply the index of your desired position after the title, like this:</p>
-    <pre><code>doctor add &lt;title of section&gt; --at &lt;index&gt;</code></pre>
-    <div class="line-block">You may also use <code>doctor add &lt;name&gt; -i &lt;index&gt;</code>, <code>doctor add &lt;name&gt; --at=&lt;index&gt;</code> or <code>doctor add &lt;name&gt; -i=&lt;index&gt;</code>.</div>
-    <h2 id="doctor-remove">Removing sections</h2>
-    <p>To remove a section, run the following</p>
-    <pre><code>doctor remove &lt;identifier&gt;</code></pre>
-    <p><code>&lt;identifier&gt;</code> can be either the index of the section you want to remove or the name of the section. Doctor will ask you for confirmation each time you remove a section. If you want to skip this, you can add the <code>--confirm</code> or <code>-c</code> flag to your command.</p>
-    <h2 id="doctor-build">Building the document</h2>
-    <p>To get your document built into a PDF, simply run</p>
-    <pre><code>doctor build</code></pre>
-    <p>This will produce <code>main.pdf</code> in your root directory.</p>
-    <h2 id="config">Configuring with the TOML file</h2>
-    <p>To configure your document, use the <code>doctor.toml</code> file at the document root. It uses the <a href="https://toml.io/en/">TOML</a> specification, which has a friendly and readable syntax. At the moment, Doctor only has a limited selection of configuration options. You do not need to specify any of them, but keep the <code>doctor.toml</code> file around - Doctor will not function if you delete it.</p>
-    <h4 id="document"><code>[document]</code></h4>
-    <p>These are options affecting the content and look of your document. The following fields are supported:</p>
-    <ul>
-    <li><p><code>title</code>: This is a string representing the title of your document.</p>
-    <blockquote>
-    <p><em>Example</em>: <code>title = "My amazing report!"</code></p>
-    </blockquote></li>
-    <li><p><code>author</code>: This can either be a string specifying the document’s author, or a list of strings specifying several authors.</p>
-    <blockquote>
-    <p><em>Example</em>: <code>author = ["Jane Doe", "John Doe"]</code></p>
-    </blockquote></li>
-    <li><p><code>date</code>: This is the date listed on your document, represented by a string. If the date is <code>"today"</code>, Doctor will insert the current date.</p>
-    <blockquote>
-    <p><em>Example</em>: <code>date = "February 17th 1998"</code></p>
-    </blockquote></li>
-    </ul>
-    <h4 id="build"><code>[build]</code></h4>
-    <p>These are options affecting the build process. The following fields are supported:</p>
-    <ul>
-    <li><p><code>engine</code>: A string specifying which PDF engine you would like to use. The options are:</p>
-    <ul>
-    <li><code>pdflatex</code></li>
-    <li><code>lualatex</code></li>
-    <li><code>xelatex</code></li>
-    <li><code>latexmk</code></li>
-    <li><code>tectonic</code></li>
-    </ul>
-    <p>If no engine is specified, the default engine is <code>tectonic</code>.</p>
-    <blockquote>
-    <p><em>Example</em>: <code>engine = "lualatex"</code></p>
-    </blockquote></li>
-    </ul>
-			</article>
-			<div class="book-comments">
-				<label for="menu-control" class="hidden book-menu-overlay"></label>
-			</div>
-		</div>
+<div class="book-page">
+<header class="book-header">
+<div class="flex align-center justify-between">
+<label for="menu-control">
+<img src="https://themes.gohugo.io//theme/hugo-book/svg/menu.svg" class="book-icon" alt="Menu">
+</label>
+<strong>Creating your first document</strong>
+<label for="toc-control">
+<img src="https://themes.gohugo.io//theme/hugo-book/svg/toc.svg" class="book-icon" alt="Table of Contents">
+</label>
+</div>
+<aside class="hidden clearfix">
+<nav id="TableOfContents">
+<ul>
+<li><a href="#doctor-add">Adding sections</a></li>
+<li><a href="#doctor-build">Building the document</a></li>
+<li><a href="#doctor-remove">Removing sections</a></li>
+<li><a href="#config">Configuring with the TOML file</a></li>
+</ul>
+</nav>
+</aside>
+</header>
+<article class="markdown">
+<h1 class="page-title">Creating your first document</h1>
+<p>In Doctor terminology, a <em>document</em> is simply a directory containing everything needed for Doctor to produce your desired output. To get started, run</p>
+<pre><code>doctor new &lt;name&gt;</code></pre>
+<p>This will create a new document inside a directory with the specified name. Omitting <code>&lt;name&gt;</code> creates a document in the current directory.</p>
+<p>The <code>new</code> command will create the following file structure inside your document:</p>
+<ul>
+<li><code>secs/</code>: This directory will contain the sections of your document, each represented by a Markdown file.</li>
+<li><code>assets/</code>: This is a directory for all the assets needed by your document. This could be everything from figures to CSL styles.</li>
+<li><code>references.bib</code>: This is a BibTeX file containing the document’s bibliography. See <a href="#citation">Citation</a> for more info on how this is handled.</li>
+<li><code>doctor.toml</code>: This configuration file specifies key aspects of your document, like the title, author(s), and more. For more info, see <a href="#config">Configuring with the TOML file</a></li>
+</ul>
+<!-- TODO: Line-block here about default doc structure, when that is implemented -->
+<p>As a rule, you should not manually create, rename or move files in a document - the exception being to place assets in the <code>assets</code> directory. Rather, you should let Doctor handle the dirty work of maintaining the workspace, and focus on what you’re best at: Writing amazing content!</p>
+<h2 id="doctor-add">Adding sections</h2>
+<p>A <em>section</em> in a Doctor document is just a single Markdown file in the <code>secs</code> directory. By design, this file should represent only <strong>one</strong> single section of the document. This ensures a consistent structure that is simple to maintain. A good rule of thumb is to start each section with the title of that section as a top level header, and only use subheaders below it.</p>
+<p>To add a section, run</p>
+<pre><code>doctor add &lt;name of section&gt;</code></pre>
+<p>This will create a new Markdown file under <code>secs</code> and adds a top level header with the specified name. To include spaces in your section name, simply wrap it in quotes, for example <code>doctor add "Results and discussion"</code>.</p>
+<p>Doctor automatically assigns an index to your new sections. The indices are used to determine the order in which the sections appear in the final output. If you insist, you can rename the files to reorder the sections yourself, but it is adviced to use the Doctor command line tool for this task. It will make sure the correct order is kept when adding, removing or moving sections.</p>
+<p>By default, every time the <code>add</code> command is run, the section is appended to the document. If you want to add a section to a specific position however, you need only use the <code>--at</code> flag to supply the index of your desired position after the title, like this:</p>
+<pre><code>doctor add &lt;title of section&gt; --at &lt;index&gt;</code></pre>
+<div class="line-block">You may also use <code>doctor add &lt;name&gt; -i &lt;index&gt;</code>, <code>doctor add &lt;name&gt; --at=&lt;index&gt;</code> or <code>doctor add &lt;name&gt; -i=&lt;index&gt;</code>.</div>
+<h2 id="doctor-build">Building the document</h2>
+<p>To get your document built into a PDF, simply run</p>
+<pre><code>doctor build</code></pre>
+<p>This will produce <code>main.pdf</code> in your root directory.</p>
+<h2 id="doctor-remove">Removing sections</h2>
+<p>To remove a section, run the following</p>
+<pre><code>doctor remove &lt;identifier&gt;</code></pre>
+<p><code>&lt;identifier&gt;</code> can be either the index of the section you want to remove or the name of the section. Doctor will ask you for confirmation each time you remove a section. If you want to skip this, you can add the <code>--confirm</code> or <code>-c</code> flag to your command.</p>
+<h2 id="config">Configuring with the TOML file</h2>
+<p>To configure your document, use the <code>doctor.toml</code> file at the document root. It uses the <a href="https://toml.io/en/">TOML</a> specification, which has a friendly and readable syntax. At the moment, Doctor only has a limited selection of configuration options. You do not need to specify any of them, but keep the <code>doctor.toml</code> file around - Doctor will not function if you delete it.</p>
+<h4 id="document"><code>[document]</code></h4>
+<p>These are options affecting the content and look of your document. The following fields are supported:</p>
+<ul>
+<li><p><code>title</code>: This is a string representing the title of your document.</p>
+<blockquote>
+<p><em>Example</em>: <code>title = "My amazing report!"</code></p>
+</blockquote></li>
+<li><p><code>author</code>: This can either be a string specifying the document’s author, or a list of strings specifying several authors.</p>
+<blockquote>
+<p><em>Example</em>: <code>author = ["Jane Doe", "John Doe"]</code></p>
+</blockquote></li>
+<li><p><code>date</code>: This is the date listed on your document, represented by a string. If the date is <code>"today"</code>, Doctor will insert the current date.</p>
+<blockquote>
+<p><em>Example</em>: <code>date = "February 17th 1998"</code></p>
+</blockquote></li>
+</ul>
+<h4 id="build"><code>[build]</code></h4>
+<p>These are options affecting the build process. The following fields are supported:</p>
+<ul>
+<li><p><code>engine</code>: A string specifying which PDF engine you would like to use. The options are:</p>
+<ul>
+<li><code>pdflatex</code></li>
+<li><code>lualatex</code></li>
+<li><code>xelatex</code></li>
+<li><code>latexmk</code></li>
+<li><code>tectonic</code></li>
+</ul>
+<p>If no engine is specified, the default engine is <code>tectonic</code>.</p>
+<blockquote>
+<p><em>Example</em>: <code>engine = "lualatex"</code></p>
+</blockquote></li>
+</ul>
+</article>
+<div class="book-comments">
+<label for="menu-control" class="hidden book-menu-overlay"></label>
+</div>
+</div>
 				<aside class="book-toc">
 		  <div class="book-toc-content">
 			<nav id="TableOfContents">
 				<ul>
-    <li><a href="#getting-started">Getting started</a>
-    <ul>
-    <li><a href="#doctor-new">Creating a document</a></li>
     <li><a href="#doctor-add">Adding sections</a></li>
-    <li><a href="#doctor-remove">Removing sections</a></li>
     <li><a href="#doctor-build">Building the document</a></li>
+    <li><a href="#doctor-remove">Removing sections</a></li>
     <li><a href="#config">Configuring with the TOML file</a></li>
-    </ul></li>
     </ul>
 			</nav>
 		  </div>
@@ -167,5 +162,16 @@
 		  menu.scrollTop = localStorage.getItem("menu.scrollTop");
 		})();
 	  </script>
+    <!-- Syntax highlighting through highlight.js -->
+    <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@10.4.0/styles/stackoverflow-light.min.css">
+    <script src="https://unpkg.com/@highlightjs/cdn-assets@10.4.0/highlight.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+          document.querySelectorAll('pre code').forEach((block) => {
+            hljs.highlightBlock(block);
+          });
+        });
+    </script>
   </body>
 </html>

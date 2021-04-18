@@ -7,11 +7,8 @@
 	<link href="css/normalize.css" rel="stylesheet" type="text/css">
 	<link href="css/out.css" rel="stylesheet" type="text/css">
 	<link rel="icon" type="image/svg" href="assets/favicon.svg">
-	<title>Doctor documentation - $pagetitle$</title>
-	$if(math)$
-	  $math$
-	$endif$
-	<!--[if lt IE 9]>
+	<title>Doctor documentation - Paragraphs</title>
+		<!--[if lt IE 9]>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
 	<![endif]-->
   </head>
@@ -19,7 +16,7 @@
 		<input type="checkbox" class="hidden toggle" id="menu-control">
 		<input type="checkbox" class="hidden toggle" id="toc-control">
 		<main class="container flex">
-		<aside class="book-menu" id="$idprefix$TOC" role="doc-toc">
+		<aside class="book-menu" id="TOC" role="doc-toc">
 			<div class="book-menu-content">
 				<nav>
 					<img class="book-brand" id="main-logo" src="assets/favicon.svg">
@@ -57,37 +54,26 @@
 <label for="menu-control">
 <img src="https://themes.gohugo.io//theme/hugo-book/svg/menu.svg" class="book-icon" alt="Menu">
 </label>
-<strong>$pagetitle$</strong>
+<strong>Paragraphs</strong>
 <label for="toc-control">
 <img src="https://themes.gohugo.io//theme/hugo-book/svg/toc.svg" class="book-icon" alt="Table of Contents">
 </label>
 </div>
-$if(toc)$
-<aside class="hidden clearfix">
-<nav id="TableOfContents">
-$table-of-contents$
-</nav>
-</aside>
-$endif$
 </header>
 <article class="markdown">
-<h1 class="page-title">$pagetitle$</h1>
-$body$
+<h1 class="page-title">Paragraphs</h1>
+<p>A paragraph is one or more lines of text followed by one or more blank lines. Newlines are treated as spaces, so you can reflow your paragraphs as you like. Pandoc’s Markdown is strict, so if you need a hard line break, you have three options:</p>
+<ul>
+<li>Use two newlines or more (essentially separating each paragraph by a blank line). This is the recommended and most readable way.</li>
+<li>Use a backslash directly followed by a single newline. <strong>Note</strong>: in multiline and grid table cells, this is the only way to create a hard line break, since trailing spaces in the cells are ignored.</li>
+<li>Use two or more spaces at the end of a line. This method should only be used if absolutely necessary, as it makes the document source less readable.</li>
+</ul>
 </article>
 <div class="book-comments">
 <label for="menu-control" class="hidden book-menu-overlay"></label>
 </div>
 </div>
-		$if(toc)$
-		<aside class="book-toc">
-		  <div class="book-toc-content">
-			<nav id="TableOfContents">
-				$table-of-contents$
-			</nav>
-		  </div>
-		</aside>
-		$endif$
-	  </main>
+			  </main>
 	  <script>
 		(function() {
 		  var menu = document.querySelector("aside.book-menu nav");

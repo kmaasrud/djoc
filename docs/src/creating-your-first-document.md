@@ -4,10 +4,6 @@ toc: true
 toc-depth: 2
 ---
 
-# Getting started
-
-## Creating a document {#doctor-new}
-
 In Doctor terminology, a *document* is simply a directory containing everything needed for Doctor to produce your desired output. To get started, run
 
     doctor new <name>
@@ -25,7 +21,7 @@ The `new` command will create the following file structure inside your document:
 
 As a rule, you should not manually create, rename or move files in a document - the exception being to place assets in the `assets` directory. Rather, you should let Doctor handle the dirty work of maintaining the workspace, and focus on what you're best at: Writing amazing content!
 
-## Adding sections {#doctor-add}
+# Adding sections {#doctor-add}
 
 A *section* in a Doctor document is just a single Markdown file in the `secs` directory. By design, this file should represent only **one** single section of the document. This ensures a consistent structure that is simple to maintain. A good rule of thumb is to start each section with the title of that section as a top level header, and only use subheaders below it.
 
@@ -43,15 +39,7 @@ By default, every time the `add` command is run, the section is appended to the 
 
 | You may also use `doctor add <name> -i <index>`, `doctor add <name> --at=<index>` or `doctor add <name> -i=<index>`.
 
-## Removing sections {#doctor-remove}
-
-To remove a section, run the following
-
-    doctor remove <identifier>
-
-`<identifier>` can be either the index of the section you want to remove or the name of the section. Doctor will ask you for confirmation each time you remove a section. If you want to skip this, you can add the `--confirm` or `-c` flag to your command.
-
-## Building the document {#doctor-build}
+# Building the document {#doctor-build}
 
 To get your document built into a PDF, simply run
 
@@ -59,11 +47,19 @@ To get your document built into a PDF, simply run
 
 This will produce `main.pdf` in your root directory.
 
-## Configuring with the TOML file {#config}
+# Removing sections {#doctor-remove}
+
+To remove a section, run the following
+
+    doctor remove <identifier>
+
+`<identifier>` can be either the index of the section you want to remove or the name of the section. Doctor will ask you for confirmation each time you remove a section. If you want to skip this, you can add the `--confirm` or `-c` flag to your command.
+
+# Configuring with the TOML file {#config}
 
 To configure your document, use the `doctor.toml` file at the document root. It uses the [TOML](https://toml.io/en/) specification, which has a friendly and readable syntax. At the moment, Doctor only has a limited selection of configuration options. You do not need to specify any of them, but keep the `doctor.toml` file around - Doctor will not function if you delete it.
 
-#### `[document]`
+### `[document]`
 
 These are options affecting the content and look of your document. The following fields are supported:
 
@@ -79,7 +75,7 @@ These are options affecting the content and look of your document. The following
 
     > *Example*: `date = "February 17th 1998"`
 
-#### `[build]`
+### `[build]`
 
 These are options affecting the build process. The following fields are supported:
 
