@@ -12,7 +12,7 @@ import (
 	"github.com/thatisuday/clapper"
 )
 
-var VERSION = "v0.1.2"
+var VERSION = "DEV"
 
 func main() {
 	registry := clapper.NewRegistry()
@@ -20,6 +20,7 @@ func main() {
 	rootCommand, _ := registry.Register("")
 	rootCommand.AddFlag("dependencies", "", true, "")
 	rootCommand.AddFlag("version", "v", true, "")
+	rootCommand.AddFlag("update", "u", true, "")
 
 	newCommand, _ := registry.Register("new")
 	newCommand.AddArg("path", ".")
@@ -68,6 +69,13 @@ func main() {
 
 				case "version":
 					fmt.Println("You are running Doctor " + VERSION)
+
+				case "update":
+					err := cmd.Update()
+					if err != nil {
+						msg.Error(err.Error())
+						os.Exit(1)
+					}
 				}
 			}
 		}
