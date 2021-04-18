@@ -20,14 +20,15 @@ EnlrZMZSJhNdxu2/9VhgG/UEISHrp0iX
 `)
 
 func Update() error {
+	done := make(chan struct{})
+	go msg.Do("Looking for new version...", done)
 	var opts equinox.Options
 	if err := opts.SetPublicKeyPEM(publicKey); err != nil {
+		msg.CloseDo(done)
 		return errors.New("Could not set public key. " + err.Error())
 	}
 
 	// check for the update
-	done := make(chan struct{})
-	go msg.Do("Looking for new version...", done)
 	resp, err := equinox.Check(appID, opts)
 	msg.CloseDo(done)
 	switch {
