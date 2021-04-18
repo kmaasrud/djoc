@@ -48,6 +48,6 @@ func Update() error {
 		return errors.New("Could not apply update. " + err.Error())
 	}
 
-	msg.Success("Updated to new version: %s" + resp.ReleaseVersion + "!")
+	msg.Success("Updated to new version: " + resp.ReleaseVersion + "!")
 	return nil
 }
