@@ -111,16 +111,18 @@ func Build() error {
 
 	// Handle errors
 	if err != nil {
+        var warnStr, errStr string
 		switch thisErr := err.(type) {
 		case *FatalError:
-			msg.CleanStderrMsg(thisErr.Stderr)
+            _, errStr = msg.CleanStderrMsg(thisErr.Stderr)
+            return errors.New("Doctor exited with errors. They are as follows:\n\n" + errStr)
 		case *WarningError:
-			msg.CleanStderrMsg(thisErr.Stderr)
+            warnStr, _ = msg.CleanStderrMsg(thisErr.Stderr)
 			msg.Success("Document built.")
+            return errors.New("Doctor exited with warnings. They are as follows:\n\n" + warnStr)
 		default:
-			msg.Error("Could not run command. " + err.Error())
+			return errors.New("Could not run command. " + err.Error())
 		}
-		return errors.New("")
 	}
 	msg.Success("Document built.")
 	return nil

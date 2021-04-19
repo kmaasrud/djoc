@@ -48,24 +48,22 @@ func CloseDo(done chan struct{}) {
 }
 
 // Tectonic, TeX and even Pandoc produce A LOT of noise. This function runs through each line
-// of stderr and returns only those containing relevant information. This cleans up a lot and
-// allows me to style the errors/warnings according to Doctor messages. I admit it might be a bit
-// stupid, since I can never be sure to catch everything, but I think it is worth the debug time.
-func CleanStderrMsg(stderr string) {
-	includeNext := false
+// of stderr and allows me to filter away lines I don't want. It also splits them into errors
+// and warnings, allowing me to separate them and style them.
+func CleanStderrMsg(stderr string) (string, string) {
+	var warnings, errors string
 	for _, line := range strings.Split(strings.TrimSuffix(stderr, "\n"), "\n") {
-		if includeNext {
-			fmt.Println("         " + line)
-			includeNext = false
-		} else if strings.HasPrefix(line, "! ") {
-			Error(Style("TeX: ", "Bold") + strings.TrimPrefix(line, "! "))
-			includeNext = true
-		} else if strings.HasPrefix(line, "error: ") {
-			Error(Style("Tectonic: ", "Bold") + strings.TrimPrefix(line, "error: "))
+		if strings.HasPrefix(line, "! ") {
+			errors += "        " + Style("TeX: ", "Bold") + strings.TrimPrefix(line, "! ") + "\n"
+		} else if strings.HasPrefix(line, "warning: ") {
+			// Supress Tectonic's warnings
 		} else if strings.HasPrefix(line, "[WARNING] ") {
-			Warning(Style("Pandoc: ", "Bold") + strings.TrimPrefix(line, "[WARNING] "))
+			warnings += "        " + Style("Pandoc: ", "Bold") + strings.TrimPrefix(line, "[WARNING] ") + "\n"
 		} else if strings.HasPrefix(line, "[ERROR] ") {
-			Error(Style("Pandoc: ", "Bold") + strings.TrimPrefix(line, "[ERROR] "))
+			errors += "        " + Style("Pandoc: ", "Bold") + strings.TrimPrefix(line, "[ERROR] ") + "\n"
+		} else {
+			errors += "        " + line + "\n"
 		}
 	}
+	return warnings, errors
 }

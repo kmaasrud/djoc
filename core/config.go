@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"os"
-    "fmt"
 
 	"github.com/pelletier/go-toml"
 )
@@ -57,8 +56,6 @@ func (c *Config) WritePandocJson(path string) error {
 	if err != nil {
 		return errors.New("Could not marshal metadata into JSON. " + err.Error())
 	}
-
-    fmt.Println(string(jsonBytes))
 
     // Write the JSON temporarily to path
 	err = os.WriteFile(path, jsonBytes, 0644)
