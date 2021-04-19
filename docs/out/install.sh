@@ -30,6 +30,7 @@ if [ -z "$PLATFORM" ]; then
 fi
 
 # Find shell profile and make sure it exists
+echo "Finding shell..."
 if [ -n "$($SHELL -c 'echo $ZSH_VERSION')" ]; then
     shell_profile="$HOME/.zshrc"
 elif [ -n "$($SHELL -c 'echo $BASH_VERSION')" ]; then
@@ -71,7 +72,7 @@ tmp=$(mktemp -d)
 # Install Doctor
 echo "Installing latest stable version of Doctor..."
 curl "https://bin.equinox.io/c/fHpZLhLmi7c/doctor-stable-$PLATFORM.tgz" --output "$tmp/doctor.tgz"
-tar xvf doctor.tgz -C "$HOME/.local/bin"
+tar xvf "$tmp/doctor.tgz" -C "$HOME/.local/bin"
 
 if [ -e "$HOME/.local/bin/doctor" ]
 then
