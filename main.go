@@ -36,6 +36,10 @@ func main() {
 	removeCommand.AddArg("sections...", "")
 	removeCommand.AddFlag("confirm", "c", true, "")
 
+    moveCommand, _ := registry.Register("move")
+    moveCommand.AddArg("section", "")
+    moveCommand.AddArg("to", "")
+
 	// Parse commands
 	command, err := registry.Parse(os.Args[1:])
 	// Handle command parsing errors
@@ -145,5 +149,25 @@ func main() {
 			msg.Error(err.Error())
 			os.Exit(1)
 		}
+
+    // Move a section from one position to another
+    case "move":
+        section := command.Args["section"].Value
+        toStr := command.Args["to"].Value
+        if section == "" || toStr == "" {
+            msg.Error("Please supply the section you want to move and the index you want to move it to.")
+            os.Exit(1)
+        }
+
+        to, err := strconv.Atoi(toStr)
+        if err != nil {
+            msg.Error("Could not parse " + toStr + " as an index. Please supply a valid number.")
+        }
+
+        err = cmd.Move(section, to)
+        if err != nil {
+            msg.Error(err.Error())
+            os.Exit(1)
+        }
 	}
 }
