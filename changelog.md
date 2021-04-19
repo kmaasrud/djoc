@@ -2,11 +2,14 @@
 
 ## Doctor v0.2.0 (Unreleased)
 
+Doctor is now published to Equinox. This means it has multiple installers and supports self-updating. You can replace your previous binary or Go install with the new one on the [download page](https://dl.equinox.io/kmaasrud/doctor/stable), and update to any new version with `doctor --update`.
+
 ### New features
 
 - [ ] Command: `doctor move` to change the position of sections
 - [ ] Command: `doctor list` to list the sections of your document, along with their index
 - [ ] Command: `doctor edit` to open a section directly in your preferred text editor.
+- [x] Command: `doctor --update` to update Doctor to the newest version.
 
 ### Improvements
 
