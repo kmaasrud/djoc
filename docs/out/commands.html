@@ -62,6 +62,7 @@
 <aside class="hidden clearfix">
 <nav id="TableOfContents">
 <ul>
+<li><a href="#doctor-new"><code>doctor new</code></a></li>
 <li><a href="#doctor-build"><code>doctor build</code></a></li>
 <li><a href="#doctor-add"><code>doctor add</code></a></li>
 <li><a href="#doctor-remove"><code>doctor remove</code></a></li>
@@ -72,10 +73,29 @@
 </header>
 <article class="markdown">
 <h1 class="page-title">Commands</h1>
-<h3 id="doctor-build"><code>doctor build</code></h3>
-<h3 id="doctor-add"><code>doctor add</code></h3>
-<h3 id="doctor-remove"><code>doctor remove</code></h3>
-<h3 id="doctor-move"><code>doctor move</code></h3>
+<h2 id="doctor-new"><code>doctor new</code></h2>
+<p>Used like:</p>
+<pre class="shell"><code>doctor new &lt;name&gt;</code></pre>
+<p>This will create a new document inside a directory with the specified name. Omitting <code>&lt;name&gt;</code> creates a document in the current directory.</p>
+<h2 id="doctor-build"><code>doctor build</code></h2>
+<p>Used like:</p>
+<pre class="shell"><code>doctor build</code></pre>
+<p>Will build the current document into a PDF.</p>
+<h2 id="doctor-add"><code>doctor add</code></h2>
+<p>Used like:</p>
+<pre class="shell"><code>doctor add &lt;name of section&gt;</code></pre>
+<p>Adds a new section to your document, automatically assigning an index to it. If you want to specify which index you want it to have, run</p>
+<pre class="shell"><code>doctor add &lt;name of section&gt; --at &lt;index&gt;</code></pre>
+<blockquote>
+<p>You may also use <code>doctor add &lt;name&gt; -i &lt;index&gt;</code>, <code>doctor add &lt;name&gt; --at=&lt;index&gt;</code> or <code>doctor add &lt;name&gt; -i=&lt;index&gt;</code>.</p>
+</blockquote>
+<p>This will add the new section at the specified index, reordering the other sections accordingly.</p>
+<h2 id="doctor-remove"><code>doctor remove</code></h2>
+<p>Used like:</p>
+<pre class="shell"><code>doctor remove &lt;identifier&gt; ...</code></pre>
+<p>Will search for a section that has an index or name that matches <code>&lt;identifier&gt;</code> and remove it, reordering the other sections accordingly. The <code>remove</code> command allows multiple arguments, meaning you can supply multiple identifiers, and Doctor will remove them one after one.</p>
+<p>Removing a section requires confirmation, which Doctor will ask for. If you want to skip this step (e.g. when deleting a lot of sections), run with the <code>--confirm</code> or <code>-c</code> flag. This will proceed with removing sections without asking for confirmation.</p>
+<h2 id="doctor-move"><code>doctor move</code></h2>
 </article>
 <div class="book-comments">
 <label for="menu-control" class="hidden book-menu-overlay"></label>
@@ -85,6 +105,7 @@
 		  <div class="book-toc-content">
 			<nav id="TableOfContents">
 				<ul>
+    <li><a href="#doctor-new"><code>doctor new</code></a></li>
     <li><a href="#doctor-build"><code>doctor build</code></a></li>
     <li><a href="#doctor-add"><code>doctor add</code></a></li>
     <li><a href="#doctor-remove"><code>doctor remove</code></a></li>

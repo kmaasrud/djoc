@@ -6,7 +6,9 @@ toc-depth: 2
 
 In Doctor terminology, a *document* is simply a directory containing everything needed for Doctor to produce your desired output. To get started, run
 
-    doctor new <name>
+```shell
+doctor new <name>
+```
 
 This will create a new document inside a directory with the specified name. Omitting `<name>` creates a document in the current directory.
 
@@ -27,7 +29,9 @@ A *section* in a Doctor document is just a single Markdown file in the `secs` di
 
 To add a section, run
 
-    doctor add <name of section>
+```shell
+doctor add <name of section>
+```
 
 This will create a new Markdown file under `secs` and adds a top level header with the specified name. To include spaces in your section name, simply wrap it in quotes, for example `doctor add "Results and discussion"`.
 
@@ -35,15 +39,17 @@ Doctor automatically assigns an index to your new sections. The indices are used
 
 By default, every time the `add` command is run, the section is appended to the document. If you want to add a section to a specific position however, you need only use the `--at` flag to supply the index of your desired position after the title, like this:
 
-    doctor add <title of section> --at <index>
-
-| You may also use `doctor add <name> -i <index>`, `doctor add <name> --at=<index>` or `doctor add <name> -i=<index>`.
+```shell
+doctor add <name of section> --at <index>
+```
 
 # Building the document {#doctor-build}
 
 To get your document built into a PDF, simply run
 
-	doctor build
+```shell
+doctor build
+```
 
 This will produce `main.pdf` in your root directory.
 
@@ -51,9 +57,11 @@ This will produce `main.pdf` in your root directory.
 
 To remove a section, run the following
 
-    doctor remove <identifier>
+```shell
+doctor remove <identifier>
+```
 
-`<identifier>` can be either the index of the section you want to remove or the name of the section. Doctor will ask you for confirmation each time you remove a section. If you want to skip this, you can add the `--confirm` or `-c` flag to your command.
+`<identifier>` can be either the index of the section you want to remove or the name of the section.
 
 # Configuring with the TOML file {#config}
 

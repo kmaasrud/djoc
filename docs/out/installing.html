@@ -7,7 +7,7 @@
 	<link href="css/normalize.css" rel="stylesheet" type="text/css">
 	<link href="css/out.css" rel="stylesheet" type="text/css">
 	<link rel="icon" type="image/svg" href="assets/favicon.svg">
-	<title>Doctor documentation - Install Doctor</title>
+	<title>Doctor documentation - Installing Doctor</title>
 		  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.js"></script>
     <script>document.addEventListener("DOMContentLoaded", function () {
      var mathElements = document.getElementsByClassName("math");
@@ -70,25 +70,30 @@
 <label for="menu-control">
 <img src="https://themes.gohugo.io//theme/hugo-book/svg/menu.svg" class="book-icon" alt="Menu">
 </label>
-<strong>Install Doctor</strong>
+<strong>Installing Doctor</strong>
 <label for="toc-control">
 <img src="https://themes.gohugo.io//theme/hugo-book/svg/toc.svg" class="book-icon" alt="Table of Contents">
 </label>
 </div>
 </header>
 <article class="markdown">
-<h1 class="page-title">Install Doctor</h1>
-<h2 id="installation">Installation</h2>
-<p>To download Doctor, either take a look at one of the pre-compiled binaries on <a href="https://github.com/kmaasrud/doctor/releases" target="_blank" rel="noopener noreferrer">GitHub</a>, or download it with the <a href="https://golang.org/doc/install" target="_blank" rel="noopener noreferrer">Go tool</a> by running:</p>
-<pre><code>go install github.com/kmaasrud/doctor</code></pre>
-<p>If you are on a Unix system and have Bash installed, you can install both Go and Doctor automatically by running this shell script:</p>
-<pre><code>wget -q -O - https://www.kmaasrud.com/doctor/install.sh | bash</code></pre>
-<p>or, if you do not have <code>wget</code>, use <code>curl</code>.</p>
-<pre><code>curl https://www.kmaasrud.com/doctor/install.sh | bash</code></pre>
-<h3 id="dependencies">Dependencies</h3>
-<p>Doctor needs one crucial component in order to work correctly, namely <a href="https://pandoc.org/" target="_blank" rel="noopener noreferrer">Pandoc</a>. Have a look at <a href="https://pandoc.org/installing.html" target="_blank" rel="noopener noreferrer">Installing Pandoc</a> and make sure it is available in your PATH by running <code>pandoc -v</code>.</p>
+<h1 class="page-title">Installing Doctor</h1>
+<p>The latest stable release of Doctor is available on the <a href="https://dl.equinox.io/kmaasrud/doctor/stable"><strong>download page</strong></a>. If you are on Linux with Bash installed, there’s a short shell script that automatically downloads the binary locally and adds it to your <code>PATH</code>. Just run</p>
+<pre class="shell"><code>curl https://www.kmaasrud.com/doctor/install.sh | bash</code></pre>
+<p>If you have the <a href="https://golang.org/doc/install" target="_blank" rel="noopener noreferrer">Go tool</a> installed, you can also download Doctor by running:</p>
+<pre class="shell"><code>go install github.com/kmaasrud/doctor@latest</code></pre>
+<h2 id="dependencies">Dependencies</h2>
+<p>Doctor needs one crucial component in order to work correctly, namely <a href="https://pandoc.org/" target="_blank" rel="noopener noreferrer">Pandoc</a>. Have a look at <a href="https://pandoc.org/installing.html" target="_blank" rel="noopener noreferrer">Installing Pandoc</a> and make sure it is available in your <code>PATH</code> by running <code>pandoc -v</code>.</p>
 <p>Additionally, if you want to produce PDFs, you will need a <span class="math inline">\TeX</span> distribution containing a PDF engine. The fastest alternative is <a href="https://tug.org/texlive/" target="_blank" rel="noopener noreferrer">TeXLive’s</a> <code>pdflatex</code>, but beware that it does not support Unicode. TeXLive also contains <code>lualatex</code> and <code>xelatex</code>, both of which support scripting, better font coverage and full Unicode. <a href="https://miktex.org/" target="_blank" rel="noopener noreferrer">MikTeX</a> is also a great distribution, containing all of the aforementioned engines. The lightest alternative is probably <a href="https://tectonic-typesetting.github.io/" target="_blank" rel="noopener noreferrer">Tectonic</a>. It is almost as fast as <code>pdflatex</code> and automatically downloads packages for you, which means you can avoid the multiple gigabyte install of TeXLive. Beware that this is beta software, and not as stable as other alternatives.</p>
-<p>With all this covered, you are ready to write your first document! A “Getting started guide” will soon be available to get you flying, but for now you can just have a look at the <a href="docs">documentation</a> to figure out how Doctor works.</p>
+<h2 id="updating">Updating</h2>
+<p>To update Doctor to a new version, simply run</p>
+<pre class="shell"><code>doctor --update</code></pre>
+<p>This will check for an update, download it if it exists and replace the old binary with the new one.</p>
+<blockquote>
+<p><strong>Note</strong>: If the Doctor binary is placed in a directory requiring administrator access, so too will the <code>doctor --update</code> command. This means you’ll have to run it like <code>sudo doctor --update</code> or similar.</p>
+</blockquote>
+<hr />
+<p>With all this covered, you are ready to write your first document! See <a href="creating-your-first-document">Creating your first document</a> for a quick guide on how to get started.</p>
 </article>
 <div class="book-comments">
 <label for="menu-control" class="hidden book-menu-overlay"></label>
