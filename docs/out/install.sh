@@ -52,11 +52,12 @@ case ":$PATH:" in
 *)
 	if [ "$shell" == "fish" ]; then
 		{
-			echo '# GoLang'
+			echo '# Added by Doctor'
 			echo 'set PATH $HOME/.local/bin $PATH'
 		} >> "$shell_profile"
 	else
 		{
+			echo '# Added by Doctor'
 			echo 'export PATH=$HOME/.local/bin:$PATH'
 		} >> "$shell_profile"
 	fi
