@@ -6,8 +6,8 @@ Doctor is now published to Equinox. This means it has multiple installers and su
 
 ### New features
 
-- [ ] Command: `doctor move` to change the position of sections
-- [ ] Command: `doctor list` to list the sections of your document, along with their index
+- [x] Command: `doctor move` to change the position of sections.
+- [ ] Command: `doctor list` to list the sections of your document, along with their index.
 - [ ] Command: `doctor edit` to open a section directly in your preferred text editor.
 - [x] Command: `doctor --update` to update Doctor to the newest version.
 
@@ -20,11 +20,12 @@ Doctor is now published to Equinox. This means it has multiple installers and su
         
         > This option only has an effect when the output format is `pdf`. For now that is the only option, so you won't have to worry about this just yet.
 
-- [x] Even though it is mostly unused for now, the Doctor data dir now respects `$XDG_DATA_DIR` and `%APPDATA%`
+- [x] Even though it is mostly unused for now, the Doctor data dir now respects `$XDG_DATA_DIR` and `%APPDATA%`.
+- [x] Big revamp to documentation and lots of stuff added to it.
 
 ### Bug fixes
 
-- [ ] Important error messages should no longer be swallowed by the Doctor messaging system.
+- [x] Important error messages should no longer be swallowed by the Doctor messaging system.
 - [x] Directory `src` was added as a resource path. This is now changed to `secs`.
 
 ## Doctor v0.1.2 (2020-04-15)
