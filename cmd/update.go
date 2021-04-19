@@ -1,10 +1,10 @@
 package cmd
 
 import (
-    "errors"
+	"errors"
 
-    "github.com/kmaasrud/doctor/msg"
-    "github.com/equinox-io/equinox"
+	"github.com/equinox-io/equinox"
+	"github.com/kmaasrud/doctor/msg"
 )
 
 // assigned when creating a new application in the dashboard

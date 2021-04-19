@@ -22,42 +22,42 @@ type DocumentConfig struct {
 
 type Config struct {
 	Document struct {
-        Title           string          `toml:"title" json:"title"`
-        Author          interface{}     `toml:"author" json:"author"` // String or list of strings
-        Date            string          `toml:"date" json:"date"`
-        DocumentClass   string          `toml:"document-class" default:"article" json:"documentclass"`
-        ClassOption     interface{}     `toml:"class-option" json:"classoption"` // String or list of strings
-        LatexHeader     string          `toml:"latex-header" json:"-"`
-        HtmlHeader      string          `toml:"html-header" json:"-"`
-        HeaderIncludes  string          `json:"header-includes"` // This only specifies output
-        NumberSections  bool            `toml:"number-sections" json:"numbersections"`
-    }                                   `toml:"document"`
+		Title          string      `toml:"title" json:"title"`
+		Author         interface{} `toml:"author" json:"author"` // String or list of strings
+		Date           string      `toml:"date" json:"date"`
+		DocumentClass  string      `toml:"document-class" default:"article" json:"documentclass"`
+		ClassOption    interface{} `toml:"class-option" json:"classoption"` // String or list of strings
+		LatexHeader    string      `toml:"latex-header" json:"-"`
+		HtmlHeader     string      `toml:"html-header" json:"-"`
+		HeaderIncludes string      `json:"header-includes"` // This only specifies output
+		NumberSections bool        `toml:"number-sections" json:"numbersections"`
+	} `toml:"document"`
 	Build struct {
-        Engine          string          `toml:"engine" default:"tectonic"`
-        LuaFilters      bool            `toml:"lua-filters" default:"true"`
-        OutputFormat    string          `toml:"output-format" default:"pdf"`
-    }                                   `toml:"build"`
+		Engine       string `toml:"engine" default:"tectonic"`
+		LuaFilters   bool   `toml:"lua-filters" default:"true"`
+		OutputFormat string `toml:"output-format" default:"pdf"`
+	} `toml:"build"`
 }
 
 func (c *Config) WritePandocJson(path string) error {
-    // Preprocessing
+	// Preprocessing
 	if c.Document.Date == "today" {
 		c.Document.Date = "\\today"
 	}
-    switch c.Build.OutputFormat {
-    case "html":
-        c.Document.HeaderIncludes = c.Document.HtmlHeader
-    case "pdf":
-        c.Document.HeaderIncludes = c.Document.LatexHeader
-    }
+	switch c.Build.OutputFormat {
+	case "html":
+		c.Document.HeaderIncludes = c.Document.HtmlHeader
+	case "pdf":
+		c.Document.HeaderIncludes = c.Document.LatexHeader
+	}
 
-    // Marshal config struct into JSON
+	// Marshal config struct into JSON
 	jsonBytes, err := json.Marshal(c.Document)
 	if err != nil {
 		return errors.New("Could not marshal metadata into JSON. " + err.Error())
 	}
 
-    // Write the JSON temporarily to path
+	// Write the JSON temporarily to path
 	err = os.WriteFile(path, jsonBytes, 0644)
 	if err != nil {
 		return errors.New("Could not create JSON file. " + err.Error())

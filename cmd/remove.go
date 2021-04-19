@@ -30,22 +30,22 @@ func Remove(inputs []string, confirm bool) error {
 
 	// Loop over supplied inputs and delete if they match
 	for i, input := range inputs {
-        matches, err := core.FindSectionMatches(input, secs, i)
-        if err != nil {
-            msg.Error(err.Error())
-            continue
-        }
+		matches, err := core.FindSectionMatches(input, secs, i)
+		if err != nil {
+			msg.Error(err.Error())
+			continue
+		}
 
 		if len(matches) == 1 {
 			// Only one match, set is as the section to remove
 			removeThis = matches[0]
 		} else if len(matches) > 1 {
 			// More than 1 match, enter interactive selection mode
-            var quit bool
-            removeThis, quit = msg.ChooseSection(matches, fmt.Sprintf("Found %d matches", len(matches)), "Which one do you want to delete?")
-            if quit {
-                continue
-            }
+			var quit bool
+			removeThis, quit = msg.ChooseSection(matches, fmt.Sprintf("Found %d matches", len(matches)), "Which one do you want to delete?")
+			if quit {
+				continue
+			}
 		}
 
 		// Confirmation of deletion if not already supplied on the command line

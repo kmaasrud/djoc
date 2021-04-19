@@ -50,7 +50,12 @@ func Build() error {
 	cmdArgs := []string{"-s", "-o", filepath.Join(rootPath, "main.pdf")}
 
 	// Add resource paths
-	var sep string; if runtime.GOOS == "windows" { sep = ";" } else { sep = ":" }
+	var sep string
+	if runtime.GOOS == "windows" {
+		sep = ";"
+	} else {
+		sep = ":"
+	}
 	resourcePaths := strings.Join([]string{rootPath, filepath.Join(rootPath, "assets"), filepath.Join(rootPath, "secs")}, sep)
 	cmdArgs = append(cmdArgs, "--resource-path="+resourcePaths)
 
@@ -88,20 +93,20 @@ func Build() error {
 		cmdArgs = append(cmdArgs, "-C", "--bibliography=references.bib")
 	}
 
-    // Make sure all temporary files are cleaned up after function is run
+	// Make sure all temporary files are cleaned up after function is run
 	defer cleanUp(rootPath, &conf)
 
 	// Temporarily write any Lua filters to file and add them to command
-    if conf.Build.LuaFilters {
-        msg.Info("Adding Lua filters...")
-        for filename, filter := range lua.Filters {
-            err := os.WriteFile(filepath.Join(rootPath, filename), filter, 0644)
-            if err != nil {
-                return errors.New("Could not create Lua file. " + err.Error())
-            }
-            cmdArgs = append(cmdArgs, "-L", filename)
-        }
-    }
+	if conf.Build.LuaFilters {
+		msg.Info("Adding Lua filters...")
+		for filename, filter := range lua.Filters {
+			err := os.WriteFile(filepath.Join(rootPath, filename), filter, 0644)
+			if err != nil {
+				return errors.New("Could not create Lua file. " + err.Error())
+			}
+			cmdArgs = append(cmdArgs, "-L", filename)
+		}
+	}
 
 	// Execute command
 	done := make(chan struct{})
@@ -111,15 +116,15 @@ func Build() error {
 
 	// Handle errors
 	if err != nil {
-        var warnStr, errStr string
+		var warnStr, errStr string
 		switch thisErr := err.(type) {
 		case *FatalError:
-            _, errStr = msg.CleanStderrMsg(thisErr.Stderr)
-            return errors.New("Doctor exited with errors. They are as follows:\n\n" + errStr)
+			_, errStr = msg.CleanStderrMsg(thisErr.Stderr)
+			return errors.New("Doctor exited with errors. They are as follows:\n\n" + errStr)
 		case *WarningError:
-            warnStr, _ = msg.CleanStderrMsg(thisErr.Stderr)
+			warnStr, _ = msg.CleanStderrMsg(thisErr.Stderr)
 			msg.Success("Document built.")
-            return errors.New("Doctor exited with warnings. They are as follows:\n\n" + warnStr)
+			return errors.New("Doctor exited with warnings. They are as follows:\n\n" + warnStr)
 		default:
 			return errors.New("Could not run command. " + err.Error())
 		}

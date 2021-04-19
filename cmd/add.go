@@ -30,17 +30,17 @@ func Add(sectionName string, index int) error {
 	// Find all existing sections
 	secs, err := utils.FindSections(rootPath)
 	if _, ok := err.(*utils.NoSectionsError); ok {
-        // NoSectionsError. secs directory might not exists, create it if not
-        if _, existErr := os.Stat(secsDir); os.IsNotExist(existErr) {
-            err := os.Mkdir(secsDir, 0755)
-            if err != nil {
-                return errors.New("Could not create directory 'secs'. " + err.Error())
-            }
-            msg.Info("Created directory " + msg.Style("secs", "Bold"))
-        }
-    } else if err != nil {
+		// NoSectionsError. secs directory might not exists, create it if not
+		if _, existErr := os.Stat(secsDir); os.IsNotExist(existErr) {
+			err := os.Mkdir(secsDir, 0755)
+			if err != nil {
+				return errors.New("Could not create directory 'secs'. " + err.Error())
+			}
+			msg.Info("Created directory " + msg.Style("secs", "Bold"))
+		}
+	} else if err != nil {
 		return errors.New("Could not add a new section. " + err.Error())
-    }
+	}
 
 	if index >= 0 {
 		// If index is specified, bump the index of all files above it by 1
