@@ -7,7 +7,23 @@
 	<link href="css/normalize.css" rel="stylesheet" type="text/css">
 	<link href="css/out.css" rel="stylesheet" type="text/css">
 	<link rel="icon" type="image/svg" href="assets/favicon.svg">
-	<title>Doctor documentation - Lists</title>
+	<title>Doctor documentation - Math</title>
+		  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.js"></script>
+    <script>document.addEventListener("DOMContentLoaded", function () {
+     var mathElements = document.getElementsByClassName("math");
+     var macros = [];
+     for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+       katex.render(texText.data, mathElements[i], {
+        displayMode: mathElements[i].classList.contains('display'),
+        throwOnError: false,
+        macros: macros,
+        fleqn: false
+       });
+    }}});
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css" />
 		<!--[if lt IE 9]>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
 	<![endif]-->
@@ -56,7 +72,7 @@
 <label for="menu-control">
 <img src="https://themes.gohugo.io//theme/hugo-book/svg/menu.svg" class="book-icon" alt="Menu">
 </label>
-<strong>Lists</strong>
+<strong>Math</strong>
 <label for="toc-control">
 <img src="https://themes.gohugo.io//theme/hugo-book/svg/toc.svg" class="book-icon" alt="Table of Contents">
 </label>
@@ -64,20 +80,36 @@
 <aside class="hidden clearfix">
 <nav id="TableOfContents">
 <ul>
-<li><a href="#ordered-lists">Ordered lists</a></li>
-<li><a href="#unordered-lists">Unordered lists</a></li>
-<li><a href="#task-lists">Task lists</a></li>
-<li><a href="#block-content-in-lists">Block content in lists</a></li>
+<li><a href="#inline-math">Inline math</a></li>
+<li><a href="#display-math">Display math</a>
+<ul>
+<li><a href="#cross-referencing">Cross-referencing</a></li>
+</ul></li>
 </ul>
 </nav>
 </aside>
 </header>
 <article class="markdown">
-<h1 class="page-title">Lists</h1>
-<h2 id="ordered-lists">Ordered lists</h2>
-<h2 id="unordered-lists">Unordered lists</h2>
-<h2 id="task-lists">Task lists</h2>
-<h2 id="block-content-in-lists">Block content in lists</h2>
+<h1 class="page-title">Math</h1>
+<h2 id="inline-math">Inline math</h2>
+<p>Anything between two <code>$</code> characters will be treated as <span class="math inline">\TeX</span> math. The opening <code>$</code> must have a non-space character immediately to its right, while the closing <code>$</code> must have a non-space character immediately to its left, and must not be followed immediately by a digit. Thus, <code>$20,000</code> and <code>$30,000</code> won’t parse as math. If for some reason you need to enclose text in literal <code>$</code> characters, escape them with a blackslash and they won’t be treated as math delimiters.</p>
+<pre class="markdown"><code>Here is some text and here is some math: $E = mc^2$.</code></pre>
+<h2 id="display-math">Display math</h2>
+<p>For display math, use <code>$$</code> delimiters. In this case, the delimiters may be separated from the formula by whitespace. However, there can be no blank lines betwen the opening and closing <code>$$</code> delimiters. I also advice you to start and end your equation on the same line as your <code>$$</code> signs, as some Pandoc filters work best that way.</p>
+<pre class="markdown"><code>And God said
+
+$$ \nabla \cdot \vec D = \rho_\nu, $$
+$$ \nabla \cdot \vec B = 0, $$
+$$ \nabla \times \vec E = -\frac{\partial \vec B}{\partial t}, $$
+$$ \nabla \times \vec H = \vec J_\text{free} + \frac{\partial \vec D}{\partial t}, $$
+
+and then there was light.</code></pre>
+<h3 id="cross-referencing">Cross-referencing</h3>
+<p>You can add a number to your display math and cross-reference it with the following syntax:</p>
+<pre class="markdown"><code>$$ f(k) = {n \choose k} p^{k} (1-p)^{n-k} $${#eq:binomial-distribution}
+
+The binomial distribution is shown in [@eq:binomial-distribution].</code></pre>
+<p>Adding <code>{#eq:binomial-distribution}</code> (the <code>#eq</code> part is required) after the equation assigns the ID <code>binomial-distribution</code> to the equation and automatically numbers it. This number gets inserted into the text by writing <code>[@eq:binomial-distribution]</code> (the <code>@eq:</code> part is required here too).</p>
 </article>
 <div class="book-comments">
 <label for="menu-control" class="hidden book-menu-overlay"></label>
@@ -87,10 +119,11 @@
 		  <div class="book-toc-content">
 			<nav id="TableOfContents">
 				<ul>
-    <li><a href="#ordered-lists">Ordered lists</a></li>
-    <li><a href="#unordered-lists">Unordered lists</a></li>
-    <li><a href="#task-lists">Task lists</a></li>
-    <li><a href="#block-content-in-lists">Block content in lists</a></li>
+    <li><a href="#inline-math">Inline math</a></li>
+    <li><a href="#display-math">Display math</a>
+    <ul>
+    <li><a href="#cross-referencing">Cross-referencing</a></li>
+    </ul></li>
     </ul>
 			</nav>
 		  </div>
