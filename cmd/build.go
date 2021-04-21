@@ -35,7 +35,7 @@ func (e *FatalError) Error() string {
 
 func Build() error {
 	// Check for dependencies
-	err := CheckDependencies()
+	err := CheckPath("pandoc")
 	if err != nil {
 		return errors.New("Build failed. " + err.Error())
 	}
@@ -50,23 +50,8 @@ func Build() error {
 	cmdArgs := []string{"-s", "-o", filepath.Join(rootPath, "main.pdf")}
 
 	// Add resource paths
-	var sep string
-	if runtime.GOOS == "windows" {
-		sep = ";"
-	} else {
-		sep = ":"
-	}
-	resourcePaths := strings.Join([]string{rootPath, filepath.Join(rootPath, "assets"), filepath.Join(rootPath, "secs")}, sep)
+	resourcePaths := strings.Join([]string{rootPath, filepath.Join(rootPath, "assets"), filepath.Join(rootPath, "secs")}, utils.ResourceSep)
 	cmdArgs = append(cmdArgs, "--resource-path="+resourcePaths)
-
-	// Find source files
-	msg.Info("Looking for source files...")
-	secs, err := utils.FindSections(rootPath)
-	if err != nil {
-		return err
-	}
-	cmdArgs = append(cmdArgs, core.PathsFromSections(secs)...)
-	msg.Info(fmt.Sprintf("Found %d source files!", len(secs)))
 
 	// Add Pandoc options from config. TODO: Clean this up a bit
 	msg.Info("Applying configuration from doctor.toml...")
@@ -82,10 +67,24 @@ func Build() error {
 	cmdArgs = append(cmdArgs, "--metadata-file="+jsonFilename)
 
 	// Specify PDF engine and add options for specific engines
+	err = CheckPath(conf.Build.Engine)
+	if err != nil {
+		return errors.New("Build failed. " + err.Error())
+	}
 	cmdArgs = append(cmdArgs, fmt.Sprintf("--pdf-engine=%s", conf.Build.Engine))
 	if conf.Build.Engine == "tectonic" {
+        // Tectonic chatters a lot. Make it a bit more silent
 		cmdArgs = append(cmdArgs, "--pdf-engine-opt=-c=minimal")
 	}
+
+	// Find source files
+	msg.Info("Looking for source files...")
+	secs, err := utils.FindSections(rootPath)
+	if err != nil {
+		return err
+	}
+	cmdArgs = append(cmdArgs, core.PathsFromSections(secs)...)
+	msg.Info(fmt.Sprintf("Found %d source files!", len(secs)))
 
 	// If references.bib exists, run with citeproc and add bibliography
 	if _, err := os.Stat(filepath.Join(rootPath, "assets", "references.bib")); err == nil {

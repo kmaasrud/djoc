@@ -13,7 +13,7 @@ import (
 )
 
 var VERSION = "DEV"
-var helpText = `Help is not written yet...`
+var helpText = `Help is sadly not written yet...`
 
 func main() {
 	registry := clapper.NewRegistry()
