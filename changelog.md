@@ -16,10 +16,11 @@ Doctor is now published to Equinox. This means it has multiple installers and su
 - [x] Added options to `doctor.toml`:
     - [x] Boolean option: Allow turning off all Lua filters with the `lua-filters`.
     - [x] Boolean option: Specify if you want numbered sections or not with `number-sections`.
-    - [x] Specify an inclusion into the LaTeX header with `latex-header`.
+    - [x] String option: Specify an inclusion into the LaTeX header with `latex-header`.
         
         > This option only has an effect when the output format is `pdf`. For now that is the only option, so you won't have to worry about this just yet.
 
+    - [x] String option: Specify a title for the section containing your references with the `references-title` option.
 - [x] Even though it is mostly unused for now, the Doctor data dir now respects `$XDG_DATA_DIR` and `%APPDATA%`.
 - [x] Big revamp to documentation and lots of stuff added to it.
 
