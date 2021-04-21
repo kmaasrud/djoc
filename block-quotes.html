@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href="css/main.css" rel="stylesheet" type="text/css">
+	<link href="css/normalize.css" rel="stylesheet" type="text/css">
+	<link href="css/out.css" rel="stylesheet" type="text/css">
+	<link rel="icon" type="image/svg" href="assets/favicon.svg">
+	<title>Doctor documentation - Block quotes</title>
+		<!--[if lt IE 9]>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+	<![endif]-->
+  </head>
+  <body>
+		<input type="checkbox" class="hidden toggle" id="menu-control">
+		<input type="checkbox" class="hidden toggle" id="toc-control">
+		<main class="container flex">
+		<aside class="book-menu" id="TOC" role="doc-toc">
+			<div class="book-menu-content">
+				<nav>
+					<img class="book-brand" id="main-logo" src="assets/favicon.svg">
+					<ul>
+						<li class="book-section-flat">
+							<span>Getting started</span>
+							<ul>
+								<li><a href="installing">Installing</a></li>
+								<li><a href="creating-your-first-document">Creating your first document</a></li>
+							</ul>
+						</li>
+						<li class="book-section-flat">
+							<a href="markdown">Markdown</span>
+							<ul>
+								<li><a href="paragraphs">Paragraphs</a></li>
+								<li><a href="headings">Headings</a></li>
+								<li><a href="formatting">Formatting</a></li>
+								<li><a href="lists">Lists</a></li>
+								<li><a href="code">Code</a></li>
+								<li><a href="math">Math</a></li>
+								<li><a href="block-quotes">Block quotes</a></li>
+							</ul>
+						</li>
+						<li class="book-section-flat">
+							<a href="conventions">Conventions</span>
+							<ul>
+								<li><a href="placeholder">Placeholder</a></li>
+							</ul>
+						</li>
+					</ul>
+				</nav>
+			</div>
+		</aside>
+<div class="book-page">
+<header class="book-header">
+<div class="flex align-center justify-between">
+<label for="menu-control">
+<img src="https://themes.gohugo.io//theme/hugo-book/svg/menu.svg" class="book-icon" alt="Menu">
+</label>
+<strong>Block quotes</strong>
+<label for="toc-control">
+<img src="https://themes.gohugo.io//theme/hugo-book/svg/toc.svg" class="book-icon" alt="Table of Contents">
+</label>
+</div>
+<aside class="hidden clearfix">
+<nav id="TableOfContents">
+
+</nav>
+</aside>
+</header>
+<article class="markdown">
+<h1 class="page-title">Block quotes</h1>
+<p>Pandoc Markdown uses email conventions for block quotes. A block quotation is one or more paragraphs or other block elements (such as lists or headings), with each line preceded by a <code>&gt;</code> character and an optional space.</p>
+<pre class="markdown"><code>&gt; This is a block quote. This
+&gt; paragraph has two lines.
+&gt;
+&gt; 1. This is a list inside a block quote.
+&gt; 2. Second item.</code></pre>
+<p>If you are feeling lazy, the following is also allowed (ignore the wonky highlighting, this is the same as above):</p>
+<pre class="markdown"><code>&gt; This is a block quote. This
+paragraph has two lines.
+
+&gt; 1. This is a list inside a block quote.
+2. Second item.</code></pre>
+<p>Block quotes can contain most other Markdown elements. Among them are other blockquotes, which means they can be nested, like this:</p>
+<pre class="markdown"><code>&gt; This is a block quote.
+&gt;
+&gt; &gt; A block quote within a block quote.</code></pre>
+<p>Standard Markdown syntax does not require a blank line before a block quote. Doctor does require this (except, of course, at the beginning of the document). The reason for the requirement is that it is all too easy for a <code>&gt;</code> to end up at the beginning of a line by accident (perhaps through line wrapping).</p>
+</article>
+<div class="book-comments">
+<label for="menu-control" class="hidden book-menu-overlay"></label>
+</div>
+</div>
+				<aside class="book-toc">
+		  <div class="book-toc-content">
+			<nav id="TableOfContents">
+				
+			</nav>
+		  </div>
+		</aside>
+			  </main>
+	  <script>
+		(function() {
+		  var menu = document.querySelector("aside.book-menu nav");
+		  addEventListener("beforeunload", function(event) {
+			  localStorage.setItem("menu.scrollTop", menu.scrollTop);
+		  });
+		  menu.scrollTop = localStorage.getItem("menu.scrollTop");
+		})();
+	  </script>
+    <!-- Syntax highlighting through highlight.js -->
+    <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@10.4.0/styles/stackoverflow-light.min.css">
+    <script src="https://unpkg.com/@highlightjs/cdn-assets@10.4.0/highlight.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+          document.querySelectorAll('pre code').forEach((block) => {
+            hljs.highlightBlock(block);
+          });
+        });
+    </script>
+  </body>
+</html>

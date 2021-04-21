@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href="css/main.css" rel="stylesheet" type="text/css">
+	<link href="css/normalize.css" rel="stylesheet" type="text/css">
+	<link href="css/out.css" rel="stylesheet" type="text/css">
+	<link rel="icon" type="image/svg" href="assets/favicon.svg">
+	<title>Doctor documentation - Code</title>
+		<!--[if lt IE 9]>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+	<![endif]-->
+  </head>
+  <body>
+		<input type="checkbox" class="hidden toggle" id="menu-control">
+		<input type="checkbox" class="hidden toggle" id="toc-control">
+		<main class="container flex">
+		<aside class="book-menu" id="TOC" role="doc-toc">
+			<div class="book-menu-content">
+				<nav>
+					<img class="book-brand" id="main-logo" src="assets/favicon.svg">
+					<ul>
+						<li class="book-section-flat">
+							<span>Getting started</span>
+							<ul>
+								<li><a href="installing">Installing</a></li>
+								<li><a href="creating-your-first-document">Creating your first document</a></li>
+							</ul>
+						</li>
+						<li class="book-section-flat">
+							<a href="markdown">Markdown</span>
+							<ul>
+								<li><a href="paragraphs">Paragraphs</a></li>
+								<li><a href="headings">Headings</a></li>
+								<li><a href="formatting">Formatting</a></li>
+								<li><a href="lists">Lists</a></li>
+								<li><a href="code">Code</a></li>
+								<li><a href="math">Math</a></li>
+								<li><a href="block-quotes">Block quotes</a></li>
+							</ul>
+						</li>
+						<li class="book-section-flat">
+							<a href="conventions">Conventions</span>
+							<ul>
+								<li><a href="placeholder">Placeholder</a></li>
+							</ul>
+						</li>
+					</ul>
+				</nav>
+			</div>
+		</aside>
+<div class="book-page">
+<header class="book-header">
+<div class="flex align-center justify-between">
+<label for="menu-control">
+<img src="https://themes.gohugo.io//theme/hugo-book/svg/menu.svg" class="book-icon" alt="Menu">
+</label>
+<strong>Code</strong>
+<label for="toc-control">
+<img src="https://themes.gohugo.io//theme/hugo-book/svg/toc.svg" class="book-icon" alt="Table of Contents">
+</label>
+</div>
+<aside class="hidden clearfix">
+<nav id="TableOfContents">
+<ul>
+<li><a href="#code-blocks">Code blocks</a>
+<ul>
+<li><a href="#indented-code-blocks">Indented code blocks</a></li>
+<li><a href="#fenced-code-blocks">Fenced code blocks</a></li>
+</ul></li>
+<li><a href="#inline-code">Inline code</a></li>
+</ul>
+</nav>
+</aside>
+</header>
+<article class="markdown">
+<h1 class="page-title">Code</h1>
+<h2 id="code-blocks">Code blocks</h2>
+<h3 id="indented-code-blocks">Indented code blocks</h3>
+<p>A block of text indented four spaces (or one tab) is treated as a code block. For example,</p>
+<pre class="markdown"><code>Paragraph here
+
+    if (a &gt; 3) {
+      moveShip(5 * gravity, DOWN);
+    }</code></pre>
+<p>The initial (four space or one tab) indentation is not considered part of the verbatim text, and is removed in the output.</p>
+<h3 id="fenced-code-blocks">Fenced code blocks</h3>
+<p>In addition to standard indented code blocks, Doctor supports fenced code blocks. These begin with a row of three or more backticks (<code>```</code>) and end with a row of backticks that must be at least as long as the starting row. Everything between these lines is treated as code and no indentation is necessary:</p>
+<pre class="markdown"><code>```
+if (a &gt; 3) {
+  moveShip(5 * gravity, DOWN);
+}
+```</code></pre>
+<p>Like regular code blocks, fenced code blocks must be separated from surrounding text by blank lines. If the code itself contains a row of backticks, just use a longer row of tildes or backticks at the start and end:</p>
+<pre class="markdown"><code>``````
+```
+if (a &gt; 3) {
+  moveShip(5 * gravity, DOWN);
+}
+```
+``````</code></pre>
+<p>If you want to specify the language of the code block, you can write</p>
+<pre class="rust"><code>```rust
+match foo {
+    Some(a) =&gt; println!(&quot;Something: {}&quot;, a),
+    None =&gt; println!(&quot;Nothing&quot;)
+}
+```</code></pre>
+<p>This is just a shorthand for attaching the language as a class, like <code>{.rust}</code>. You can attach further attributes to a fenced code block by using this syntax:</p>
+<pre class="markdown"><code>```{#mycode .haskell .numberLines startFrom=&quot;100&quot;}
+qsort []     = []
+qsort (x:xs) = qsort (filter (&lt; x) xs) ++ [x] ++
+               qsort (filter (&gt;= x) xs)
+```</code></pre>
+<p>Here <code>mycode</code> is an identifier, <code>haskell</code> and <code>numberLines</code> are classes, and <code>startFrom</code> is an attribute with value <code>100</code>.</p>
+<h2 id="inline-code">Inline code</h2>
+<p>To write inline code, put the text between backticks, e.g.</p>
+<pre class="markdown"><code>What is the difference between `&gt;&gt;=` and `&gt;&gt;`?</code></pre>
+<p>If you want to include a literal backtick as part of the code, use double backticks (the spaces before and after the enclosed backtick will be ignored.)</p>
+<pre class="markdown"><code>Here is a literal backtick `` ` ``.</code></pre>
+<blockquote>
+<p><strong>NOTE</strong>: Backslash-escapes (and other Markdown constructs) do not work inside verbatim (code) contexts:</p>
+<pre class="markdown"><code>This is a backslash followed by an asterisk: `\*`.</code></pre>
+</blockquote>
+<p>As with <a href="#code-blocks">code blocks</a>, you can attach attributes to inline code as well. The syntax is similar:</p>
+<pre class="markdown"><code>This is Haskell code: `&lt;$&gt;`{.haskell}</code></pre>
+</article>
+<div class="book-comments">
+<label for="menu-control" class="hidden book-menu-overlay"></label>
+</div>
+</div>
+				<aside class="book-toc">
+		  <div class="book-toc-content">
+			<nav id="TableOfContents">
+				<ul>
+    <li><a href="#code-blocks">Code blocks</a>
+    <ul>
+    <li><a href="#indented-code-blocks">Indented code blocks</a></li>
+    <li><a href="#fenced-code-blocks">Fenced code blocks</a></li>
+    </ul></li>
+    <li><a href="#inline-code">Inline code</a></li>
+    </ul>
+			</nav>
+		  </div>
+		</aside>
+			  </main>
+	  <script>
+		(function() {
+		  var menu = document.querySelector("aside.book-menu nav");
+		  addEventListener("beforeunload", function(event) {
+			  localStorage.setItem("menu.scrollTop", menu.scrollTop);
+		  });
+		  menu.scrollTop = localStorage.getItem("menu.scrollTop");
+		})();
+	  </script>
+    <!-- Syntax highlighting through highlight.js -->
+    <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@10.4.0/styles/stackoverflow-light.min.css">
+    <script src="https://unpkg.com/@highlightjs/cdn-assets@10.4.0/highlight.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+          document.querySelectorAll('pre code').forEach((block) => {
+            hljs.highlightBlock(block);
+          });
+        });
+    </script>
+  </body>
+</html>
