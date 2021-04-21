@@ -17,7 +17,7 @@ import (
 
 // Checks if the dependencies of Doctor are present.
 func CheckDependencies() error {
-	deps := map[string]string{"pandoc": "2.13", "tectonic": "0.4.1"}
+	deps := map[string]string{"pandoc": "2.13"}
 
 	doctorPath, err := utils.FindDoctorDataDir()
 	if err != nil {
