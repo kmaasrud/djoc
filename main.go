@@ -66,7 +66,7 @@ func main() {
 			if ok, _ := strconv.ParseBool(val.Value); ok {
 				switch flag {
 				case "dependencies":
-					err := cmd.CheckDependencies()
+					err := cmd.CheckPath("pandoc")
 					if err != nil {
 						msg.Error(err.Error())
 						os.Exit(1)
