@@ -7,11 +7,13 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+    "regexp"
 )
 
 // The string separating the index and the name. If changed, make a due notice to users and
 // either ensure backwards compatibility or have Doctor change the format automatically.
 const SectionSep string = "_"
+var headerRegex *regexp.Regexp = regexp.MustCompile(`^#\s+([^#\n]*)`)
 
 // Represents a section in the document.
 type Section struct {
@@ -41,8 +43,17 @@ func (s *Section) ChangeIndex(i int) error {
 
 // Creates a new Section struct from the input path.
 func SectionFromPath(path string) (Section, error) {
+    var title string
 	split := strings.Split(strings.TrimSuffix(filepath.Base(path), filepath.Ext(path)), SectionSep)
-	title := strings.Join(split[1:], "") // TODO: Find title from header of file
+    content, err := os.ReadFile(path)
+    if err == nil {
+        title = headerRegex.FindString(string(content))
+    }
+    if err == nil && title != "" {
+        title = title[2:]
+    } else {
+        title = strings.Join(split[1:], "")
+    }
 	index, err := strconv.Atoi(split[0])
 	if err != nil {
 		return Section{}, err
