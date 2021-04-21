@@ -14,7 +14,7 @@ type BuildConfig struct {
 
 type DocumentConfig struct {
 	Title         string      `toml:"title" json:"title"`
-	Author        interface{} `toml:"author" json:"author"` // String or list of strings
+	Author        interface{} `toml:"author" json:"author" default:"null"` // String or list of strings
 	Date          string      `toml:"date" json:"date"`
 	DocumentClass string      `toml:"document-class" default:"article" json:"documentclass"`
 	ClassOption   interface{} `toml:"class-option" json:"classoption"` // String or list of strings
@@ -22,15 +22,16 @@ type DocumentConfig struct {
 
 type Config struct {
 	Document struct {
-		Title          string      `toml:"title" json:"title"`
-		Author         interface{} `toml:"author" json:"author"` // String or list of strings
-		Date           string      `toml:"date" json:"date"`
-		DocumentClass  string      `toml:"document-class" default:"article" json:"documentclass"`
-		ClassOption    interface{} `toml:"class-option" json:"classoption"` // String or list of strings
-		LatexHeader    string      `toml:"latex-header" json:"-"`
-		HtmlHeader     string      `toml:"html-header" json:"-"`
-		HeaderIncludes string      `json:"header-includes"` // This only specifies output
-		NumberSections bool        `toml:"number-sections" json:"numbersections"`
+		Title                   string      `toml:"title" json:"title"`
+		Author                  interface{} `toml:"author" json:"author,omitempty"` // String or list of strings
+		Date                    string      `toml:"date" json:"date,omitempty"`
+		DocumentClass           string      `toml:"document-class" default:"article" json:"documentclass"`
+		ClassOption             interface{} `toml:"class-option" json:"classoption"` // String or list of strings
+		LatexHeader             string      `toml:"latex-header" json:"-"`
+		HtmlHeader              string      `toml:"html-header" json:"-"`
+		HeaderIncludes          string      `json:"header-includes"` // This only specifies output
+		NumberSections          bool        `toml:"number-sections" json:"numbersections"`
+        ReferenceSectionTitle   string      `toml:"references-title" json:"reference-section-title" default:"References"`
 	} `toml:"document"`
 	Build struct {
 		Engine       string `toml:"engine" default:"tectonic"`
