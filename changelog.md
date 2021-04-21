@@ -7,8 +7,7 @@ Doctor is now published to Equinox. This means it has multiple installers and su
 ### New features
 
 - [x] Command: `doctor move` to change the position of sections.
-- [ ] Command: `doctor list` to list the sections of your document, along with their index.
-- [ ] Command: `doctor edit` to open a section directly in your preferred text editor.
+- [x] Command: `doctor list` to list the sections of your document, along with their index.
 - [x] Command: `doctor --update` to update Doctor to the newest version.
 
 ### Improvements
