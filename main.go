@@ -12,7 +12,7 @@ import (
 	"github.com/thatisuday/clapper"
 )
 
-var VERSION = "DEV"
+var VERSION = "0.2.0"
 var helpText = `Help is sadly not written yet...`
 
 func main() {
