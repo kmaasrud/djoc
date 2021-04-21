@@ -13,6 +13,7 @@ import (
 )
 
 var VERSION = "DEV"
+var helpText = `Help is not written yet...`
 
 func main() {
 	registry := clapper.NewRegistry()
@@ -21,6 +22,7 @@ func main() {
 	rootCommand.AddFlag("dependencies", "", true, "")
 	rootCommand.AddFlag("version", "v", true, "")
 	rootCommand.AddFlag("update", "u", true, "")
+	rootCommand.AddFlag("help", "h", true, "")
 
 	newCommand, _ := registry.Register("new")
 	newCommand.AddArg("path", ".")
@@ -80,6 +82,9 @@ func main() {
 						msg.Error(err.Error())
 						os.Exit(1)
 					}
+				
+				case "help":
+					fmt.Println(helpText)
 				}
 			}
 		}
