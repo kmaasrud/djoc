@@ -54,7 +54,7 @@ function populate_tables(table)
     -- Caption might contain several blocks, extract ID from last block
     caption = table.caption.long[#table.caption.long].content
     for i=#caption,1,-1 do -- Iterating backwards to limit number of loops (ID often placed after the caption)
-      if caption[i].t == "Str" and caption[j].text:match("^{#tbl:.*}") then
+      if caption[i].t == "Str" and caption[i].text:match("^{#tbl:.*}") then
         id = caption[i].text:gsub("{#", ""):gsub("}", "") -- Strip the prefix and brackets (FIXME: Other attributes should perhaps be allowed...)
         tables[id] = table_count
         table.identifier = id
