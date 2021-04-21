@@ -42,6 +42,8 @@ func main() {
 	moveCommand.AddArg("section", "")
 	moveCommand.AddArg("to", "")
 
+	registry.Register("list")
+
 	// Parse commands
 	command, err := registry.Parse(os.Args[1:])
 	// Handle command parsing errors
@@ -174,5 +176,8 @@ func main() {
 			msg.Error(err.Error())
 			os.Exit(1)
 		}
+
+	// List out all sections
+	case "list":
 	}
 }
