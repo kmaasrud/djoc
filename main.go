@@ -179,5 +179,6 @@ func main() {
 
 	// List out all sections
 	case "list":
+		cmd.List()
 	}
 }

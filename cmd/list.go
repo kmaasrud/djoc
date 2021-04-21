@@ -5,6 +5,7 @@ import (
     "fmt"
 
     "github.com/kmaasrud/doctor/utils"
+    "github.com/kmaasrud/doctor/msg"
 )
 
 func List() error {
@@ -23,7 +24,7 @@ func List() error {
 	}
 
     for _, sec := range secs {
-        fmt.Println(sec.Title)
+        fmt.Printf("%s %s\n", msg.Style(fmt.Sprintf("%3d", sec.Index), "Gray"), sec.Title)
     }
 
     return nil

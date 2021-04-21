@@ -17,7 +17,7 @@ func ChooseSection(secs []core.Section, initMessage, choiceMessage string) (core
 	Info(initMessage)
 	for true {
 		for i, sec := range secs {
-			fmt.Printf(" %d. %s\n", i+1, sec.Title)
+			fmt.Printf("%s %s\n", Style(fmt.Sprintf("%3d", i+1), "Gray"), sec.Title)
 		}
 		fmt.Print(choiceMessage + " (q to quit) ")
 		fmt.Scanln(&chosenIndex)
