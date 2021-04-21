@@ -1,5 +1,3 @@
-GOVERSION="1.16"
-
 OS="$(uname -s)"
 ARCH="$(uname -m)"
 
@@ -11,9 +9,6 @@ case $OS in
 			;;
 		"aarch64")
 			ARCH=arm64
-			;;
-		"armv6" | "armv7l")
-			ARCH=armv6l
 			;;
 		"armv8")
 			ARCH=arm64
@@ -35,6 +30,7 @@ if [ -z "$PLATFORM" ]; then
 fi
 
 # Find shell profile and make sure it exists
+echo "Finding shell..."
 if [ -n "$($SHELL -c 'echo $ZSH_VERSION')" ]; then
     shell_profile="$HOME/.zshrc"
 elif [ -n "$($SHELL -c 'echo $BASH_VERSION')" ]; then
@@ -49,93 +45,44 @@ elif [ -n "$($SHELL -c 'echo $FISH_VERSION')" ]; then
 fi
 touch "$shell_profile"
 
-# Check if Go is available
-if ! command -v go &> /dev/null
-then
-	# Fix variables
-	[ -z "$GOROOT" ] && GOROOT="$HOME/.go"
-	PACKAGE_NAME="go$GOVERSION.$PLATFORM.tar.gz"
-	TEMP_DIRECTORY=$(mktemp -d)
-
-	# Download Go
-	echo "Downloading $PACKAGE_NAME..."
-	if hash wget 2>/dev/null; then
-		wget https://storage.googleapis.com/golang/$PACKAGE_NAME -O "$TEMP_DIRECTORY/go.tar.gz"
-	else
-		curl -o "$TEMP_DIRECTORY/go.tar.gz" https://storage.googleapis.com/golang/$PACKAGE_NAME
-	fi
-	if [ $? -ne 0 ]; then
-		echo "Download failed! Exiting."
-		exit 1
-	fi
-
-	# Extract file
-	echo "Extracting File..."
-	mkdir -p "$GOROOT"
-	tar -C "$GOROOT" --strip-components=1 -xzf "$TEMP_DIRECTORY/go.tar.gz"
-
-	# Make sure GOROOT is in PATH
-	echo "Ensuring Go is in PATH..."
-	case ":$PATH:" in
-	*:$GOROOT/bin:*) echo "GOROOT is in your PATH already, moving on.";;
-	*)
-		if [ "$shell" == "fish" ]; then
-			{
-				echo '# GoLang'
-				echo "set GOROOT '${GOROOT}'"
-				echo 'set PATH $GOROOT/bin $PATH'
-			} >> "$shell_profile"
-		else
-			{
-				echo '# GoLang'
-				echo "export GOROOT=${GOROOT}"
-				echo 'export PATH=$GOROOT/bin:$PATH'
-			} >> "$shell_profile"
-		fi
-		;;
-	esac
-fi
-
-[ -z "$GOPATH" ] && GOPATH="$HOME/go"
-
-
-# Make sure GOPATH is in PATH
-echo "Making sure GOPATH is in your PATH..."
+# Ensure local PATH addition
+echo "Making sure ~/.local/bin is in your PATH..."
 case ":$PATH:" in
-*:$GOPATH/bin:*) echo "GOPATH is in your PATH already, moving on.";;
+*:$HOME/.local/bin:*) ;;
 *)
 	if [ "$shell" == "fish" ]; then
 		{
-			echo '# GoLang'
-			echo "set GOPATH '$GOPATH'"
-			echo 'set PATH $GOPATH/bin $PATH'
+			echo '# Added by Doctor'
+			echo 'set PATH $HOME/.local/bin $PATH'
 		} >> "$shell_profile"
 	else
 		{
-			echo '# GoLang'
-			echo "export GOPATH=$GOPATH"
-			echo 'export PATH=$GOPATH/bin:$PATH'
+			echo '# Added by Doctor'
+			echo 'export PATH=$HOME/.local/bin:$PATH'
 		} >> "$shell_profile"
 	fi
 	;;
 esac
 
-# Ensuring directories exist
-mkdir -p "${GOPATH}/"{src,pkg,bin}
+# Ensuring directory exists
+mkdir -p "$HOME/.local/bin"
 
+# Make temporary dir
+tmp=$(mktemp -d)
 
 # Install Doctor
-echo "Installing Doctor with Go tool..."
-source $shell_profile
-go install github.com/kmaasrud/doctor@latest
+echo "Installing latest stable version of Doctor..."
+curl "https://bin.equinox.io/c/fHpZLhLmi7c/doctor-stable-$PLATFORM.tgz" --output "$tmp/doctor.tgz"
+tar xvf "$tmp/doctor.tgz" -C "$HOME/.local/bin"
 
-if [ -e "$GOPATH/bin/doctor" ]
+if [ -e "$HOME/.local/bin/doctor" ]
 then
 	echo -e "\nDoctor was installed successfully!\n"
 	echo -e "\nMake sure to relogin into your shell or run:"
 	echo -e "\n\tsource $shell_profile\n\nto update your environment variables.\n"
 else
-	echo -e "\nDoctor did not get installed.\n"
-	echo "Check that you are running the latest version of Go and try again."
-	echo "If that is not the issue, check alternative install methods on the Doctor installation page."
+	echo -e "\nThe automatic install did not work, install Doctor manually.\n"
 fi
+
+# Remove temporary directory
+rm -rf $tmp

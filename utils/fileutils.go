@@ -2,7 +2,6 @@ package utils
 
 import (
 	"errors"
-	"fmt"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -11,6 +10,9 @@ import (
 	"github.com/kmaasrud/doctor/msg"
 )
 
+// Error type returned when no sections are found from the root path.
+// Mainly used for not throwing an error in 'doctor add' when there are no sections,
+// but also useful to specify messages.
 type NoSectionsError struct {
 	ErrorMsg string
 }
@@ -25,7 +27,7 @@ func (e *NoSectionsError) Error() string {
 func FindDoctorRoot() (string, error) {
 	path, err := os.Getwd()
 	if err != nil {
-		msg.Error(fmt.Sprintf("%s", err))
+		msg.Error(err.Error())
 	}
 
 	for {
@@ -44,7 +46,7 @@ func FindSections(rootPath string) ([]core.Section, error) {
 	var files []core.Section
 
 	if _, err := os.Stat(filepath.Join(rootPath, "secs")); os.IsNotExist(err) {
-		return nil, &NoSectionsError{"Empty Doctor document.\n\tConsider adding a couple of source files with " + msg.Style("doctor add <section name>", "Bold")}
+		return nil, &NoSectionsError{"Empty Doctor document."}
 	}
 	// Walk should walk through dirs in lexical order, making sorting unecessary (luckily)
 	err := filepath.Walk(filepath.Join(rootPath, "secs"), func(path string, info os.FileInfo, err error) error {
@@ -52,7 +54,6 @@ func FindSections(rootPath string) ([]core.Section, error) {
 			return err
 		}
 		if !info.IsDir() && filepath.Ext(path) == ".md" {
-			// TODO: Make sure the file ends in a couple of newlines (Lua filter?)
 			sec, err := core.SectionFromPath(path)
 			if err != nil {
 				return err
@@ -61,28 +62,38 @@ func FindSections(rootPath string) ([]core.Section, error) {
 		}
 		return nil
 	})
-	if len(files) < 1 {
-		return nil, &NoSectionsError{"Empty Doctor document.\n\tConsider adding a couple of source files with " + msg.Style("doctor add <section name>", "Bold")}
-	} else if err != nil {
+	if err != nil {
 		return nil, err
+	} else if len(files) < 1 {
+		return nil, &NoSectionsError{"Empty Doctor document."}
 	}
 
 	return files, nil
 }
 
 // Returns the path where Doctor stores it's data. Supports both Windows and Unix.
-// TODO: Accept variables like XDG_DATA_DIR and %DATADIR% (or whatever it's called on Windows).
 func FindDoctorDataDir() (string, error) {
+	var doctorPath string
+	var datadirEnv string
+	var defaultDir []string
+
 	home, err := os.UserHomeDir()
 	if err != nil {
-		return " ", err
+		return doctorPath, err
 	}
 
-	var doctorPath string
 	if runtime.GOOS == "windows" {
-		doctorPath = filepath.Join(home, "AppData", "Roaming", "doctor")
+		datadirEnv = "APPDATA"
+		defaultDir = []string{home, "AppData", "Roaming", "doctor"}
 	} else {
-		doctorPath = filepath.Join(home, ".local", "share", "doctor")
+		datadirEnv = "XDG_DATA_DIR"
+		defaultDir = []string{home, ".local", "share", "doctor"}
+	}
+	dataDir, exists := os.LookupEnv(datadirEnv)
+	if exists {
+		doctorPath = filepath.Join(dataDir, "doctor")
+	} else {
+		doctorPath = filepath.Join(defaultDir...)
 	}
 
 	return doctorPath, nil

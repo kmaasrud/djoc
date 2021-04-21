@@ -1,5 +1,10 @@
 VER := $(shell git describe --tags --abbrev=0)
 
+all:
+	equinox release --config ../equinox/doctor.yaml --channel stable --version $(VER) github.com/kmaasrud/doctor
+	# TODO: Investigate how to include build flags, like this
+	# equinox release --config ../equinox/doctor.yaml --channel stable --version $(VER) github.com/kmaasrud/doctor -ldflags="-s -w -X 'main.VERSION=$(VER)'"
+
 build:
 	for arch in "amd64" "arm64"; do \
 		GOOS=linux GOARCH=$$arch go build -ldflags="-s -w -X 'main.VERSION=$(VER)'" -o bin/bins/doctor-$(VER)-linux-$$arch ; \
@@ -21,3 +26,8 @@ build:
 	done ; \
 	mv bin/*windows-amd64.zip bin/doctor-$(VER)-windows-x86.zip
 	mv bin/bins/*windows-amd64.exe bin/bins/doctor-$(VER)-windows-x86.exe
+
+.PHONY: clean
+
+clean:
+	rm -rf bin

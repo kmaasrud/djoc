@@ -8,7 +8,6 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-	"runtime"
 	"strings"
 
 	"github.com/kmaasrud/doctor/core"
@@ -35,7 +34,7 @@ func (e *FatalError) Error() string {
 
 func Build() error {
 	// Check for dependencies
-	err := CheckDependencies()
+	err := CheckPath("pandoc")
 	if err != nil {
 		return errors.New("Build failed. " + err.Error())
 	}
@@ -45,20 +44,13 @@ func Build() error {
 	if err != nil {
 		return errors.New("Build failed. " + err.Error())
 	}
-	defer cleanUp(rootPath)
 
 	// Initialize the command
 	cmdArgs := []string{"-s", "-o", filepath.Join(rootPath, "main.pdf")}
-	// cmdArgs := []string{"-s", "--pdf-engine=pdflatex", "-o", filepath.Join(rootPath, "main.pdf")}
 
-	// Find source files
-	msg.Info("Looking for source files...")
-	secs, err := utils.FindSections(rootPath)
-	if err != nil {
-		return err
-	}
-	cmdArgs = append(cmdArgs, core.PathsFromSections(secs)...)
-	msg.Info(fmt.Sprintf("Found %d source files!", len(secs)))
+	// Add resource paths
+	resourcePaths := strings.Join([]string{rootPath, filepath.Join(rootPath, "assets"), filepath.Join(rootPath, "secs")}, utils.ResourceSep)
+	cmdArgs = append(cmdArgs, "--resource-path="+resourcePaths)
 
 	// Add Pandoc options from config. TODO: Clean this up a bit
 	msg.Info("Applying configuration from doctor.toml...")
@@ -74,35 +66,45 @@ func Build() error {
 	cmdArgs = append(cmdArgs, "--metadata-file="+jsonFilename)
 
 	// Specify PDF engine and add options for specific engines
+	err = CheckPath(conf.Build.Engine)
+	if err != nil {
+		return errors.New("Build failed. " + err.Error())
+	}
 	cmdArgs = append(cmdArgs, fmt.Sprintf("--pdf-engine=%s", conf.Build.Engine))
 	if conf.Build.Engine == "tectonic" {
+        // Tectonic chatters a lot. Make it a bit more silent
 		cmdArgs = append(cmdArgs, "--pdf-engine-opt=-c=minimal")
 	}
 
-	// Temporarily write any Lua filters to file and add them to command
-	for filename, filter := range lua.Filters {
-		err := os.WriteFile(filepath.Join(rootPath, filename), filter, 0644)
-		if err != nil {
-			return errors.New("Could not create Lua file. " + err.Error())
-		}
-		cmdArgs = append(cmdArgs, "-L", filename)
+	// Find source files
+	msg.Info("Looking for source files...")
+	secs, err := utils.FindSections(rootPath)
+	if err != nil {
+		return err
 	}
+	cmdArgs = append(cmdArgs, core.PathsFromSections(secs)...)
+	msg.Info(fmt.Sprintf("Found %d source files!", len(secs)))
 
 	// If references.bib exists, run with citeproc and add bibliography
 	if _, err := os.Stat(filepath.Join(rootPath, "assets", "references.bib")); err == nil {
-		msg.Info("Running with citeproc. Bibliography: " + filepath.Join(rootPath, "assets", "references.bib"))
+		msg.Info("Running with citeproc. Bibliography: " + filepath.Join("assets", "references.bib"))
 		cmdArgs = append(cmdArgs, "-C", "--bibliography=references.bib")
 	}
 
-	// Add resource paths
-	var sep string
-	if runtime.GOOS == "windows" {
-		sep = ";"
-	} else {
-		sep = ":"
+	// Make sure all temporary files are cleaned up after function is run
+	defer cleanUp(rootPath, &conf)
+
+	// Temporarily write any Lua filters to file and add them to command
+	if conf.Build.LuaFilters {
+		msg.Info("Adding Lua filters...")
+		for filename, filter := range lua.Filters {
+			err := os.WriteFile(filepath.Join(rootPath, filename), filter, 0644)
+			if err != nil {
+				return errors.New("Could not create Lua file. " + err.Error())
+			}
+			cmdArgs = append(cmdArgs, "-L", filename)
+		}
 	}
-	resourcePaths := strings.Join([]string{rootPath, filepath.Join(rootPath, "assets"), filepath.Join(rootPath, "src")}, sep)
-	cmdArgs = append(cmdArgs, "--resource-path="+resourcePaths)
 
 	// Execute command
 	done := make(chan struct{})
@@ -112,16 +114,18 @@ func Build() error {
 
 	// Handle errors
 	if err != nil {
+		var warnStr, errStr string
 		switch thisErr := err.(type) {
 		case *FatalError:
-			msg.CleanStderrMsg(thisErr.Stderr)
+			_, errStr = msg.CleanStderrMsg(thisErr.Stderr)
+			return errors.New("Doctor exited with errors. They are as follows:\n\n" + errStr)
 		case *WarningError:
-			msg.CleanStderrMsg(thisErr.Stderr)
+			warnStr, _ = msg.CleanStderrMsg(thisErr.Stderr)
 			msg.Success("Document built.")
+			return errors.New("Doctor exited with warnings. They are as follows:\n\n" + warnStr)
 		default:
-			msg.Error("Could not run command. " + err.Error())
+			return errors.New("Could not run command. " + err.Error())
 		}
-		return errors.New("")
 	}
 	msg.Success("Document built.")
 	return nil
@@ -144,9 +148,9 @@ func runPandocWith(cmdArgs []string) error {
 	return nil
 }
 
-func cleanUp(rootPath string) {
+func cleanUp(rootPath string, conf *core.Config) {
 	msg.Info("Cleaning up temporary files...")
-	if len(lua.Filters) > 0 {
+	if conf.Build.LuaFilters {
 		for filename := range lua.Filters {
 			err := os.Remove(filepath.Join(rootPath, filename))
 			if err != nil {

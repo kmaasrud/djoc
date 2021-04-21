@@ -1,3 +1,5 @@
+github.com/equinox-io/equinox v1.2.0 h1:bBS7Ou+Y7Jwgmy8TWSYxEh85WctuFn7FPlgbUzX4DBA=
+github.com/equinox-io/equinox v1.2.0/go.mod h1:6s3HJB0PYUNgs0mxmI8fHdfVl3TQ25ieA/PVfr+eyVo=
 github.com/pelletier/go-toml v1.9.0 h1:NOd0BRdOKpPf0SxkL3HxSQOG7rNh+4kl6PHcBPFs7Q0=
 github.com/pelletier/go-toml v1.9.0/go.mod h1:u1nR/EPcESfeI/szUZKdtJ0xRNbUoANCkoOuaOx1Y+c=
 github.com/thatisuday/clapper v1.0.10 h1:1EkqE/nb4npp8DuTKnpvVzO/Mcac9lOPND34uUKF+bU=

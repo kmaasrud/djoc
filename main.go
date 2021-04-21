@@ -12,7 +12,8 @@ import (
 	"github.com/thatisuday/clapper"
 )
 
-var VERSION = "v0.1.2"
+var VERSION = "DEV"
+var helpText = `Help is sadly not written yet...`
 
 func main() {
 	registry := clapper.NewRegistry()
@@ -20,6 +21,8 @@ func main() {
 	rootCommand, _ := registry.Register("")
 	rootCommand.AddFlag("dependencies", "", true, "")
 	rootCommand.AddFlag("version", "v", true, "")
+	rootCommand.AddFlag("update", "u", true, "")
+	rootCommand.AddFlag("help", "h", true, "")
 
 	newCommand, _ := registry.Register("new")
 	newCommand.AddArg("path", ".")
@@ -34,6 +37,12 @@ func main() {
 	removeCommand, _ := registry.Register("remove")
 	removeCommand.AddArg("sections...", "")
 	removeCommand.AddFlag("confirm", "c", true, "")
+
+	moveCommand, _ := registry.Register("move")
+	moveCommand.AddArg("section", "")
+	moveCommand.AddArg("to", "")
+
+	registry.Register("list")
 
 	// Parse commands
 	command, err := registry.Parse(os.Args[1:])
@@ -59,7 +68,7 @@ func main() {
 			if ok, _ := strconv.ParseBool(val.Value); ok {
 				switch flag {
 				case "dependencies":
-					err := cmd.CheckDependencies()
+					err := cmd.CheckPath("pandoc")
 					if err != nil {
 						msg.Error(err.Error())
 						os.Exit(1)
@@ -68,6 +77,16 @@ func main() {
 
 				case "version":
 					fmt.Println("You are running Doctor " + VERSION)
+
+				case "update":
+					err := cmd.Update()
+					if err != nil {
+						msg.Error(err.Error())
+						os.Exit(1)
+					}
+				
+				case "help":
+					fmt.Println(helpText)
 				}
 			}
 		}
@@ -137,5 +156,29 @@ func main() {
 			msg.Error(err.Error())
 			os.Exit(1)
 		}
+
+	// Move a section from one position to another
+	case "move":
+		section := command.Args["section"].Value
+		toStr := command.Args["to"].Value
+		if section == "" || toStr == "" {
+			msg.Error("Please supply the section you want to move and the index you want to move it to.")
+			os.Exit(1)
+		}
+
+		to, err := strconv.Atoi(toStr)
+		if err != nil {
+			msg.Error("Could not parse " + toStr + " as an index. Please supply a valid number.")
+		}
+
+		err = cmd.Move(section, to)
+		if err != nil {
+			msg.Error(err.Error())
+			os.Exit(1)
+		}
+
+	// List out all sections
+	case "list":
+		cmd.List()
 	}
 }

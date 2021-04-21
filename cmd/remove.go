@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"os"
-	"strconv"
 	"strings"
 
 	"github.com/kmaasrud/doctor/core"
@@ -17,40 +16,24 @@ func Remove(inputs []string, confirm bool) error {
 
 	rootPath, err := utils.FindDoctorRoot()
 	if err != nil {
-		return errors.New("Could not remove section. " + err.Error())
+		return err
 	}
 
 	// Find all existing sections
 	secs, err := utils.FindSections(rootPath)
 	if err != nil {
 		if _, ok := err.(*utils.NoSectionsError); !ok {
-			return errors.New("There are no sections in this document.")
+			return err
 		}
 		return errors.New("Could not load section list. " + err.Error())
 	}
 
 	// Loop over supplied inputs and delete if they match
-SectionLoop:
 	for i, input := range inputs {
-		var matches []core.Section
-		index, err := strconv.Atoi(input)
+		matches, err := core.FindSectionMatches(input, secs, i)
 		if err != nil {
-			// The input is not parsable as int, handle it as a section name
-			for _, sec := range secs {
-				if strings.ToLower(sec.Title) == strings.ToLower(input) {
-					matches = append(matches, sec)
-				}
-			}
-		} else {
-			// The input is parsable as int, handle it as a section index
-			// Index matching is a bit difficult, since the indices change around a lot
-			// when removing multiple sections. To solve this, subtract the number of sections
-			// deleted from the index matched against.
-			for _, sec := range secs {
-				if sec.Index == index-i {
-					matches = append(matches, sec)
-				}
-			}
+			msg.Error(err.Error())
+			continue
 		}
 
 		if len(matches) == 1 {
@@ -58,28 +41,11 @@ SectionLoop:
 			removeThis = matches[0]
 		} else if len(matches) > 1 {
 			// More than 1 match, enter interactive selection mode
-			msg.Info(fmt.Sprintf("Found %d matches.", len(matches)))
-			var chosenIndex string
-			for true {
-				for j, match := range matches {
-					fmt.Printf(" %d. %s\n", j+1, match.Title)
-				}
-				fmt.Print("Which one do you want to delete? (q to quit) ")
-				fmt.Scanln(&chosenIndex)
-				index, err := strconv.Atoi(chosenIndex)
-				if err == nil && index > 0 && index <= len(matches) {
-					removeThis = matches[index-1]
-					break
-				} else if strings.ToLower(chosenIndex) == "q" {
-					continue SectionLoop
-				} else {
-					msg.Info("That is not a valid option. Please enter the number of the section you want to remove.")
-				}
+			var quit bool
+			removeThis, quit = msg.ChooseSection(matches, fmt.Sprintf("Found %d matches", len(matches)), "Which one do you want to delete?")
+			if quit {
+				continue
 			}
-		} else {
-			// No matches found
-			msg.Error("Could not find any sections matching " + msg.Style(input, "Bold") + ".")
-			continue SectionLoop
 		}
 
 		// Confirmation of deletion if not already supplied on the command line
@@ -89,7 +55,7 @@ SectionLoop:
 			fmt.Scanln(&confirmString)
 			if strings.ToLower(confirmString) != "y" {
 				msg.Info("Skipping deletion of " + removeThis.Title + ".")
-				continue SectionLoop
+				continue
 			}
 		}
 
@@ -97,7 +63,7 @@ SectionLoop:
 		err = os.Remove(removeThis.Path)
 		if err != nil {
 			msg.Error("Could not remove section " + msg.Style(removeThis.Title, "Bold") + ". " + err.Error())
-			continue SectionLoop
+			continue
 		}
 		msg.Success("Deleted section " + msg.Style(removeThis.Title, "Bold") + ".")
 
