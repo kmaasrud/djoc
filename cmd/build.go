@@ -65,6 +65,9 @@ func Build() error {
 	}
 	cmdArgs = append(cmdArgs, "--metadata-file="+jsonFilename)
 
+	// Make sure all temporary files are cleaned up after function is run
+	defer cleanUp(rootPath, &conf)
+
 	// Specify PDF engine and add options for specific engines
 	err = CheckPath(conf.Build.Engine)
 	if err != nil {
@@ -85,15 +88,6 @@ func Build() error {
 	cmdArgs = append(cmdArgs, core.PathsFromSections(secs)...)
 	msg.Info(fmt.Sprintf("Found %d source files!", len(secs)))
 
-	// If references.bib exists, run with citeproc and add bibliography
-	if _, err := os.Stat(filepath.Join(rootPath, "assets", "references.bib")); err == nil {
-		msg.Info("Running with citeproc. Bibliography: " + filepath.Join("assets", "references.bib"))
-		cmdArgs = append(cmdArgs, "-C", "--bibliography=references.bib")
-	}
-
-	// Make sure all temporary files are cleaned up after function is run
-	defer cleanUp(rootPath, &conf)
-
 	// Temporarily write any Lua filters to file and add them to command
 	if conf.Build.LuaFilters {
 		msg.Info("Adding Lua filters...")
@@ -104,6 +98,12 @@ func Build() error {
 			}
 			cmdArgs = append(cmdArgs, "-L", filename)
 		}
+	}
+
+	// If references.bib exists, run with citeproc and add bibliography
+	if _, err := os.Stat(filepath.Join(rootPath, "assets", "references.bib")); err == nil {
+		msg.Info("Running with citeproc. Bibliography: " + filepath.Join("assets", "references.bib"))
+		cmdArgs = append(cmdArgs, "-C", "--bibliography=references.bib")
 	}
 
 	// Execute command
