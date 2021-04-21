@@ -1,3 +1,3 @@
 package utils
 
-var ResourceSep string = ";"
+const ResourceSep string = ";"

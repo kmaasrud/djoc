@@ -1,3 +1,5 @@
+// +build aix darwin dragonfly freebsd js,wasm linux nacl netbsd openbsd solaris
+
 package utils
 
-var ResourceSep string = ":"
+const ResourceSep string = ":"
