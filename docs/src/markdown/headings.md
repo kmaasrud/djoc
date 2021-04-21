@@ -3,7 +3,7 @@ title: Headings
 toc: true
 ---
 
-There are two kinds of headings: [Setext](#setext-headers) and [ATX](#atx-headers). Both heading types can contain inline formatting, such as emphasis (see [Inline formatting](inline-formatting)).
+There are two kinds of headings: [Setext](#setext-headers) and [ATX](#atx-headers). Both heading types can contain inline formatting, such as emphasis (see [Formatting](formatting)).
 
 > **Note**: You of course choose to use whatever style you prefer, but as a convention, you should use [ATX headers](#atx-headers) when writing with Doctor.
 

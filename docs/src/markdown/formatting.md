@@ -36,7 +36,7 @@ This ~~is deleted text.~~
 
 # Superscript and subscript
 
-^Super^scripts may be written by surrounding the superscripted text by `^` (intuitively enough) characters; ~sub~scripts may be written by surrounding the subscripted text with `~` (not as intuitive) characters. Thus, for example,
+^Super^scripts may be written by surrounding the superscripted text by `^` characters (intuitively enough); ~sub~scripts may be written by surrounding the subscripted text with `~` characters (not as intuitive.) Thus, for example,
 
 ```markdown
 H~2~O is a liquid.  2^10^ is 1024.

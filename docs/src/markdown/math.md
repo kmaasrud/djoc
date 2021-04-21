@@ -13,7 +13,7 @@ Here is some text and here is some math: $E = mc^2$.
 
 # Display math
 
-For display math, use `$$` delimiters. In this case, the delimiters may be separated from the formula by whitespace. However, there can be no blank lines betwen the opening and closing `$$` delimiters. I also advice you to start and end your equation on the same line as your `$$` signs, as some Pandoc filters work best that way.
+For display math, use `$$` delimiters. In this case, the delimiters may be separated from the formula by whitespace. However, there can be no blank lines betwen the opening and closing `$$` delimiters. I also advise you to start and end your equation on the same line as your `$$` signs, as some Pandoc filters work best that way.
 
 ```markdown
 And God said
