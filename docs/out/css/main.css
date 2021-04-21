@@ -23,7 +23,6 @@ article {
 h1 {
 	border-bottom: 1px solid rgba(var(--text-color), 0.2);
 }
-
 h1, h2, h3, h4, h5, h6 { font-family: "TOMMY Medium"; }
 
 /* Link styling */
