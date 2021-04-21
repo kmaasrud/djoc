@@ -1,6 +1,6 @@
 # Changelogs
 
-## Doctor v0.2.0 (Unreleased)
+## Doctor v0.2.0 (2020-04-21)
 
 Doctor is now published to Equinox. This means it has multiple installers and supports self-updating. You can replace your previous binary or Go install with the new one on the [download page](https://dl.equinox.io/kmaasrud/doctor/stable), and update to any new version with `doctor --update`.
 
@@ -27,6 +27,7 @@ Doctor is now published to Equinox. This means it has multiple installers and su
 
 - [x] Important error messages should no longer be swallowed by the Doctor messaging system.
 - [x] Directory `src` was added as a resource path. This is now changed to `secs`.
+- [x] Doctor forced you to have Tectonic installed to properly function. This is no longer the case.
 
 ## Doctor v0.1.2 (2020-04-15)
 
