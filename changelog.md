@@ -1,5 +1,12 @@
 # Changelogs
 
+## Doctor v0.2.1 (2020-04-21)
+
+### Bug fixes
+
+- [x] Citeproc interfered with the Lua filter for cross-referencing. This is now fixed.
+- [x] Table cross-referencing was not working because of a indexing error which is now corrected.
+
 ## Doctor v0.2.0 (2020-04-21)
 
 Doctor is now published to Equinox. This means it has multiple installers and supports self-updating. You can replace your previous binary or Go install with the new one on the [download page](https://dl.equinox.io/kmaasrud/doctor/stable), and update to any new version with `doctor --update`.
