@@ -1,5 +1,11 @@
 # Changelogs
 
+## Doctor v0.2.2 (Unreleased)
+
+### Improvements
+
+- [x] Added configuration option `filename` to specify the name of your output-file.
+
 ## Doctor v0.2.1 (2020-04-21)
 
 ### Bug fixes
