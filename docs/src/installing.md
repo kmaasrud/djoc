@@ -19,7 +19,16 @@ go install github.com/kmaasrud/doctor@latest
 
 Doctor needs one crucial component in order to work correctly, namely [Pandoc](https://pandoc.org/){target="_blank" rel="noopener noreferrer"}. Have a look at [Installing Pandoc](https://pandoc.org/installing.html){target="_blank" rel="noopener noreferrer"} and make sure it is available in your `PATH` by running `pandoc -v`.
 
-Additionally, if you want to produce PDFs, you will need a $\TeX$ distribution containing a PDF engine. The fastest alternative is [TeXLive's](https://tug.org/texlive/){target="_blank" rel="noopener noreferrer"} `pdflatex`, but beware that it does not support Unicode. TeXLive also contains `lualatex` and `xelatex`, both of which support scripting, better font coverage and full Unicode. [MikTeX](https://miktex.org/){target="_blank" rel="noopener noreferrer"} is also a great distribution, containing all of the aforementioned engines. The lightest alternative is probably [Tectonic](https://tectonic-typesetting.github.io/){target="_blank" rel="noopener noreferrer"}. It is almost as fast as `pdflatex` and automatically downloads packages for you, which means you can avoid the multiple gigabyte install of TeXLive. Beware that this is beta software, and not as stable as other alternatives. 
+
+## PDF creation with a $\TeX$ distribution
+
+If you want to produce PDFs, you will need a $\TeX$ distribution containing a PDF engine. The fastest alternative is [TeXLive's](https://tug.org/texlive/){target="_blank" rel="noopener noreferrer"} `pdflatex`, but beware that it does not fully support Unicode. In cases where this is needed, TeXLive also contains `lualatex` and `xelatex`, both of which have better font coverage and Unicode support. Refer to the [TeXLive homepage](https://tug.org/texlive/){target="_blank" rel="noopener noreferrer"} for how to install this distribution on your system.
+
+[MiKTeX](https://miktex.org/){target="_blank" rel="noopener noreferrer"} is also a great alternative, containing all of the aforementioned engines. In my testing MiKTeX was quite a lot slower than TeXLive, but it comes with the advantage of auto-installing missing packages while compiling. This means you can get away with a smaller install size and avoid the dreaded dependency hell many face when using TeXLive.
+
+That leaves me with the lightest alternative, which is self-contained, reasonably fast and auto-installs missing packages, namely [Tectonic](https://tectonic-typesetting.github.io/){target="_blank" rel="noopener noreferrer"}. For me it has proven to be the best compromise between speed and minimal bloat, which makes it a perfect alternative for those who do not already have a $\TeX$ distribution on their system. Beware that this is beta software, and thus not as stable as other alternatives.
+
+Be sure that the engine you choose is in your `PATH` (for example by running `pdflatex` to see if you get an error) and edit the `engine` option in `doctor.toml` to use your preffered engine. See also [the configuration docs](config#engine) for more info.
 
 # Updating
 
