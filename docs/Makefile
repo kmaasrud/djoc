@@ -10,7 +10,7 @@ $(output)/%.html: src/%.md
 $(output)/%.html: src/markdown/%.md
 	pandoc $< -s -o $@ --template=template.html --katex --toc --shift-heading-level-by=1 --no-highlight
 
-.PHONY : clean
+.PHONY: clean
 
 clean:
 	rm -f $(output)/*.html
