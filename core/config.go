@@ -10,16 +10,21 @@ import (
 
 type Config struct {
 	Document struct {
+        // Directly transferred options
 		Title                   string      `toml:"title" json:"title"`
 		Author                  interface{} `toml:"author" json:"author,omitempty"` // String or list of strings
 		Date                    string      `toml:"date" json:"date,omitempty"`
-		DocumentClass           string      `toml:"document-class" default:"article" json:"documentclass"`
+		DocumentClass           string      `toml:"document-class" json:"documentclass" default:"article"`
 		ClassOption             interface{} `toml:"class-option" json:"classoption"` // String or list of strings
+		NumberSections          bool        `toml:"number-sections" json:"numbersections"`
+        ReferencesTitle         string      `toml:"references-title" json:"reference-section-title" default:"References"`
+
+        // Processed only by Doctor
 		LatexHeader             string      `toml:"latex-header" json:"-"`
 		HtmlHeader              string      `toml:"html-header" json:"-"`
-		HeaderIncludes          string      `json:"header-includes"` // This only specifies output
-		NumberSections          bool        `toml:"number-sections" json:"numbersections"`
-        ReferenceSectionTitle   string      `toml:"references-title" json:"reference-section-title" default:"References"`
+
+        // Not user-facing. Served to Pandoc
+		HeaderIncludes          string      `json:"header-includes"`
 	} `toml:"document"`
 	Build struct {
         Filename                string      `toml:"filename" default:"main"`
@@ -58,13 +63,17 @@ func (c *Config) WritePandocJson(path string) error {
 
 func ConfigFromFile(path string) (Config, error) {
 	conf := Config{}
+    // Load the TOML bytes
 	tomlBytes, err := os.ReadFile(path)
 	if err != nil {
 		return conf, errors.New("Could not read config file. " + err.Error())
 	}
+
+    // Unmarshal into config struct
 	err = toml.Unmarshal(tomlBytes, &conf)
 	if err != nil {
 		return conf, errors.New("Could not unmarshal config file. " + err.Error())
 	}
+
 	return conf, nil
 }
