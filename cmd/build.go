@@ -46,11 +46,7 @@ func Build() error {
 	}
 
 	// Initialize the command
-	cmdArgs := []string{"-s", "-o", filepath.Join(rootPath, "main.pdf")}
-
-	// Add resource paths
-	resourcePaths := strings.Join([]string{rootPath, filepath.Join(rootPath, "assets"), filepath.Join(rootPath, "secs")}, utils.ResourceSep)
-	cmdArgs = append(cmdArgs, "--resource-path="+resourcePaths)
+	cmdArgs := []string{"-s"}
 
 	// Add Pandoc options from config. TODO: Clean this up a bit
 	msg.Info("Applying configuration from doctor.toml...")
@@ -64,9 +60,14 @@ func Build() error {
 		return err
 	}
 	cmdArgs = append(cmdArgs, "--metadata-file="+jsonFilename)
+	defer cleanUpJson(rootPath)
 
-	// Make sure all temporary files are cleaned up after function is run
-	defer cleanUp(rootPath, &conf)
+    // Define output file
+    cmdArgs = append(cmdArgs, "-o", filepath.Join(rootPath, conf.Build.Filename+".pdf"))
+
+	// Add resource paths
+	resourcePaths := strings.Join([]string{rootPath, filepath.Join(rootPath, "assets"), filepath.Join(rootPath, "secs")}, utils.ResourceSep)
+	cmdArgs = append(cmdArgs, "--resource-path="+resourcePaths)
 
 	// Specify PDF engine and add options for specific engines
 	err = CheckPath(conf.Build.Engine)
@@ -98,6 +99,7 @@ func Build() error {
 			}
 			cmdArgs = append(cmdArgs, "-L", filename)
 		}
+        defer cleanUpLua(rootPath)
 	}
 
 	// If references.bib exists, run with citeproc and add bibliography
@@ -148,17 +150,16 @@ func runPandocWith(cmdArgs []string) error {
 	return nil
 }
 
-func cleanUp(rootPath string, conf *core.Config) {
-	msg.Info("Cleaning up temporary files...")
-	if conf.Build.LuaFilters {
-		for filename := range lua.Filters {
-			err := os.Remove(filepath.Join(rootPath, filename))
-			if err != nil {
-				msg.Error("Failed to remove Lua filter " + filename + ". " + err.Error())
-			}
-		}
-	}
+func cleanUpLua(rootPath string) {
+    for filename := range lua.Filters {
+        err := os.Remove(filepath.Join(rootPath, filename))
+        if err != nil {
+            msg.Error("Failed to remove Lua filter " + filename + ". " + err.Error())
+        }
+    }
+}
 
+func cleanUpJson(rootPath string) {
 	err := os.Remove(filepath.Join(rootPath, ".metadata.json"))
 	if err != nil {
 		msg.Error("Failed to remove JSON metadata file. " + err.Error())

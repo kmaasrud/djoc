@@ -8,18 +8,6 @@ import (
 	"github.com/pelletier/go-toml"
 )
 
-type BuildConfig struct {
-	Engine string `toml:"engine" default:"tectonic"`
-}
-
-type DocumentConfig struct {
-	Title         string      `toml:"title" json:"title"`
-	Author        interface{} `toml:"author" json:"author" default:"null"` // String or list of strings
-	Date          string      `toml:"date" json:"date"`
-	DocumentClass string      `toml:"document-class" default:"article" json:"documentclass"`
-	ClassOption   interface{} `toml:"class-option" json:"classoption"` // String or list of strings
-}
-
 type Config struct {
 	Document struct {
 		Title                   string      `toml:"title" json:"title"`
@@ -34,9 +22,10 @@ type Config struct {
         ReferenceSectionTitle   string      `toml:"references-title" json:"reference-section-title" default:"References"`
 	} `toml:"document"`
 	Build struct {
-		Engine       string `toml:"engine" default:"tectonic"`
-		LuaFilters   bool   `toml:"lua-filters" default:"true"`
-		OutputFormat string `toml:"output-format" default:"pdf"`
+        Filename                string      `toml:"filename" default:"main"`
+		Engine                  string      `toml:"engine" default:"tectonic"`
+		LuaFilters              bool        `toml:"lua-filters" default:"true"`
+		OutputFormat            string      `toml:"output-format" default:"pdf"`
 	} `toml:"build"`
 }
 
