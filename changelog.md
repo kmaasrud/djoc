@@ -5,6 +5,8 @@
 ### Improvements
 
 - [x] Added configuration option `filename` to specify the name of your output-file.
+- [x] Added configuration option `csl` to specify which citation style is wanted.
+- [x] Added configuration option `link-citations` to specify if you want citations to be links to the corresponding entry in the bibliograhy.
 
 ## Doctor v0.2.1 (2020-04-21)
 
