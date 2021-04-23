@@ -15,9 +15,11 @@ type Config struct {
 		Author                  interface{} `toml:"author" json:"author,omitempty"` // String or list of strings
 		Date                    string      `toml:"date" json:"date,omitempty"`
 		DocumentClass           string      `toml:"document-class" json:"documentclass" default:"article"`
-		ClassOption             interface{} `toml:"class-option" json:"classoption"` // String or list of strings
+		ClassOption             interface{} `toml:"class-options" json:"classoption"` // String or list of strings
 		NumberSections          bool        `toml:"number-sections" json:"numbersections"`
-        ReferencesTitle         string      `toml:"references-title" json:"reference-section-title" default:"References"`
+        ReferencesTitle         string      `toml:"references-title" json:"reference-section-title,omitempty"`
+        Csl                     string      `toml:"csl" json:"csl,omitempty"` // Default is Chicago MoS 17th Ed.
+        LinkCitations           bool        `toml:"link-citations" json:"link-citations"`
 
         // Processed only by Doctor
 		LatexHeader             string      `toml:"latex-header" json:"-"`
@@ -36,9 +38,10 @@ type Config struct {
 
 func (c *Config) WritePandocJson(path string) error {
 	// Preprocessing
-	if c.Document.Date == "today" {
+    switch c.Document.Date {
+    case "today", "now", "present":
 		c.Document.Date = "\\today"
-	}
+    }
 	switch c.Build.OutputFormat {
 	case "html":
 		c.Document.HeaderIncludes = c.Document.HtmlHeader
