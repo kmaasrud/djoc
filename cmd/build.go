@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"bytes"
 	_ "embed"
+	"bytes"
 	"errors"
 	"fmt"
 	"os"
