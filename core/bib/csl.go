@@ -8,8 +8,8 @@ var apa []byte
 //go:embed styles/ieee.csl
 var ieee []byte
 
-//go:embed styles/harvard1.csl
-var harvard1 []byte
+//go:embed styles/harvard.csl
+var harvard []byte
 
 //go:embed styles/nature.csl
 var nature []byte
@@ -20,7 +20,7 @@ var vancouver []byte
 var Styles = map[string][]byte{
 	"apa": apa,
 	"ieee": ieee,
-	"harvard1": harvard1,
+	"harvard": harvard,
 	"nature": nature,
 	"vancouver": vancouver,
 }
