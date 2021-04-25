@@ -1,12 +1,11 @@
 # Changelogs
 
-## Doctor v0.2.2 (Unreleased)
+## Doctor v0.2.2 (2020-04-25)
 
 ### New features
 
 - [x] Doctor now comes with a couple of CSL styles embedded, which are written into the `assets` folder when required.
-- [ ] **IMPORTANT**: Lots of TOML options are added and the structure is changed. Refer to [the docs](https://kmaasrud.com/doctor/config) to see what's new.
-
+- [x] **IMPORTANT**: Lots of TOML options are added and the structure is changed. Refer to [the docs](https://kmaasrud.com/doctor/config) to see what's new and adapt your documents' `doctor.toml` to the new headers.
 
 ## Doctor v0.2.1 (2020-04-21)
 
