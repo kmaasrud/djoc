@@ -10,10 +10,11 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/kmaasrud/doctor/core"
 	"github.com/kmaasrud/doctor/lua"
 	"github.com/kmaasrud/doctor/msg"
 	"github.com/kmaasrud/doctor/utils"
+	"github.com/kmaasrud/doctor/core"
+	"github.com/kmaasrud/doctor/core/bib"
 )
 
 type WarningError struct {
@@ -48,19 +49,12 @@ func Build() error {
 	// Initialize the command
 	cmdArgs := []string{"-s"}
 
-	// Add Pandoc options from config. TODO: Clean this up a bit
+	// Find config
 	msg.Info("Applying configuration from doctor.toml...")
 	conf, err := core.ConfigFromFile(filepath.Join(rootPath, "doctor.toml"))
 	if err != nil {
 		return err
 	}
-	jsonFilename := filepath.Join(rootPath, ".metadata.json")
-	err = conf.WritePandocJson(jsonFilename)
-	if err != nil {
-		return err
-	}
-	cmdArgs = append(cmdArgs, "--metadata-file="+jsonFilename)
-	defer cleanUpJson(rootPath)
 
     // Define output file
     cmdArgs = append(cmdArgs, "-o", filepath.Join(rootPath, conf.Build.Filename+".pdf"))
@@ -95,7 +89,8 @@ func Build() error {
 		for filename, filter := range lua.Filters {
 			err := os.WriteFile(filepath.Join(rootPath, filename), filter, 0644)
 			if err != nil {
-				return errors.New("Could not create Lua file. " + err.Error())
+				msg.Warning("Could not create Lua file, skipping it. " + err.Error())
+                continue
 			}
 			cmdArgs = append(cmdArgs, "-L", filename)
 		}
@@ -106,7 +101,27 @@ func Build() error {
 	if _, err := os.Stat(filepath.Join(rootPath, "assets", "references.bib")); err == nil {
 		msg.Info("Running with citeproc. Bibliography: " + filepath.Join("assets", "references.bib"))
 		cmdArgs = append(cmdArgs, "-C", "--bibliography=references.bib")
+        
+        // If a CSL style is specified, make sure it exists in assets
+        if cslName := conf.Document.Csl; cslName != "" {
+            if val, ok := bib.Styles[cslName]; ok {
+                err := os.WriteFile(filepath.Join(rootPath, "assets", cslName + ".csl"), val, 0644)
+                if err != nil {
+                    msg.Warning("Could not create CSL style, skipping it. " + err.Error())
+                    conf.Document.Csl = ""
+                }
+            }
+        }
 	}
+
+    // Write Pandoc's config options into a JSON file
+	jsonFilename := filepath.Join(rootPath, ".metadata.json")
+	err = conf.WritePandocJson(jsonFilename)
+	if err != nil {
+		return err
+	}
+	cmdArgs = append(cmdArgs, "--metadata-file="+jsonFilename)
+	defer cleanUpJson(rootPath)
 
 	// Execute command
 	done := make(chan struct{})
