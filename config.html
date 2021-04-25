@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href="css/main.css" rel="stylesheet" type="text/css">
+	<link href="css/normalize.css" rel="stylesheet" type="text/css">
+	<link href="css/out.css" rel="stylesheet" type="text/css">
+	<link rel="icon" type="image/svg" href="assets/favicon.svg">
+	<title>Doctor documentation - Configuration</title>
+		  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.js"></script>
+    <script>document.addEventListener("DOMContentLoaded", function () {
+     var mathElements = document.getElementsByClassName("math");
+     var macros = [];
+     for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+       katex.render(texText.data, mathElements[i], {
+        displayMode: mathElements[i].classList.contains('display'),
+        throwOnError: false,
+        macros: macros,
+        fleqn: false
+       });
+    }}});
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css" />
+		<!--[if lt IE 9]>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+	<![endif]-->
+  </head>
+  <body>
+		<input type="checkbox" class="hidden toggle" id="menu-control">
+		<input type="checkbox" class="hidden toggle" id="toc-control">
+		<main class="container flex">
+		<aside class="book-menu" id="TOC" role="doc-toc">
+			<div class="book-menu-content">
+				<nav>
+					<img class="book-brand" id="main-logo" src="assets/favicon.svg">
+					<ul>
+						<li class="book-section-flat">
+							<span>Getting started</span>
+							<ul>
+								<li><a href="installing">Installing</a></li>
+								<li><a href="creating-your-first-document">Creating your first document</a></li>
+							</ul>
+						</li>
+						<li class="book-section-flat">
+							<a href="markdown">Markdown</span>
+							<ul>
+								<li><a href="paragraphs">Paragraphs</a></li>
+								<li><a href="headings">Headings</a></li>
+								<li><a href="formatting">Formatting</a></li>
+								<li><a href="lists">Lists</a></li>
+								<li><a href="images-and-figures">Images and figures</a></li>
+								<li><a href="code">Code</a></li>
+								<li><a href="math">Math</a></li>
+								<li><a href="block-quotes">Block quotes</a></li>
+							</ul>
+						</li>
+						<!-- <li class="book-section-flat">
+							<a href="conventions">Conventions</span>
+							<ul>
+								<li><a href="placeholder">Placeholder</a></li>
+							</ul>
+						</li> -->
+					</ul>
+				</nav>
+			</div>
+		</aside>
+<div class="book-page">
+<header class="book-header">
+<div class="flex align-center justify-between">
+<label for="menu-control">
+<img src="https://themes.gohugo.io//theme/hugo-book/svg/menu.svg" class="book-icon" alt="Menu">
+</label>
+<strong>Configuration</strong>
+<label for="toc-control">
+<img src="https://themes.gohugo.io//theme/hugo-book/svg/toc.svg" class="book-icon" alt="Table of Contents">
+</label>
+</div>
+<aside class="hidden clearfix">
+<nav id="TableOfContents">
+<ul>
+<li><a href="#meta"><code>[meta]</code></a></li>
+<li><a href="#build"><code>[build]</code></a></li>
+<li><a href="#style"><code>[style]</code></a></li>
+<li><a href="#bib"><code>[bib]</code></a></li>
+<li><a href="#latex"><code>[latex]</code></a></li>
+<li><a href="#html"><code>[html]</code></a></li>
+</ul>
+</nav>
+</aside>
+</header>
+<article class="markdown">
+<h1 class="page-title">Configuration</h1>
+<p>Your Doctor document can be configured quite extensively with the <code>doctor.toml</code> file. This file allows you to specify metadata, apply styling, supply information to Pandoc and/or the <span class="math inline">\TeX</span> engine, and much more. I’ve chosen the TOML specification since I consider it the most human-friendly configuration interface - it’s legibility being the main draw.</p>
+<p>The configuration file has six main <em>tables</em> (which is TOML terminology for a collection of key-value pairs following a header): <code>[meta]</code>, <code>[build]</code>, <code>[style]</code>, <code>[bib]</code>, <code>[latex]</code> and <code>[html]</code>. They contain the configurations as listed below.</p>
+<h2 id="meta"><code>[meta]</code></h2>
+<p>These options relate to the metadata of your document.</p>
+<ul>
+<li><p><code>title</code>: The document’s title.</p>
+<blockquote>
+<p><em>Example</em>: <code>title = "My amazing report!"</code></p>
+</blockquote></li>
+<li><p><code>author</code>: The document’s author or a list of authors.</p>
+<blockquote>
+<p><em>Example</em>: <code>author = ["Jane Doe", "John Doe"]</code></p>
+</blockquote></li>
+<li><p><code>date</code>: The date of your document. If the date is <code>"today"</code> or <code>"now"</code>, Doctor will insert the current date.</p>
+<blockquote>
+<p><em>Example</em>: <code>date = "February 17th 1998"</code></p>
+</blockquote></li>
+</ul>
+<h2 id="build"><code>[build]</code></h2>
+<p>These options allow you to tune how the document is built.</p>
+<ul>
+<li><p><code>engine</code>: The <span class="math inline">\TeX</span> engine you want to use to build your PDF. The options are:</p>
+<ul>
+<li><code>pdflatex</code></li>
+<li><code>lualatex</code></li>
+<li><code>xelatex</code></li>
+<li><code>latexmk</code></li>
+<li><code>tectonic</code></li>
+</ul>
+<p>If no engine is specified, Doctor will use <code>pdflatex</code> as the default.</p>
+<blockquote>
+<p><em>Example</em>: <code>engine = "lualatex"</code></p>
+</blockquote></li>
+<li><p><code>filename</code>: The filename you want for your exported document. You do not need to specify an extension, Doctor will automatically append <code>.pdf</code> when exporting as a PDF and <code>.html</code> when exporting as HTML.</p></li>
+<li><p><code>output-format</code>: The format of your exported document. The options are <code>"html"</code> or <code>"pdf"</code>.</p>
+<blockquote>
+<p><em>Example</em>: <code>output-format = "html"</code></p>
+</blockquote>
+<p>If no output format is specified, Doctor will compile the document into a PDF.</p></li>
+<li><p><code>lua-filters</code>: Boolean that specifies whether or not to use the embedded Lua filters. This option is mainly for debugging. The default is <code>true</code>, and turning it <code>false</code> will stop some functionality like cross-referencing.</p>
+<blockquote>
+<p><em>Example</em>: <code>lua-filters = false</code></p>
+</blockquote></li>
+</ul>
+<h2 id="style"><code>[style]</code></h2>
+<p>These are options that specify how you want your document presented.</p>
+<ul>
+<li><p><code>two-column</code>: If this option is <code>true</code>, the PDF document will be formatted with two columns on each page. The default is <code>false</code>.</p>
+<blockquote>
+<p><em>Example</em>: <code>two-column = true</code></p>
+</blockquote></li>
+<li><p><code>number-sections</code>: Boolean that specifies whether or not you want the sections of your document numbered. If you want to use cross-referencing with sections, this option must be true.</p>
+<blockquote>
+<p><em>Example</em>: <code>number-sections = true</code></p>
+</blockquote></li>
+<li><p><code>document-class</code>: This corresponds to the <span class="math inline">\LaTeX</span> document classes which are listed <a href="https://ctan.org/topic/class">here</a>. Beware that not all classes are tested with the Doctor syntax, so some might not work as expected.</p>
+<blockquote>
+<p><em>Example</em>: <code>document-class = "report"</code></p>
+</blockquote></li>
+<li><p><code>class-options</code>: Options for the document class. The available options depend on the chosen document class, but some commonly used ones are listed <a href="https://en.wikibooks.org/wiki/LaTeX/Document_Structure#Document_Class_Options">here</a>.</p></li>
+</ul>
+<h2 id="bib"><code>[bib]</code></h2>
+<p>These options all relate to citations and the bibliography of your document.</p>
+<ul>
+<li><p><code>csl</code>: The CSL (<a href="https://citationstyles.org/">Citation Style Language</a>) style to use for your citations. You can either use a CSL file (you need only specify the name, not the <code>.csl</code> extension) placed in the <code>assets</code> directory, or a URL that points to a CSL file available on the internet.</p>
+<p>The default CSL style is the <a href="https://csl.mendeley.com/styleInfo/?styleId=http%3A%2F%2Fwww.zotero.org%2Fstyles%2Fchicago-author-date">Chicago Manual of Style 17th edition</a>. Doctor also comes with a few CSL styles embedded into the binary. These are:</p>
+<ul>
+<li><a href="https://csl.mendeley.com/styleInfo/?styleId=http%3A%2F%2Fwww.zotero.org%2Fstyles%2Fapa">American Psychological Associtaton 6th editon</a>, which you can use with <code>csl = "apa"</code>.</li>
+<li><a href="https://csl.mendeley.com/styleInfo/?styleId=http%3A%2F%2Fwww.zotero.org%2Fstyles%2Fieee">IEEE</a>, which you can use with <code>csl = "ieee"</code>.</li>
+<li><a href="https://csl.mendeley.com/styleInfo/?styleId=http%3A%2F%2Fwww.zotero.org%2Fstyles%2Fharvard-cite-them-right">Cite Them Right 10th edition - Harvard</a>, which you can use with <code>csl = "harvard"</code>.</li>
+<li><a href="https://csl.mendeley.com/styleInfo/?styleId=http%3A%2F%2Fwww.zotero.org%2Fstyles%2Fnature">Nature</a>, which you can use with <code>csl = "nature"</code>.</li>
+<li><a href="https://csl.mendeley.com/styleInfo/?styleId=http%3A%2F%2Fwww.zotero.org%2Fstyles%2Fvancouver">Vancouver</a>, which you can use with <code>csl = "vancouver"</code>.</li>
+</ul>
+<p>For more CSL styles, a good source is the <a href="https://csl.mendeley.com/searchByName/">Mendeley CSL database</a>. There you can find a style you like, and use the URL leading to the CSL file.</p>
+<blockquote>
+<p><em>Example</em>: <code>csl = "apa"</code></p>
+</blockquote></li>
+<li><p><code>bibliography-title</code>: The title of the bibliography section. The default is an empty string.</p>
+<blockquote>
+<p><em>Example</em>: <code>references-title = "References"</code></p>
+</blockquote></li>
+<li><p><code>include-bibliography</code>: Boolean that specifies whether or not you want your bibliography included in your document. The default is <code>true</code>.</p>
+<blockquote>
+<p><em>Example</em>: <code>include-bibliography = false</code></p>
+</blockquote></li>
+</ul>
+<h2 id="latex"><code>[latex]</code></h2>
+<p>These are options that are specific for <span class="math inline">\LaTeX</span> and PDF output.</p>
+<ul>
+<li><p><code>packages</code>: A list of strings specifying the packages you want used. This is similar to <code>\usepackage{package}</code> in a <span class="math inline">\LaTeX</span> document, but much less verbose.</p>
+<blockquote>
+<p><em>Example</em>: <code>packages = ["graphicx", "placeins"]</code></p>
+</blockquote>
+<p>If you want to supply options to you package inclusion, you can write them with brackets as you would normally. An example could be when you want to specify a language to Babel. In this case, you could write <code>packages = ["[norsk]{babel}"]</code>.</p></li>
+<li><p><code>header</code>: Whatever you want parsed by <span class="math inline">\LaTeX</span> as header content. For simple package inclusions, the above option is recommended, but if more advanced headers are required, you can use this option. To avoid having to escape macros or manually write newline characters, you can use a multiline literal string, which is surrounded by <code>'''</code>.</p>
+<blockquote>
+<p><em>Example</em>:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode toml"><code class="sourceCode toml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dt">header</span> <span class="op">=</span> <span class="st">&#39;&#39;&#39;</span><span class="vs">\makeatletter</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="vs">\newcommand*{\centerfloat}{%</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="vs">\parindent \z@</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="vs">\leftskip \z@ \@plus 1fil \@minus \textwidth</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="vs">\rightskip\leftskip</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="vs">\parfillskip \z@skip}</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="vs">\makeatother</span><span class="st">&#39;&#39;&#39;</span></span></code></pre></div>
+</blockquote></li>
+</ul>
+<h2 id="html"><code>[html]</code></h2>
+<p>These are options that are specific for HTML output, but since you cannot output HTML yet, these do nothing at the moment.</p>
+<ul>
+<li><code>header</code>: Whatever you want included in the <code>&lt;head&gt;</code> of you HTML document. To avoid having to escape macros or manually write newline characters, you can use a multiline literal string, which is surrounded by <code>'''</code>.</li>
+</ul>
+</article>
+<div class="book-comments">
+<label for="menu-control" class="hidden book-menu-overlay"></label>
+</div>
+</div>
+				<aside class="book-toc">
+		  <div class="book-toc-content">
+			<nav id="TableOfContents">
+				<ul>
+    <li><a href="#meta"><code>[meta]</code></a></li>
+    <li><a href="#build"><code>[build]</code></a></li>
+    <li><a href="#style"><code>[style]</code></a></li>
+    <li><a href="#bib"><code>[bib]</code></a></li>
+    <li><a href="#latex"><code>[latex]</code></a></li>
+    <li><a href="#html"><code>[html]</code></a></li>
+    </ul>
+			</nav>
+		  </div>
+		</aside>
+			  </main>
+	  <script>
+		(function() {
+		  var menu = document.querySelector("aside.book-menu nav");
+		  addEventListener("beforeunload", function(event) {
+			  localStorage.setItem("menu.scrollTop", menu.scrollTop);
+		  });
+		  menu.scrollTop = localStorage.getItem("menu.scrollTop");
+		})();
+	  </script>
+    <!-- Syntax highlighting through highlight.js -->
+    <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@10.4.0/styles/stackoverflow-light.min.css">
+    <script src="https://unpkg.com/@highlightjs/cdn-assets@10.4.0/highlight.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+          document.querySelectorAll('pre code').forEach((block) => {
+            hljs.highlightBlock(block);
+          });
+        });
+    </script>
+  </body>
+</html>
