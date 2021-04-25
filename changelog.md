@@ -2,6 +2,10 @@
 
 ## Doctor v0.2.2 (Unreleased)
 
+### New features
+
+- [x] Doctor now comes with a couple of CSL styles embedded, which are written into the `assets` folder when required.
+
 ### Improvements
 
 - [x] Added configuration option `filename` to specify the name of your output-file.
