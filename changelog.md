@@ -5,12 +5,8 @@
 ### New features
 
 - [x] Doctor now comes with a couple of CSL styles embedded, which are written into the `assets` folder when required.
+- [ ] **IMPORTANT**: Lots of TOML options are added and the structure is changed. Refer to [the docs](https://kmaasrud.com/doctor/config) to see what's new.
 
-### Improvements
-
-- [x] Added configuration option `filename` to specify the name of your output-file.
-- [x] Added configuration option `csl` to specify which citation style is wanted.
-- [x] Added configuration option `link-citations` to specify if you want citations to be links to the corresponding entry in the bibliograhy.
 
 ## Doctor v0.2.1 (2020-04-21)
 
