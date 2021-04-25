@@ -7,16 +7,17 @@ import (
 )
 
 type PandocConfig struct {
-    Title           string      `json:"title,omitempty"`
-    Author          interface{} `json:"author,omitempty"`
-    Date            string      `json:"date"`
-    DocumentClass   string      `json:"documentclass"`
-    ClassOptions    interface{} `json:"classoption,omitempty"`
-    NumberSections  bool        `json:"numbersections"`
-    ReferencesTitle string      `json:"reference-section-title,omitempty"`
-    Csl             string      `json:"csl,omitempty"`
-    LinkCitations   bool        `json:"link-citations"`
-	HeaderIncludes  string      `json:"header-includes,omitempty"`
+    Title                   string      `json:"title,omitempty"`
+    Author                  interface{} `json:"author,omitempty"`
+    Date                    string      `json:"date"`
+    DocumentClass           string      `json:"documentclass"`
+    ClassOptions            []string    `json:"classoption,omitempty"`
+    NumberSections          bool        `json:"numbersections"`
+    BiblographyTitle        string      `json:"reference-section-title,omitempty"`
+    Csl                     string      `json:"csl,omitempty"`
+    LinkCitations           bool        `json:"link-citations"`
+	HeaderIncludes          string      `json:"header-includes,omitempty"`
+    SupressBibliography     bool        `json:"supress-bibliography"`
 }
 
 func WritePandocJson(path string, c *Config) error {
@@ -26,12 +27,13 @@ func WritePandocJson(path string, c *Config) error {
         DocumentClass: c.Style.DocumentClass,
         ClassOptions: c.Style.ClassOptions,
         NumberSections: c.Style.NumberSections,
-        ReferencesTitle: c.Bib.ReferencesTitle,
+        BiblographyTitle: c.Bib.BibliographyTitle,
         Csl: c.Bib.Csl,
         LinkCitations: c.Bib.LinkCitations,
+        SupressBibliography: !c.Bib.IncludeBibliography,
     }
 
-    // Handle some special values
+    // Handle date
     switch c.Meta.Date {
     case "today", "now", "present":
 		pandocConf.Date = "\\today"
@@ -39,6 +41,7 @@ func WritePandocJson(path string, c *Config) error {
         pandocConf.Date = c.Meta.Date
     }
 
+    // Handle output specific options
 	switch c.Build.OutputFormat {
 	case "html":
 		pandocConf.HeaderIncludes = c.Html.Header
@@ -56,6 +59,11 @@ func WritePandocJson(path string, c *Config) error {
         }
 		pandocConf.HeaderIncludes += c.Latex.Header
 	}
+
+    // Handle two-column
+    if c.Style.TwoColumn {
+        pandocConf.ClassOptions = append(pandocConf.ClassOptions, "twocolumn")
+    }
 
 	// Marshal config struct into JSON
 	jsonBytes, err := json.Marshal(&pandocConf)

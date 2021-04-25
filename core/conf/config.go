@@ -8,30 +8,32 @@ import (
 )
 
 type Config struct {
+    Meta struct {
+        Title                   string      `toml:"title"`
+        Author                  interface{} `toml:"author"`
+        Date                    string      `toml:"date"` // String or list of strings
+    } `toml:"meta"`
 	Build struct {
         Filename                string      `toml:"filename" default:"document"`
 		Engine                  string      `toml:"engine" default:"pdflatex"`
 		LuaFilters              bool        `toml:"lua-filters" default:"true"`
 		OutputFormat            string      `toml:"output-format" default:"pdf"`
 	} `toml:"build"`
-    Meta struct {
-        Title                   string      `toml:"title"`
-        Author                  interface{} `toml:"author"`
-        Date                    string      `toml:"date"` // String or list of strings
-    } `toml:"meta"`
     Style struct {
-		DocumentClass           string      `toml:"document-class" default:"article"`
-		ClassOptions            interface{} `toml:"class-options"` // String or list of strings
+        TwoColumn               bool        `toml:"two-column" default:"false"`
         NumberSections          bool        `toml:"number-sections" default:"false"`
+		DocumentClass           string      `toml:"document-class" default:"article"`
+		ClassOptions            []string    `toml:"class-options"` // String or list of strings
     } `toml:"style"`
     Bib struct {
-        ReferencesTitle         string      `toml:"references-title"`
         Csl                     string      `toml:"csl"` // Default is Chicago MoS 17th Ed.
+        BibliographyTitle       string      `toml:"bibliography-title"`
         LinkCitations           bool        `toml:"link-citations" default:"true"`
+        IncludeBibliography     bool        `toml:"include-bibliography" default:"true"`
     } `toml:"bib"`
     Latex struct {
-		Header                  string      `toml:"header"`
         Packages                []string    `toml:"packages"`
+		Header                  string      `toml:"header"`
     } `toml:"latex"`
     Html struct {
 		Header                  string      `toml:"header"`
