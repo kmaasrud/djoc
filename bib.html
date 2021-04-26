@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href="css/main.css" rel="stylesheet" type="text/css">
+	<link href="css/normalize.css" rel="stylesheet" type="text/css">
+	<link href="css/out.css" rel="stylesheet" type="text/css">
+	<link rel="icon" type="image/svg" href="assets/favicon.svg">
+	<title>Doctor documentation - Doctor’s bibliography tool</title>
+		<!--[if lt IE 9]>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+	<![endif]-->
+  </head>
+  <body>
+		<input type="checkbox" class="hidden toggle" id="menu-control">
+		<input type="checkbox" class="hidden toggle" id="toc-control">
+		<main class="container flex">
+		<aside class="book-menu" id="TOC" role="doc-toc">
+			<div class="book-menu-content">
+				<nav>
+					<img class="book-brand" id="main-logo" src="assets/favicon.svg">
+					<ul>
+						<li class="book-section-flat">
+							<span>Getting started</span>
+							<ul>
+								<li><a href="installing">Installing</a></li>
+								<li><a href="creating-your-first-document">Creating your first document</a></li>
+							</ul>
+						</li>
+						<li class="book-section-flat">
+							<span>Using Doctor</span>
+							<ul>
+								<li><a href="cli">Command line tool</a></li>
+								<li><a href="config">Configuration</a></li>
+							</ul>
+						</li>
+						<li class="book-section-flat">
+							<a href="markdown">Markdown</span>
+							<ul>
+								<li><a href="paragraphs">Paragraphs</a></li>
+								<li><a href="headings">Headings</a></li>
+								<li><a href="formatting">Formatting</a></li>
+								<li><a href="lists">Lists</a></li>
+								<li><a href="images-and-figures">Images and figures</a></li>
+								<li><a href="code">Code</a></li>
+								<li><a href="math">Math</a></li>
+								<li><a href="block-quotes">Block quotes</a></li>
+							</ul>
+						</li>
+						<!-- <li class="book-section-flat">
+							<a href="conventions">Conventions</span>
+							<ul>
+								<li><a href="placeholder">Placeholder</a></li>
+							</ul>
+						</li> -->
+					</ul>
+				</nav>
+			</div>
+		</aside>
+<div class="book-page">
+<header class="book-header">
+<div class="flex align-center justify-between">
+<label for="menu-control">
+<img src="https://themes.gohugo.io//theme/hugo-book/svg/menu.svg" class="book-icon" alt="Menu">
+</label>
+<strong>Doctor’s bibliography tool</strong>
+<label for="toc-control">
+<img src="https://themes.gohugo.io//theme/hugo-book/svg/toc.svg" class="book-icon" alt="Table of Contents">
+</label>
+</div>
+<aside class="hidden clearfix">
+<nav id="TableOfContents">
+<ul>
+<li><a href="#csl">Citation Style Language</a></li>
+</ul>
+</nav>
+</aside>
+</header>
+<article class="markdown">
+<h1 class="page-title">Doctor’s bibliography tool</h1>
+<h2 id="csl">Citation Style Language</h2>
+<p>Doctor comes with a few common CSL styles prepackaged. To use these, just apply them like <code>csl = "&lt;csl name&gt;"</code> in the <code>doctor.toml</code> file and Doctor will automatically add it to the <code>assets</code> directory. Your options are</p>
+<ul>
+<li><a href="https://csl.mendeley.com/styleInfo/?styleId=http%3A%2F%2Fwww.zotero.org%2Fstyles%2Fapa">American Psychological Associtaton 6th editon</a>, which you can use with <code>csl = "apa"</code>.</li>
+<li><a href="https://csl.mendeley.com/styleInfo/?styleId=http%3A%2F%2Fwww.zotero.org%2Fstyles%2Fieee">IEEE</a>, which you can use with <code>csl = "ieee"</code>.</li>
+<li><a href="https://csl.mendeley.com/styleInfo/?styleId=http%3A%2F%2Fwww.zotero.org%2Fstyles%2Fharvard-cite-them-right">Cite Them Right 10th edition - Harvard</a>, which you can use with <code>csl = "harvard"</code>.</li>
+<li><a href="https://csl.mendeley.com/styleInfo/?styleId=http%3A%2F%2Fwww.zotero.org%2Fstyles%2Fnature">Nature</a>, which you can use with <code>csl = "nature"</code>.</li>
+<li><a href="https://csl.mendeley.com/styleInfo/?styleId=http%3A%2F%2Fwww.zotero.org%2Fstyles%2Fvancouver">Vancouver</a>, which you can use with <code>csl = "vancouver"</code>.</li>
+</ul>
+<p>For more CSL styles, a good source is the <a href="https://csl.mendeley.com/searchByName/">Mendeley CSL database</a>. There you can find a style you like, copy the URL from the Install button and put it as the CSL style like <code>csl = "&lt;url&gt;"</code>. Doctor will then fetch the style from the internet when building your document.</p>
+</article>
+<div class="book-comments">
+<label for="menu-control" class="hidden book-menu-overlay"></label>
+</div>
+</div>
+				<aside class="book-toc">
+		  <div class="book-toc-content">
+			<nav id="TableOfContents">
+				<ul>
+    <li><a href="#csl">Citation Style Language</a></li>
+    </ul>
+			</nav>
+		  </div>
+		</aside>
+			  </main>
+	  <script>
+		(function() {
+		  var menu = document.querySelector("aside.book-menu nav");
+		  addEventListener("beforeunload", function(event) {
+			  localStorage.setItem("menu.scrollTop", menu.scrollTop);
+		  });
+		  menu.scrollTop = localStorage.getItem("menu.scrollTop");
+		})();
+	  </script>
+    <!-- Syntax highlighting through highlight.js -->
+    <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@10.4.0/styles/stackoverflow-light.min.css">
+    <script src="https://unpkg.com/@highlightjs/cdn-assets@10.4.0/highlight.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+          document.querySelectorAll('pre code').forEach((block) => {
+            hljs.highlightBlock(block);
+          });
+        });
+    </script>
+  </body>
+</html>
