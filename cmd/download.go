@@ -17,15 +17,15 @@ func CheckPath(program string) error {
 		return err
 	}
 
-    // Check if dependency is available in the Doctor data dir
-    // TODO: This is mainly here to allow backwards compatibility with those who have installed Pandoc 2.13
-    // with Doctor previously
-    if _, err := os.Stat(filepath.Join(doctorPath, program+"-2.13", "bin", program)); err == nil {
-        return nil
-    }
-    _, err = exec.LookPath(program)
-    if err != nil {
-        return errors.New("Could not find " + program + " in your PATH.")
-    }
+	// Check if dependency is available in the Doctor data dir
+	// TODO: This is mainly here to allow backwards compatibility with those who have installed Pandoc 2.13
+	// with Doctor previously
+	if _, err := os.Stat(filepath.Join(doctorPath, program+"-2.13", "bin", program)); err == nil {
+		return nil
+	}
+	_, err = exec.LookPath(program)
+	if err != nil {
+		return errors.New("Could not find " + program + " in your PATH.")
+	}
 	return nil
 }

@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	_ "embed"
 	"bytes"
+	_ "embed"
 	"errors"
 	"fmt"
 	"os"
@@ -10,12 +10,12 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/kmaasrud/doctor/core"
+	"github.com/kmaasrud/doctor/core/bib"
+	"github.com/kmaasrud/doctor/core/conf"
 	"github.com/kmaasrud/doctor/lua"
 	"github.com/kmaasrud/doctor/msg"
 	"github.com/kmaasrud/doctor/utils"
-	"github.com/kmaasrud/doctor/core"
-	"github.com/kmaasrud/doctor/core/conf"
-	"github.com/kmaasrud/doctor/core/bib"
 )
 
 type WarningError struct {
@@ -57,8 +57,8 @@ func Build() error {
 		return err
 	}
 
-    // Define output file
-    cmdArgs = append(cmdArgs, "-o", filepath.Join(rootPath, config.Build.Filename+".pdf"))
+	// Define output file
+	cmdArgs = append(cmdArgs, "-o", filepath.Join(rootPath, config.Build.Filename+".pdf"))
 
 	// Add resource paths
 	resourcePaths := strings.Join([]string{rootPath, filepath.Join(rootPath, "assets"), filepath.Join(rootPath, "secs")}, utils.ResourceSep)
@@ -71,7 +71,7 @@ func Build() error {
 	}
 	cmdArgs = append(cmdArgs, fmt.Sprintf("--pdf-engine=%s", config.Build.Engine))
 	if config.Build.Engine == "tectonic" {
-        // Tectonic chatters a lot. Make it a bit more silent
+		// Tectonic chatters a lot. Make it a bit more silent
 		cmdArgs = append(cmdArgs, "--pdf-engine-opt=-c=minimal")
 	}
 
@@ -91,31 +91,31 @@ func Build() error {
 			err := os.WriteFile(filepath.Join(rootPath, filename), filter, 0644)
 			if err != nil {
 				msg.Warning("Could not create Lua file, skipping it. " + err.Error())
-                continue
+				continue
 			}
 			cmdArgs = append(cmdArgs, "-L", filename)
 		}
-        defer cleanUpLua(rootPath)
+		defer cleanUpLua(rootPath)
 	}
 
 	// If references.bib exists, run with citeproc and add bibliography
 	if _, err := os.Stat(filepath.Join(rootPath, "assets", "references.bib")); err == nil {
 		msg.Info("Running with citeproc. Bibliography: " + filepath.Join("assets", "references.bib"))
 		cmdArgs = append(cmdArgs, "-C", "--bibliography=references.bib")
-        
-        // If a CSL style is specified, make sure it exists in assets
-        if cslName := config.Bib.Csl; cslName != "" {
-            if val, ok := bib.Styles[cslName]; ok {
-                err := os.WriteFile(filepath.Join(rootPath, "assets", cslName + ".csl"), val, 0644)
-                if err != nil {
-                    msg.Warning("Could not create CSL style, skipping it. " + err.Error())
-                    config.Bib.Csl = ""
-                }
-            }
-        }
+
+		// If a CSL style is specified, make sure it exists in assets
+		if cslName := config.Bib.Csl; cslName != "" {
+			if val, ok := bib.Styles[cslName]; ok {
+				err := os.WriteFile(filepath.Join(rootPath, "assets", cslName+".csl"), val, 0644)
+				if err != nil {
+					msg.Warning("Could not create CSL style, skipping it. " + err.Error())
+					config.Bib.Csl = ""
+				}
+			}
+		}
 	}
 
-    // Write Pandoc's config options into a JSON file
+	// Write Pandoc's config options into a JSON file
 	jsonFilename := filepath.Join(rootPath, ".metadata.json")
 	err = conf.WritePandocJson(jsonFilename, config)
 	if err != nil {
@@ -167,12 +167,12 @@ func runPandocWith(cmdArgs []string) error {
 }
 
 func cleanUpLua(rootPath string) {
-    for filename := range lua.Filters {
-        err := os.Remove(filepath.Join(rootPath, filename))
-        if err != nil {
-            msg.Error("Failed to remove Lua filter " + filename + ". " + err.Error())
-        }
-    }
+	for filename := range lua.Filters {
+		err := os.Remove(filepath.Join(rootPath, filename))
+		if err != nil {
+			msg.Error("Failed to remove Lua filter " + filename + ". " + err.Error())
+		}
+	}
 }
 
 func cleanUpJson(rootPath string) {

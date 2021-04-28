@@ -83,7 +83,7 @@ func main() {
 						msg.Error(err.Error())
 						os.Exit(1)
 					}
-				
+
 				case "help":
 					fmt.Println(helpText)
 				}

@@ -18,9 +18,9 @@ var nature []byte
 var vancouver []byte
 
 var Styles = map[string][]byte{
-	"apa": apa,
-	"ieee": ieee,
-	"harvard": harvard,
-	"nature": nature,
+	"apa":       apa,
+	"ieee":      ieee,
+	"harvard":   harvard,
+	"nature":    nature,
 	"vancouver": vancouver,
 }
