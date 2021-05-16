@@ -12,5 +12,4 @@ Doctor comes with a few common CSL styles prepackaged. To use these, just apply 
 - [Nature](https://csl.mendeley.com/styleInfo/?styleId=http%3A%2F%2Fwww.zotero.org%2Fstyles%2Fnature), which you can use with `csl = "nature"`.
 - [Vancouver](https://csl.mendeley.com/styleInfo/?styleId=http%3A%2F%2Fwww.zotero.org%2Fstyles%2Fvancouver), which you can use with `csl = "vancouver"`.
 
-For more CSL styles, a good source is the [Mendeley CSL database](https://csl.mendeley.com/searchByName/). There you can find a style you like, copy the URL from the Install button and put it as the CSL style like `csl = "<url>"`. Doctor will then fetch the style from the internet when building your document.
-
+For more CSL styles, a good source is the [Mendeley CSL database](https://csl.mendeley.com/searchByName/). There you can find a style you like, copy the URL from the install button and put it as the CSL style like `csl = "<url>"`. Doctor will then fetch the style from the internet when building your document.
