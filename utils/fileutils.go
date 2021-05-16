@@ -4,7 +4,6 @@ import (
 	"errors"
 	"os"
 	"path/filepath"
-	"runtime"
 
 	"github.com/kmaasrud/doctor/core"
 	"github.com/kmaasrud/doctor/msg"
@@ -69,32 +68,4 @@ func FindSections(rootPath string) ([]core.Section, error) {
 	}
 
 	return files, nil
-}
-
-// Returns the path where Doctor stores it's data. Supports both Windows and Unix.
-func FindDoctorDataDir() (string, error) {
-	var doctorPath string
-	var datadirEnv string
-	var defaultDir []string
-
-	home, err := os.UserHomeDir()
-	if err != nil {
-		return doctorPath, err
-	}
-
-	if runtime.GOOS == "windows" {
-		datadirEnv = "APPDATA"
-		defaultDir = []string{home, "AppData", "Roaming", "doctor"}
-	} else {
-		datadirEnv = "XDG_DATA_DIR"
-		defaultDir = []string{home, ".local", "share", "doctor"}
-	}
-	dataDir, exists := os.LookupEnv(datadirEnv)
-	if exists {
-		doctorPath = filepath.Join(dataDir, "doctor")
-	} else {
-		doctorPath = filepath.Join(defaultDir...)
-	}
-
-	return doctorPath, nil
 }
