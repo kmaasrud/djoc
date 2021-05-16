@@ -2,10 +2,48 @@ package cmd
 
 import (
 	"errors"
+    "fmt"
+    "strings"
+    "os"
 
 	"github.com/equinox-io/equinox"
+    "github.com/blang/semver"
+    "github.com/rhysd/go-github-selfupdate/selfupdate"
 	"github.com/kmaasrud/doctor/msg"
 )
+
+func Update(ver string) error {
+    latest, found, err := selfupdate.DetectLatest("kmaasrud/doctor")
+    if err != nil {
+        return errors.New("Error occurred while detecting version: " + err.Error())
+    }
+
+    v := semver.MustParse(ver)
+    if !found || latest.Version.LTE(v) {
+        msg.Info("Current version is the latest")
+        return nil
+    }
+
+    var confirmString string
+    fmt.Printf("Do you want to update to version %s? (Y/n) ", msg.Style(latest.Version.String(), "Bold"))
+    fmt.Scanln(&confirmString)
+    if strings.ToLower(confirmString) == "n" {
+        msg.Info("Keeping current version.")
+        return nil
+    }
+
+    exe, err := os.Executable()
+    if err != nil {
+        return errors.New("Could not locate executable path")
+    }
+
+    if err := selfupdate.UpdateTo(latest.AssetURL, exe); err != nil {
+        return errors.New("Error occurred while updating binary: "  + err.Error())
+    }
+
+    msg.Success("Successfully updated to version " + latest.Version.String())
+    return nil
+}
 
 // assigned when creating a new application in the dashboard
 const appID = "app_gvefXKeSXD5"
@@ -19,7 +57,7 @@ EnlrZMZSJhNdxu2/9VhgG/UEISHrp0iX
 -----END ECDSA PUBLIC KEY-----
 `)
 
-func Update() error {
+func EquinoxUpdate() error {
 	done := make(chan struct{})
 	go msg.Do("Looking for new version...", done)
 	var opts equinox.Options

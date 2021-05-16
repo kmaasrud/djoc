@@ -11,7 +11,7 @@ import (
 	"github.com/thatisuday/clapper"
 )
 
-var VERSION = "0.2.0"
+var VERSION = "DEV"
 var helpText = `Help is sadly not written yet...`
 
 func main() {
@@ -78,7 +78,7 @@ func main() {
 					fmt.Println("You are running Doctor " + VERSION)
 
 				case "update":
-					err := cmd.Update()
+					err := cmd.Update(VERSION)
 					if err != nil {
 						msg.Error(err.Error())
 						os.Exit(1)
