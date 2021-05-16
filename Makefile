@@ -12,7 +12,7 @@ all:
 	for arch in "amd64" "arm64"; do \
 		GOOS=darwin GOARCH=$$arch go build -ldflags="-s -w -X 'main.VERSION=$(VER)'" -o bin/bins/doctor_darwin_$$arch ; \
 		cp bin/bins/*darwin_$$arch* bin/doctor ; \
-		zip bin/doctor_macOS_$$arch.zip bin/doctor ; \
+		zip bin/doctor_darwin_$$arch.zip bin/doctor ; \
 		rm bin/doctor ; \
 	done ; \
 	# Windows

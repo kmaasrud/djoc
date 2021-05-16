@@ -13,14 +13,13 @@ case $OS in
 		"armv8")
 			ARCH=arm64
 			;;
-		.*386.*)
-			ARCH=386
-			;;
 		esac
-		PLATFORM="linux-$ARCH"
+		PLATFORM="linux_$ARCH"
+        FILENAME="doctor_linux_$ARCH.tar.gz"
 	;;
 	"Darwin")
-		PLATFORM="darwin-amd64"
+		PLATFORM="darwin_amd64"
+        FILENAME="doctor_darwin_$ARCH.zip"
 	;;
 esac
 
@@ -71,9 +70,21 @@ mkdir -p "$HOME/.local/bin"
 tmp=$(mktemp -d)
 
 # Install Doctor
-echo "Installing latest stable version of Doctor..."
-curl "https://bin.equinox.io/c/fHpZLhLmi7c/doctor-stable-$PLATFORM.tgz" --output "$tmp/doctor.tgz"
-tar xvf "$tmp/doctor.tgz" -C "$HOME/.local/bin"
+echo "Installing latest version of Doctor..."
+latest=$(curl -sL https://api.github.com/repos/kmaasrud/doctor/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+curl "https://github.com/kmaasrud/doctor/releases/download/v0.2.3/$FILENAME" --output "$tmp/$FILENAME"
+# Equinox: curl "https://bin.equinox.io/c/fHpZLhLmi7c/doctor-stable-$PLATFORM.tgz" --output "$tmp/doctor.tgz"
+
+# Extract into tmp dir
+echo "Extracting archive..."
+case $OS in
+    "Linux")
+        tar xvf "$tmp/$FILENAME" -C "$HOME/.local/bin"
+    ;;
+    "Darwin")
+        unzip "$tmp/$FILENAME" -d "$HOME/.local/bin"
+    ;;
+esac
 
 if [ -e "$HOME/.local/bin/doctor" ]
 then
