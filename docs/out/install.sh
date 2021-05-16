@@ -71,15 +71,15 @@ tmp=$(mktemp -d)
 
 # Install Doctor
 echo "Installing latest version of Doctor..."
-latest=$(curl -sL https://api.github.com/repos/kmaasrud/doctor/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
-curl "https://github.com/kmaasrud/doctor/releases/download/v0.2.3/$FILENAME" --output "$tmp/$FILENAME"
+VER=$(curl -sL https://api.github.com/repos/kmaasrud/doctor/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+curl "https://github.com/kmaasrud/doctor/releases/download/$VER/$FILENAME" --output "$tmp/$FILENAME"
 # Equinox: curl "https://bin.equinox.io/c/fHpZLhLmi7c/doctor-stable-$PLATFORM.tgz" --output "$tmp/doctor.tgz"
 
 # Extract into tmp dir
 echo "Extracting archive..."
 case $OS in
     "Linux")
-        tar xvf "$tmp/$FILENAME" -C "$HOME/.local/bin"
+        tar -xvf "$tmp/$FILENAME" -C "$HOME/.local/bin"
     ;;
     "Darwin")
         unzip "$tmp/$FILENAME" -d "$HOME/.local/bin"
