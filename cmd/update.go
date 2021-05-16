@@ -18,9 +18,14 @@ func Update(ver string) error {
         return errors.New("Error occurred while detecting version: " + err.Error())
     }
 
-    v := semver.MustParse(ver)
+    if ver == "DEV" {
+        msg.Info("You are on the DEV version and are following HEAD of the repo.\n    Run 'go install -u github.com/kmaasrud/doctor' to update.")
+        return nil
+    }
+
+    v := semver.MustParse(ver[1:])
     if !found || latest.Version.LTE(v) {
-        msg.Info("Current version is the latest")
+        msg.Success("Current version is the latest!")
         return nil
     }
 
