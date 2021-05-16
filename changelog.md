@@ -1,5 +1,13 @@
 # Changelogs
 
+## Doctor v0.2.3 (2020-05-16)
+
+I'm fearing Equinox might have abandoned their project and am thus moving to updates hosted on GitHub. [go-github-selfupdate](https://github.com/rhysd/go-github-selfupdate) seems to provide the desired functionality, and this should be properly working now.
+
+You will need to download this version manually and place it in your `PATH`, but when this is done, you can update your binary with `doctor --update`.
+
+If you have Doctor installed with the Go tool, you will follow the HEAD of this repo, and will need to run `go install -u github.com/kmaasrud/doctor` to update.
+
 ## Doctor v0.2.2 (2020-04-25)
 
 ### New features
