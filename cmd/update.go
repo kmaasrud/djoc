@@ -14,7 +14,7 @@ import (
 
 func Update(ver string) error {
     if ver == "DEV" {
-        msg.Info("You are on the DEV version (downloaded with the Go tool.)\n    Run 'go install github.com/kmaasrud/doctor@latest' to update.")
+        fmt.Println("You are on the DEV version of Doctor (downloaded with the Go tool.)\nRun 'go install github.com/kmaasrud/doctor@latest' to update.")
         return nil
     }
 
