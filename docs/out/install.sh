@@ -48,8 +48,11 @@ touch "$shell_profile"
 # Ensure local PATH addition
 echo "Making sure ~/.local/bin is in your PATH..."
 case ":$PATH:" in
-*:$HOME/.local/bin:*) ;;
+*:$HOME/.local/bin:*) 
+    pathok=true
+    ;;
 *)
+    pathok=false
 	if [ "$shell" == "fish" ]; then
 		{
 			echo '# Added by Doctor'
@@ -70,28 +73,32 @@ mkdir -p "$HOME/.local/bin"
 # Make temporary dir
 tmp=$(mktemp -d)
 
+# Find latest version
+VER=$(curl -sL https://api.github.com/repos/kmaasrud/doctor/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+
 # Install Doctor
 echo "Installing latest version of Doctor..."
-VER=$(curl -sL https://api.github.com/repos/kmaasrud/doctor/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
-curl "https://github.com/kmaasrud/doctor/releases/download/$VER/$FILENAME" --output "$tmp/$FILENAME"
+curl -sLJ "https://github.com/kmaasrud/doctor/releases/download/$VER/$FILENAME" --output "$tmp/$FILENAME"
 # Equinox: curl "https://bin.equinox.io/c/fHpZLhLmi7c/doctor-stable-$PLATFORM.tgz" --output "$tmp/doctor.tgz"
 
 # Extract
 echo "Extracting archive..."
 case $OS in
     "Linux")
-        tar xzvf "$tmp/$FILENAME" -C "$HOME/.local/bin"
+        tar xzf "$tmp/$FILENAME" -C "$HOME/.local"
     ;;
     "Darwin")
-        unzip "$tmp/$FILENAME" -d "$HOME/.local/bin"
+        unzip -q "$tmp/$FILENAME" -d "$HOME/.local"
     ;;
 esac
 
 if [ -e "$HOME/.local/bin/doctor" ]
 then
 	echo -e "\nDoctor was installed successfully!\n"
-	echo -e "\nMake sure to relogin into your shell or run:"
-	echo -e "\n\tsource $shell_profile\n\nto update your environment variables.\n"
+    if [ pathok = false ] ; then
+        echo -e "\nMake sure to relogin into your shell or run:"
+        echo -e "\n\tsource $shell_profile\n\nto update your environment variables.\n"
+    fi
 else
 	echo -e "\nThe automatic install did not work, install Doctor manually.\n"
 fi
