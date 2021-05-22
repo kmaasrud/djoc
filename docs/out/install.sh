@@ -30,6 +30,7 @@ fi
 
 # Find shell profile and make sure it exists
 echo "Finding shell..."
+shell_profile="$HOME/.profile"
 if [ -n "$($SHELL -c 'echo $ZSH_VERSION')" ]; then
     shell_profile="$HOME/.zshrc"
 elif [ -n "$($SHELL -c 'echo $BASH_VERSION')" ]; then
@@ -75,11 +76,11 @@ VER=$(curl -sL https://api.github.com/repos/kmaasrud/doctor/releases/latest | gr
 curl "https://github.com/kmaasrud/doctor/releases/download/$VER/$FILENAME" --output "$tmp/$FILENAME"
 # Equinox: curl "https://bin.equinox.io/c/fHpZLhLmi7c/doctor-stable-$PLATFORM.tgz" --output "$tmp/doctor.tgz"
 
-# Extract into tmp dir
+# Extract
 echo "Extracting archive..."
 case $OS in
     "Linux")
-        tar -xvf "$tmp/$FILENAME" -C "$HOME/.local/bin"
+        tar xzvf "$tmp/$FILENAME" -C "$HOME/.local/bin"
     ;;
     "Darwin")
         unzip "$tmp/$FILENAME" -d "$HOME/.local/bin"
