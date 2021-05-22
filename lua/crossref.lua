@@ -61,11 +61,13 @@ function populate_tables(table)
         table_count = table_count + 1
         -- Remove ID definition and the space before from caption
         caption:remove(i); if i > 2 then caption:remove(i-1) end
-        break
+        if FORMAT == "latex" then
+          caption:insert(i-1, pandoc.RawInline("tex", "\\label{" .. id .. "}"))
+          return table
+        else
+          return pandoc.Div(table, {id = id})
+        end
       end
-    end
-    if id then
-      return pandoc.Div(table, {id = id})
     end
   end
 end
@@ -74,7 +76,7 @@ end
 function refs(cite)
   id = cite.citations[1].id
   sec = id:match("^sec:.*"); fig = id:match("^fig:.*"); tbl = id:match("^tbl:.*"); eq = id:match("^eq:.*")
-  if FORMAT == "latex" and (sec or fig or eq) then
+  if FORMAT == "latex" then
     return pandoc.RawInline("latex", "\\ref{" .. id .. "}")
   elseif sec then
     return pandoc.Link({pandoc.Str(sections[id])}, '#' .. id, "", "")
