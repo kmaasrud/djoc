@@ -1,5 +1,15 @@
 # Changelogs
 
+## Doctor v0.2.4 (Unreleased)
+
+### New features
+
+- [ ] Doctor now has help texts for the main program and all sub-commands. Find them by running `doctor --help` or `doctor <sub-command> --help`.
+
+### Bug fixes
+
+- [x] Table reference numbers were previously found manually by inserting the table count. In the case of table numbers like "Table 2.1" or "Table A.3", this would output incorrectly. This is now fixed by using `\label` and `\ref` instead.
+
 ## Doctor v0.2.3 (2020-05-16)
 
 I'm fearing Equinox might have abandoned their project and am thus moving to updates hosted on GitHub. [go-github-selfupdate](https://github.com/rhysd/go-github-selfupdate) seems to provide the desired functionality, and this should be properly working now.
