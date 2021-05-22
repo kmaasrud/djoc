@@ -28,7 +28,7 @@ If you want to produce PDFs, you will need a $\TeX$ distribution containing a PD
 
 That leaves me with the lightest alternative, which is self-contained, reasonably fast and auto-installs missing packages, namely [Tectonic](https://tectonic-typesetting.github.io/){target="_blank" rel="noopener noreferrer"}. For me it has proven to be the best compromise between speed and minimal bloat, which makes it a perfect alternative for those who do not already have a $\TeX$ distribution on their system. Beware that this is beta software, and thus not as stable as other alternatives.
 
-Be sure that the engine you choose is in your `PATH` (for example by running `pdflatex` to see if you get an error) and edit the `engine` option in `doctor.toml` to use your preffered engine. See also [the configuration docs](config#engine) for more info.
+Be sure that the engine you choose is in your `PATH` (for example by running `pdflatex` to see if you get an error) and edit the `engine` option in `doctor.toml` to use your preffered engine. See also [the configuration docs](config#build) for more info.
 
 # Updating
 
