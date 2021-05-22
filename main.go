@@ -12,7 +12,6 @@ import (
 )
 
 var VERSION = "DEV"
-var helpText = `Help is sadly not written yet...`
 
 func main() {
 	registry := clapper.NewRegistry()
@@ -32,6 +31,7 @@ func main() {
 	addCommand, _ := registry.Register("add")
 	addCommand.AddArg("name", "")
 	addCommand.AddFlag("at", "i", false, "")
+    addCommand.AddFlag("help", "h", true, "")
 
 	removeCommand, _ := registry.Register("remove")
 	removeCommand.AddArg("sections...", "")
@@ -51,7 +51,7 @@ func main() {
 			msg.Error("Unknown command " + msg.Style(os.Args[1], "Bold") + ". Run " + msg.Style("doctor --help", "Bold") + " to see a list of available commands.")
 		} else if _, ok := err.(clapper.ErrorUnknownFlag); ok {
 			errorString := strings.ToUpper(string(err.Error()[0])) + string(err.Error()[1:])
-			msg.Error(fmt.Sprintf("%s. Run %s for further help.", errorString, msg.Style("kodb"+" --help", "Bold")))
+			msg.Error(fmt.Sprintf("%s. Run %s for further help.", errorString, msg.Style("doctor"+" --help", "Bold")))
 		} else {
 			msg.Error(err.Error())
 		}
@@ -62,6 +62,8 @@ func main() {
 	switch command.Name {
 	// Root command
 	case "":
+        cmd.Help(command.Flags["help"], command.Name)
+
 		for flag, val := range command.Flags {
 			// Can discard this err, the root command's flags will always be parsable bools
 			if ok, _ := strconv.ParseBool(val.Value); ok {
@@ -83,12 +85,9 @@ func main() {
 						msg.Error(err.Error())
 						os.Exit(1)
 					}
-
-				case "help":
-					fmt.Println(helpText)
-				}
-			}
-		}
+                }
+            }
+        }
 
 	// Create new document command
 	case "new":
@@ -121,6 +120,7 @@ func main() {
 
 	// Add a new section to the document
 	case "add":
+        cmd.Help(command.Flags["help"], command.Name)
 		var err error
 		if command.Args["name"].Value == "" {
 			msg.Error("Please supply a name for your section.")
