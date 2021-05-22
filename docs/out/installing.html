@@ -88,8 +88,8 @@
 </header>
 <article class="markdown">
 <h1 class="page-title">Installing Doctor</h1>
-<p>The latest stable release of Doctor is available on the <a href="https://dl.equinox.io/kmaasrud/doctor/stable" target="_blank" rel="noopener noreferrer"><strong>download page</strong></a>. If you are on a Unix system with Bash installed, there’s a short shell script that automatically downloads the binary locally and adds it to your <code>PATH</code>. Just run</p>
-<pre class="shell"><code>curl https://www.kmaasrud.com/doctor/install.sh | bash</code></pre>
+<p>The latest stable release of Doctor is available on the <a href="https://github.com/kmaasrud/doctor/releases" target="_blank" rel="noopener noreferrer"><strong>download page</strong></a>. If you are on a Unix system with Bash installed, there’s a short shell script that automatically downloads the binary locally and adds it to your <code>PATH</code>. Just run</p>
+<pre class="shell"><code>curl https://kmaasrud.com/doctor/install.sh | bash</code></pre>
 <p>If you have the <a href="https://golang.org/doc/install" target="_blank" rel="noopener noreferrer">Go tool</a> installed, you can alternatively download Doctor by running:</p>
 <pre class="shell"><code>go install github.com/kmaasrud/doctor@latest</code></pre>
 <h2 id="dependencies">Dependencies</h2>
@@ -98,7 +98,7 @@
 <p>If you want to produce PDFs, you will need a <span class="math inline">\TeX</span> distribution containing a PDF engine. The fastest alternative is <a href="https://tug.org/texlive/" target="_blank" rel="noopener noreferrer">TeXLive’s</a> <code>pdflatex</code>, but beware that it does not fully support Unicode. In cases where this is needed, TeXLive also contains <code>lualatex</code> and <code>xelatex</code>, both of which have better font coverage and Unicode support. Refer to the <a href="https://tug.org/texlive/" target="_blank" rel="noopener noreferrer">TeXLive homepage</a> for how to install this distribution on your system.</p>
 <p><a href="https://miktex.org/" target="_blank" rel="noopener noreferrer">MiKTeX</a> is also a great alternative, containing all of the aforementioned engines. In my testing MiKTeX was quite a lot slower than TeXLive, but it comes with the advantage of auto-installing missing packages while compiling. This means you can get away with a smaller install size and avoid the dreaded dependency hell many face when using TeXLive.</p>
 <p>That leaves me with the lightest alternative, which is self-contained, reasonably fast and auto-installs missing packages, namely <a href="https://tectonic-typesetting.github.io/" target="_blank" rel="noopener noreferrer">Tectonic</a>. For me it has proven to be the best compromise between speed and minimal bloat, which makes it a perfect alternative for those who do not already have a <span class="math inline">\TeX</span> distribution on their system. Beware that this is beta software, and thus not as stable as other alternatives.</p>
-<p>Be sure that the engine you choose is in your <code>PATH</code> (for example by running <code>pdflatex</code> to see if you get an error) and edit the <code>engine</code> option in <code>doctor.toml</code> to use your preffered engine. See also <a href="config#engine">the configuration docs</a> for more info.</p>
+<p>Be sure that the engine you choose is in your <code>PATH</code> (for example by running <code>pdflatex</code> to see if you get an error) and edit the <code>engine</code> option in <code>doctor.toml</code> to use your preffered engine. See also <a href="config#build">the configuration docs</a> for more info.</p>
 <h2 id="updating">Updating</h2>
 <p>To update Doctor to a new version, simply run</p>
 <pre class="shell"><code>doctor --update</code></pre>

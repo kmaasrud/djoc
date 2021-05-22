@@ -6,7 +6,7 @@ toc: false
 The latest stable release of Doctor is available on the [**download page**](https://github.com/kmaasrud/doctor/releases){target="_blank" rel="noopener noreferrer"}. If you are on a Unix system with Bash installed, there's a short shell script that automatically downloads the binary locally and adds it to your `PATH`. Just run
 
 ```shell
-curl https://www.kmaasrud.com/doctor/install.sh | bash
+curl https://kmaasrud.com/doctor/install.sh | bash
 ```
 
 If you have the [Go tool](https://golang.org/doc/install){target="_blank" rel="noopener noreferrer"} installed, you can alternatively download Doctor by running:
