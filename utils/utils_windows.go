@@ -1,8 +1,8 @@
 package utils
 
 import (
-    "os"
-    "path/filepath"
+	"os"
+	"path/filepath"
 )
 
 const ResourceSep string = ";"
@@ -11,16 +11,16 @@ const ResourceSep string = ";"
 func FindDoctorDataDir() (string, error) {
 	var doctorPath string
 
-    datadirEnv := "APPDATA"
+	datadirEnv := "APPDATA"
 	dataDir, exists := os.LookupEnv(datadirEnv)
 	if exists {
 		doctorPath = filepath.Join(dataDir, "doctor")
 	} else {
-        home, err := os.UserHomeDir()
-        if err != nil {
-            return doctorPath, err
-        }
-        defaultDir := []string{home, "AppData", "Roaming", "doctor"}
+		home, err := os.UserHomeDir()
+		if err != nil {
+			return doctorPath, err
+		}
+		defaultDir := []string{home, "AppData", "Roaming", "doctor"}
 		doctorPath = filepath.Join(defaultDir...)
 	}
 
