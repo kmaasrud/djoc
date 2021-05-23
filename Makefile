@@ -28,7 +28,15 @@ equinox:
 	# TODO: Investigate how to include build flags, like this
 	# equinox release --config ../equinox/doctor.yaml --channel stable --version $(VER) github.com/kmaasrud/doctor -ldflags="-s -w -X 'main.VERSION=$(VER)'"
 
-.PHONY: clean
+.PHONY: clean fmt
 
 clean:
 	rm -rf bin
+
+fmt:
+	@go fmt
+	@cd cmd && go fmt
+	@cd lua && go fmt
+	@cd core && go fmt
+	@cd utils && go fmt
+	@cd msg && go fmt
