@@ -4,11 +4,12 @@
 
 ### New features
 
-- [ ] Doctor now has help texts for the main program and all sub-commands. Find them by running `doctor --help` or `doctor <sub-command> --help`.
+- [x] Doctor now has help texts for the main program and all sub-commands. Find them by running `doctor --help` or `doctor <command> --help`.
 
 ### Bug fixes
 
 - [x] Table reference numbers were previously found manually by inserting the table count. In the case of table numbers like "Table 2.1" or "Table A.3", this would output incorrectly. This is now fixed by using `\label` and `\ref` instead.
+- [x] `doctor list` did not output any errors. Although they happen rarely, this is now fixed.
 
 ## Doctor v0.2.3 (2020-05-16)
 
