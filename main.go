@@ -183,6 +183,10 @@ func main() {
 
 	// List out all sections
 	case "list":
-		cmd.List()
+		err := cmd.List()
+		if err != nil {
+			msg.Error(err.Error())
+			os.Exit(1)
+		}
 	}
 }
