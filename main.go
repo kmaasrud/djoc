@@ -25,23 +25,28 @@ func main() {
 	newCommand, _ := registry.Register("new")
 	newCommand.AddArg("path", ".")
 	newCommand.AddFlag("default", "d", true, "")
+	newCommand.AddFlag("help", "h", true, "")
 
-	registry.Register("build")
+	buildCommand, _ := registry.Register("build")
+	buildCommand.AddFlag("help", "h", true, "")
 
 	addCommand, _ := registry.Register("add")
 	addCommand.AddArg("name", "")
 	addCommand.AddFlag("at", "i", false, "")
-    addCommand.AddFlag("help", "h", true, "")
+	addCommand.AddFlag("help", "h", true, "")
 
 	removeCommand, _ := registry.Register("remove")
 	removeCommand.AddArg("sections...", "")
 	removeCommand.AddFlag("confirm", "c", true, "")
+	removeCommand.AddFlag("help", "h", true, "")
 
 	moveCommand, _ := registry.Register("move")
 	moveCommand.AddArg("section", "")
 	moveCommand.AddArg("to", "")
+	moveCommand.AddFlag("help", "h", true, "")
 
-	registry.Register("list")
+	listCommand, _ := registry.Register("list")
+	listCommand.AddFlag("help", "h", true, "")
 
 	// Parse commands
 	command, err := registry.Parse(os.Args[1:])
@@ -58,12 +63,13 @@ func main() {
 		os.Exit(1)
 	}
 
+	// Print help text
+	cmd.Help(command.Flags["help"], command.Name)
+
 	// Run the correct command logic
 	switch command.Name {
 	// Root command
 	case "":
-        cmd.Help(command.Flags["help"], command.Name)
-
 		for flag, val := range command.Flags {
 			// Can discard this err, the root command's flags will always be parsable bools
 			if ok, _ := strconv.ParseBool(val.Value); ok {
@@ -85,9 +91,9 @@ func main() {
 						msg.Error(err.Error())
 						os.Exit(1)
 					}
-                }
-            }
-        }
+				}
+			}
+		}
 
 	// Create new document command
 	case "new":
@@ -120,7 +126,6 @@ func main() {
 
 	// Add a new section to the document
 	case "add":
-        cmd.Help(command.Flags["help"], command.Name)
 		var err error
 		if command.Args["name"].Value == "" {
 			msg.Error("Please supply a name for your section.")
