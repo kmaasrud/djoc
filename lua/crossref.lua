@@ -76,7 +76,7 @@ end
 function refs(cite)
   id = cite.citations[1].id
   sec = id:match("^sec:.*"); fig = id:match("^fig:.*"); tbl = id:match("^tbl:.*"); eq = id:match("^eq:.*")
-  if FORMAT == "latex" then
+  if FORMAT == "latex" and (sec or fig or tbl or eq) then
     return pandoc.RawInline("latex", "\\ref{" .. id .. "}")
   elseif sec then
     return pandoc.Link({pandoc.Str(sections[id])}, '#' .. id, "", "")
