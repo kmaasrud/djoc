@@ -1,5 +1,5 @@
 ---
-title: Configuration
+title: Configuring
 toc: true
 ---
 
