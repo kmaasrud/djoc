@@ -1,7 +1,6 @@
 ---
 title: Creating your first document
-toc: true
-toc-depth: 2
+toc: false
 ---
 
 To get started with Doctor, create a new document by running
