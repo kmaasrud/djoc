@@ -11,12 +11,16 @@ import (
 	"github.com/kmaasrud/doctor/utils"
 )
 
+// Default template for doctor.toml
 const tomlFile string = `[meta]
 title = "%s"
 author = "AUTHOR"
 date = "today"
 `
 
+// Creates a new document in the supplied directory. `path` is converted into an absolute path
+// before being used. `defaultStructure` specifies whether to prepopulate the document with
+// a default structure, namely a classic report structure.
 func CreateDocumentAt(path string, defaultStructure bool) error {
 	rootPath, err := filepath.Abs(path)
 	if err != nil {
@@ -24,22 +28,28 @@ func CreateDocumentAt(path string, defaultStructure bool) error {
 	}
 
 	// Check if specified directory exists. If not, create it. If it does, just write into it
-	if _, existErr := os.Stat(rootPath); os.IsNotExist(existErr) {
+	if fInfo, existErr := os.Stat(rootPath); os.IsNotExist(existErr) {
 		err := os.Mkdir(rootPath, 0755)
 		if err != nil {
 			return errors.New("Could not create root directory: " + err.Error())
 		}
-		msg.Info("Created new directory " + msg.Style(rootPath, "Bold") + ".")
+		msg.Info("Created new directory " + rootPath + ".")
+	} else if fInfo.IsDir() == false {
+		message := `There is already a file with the path %s.
+    Consider naming your document something else.`
+		return errors.New(fmt.Sprintf(message, msg.Style(rootPath, "Bold")))
 	}
 
 	// Create the assets directory if it doesn't exist. If it does, just write into it
 	assetPath := filepath.Join(rootPath, "assets")
-	if _, existErr := os.Stat(assetPath); os.IsNotExist(existErr) {
+	if _, err := os.Stat(assetPath); os.IsNotExist(err) {
 		err := os.Mkdir(assetPath, 0755)
 		if err != nil {
 			return errors.New("Could not create assets directory: " + err.Error())
 		}
-		msg.Info("Made " + msg.Style("assets", "Bold") + " directory.")
+		msg.Info("Made assets directory.")
+	} else if err != nil {
+		return errors.New("Could not create assets directory. " + err.Error())
 	} else {
 		msg.Info("The assets directory already exists, keeping it.")
 	}
@@ -50,7 +60,7 @@ func CreateDocumentAt(path string, defaultStructure bool) error {
 	tomlPath := filepath.Join(rootPath, "doctor.toml")
 	err = ioutil.WriteFile(tomlPath, []byte(fmt.Sprintf(tomlFile, docTitle)), 0666)
 	if err != nil {
-		return errors.New("Unable to write file: " + err.Error())
+		return errors.New("Unable to create doctor.toml. " + err.Error())
 	} else {
 		msg.Info("Created config file: " + filepath.Base(tomlPath) + ".")
 	}
@@ -60,27 +70,27 @@ func CreateDocumentAt(path string, defaultStructure bool) error {
 	refPath := filepath.Join(assetPath, "references.bib")
 	err = ioutil.WriteFile(refPath, []byte(""), 0666)
 	if err != nil {
-		return errors.New("Unable to write file: " + err.Error())
+		return errors.New("Unable to create references.bib. " + err.Error())
 	} else {
 		msg.Info("Created bibliography file: " + filepath.Base(refPath) + ".")
 	}
 
-	// TODO: Make this functional
+	// If --default flag is supplied, make default document structure
 	if defaultStructure {
+		// Change working dir into the newly created document
 		err = os.Chdir(rootPath)
 		if err != nil {
-			msg.Warning("Could not create default document structure. " + err.Error())
+			msg.Warning("Could not navigate into your document. " + err.Error())
 			return nil
 		}
 
 		msg.Info("Adding sections of default document structure...")
-		Add("Abstract", -1)
-		Add("Introduction", -1)
-		Add("Theory", -1)
-		Add("Method", -1)
-		Add("Results", -1)
-		Add("Discussion", -1)
-		Add("Conclusion", -1)
+		for _, name := range []string{"Abstract", "Introduction", "Theory", "Method", "Results", "Discussion", "Conclusion"} {
+			err = Add(name, -1)
+			if err != nil {
+				msg.Warning("Could not create section " + msg.Style(name, "Bold") + ". " + err.Error())
+			}
+		}
 	}
 
 	return nil
