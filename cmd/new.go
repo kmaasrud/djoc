@@ -2,15 +2,17 @@ package cmd
 
 import (
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 
 	"github.com/kmaasrud/doctor/msg"
+	"github.com/kmaasrud/doctor/utils"
 )
 
 const tomlFile string = `[meta]
-title = "TITLE"
+title = "%s"
 author = "AUTHOR"
 date = "today"
 `
@@ -42,9 +44,11 @@ func CreateDocumentAt(path string, defaultStructure bool) error {
 		msg.Info("The assets directory already exists, keeping it.")
 	}
 
+	// Find name of document's directory, and declare the title as the capitalized version of it
+	docTitle := utils.CapitalizeFirst(filepath.Base(rootPath))
 	// Create the TOML config file with rw permissions for all
 	tomlPath := filepath.Join(rootPath, "doctor.toml")
-	err = ioutil.WriteFile(tomlPath, []byte(tomlFile), 0666)
+	err = ioutil.WriteFile(tomlPath, []byte(fmt.Sprintf(tomlFile, docTitle)), 0666)
 	if err != nil {
 		return errors.New("Unable to write file: " + err.Error())
 	} else {
