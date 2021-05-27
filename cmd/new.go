@@ -81,7 +81,6 @@ func CreateDocumentAt(path string, defaultStructure bool) error {
 		Add("Results", -1)
 		Add("Discussion", -1)
 		Add("Conclusion", -1)
-		Add("Appendix", -1)
 	}
 
 	return nil
