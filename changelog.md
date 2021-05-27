@@ -1,7 +1,11 @@
 # Changelogs
 
 
-## Doctor v0.2.5 (Unrelease)
+## Doctor v0.2.5 (Unreleased)
+
+### New features
+
+- [x] When running `doctor new`, you can supply the `--default` flag to automatically create a classic report structure of abstract, introduction, theory, method, results, discussion and conclusion.
 
 ### Improvements
 
