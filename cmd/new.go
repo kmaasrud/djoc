@@ -67,7 +67,21 @@ func CreateDocumentAt(path string, defaultStructure bool) error {
 
 	// TODO: Make this functional
 	if defaultStructure {
+		err = os.Chdir(rootPath)
+		if err != nil {
+			msg.Warning("Could not create default document structure. " + err.Error())
+			return nil
+		}
+
 		msg.Info("Adding sections of default document structure...")
+		Add("Abstract", -1)
+		Add("Introduction", -1)
+		Add("Theory", -1)
+		Add("Method", -1)
+		Add("Results", -1)
+		Add("Discussion", -1)
+		Add("Conclusion", -1)
+		Add("Appendix", -1)
 	}
 
 	return nil
