@@ -79,19 +79,19 @@
 <article class="markdown">
 <h1 class="page-title">Block quotes</h1>
 <p>Pandoc Markdown uses email conventions for block quotes. A block quotation is one or more paragraphs or other block elements (such as lists or headings), with each line preceded by a <code>&gt;</code> character and an optional space.</p>
-<pre class="markdown"><code>&gt; This is a block quote. This
+<pre class="shell"><code>&gt; This is a block quote. This
 &gt; paragraph has two lines.
 &gt;
 &gt; 1. This is a list inside a block quote.
 &gt; 2. Second item.</code></pre>
 <p>If you are feeling lazy, the following is also allowed (ignore the wonky highlighting, this is the same as above):</p>
-<pre class="markdown"><code>&gt; This is a block quote. This
+<pre class="shell"><code>&gt; This is a block quote. This
 paragraph has two lines.
 
 &gt; 1. This is a list inside a block quote.
 2. Second item.</code></pre>
 <p>Block quotes can contain most other Markdown elements. Among them are other blockquotes, which means they can be nested, like this:</p>
-<pre class="markdown"><code>&gt; This is a block quote.
+<pre class="shell"><code>&gt; This is a block quote.
 &gt;
 &gt; &gt; A block quote within a block quote.</code></pre>
 <p>Standard Markdown syntax does not require a blank line before a block quote. Doctor does require this (except, of course, at the beginning of the document). The reason for the requirement is that it is all too easy for a <code>&gt;</code> to end up at the beginning of a line by accident (perhaps through line wrapping).</p>

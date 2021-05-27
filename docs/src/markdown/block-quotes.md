@@ -5,7 +5,7 @@ toc: true
 
 Pandoc Markdown uses email conventions for block quotes. A block quotation is one or more paragraphs or other block elements (such as lists or headings), with each line preceded by a `>` character and an optional space.
 
-```markdown
+```shell
 > This is a block quote. This
 > paragraph has two lines.
 >
@@ -15,7 +15,7 @@ Pandoc Markdown uses email conventions for block quotes. A block quotation is on
 
 If you are feeling lazy, the following is also allowed (ignore the wonky highlighting, this is the same as above):
 
-```markdown
+```shell
 > This is a block quote. This
 paragraph has two lines.
 
@@ -25,7 +25,7 @@ paragraph has two lines.
 
 Block quotes can contain most other Markdown elements. Among them are other blockquotes, which means they can be nested, like this:
 
-```markdown
+```shell
 > This is a block quote.
 >
 > > A block quote within a block quote.
