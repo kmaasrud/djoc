@@ -1,5 +1,13 @@
 # Changelogs
 
+
+## Doctor v0.2.5 (Unrelease)
+
+### Improvements
+
+- [x] `doctor new` now automatically fills in the `title`-field in `doctor.toml`, based on the capitalized name of the directory the document is created in. This is only a convenience feature, but should be less confusing than the previous `title = "TITLE"` placeholder.
+
+
 ## Doctor v0.2.4 (2020-05-23)
 
 ### New features
@@ -11,6 +19,7 @@
 - [x] Table reference numbers were previously found manually by inserting the table count. In the case of table numbers like "Table 2.1" or "Table A.3", this would output incorrectly. This is now fixed by using `\label` and `\ref` instead.
 - [x] `doctor list` did not output any errors. Although they happen rarely, this is now fixed.
 
+
 ## Doctor v0.2.3 (2020-05-16)
 
 I'm fearing Equinox might have abandoned their project and am thus moving to updates hosted on GitHub. [go-github-selfupdate](https://github.com/rhysd/go-github-selfupdate) seems to provide the desired functionality, and this should be properly working now.
@@ -19,6 +28,7 @@ You will need to download this version manually and place it in your `PATH`, but
 
 If you have Doctor installed with the Go tool, you will follow the HEAD of this repo, and will need to run `go install -u github.com/kmaasrud/doctor` to update.
 
+
 ## Doctor v0.2.2 (2020-04-25)
 
 ### New features
@@ -26,12 +36,14 @@ If you have Doctor installed with the Go tool, you will follow the HEAD of this 
 - [x] Doctor now comes with a couple of CSL styles embedded, which are written into the `assets` folder when required.
 - [x] **IMPORTANT**: Lots of TOML options are added and the structure is changed. Refer to [the docs](https://kmaasrud.com/doctor/config) to see what's new and adapt your documents' `doctor.toml` to the new headers.
 
+
 ## Doctor v0.2.1 (2020-04-21)
 
 ### Bug fixes
 
 - [x] Citeproc interfered with the Lua filter for cross-referencing. This is now fixed.
 - [x] Table cross-referencing was not working because of a indexing error which is now corrected.
+
 
 ## Doctor v0.2.0 (2020-04-21)
 
@@ -62,9 +74,11 @@ Doctor is now published to Equinox. This means it has multiple installers and su
 - [x] Directory `src` was added as a resource path. This is now changed to `secs`.
 - [x] Doctor forced you to have Tectonic installed to properly function. This is no longer the case.
 
+
 ## Doctor v0.1.2 (2020-04-15)
 
 -  Added versioning feature. Run `doctor --version` or `doctor -v` to see which version you are currently on.
+
 
 ## Doctor v0.1.1 (2020-04-14)
 
@@ -73,6 +87,7 @@ Fixes issue with a malformed file `'` being part of the repo. You should now be 
     go install github.com/kmaasrud/doctor@latest
 
 Other than that, the binaries are exactly the same as in `v0.1.0`
+
 
 ## Doctor v0.1.0 (2020-04-13)
 
