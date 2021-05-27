@@ -1,7 +1,7 @@
 # Changelogs
 
 
-## Doctor v0.2.5 (Unreleased)
+## Doctor v0.2.5 (2020-05-27)
 
 ### New features
 
