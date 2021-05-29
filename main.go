@@ -8,6 +8,7 @@ import (
 
 	"github.com/kmaasrud/doctor/cmd"
 	"github.com/kmaasrud/doctor/msg"
+	"github.com/kmaasrud/doctor/utils"
 	"github.com/thatisuday/clapper"
 )
 
@@ -55,8 +56,7 @@ func main() {
 		if _, ok := err.(clapper.ErrorUnknownCommand); ok {
 			msg.Error("Unknown command " + msg.Style(os.Args[1], "Bold") + ". Run " + msg.Style("doctor --help", "Bold") + " to see a list of available commands.")
 		} else if _, ok := err.(clapper.ErrorUnknownFlag); ok {
-			errorString := strings.ToUpper(string(err.Error()[0])) + string(err.Error()[1:])
-			msg.Error(fmt.Sprintf("%s. Run %s for further help.", errorString, msg.Style("doctor"+" --help", "Bold")))
+			msg.Error(fmt.Sprintf("%s. Run %s for further help.", utils.CapitalizeFirst(err.Error()), msg.Style("doctor"+" --help", "Bold")))
 		} else {
 			msg.Error(err.Error())
 		}

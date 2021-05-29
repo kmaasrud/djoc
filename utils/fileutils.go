@@ -13,11 +13,11 @@ import (
 // Mainly used for not throwing an error in 'doctor add' when there are no sections,
 // but also useful to specify messages.
 type NoSectionsError struct {
-	ErrorMsg string
+	errorMsg string
 }
 
 func (e *NoSectionsError) Error() string {
-	return e.ErrorMsg
+	return e.errorMsg
 }
 
 // Searches up the directory tree to find a doctor.yaml file and returns the path
@@ -47,6 +47,7 @@ func FindSections(rootPath string) ([]core.Section, error) {
 	if _, err := os.Stat(filepath.Join(rootPath, "secs")); os.IsNotExist(err) {
 		return nil, &NoSectionsError{"Empty Doctor document."}
 	}
+
 	// Walk should walk through dirs in lexical order, making sorting unecessary (luckily)
 	err := filepath.Walk(filepath.Join(rootPath, "secs"), func(path string, info os.FileInfo, err error) error {
 		if err != nil {
