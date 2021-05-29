@@ -2,16 +2,17 @@ package msg
 
 import (
 	"fmt"
+	"os"
 	"strings"
 	"time"
 )
 
 func Error(text string) {
-	println(fmt.Sprintf(" %s  %s", Style("E", "Red", "Bold"), text))
+	fmt.Fprintln(os.Stderr, fmt.Sprintf(" %s  %s", Style("E", "Red", "Bold"), text))
 }
 
 func Warning(text string) {
-	println(fmt.Sprintf(" %s  %s", Style("W", "Yellow", "Bold"), text))
+	fmt.Fprintln(os.Stderr, fmt.Sprintf(" %s  %s", Style("W", "Yellow", "Bold"), text))
 }
 
 func Info(text string) {
