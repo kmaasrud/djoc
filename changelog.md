@@ -1,5 +1,15 @@
 # Changelogs
 
+## Doctor v0.2.6 (Unreleased)
+
+### New features
+
+- [x] New configuration option `bibliography-file` under the `[bib]` table. This allows you to use another filename than the default `references.bib`. The BibTeX file must still be located in the `assets` directory
+
+### Improvements
+
+- [x] Further improved title recognition. `doctor list` should benefit from not being as dependent on the filenames.
+
 
 ## Doctor v0.2.5 (2020-05-27)
 
