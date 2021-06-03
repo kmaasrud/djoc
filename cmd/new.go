@@ -35,9 +35,9 @@ func CreateDocumentAt(path string, defaultStructure bool) error {
 		}
 		msg.Info("Created new directory " + rootPath + ".")
 	} else if fInfo.IsDir() == false {
-		message := `There is already a file with the path %s.
+		message := `There is already a file with the path '%s'.
     Consider naming your document something else.`
-		return errors.New(fmt.Sprintf(message, msg.Style(rootPath, "Bold")))
+		return errors.New(fmt.Sprintf(message, rootPath))
 	}
 
 	// Create the assets directory if it doesn't exist. If it does, just write into it
@@ -88,7 +88,7 @@ func CreateDocumentAt(path string, defaultStructure bool) error {
 		for _, name := range []string{"Abstract", "Introduction", "Theory", "Method", "Results", "Discussion", "Conclusion"} {
 			err = Add(name, -1)
 			if err != nil {
-				msg.Warning("Could not create section " + msg.Style(name, "Bold") + ". " + err.Error())
+				msg.Warning("Could not create section '" + name + "'. " + err.Error())
 			}
 		}
 	}

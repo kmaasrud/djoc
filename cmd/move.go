@@ -66,6 +66,6 @@ func Move(input string, to int) error {
 		return errors.New("Could not move section. " + err.Error())
 	}
 
-	msg.Success(fmt.Sprintf("Moved %s from index %d to %d", msg.Style(moveThis.Title, "Bold"), prevIndex, moveThis.Index))
+	msg.Success(fmt.Sprintf("Moved '%s' from index %d to %d", moveThis.Title, prevIndex, moveThis.Index))
 	return nil
 }

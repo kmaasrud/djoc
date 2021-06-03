@@ -36,7 +36,7 @@ func Add(sectionName string, index int) error {
 			if err != nil {
 				return errors.New("Could not create directory 'secs'. " + err.Error())
 			}
-			msg.Info("Created directory " + msg.Style("secs", "Bold"))
+			msg.Info("Created directory 'secs'.")
 		}
 	} else if err != nil {
 		return errors.New("Could not add a new section. " + err.Error())

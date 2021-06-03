@@ -54,9 +54,9 @@ func main() {
 	// Handle command parsing errors
 	if err != nil {
 		if _, ok := err.(clapper.ErrorUnknownCommand); ok {
-			msg.Error("Unknown command " + msg.Style(os.Args[1], "Bold") + ". Run " + msg.Style("doctor --help", "Bold") + " to see a list of available commands.")
+			msg.Error("Unknown command '" + os.Args[1] + "'. Run 'doctor --help' to see a list of available commands.")
 		} else if _, ok := err.(clapper.ErrorUnknownFlag); ok {
-			msg.Error(fmt.Sprintf("%s. Run %s for further help.", utils.CapitalizeFirst(err.Error()), msg.Style("doctor"+" --help", "Bold")))
+			msg.Error(fmt.Sprintf("%s. Run 'doctor --help' for further help.", utils.CapitalizeFirst(err.Error())))
 		} else {
 			msg.Error(err.Error())
 		}

@@ -54,10 +54,10 @@ func CloseDo(done chan struct{}) {
 func CleanStderrMsg(stderr string) (string, string) {
 	var warnings, errors string
 	for _, line := range strings.Split(strings.TrimSuffix(stderr, "\n"), "\n") {
+        if line == "" { continue }
+
 		if strings.HasPrefix(line, "! ") {
 			errors += "        " + Style("TeX: ", "Bold") + strings.TrimPrefix(line, "! ") + "\n"
-		} else if strings.HasPrefix(line, "warning: ") {
-			// Supress Tectonic's warnings
 		} else if strings.HasPrefix(line, "[WARNING] ") {
 			warnings += "        " + Style("Pandoc: ", "Bold") + strings.TrimPrefix(line, "[WARNING] ") + "\n"
 		} else if strings.HasPrefix(line, "[ERROR] ") {
