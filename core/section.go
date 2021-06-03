@@ -14,7 +14,7 @@ import (
 // either ensure backwards compatibility or have Doctor change the format automatically.
 const SectionSep string = "_"
 
-var headerRegex *regexp.Regexp = regexp.MustCompile(`^#\s+([^#\n]*)`)
+var headerRegex *regexp.Regexp = regexp.MustCompile(`(?m)^#\s+[^#\n]*`)
 
 // Represents a section in the document.
 type Section struct {
@@ -46,15 +46,16 @@ func (s *Section) ChangeIndex(i int) error {
 func SectionFromPath(path string) (Section, error) {
 	var title string
 	split := strings.Split(strings.TrimSuffix(filepath.Base(path), filepath.Ext(path)), SectionSep)
+    title = strings.Join(split[1:], "")
+
 	content, err := os.ReadFile(path)
-	if err == nil {
-		title = headerRegex.FindString(string(content))
-	}
-	if err == nil && title != "" {
-		title = title[2:]
-	} else {
-		title = strings.Join(split[1:], "")
-	}
+    if err == nil {
+        h1 := headerRegex.FindString(string(content))
+        if h1 != "" {
+            title = h1[2:]
+        }
+    }
+
 	index, err := strconv.Atoi(split[0])
 	if err != nil {
 		return Section{}, err
@@ -63,7 +64,7 @@ func SectionFromPath(path string) (Section, error) {
 	return Section{path, title, index}, nil
 }
 
-// Takes a list of Section structs and outputs a list of the corresponding paths.
+// Takes a list of Section structs and returns a list of the corresponding paths.
 func PathsFromSections(secs []Section) []string {
 	var paths []string
 	for _, sec := range secs {
