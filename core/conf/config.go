@@ -27,6 +27,7 @@ type Config struct {
 	} `toml:"style"`
 	Bib struct {
 		Csl                 string `toml:"csl"` // Default is Chicago MoS 17th Ed.
+        BibliographyFile    string `toml:"bibliography-file" default:"references.bib"`
 		BibliographyTitle   string `toml:"bibliography-title"`
 		LinkCitations       bool   `toml:"link-citations" default:"true"`
 		IncludeBibliography bool   `toml:"include-bibliography" default:"true"`

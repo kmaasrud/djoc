@@ -82,7 +82,11 @@ func Build() error {
 		return err
 	}
 	cmdArgs = append(cmdArgs, core.PathsFromSections(secs)...)
-	msg.Info(fmt.Sprintf("Found %d source files!", len(secs)))
+	plural := ""
+	if len(secs) > 1 {
+		plural = "s"
+	}
+	msg.Info(fmt.Sprintf("Found %d source file%s!", len(secs), plural))
 
 	// Temporarily write any Lua filters to file and add them to command
 	if config.Build.LuaFilters {
@@ -99,8 +103,8 @@ func Build() error {
 	}
 
 	// If references.bib exists, run with citeproc and add bibliography
-	if _, err := os.Stat(filepath.Join(rootPath, "assets", "references.bib")); err == nil {
-		msg.Info("Running with citeproc. Bibliography: " + filepath.Join("assets", "references.bib"))
+	if f, err := os.Stat(filepath.Join(rootPath, "assets", config.Bib.BibliographyFile)); err == nil {
+		msg.Info("Running with citeproc. Bibliography: '" + f.Name() + "'.")
 		cmdArgs = append(cmdArgs, "-C", "--bibliography=references.bib")
 
 		// If a CSL style is specified, make sure it exists in assets
@@ -113,6 +117,8 @@ func Build() error {
 				}
 			}
 		}
+	} else if os.IsNotExist(err) {
+		msg.Warning("Could not find bibliography file: '" + config.Bib.BibliographyFile + "'. Skipping citation processing.")
 	}
 
 	// Write Pandoc's config options into a JSON file
@@ -136,11 +142,12 @@ func Build() error {
 		switch thisErr := err.(type) {
 		case *FatalError:
 			_, errStr = msg.CleanStderrMsg(thisErr.Stderr)
-			return errors.New("Doctor exited with errors. They are as follows:\n\n" + errStr)
+			return errors.New("An error happened during build:\n\n" + errStr)
 		case *WarningError:
 			warnStr, _ = msg.CleanStderrMsg(thisErr.Stderr)
 			msg.Success("Document built.")
-			return errors.New("Doctor exited with warnings. They are as follows:\n\n" + warnStr)
+			msg.Warning("A warning was thrown during build:\n\n" + warnStr)
+			return errors.New("")
 		default:
 			return errors.New("Could not run command. " + err.Error())
 		}
