@@ -10,6 +10,10 @@
 
 - [x] Further improved title recognition. `doctor list` should benefit from not being as dependent on the filenames.
 
+### Bug fixes
+
+- [x] CGo was previously enabled, which dynamically linked libc. I am building Doctor on Arch Linux, which uses a newer version of libc than most Debian distributions. This made Doctor crash on said distributions. CGo is not necessary, and is now disabled.
+
 
 ## Doctor v0.2.5 (2020-05-27)
 
