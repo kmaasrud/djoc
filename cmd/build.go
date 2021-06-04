@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"bytes"
-	_ "embed"
 	"errors"
 	"fmt"
 	"os"

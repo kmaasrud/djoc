@@ -46,15 +46,15 @@ func (s *Section) ChangeIndex(i int) error {
 func SectionFromPath(path string) (Section, error) {
 	var title string
 	split := strings.Split(strings.TrimSuffix(filepath.Base(path), filepath.Ext(path)), SectionSep)
-    title = strings.Join(split[1:], "")
+	title = strings.Join(split[1:], "")
 
 	content, err := os.ReadFile(path)
-    if err == nil {
-        h1 := headerRegex.FindString(string(content))
-        if h1 != "" {
-            title = h1[2:]
-        }
-    }
+	if err == nil {
+		h1 := headerRegex.FindString(string(content))
+		if h1 != "" {
+			title = h1[2:]
+		}
+	}
 
 	index, err := strconv.Atoi(split[0])
 	if err != nil {
