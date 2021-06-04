@@ -76,6 +76,7 @@ These options all relate to citations and the bibliography of your document.
 |--|:--|
 | `csl` | The CSL ([Citation Style Language](https://citationstyles.org/)) style to use for your citations. You can either use one of the CSL styles that come prepackaged with Doctor (listed [here](bib#csl)), a CSL file in your `assets` folder or a URL that points to a CSL file available on the internet. For local files, you need only specify the name, not the `.csl` extension. The default CSL style is the [Chicago Manual of Style 17th edition](https://csl.mendeley.com/styleInfo/?styleId=http%3A%2F%2Fwww.zotero.org%2Fstyles%2Fchicago-author-date). |
 | `bibliography-title` | The title of the bibliography section. The default is no title. |
+| `bibliography-file` | The name of your BibTeX file. All paths are relative to the `assets` directory. The default is `references.bib` |
 | `include-bibliography` | Boolean that specifies whether or not you want your bibliography included in your document. The default is `true`. |
 
 Here's an example of a `[bib]` table:
