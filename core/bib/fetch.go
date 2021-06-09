@@ -2,7 +2,6 @@ package bib
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 	"net/url"
@@ -11,26 +10,11 @@ import (
 	"reflect"
 )
 
-type BibEntry struct {
-	Id				string				`json:"id"`
-	Type			string				`json:"type"`
-	Title			string				`json:"title"`
-	Publisher		string				`json:"publisher"`
-	Accessed		time.Time			`json:"accessed"`
-	Issued			time.Time			`json:"issued"`
-	Author			[]struct {
-		Family		string				`json:"family"`
-		Given		string				`json:"given"`
-		Literal		string				`json:"literal"`
-		NonDropPart string				`json:"non-dropping-particle"`
-		DropPart	string				`json:"dropping-particle"`
-	}									`json:"author"`
-	Fields			map[string]string	`json:"-"`
-}
-
 const zoteroBase string = "https://api.zotero.org"
 
-func GetZoteroItem(query string, userId string) {
+func SearchZotero(query string, userId string) ([]BibEntry, error) {
+	var entries []BibEntry
+
 	// Create the request URL
 	u, _ := url.Parse(zoteroBase)
 	u.Path = path.Join(u.Path, "users", userId, "items")
@@ -45,14 +29,14 @@ func GetZoteroItem(query string, userId string) {
 	// Fetch the response
 	resp, err := http.Get(u.String())
 	if err != nil {
-		print(err)
+		return entries, err
 	}
 	defer resp.Body.Close()
 
 	// Read into []byte
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		print(err)
+		return entries, err
 	}
 
 	// Unmarshal "items" field into a list of raw JSON to parse individually
@@ -62,29 +46,25 @@ func GetZoteroItem(query string, userId string) {
 	json.Unmarshal(body, &results)
 
 	// Do parsing of each result
-	var entries []BibEntry
 	for _, entry := range results.Items {
 		var e BibEntry
 
 		// Unmarshal known fields
 		json.Unmarshal(entry, &e)
 
-		// Unmarshal all fields into map and delete known fields (essentially storing unknown fields)
-		json.Unmarshal(entry, &e.Fields)
-		delete(e.Fields, "id")
-		delete(e.Fields, "type")
-		delete(e.Fields, "title")
-		delete(e.Fields, "author")
-
 		// Process dates
 		var dateStruct struct {
-			Issued struct {
-				DateParts [][]int	`json:"date-parts"`
-			} `json:"issued"`
 			Accessed struct {
 				DateParts [][]int	`json:"date-parts"`
 			} `json:"accessed"`
+			Issued struct {
+				DateParts [][]int	`json:"date-parts"`
+			} `json:"issued"`
+			Submitted struct {
+				DateParts [][]int	`json:"date-parts"`
+			} `json:"accessed"`
 		}
+
 		// This is extremely verbose, but it works
 		if err := json.Unmarshal(entry, &dateStruct); err == nil {
 			process := func(d [][]int) time.Time {
@@ -96,23 +76,20 @@ func GetZoteroItem(query string, userId string) {
 					return time.Date(d[0][0], time.Month(1), 1, 0, 0, 0, 0, time.UTC)
 				}
 			}
+			if d := dateStruct.Accessed; !reflect.ValueOf(d).IsZero() {
+				e.Accessed = process(d.DateParts)
+			}
 			if d := dateStruct.Issued; !reflect.ValueOf(d).IsZero() {
 				// NOTE: Assuming "date-parts". It seems Zotero parses dates themselves, and does not use "raw"
 				e.Issued = process(d.DateParts)
 			}
-			if d := dateStruct.Accessed; !reflect.ValueOf(d).IsZero() {
-				e.Accessed = process(d.DateParts)
+			if d := dateStruct.Submitted; !reflect.ValueOf(d).IsZero() {
+				e.Submitted = process(d.DateParts)
 			}
 		}
 
 		entries = append(entries, e)
 	}
-	for _, entry := range entries {
-		fmt.Printf("%+v\n", entry.Title)
-		fmt.Printf("%+v\n", entry.Issued)
-	}
-}
 
-func main() {
-	GetZoteroItem("hartree", "7721787")
+	return entries, nil
 }
