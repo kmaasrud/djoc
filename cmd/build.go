@@ -35,7 +35,7 @@ func (e *FatalError) Error() string {
 
 func Build() error {
 	// Check for dependencies
-	err := CheckPath("pandoc")
+	_, err := utils.CheckPath("pandoc")
 	if err != nil {
 		return errors.New("Build failed. " + err.Error())
 	}
@@ -64,11 +64,11 @@ func Build() error {
 	cmdArgs = append(cmdArgs, "--resource-path="+resourcePaths)
 
 	// Specify PDF engine and add options for specific engines
-	err = CheckPath(config.Build.Engine)
+	pdfEngine, err := utils.CheckPath(config.Build.Engine)
 	if err != nil {
 		return errors.New("Build failed. " + err.Error())
 	}
-	cmdArgs = append(cmdArgs, fmt.Sprintf("--pdf-engine=%s", config.Build.Engine))
+	cmdArgs = append(cmdArgs, fmt.Sprintf("--pdf-engine=%s", pdfEngine))
 	if config.Build.Engine == "tectonic" {
 		// Tectonic chatters a lot. Make it a bit more silent
 		cmdArgs = append(cmdArgs, "--pdf-engine-opt=-c=minimal")
@@ -161,10 +161,12 @@ func runPandocWith(cmdArgs []string) error {
 	cmd.Stderr = &stderr
 
 	err := cmd.Run()
+
 	// Fatal error
 	if err != nil {
 		return &FatalError{string(stderr.Bytes())}
 	}
+
 	// Non-fatal, but stderr is not empty, so it includes warnings
 	if stderr := string(stderr.Bytes()); len(stderr) != 0 {
 		return &WarningError{string(stderr)}

@@ -3,6 +3,7 @@ package utils
 import (
 	"errors"
 	"os"
+	"os/exec"
 	"path/filepath"
 
 	"github.com/kmaasrud/doctor/core"
@@ -69,4 +70,23 @@ func FindSections(rootPath string) ([]core.Section, error) {
 	}
 
 	return files, nil
+}
+
+// Wrapper function around exec.LookPath. Also consults the Doctor data dir
+func CheckPath(program string) (string, error) {
+	// Check for program in Doctor's data directory
+	doctorPath, err := FindDoctorDataDir()
+	if err == nil {
+		path := filepath.Join(doctorPath, "bin", program)
+		if _, err := os.Stat(path); err == nil {
+			return path, nil
+		}
+	}
+
+	// Check if program in PATH
+	path, err := exec.LookPath(program)
+	if err != nil {
+		return "", errors.New("Could not find " + program + " in your PATH.")
+	}
+	return path, nil
 }

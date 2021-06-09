@@ -9,7 +9,7 @@ import (
 
 const ResourceSep string = ":"
 
-// Returns the path where Doctor stores it's data. Supports both Windows and Unix.
+// Returns the path where Doctor stores it's data on Unix-like systems
 func FindDoctorDataDir() (string, error) {
 	var doctorPath string
 

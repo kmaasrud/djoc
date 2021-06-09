@@ -18,7 +18,6 @@ func main() {
 	registry := clapper.NewRegistry()
 
 	rootCommand, _ := registry.Register("")
-	rootCommand.AddFlag("dependencies", "", true, "")
 	rootCommand.AddFlag("version", "v", true, "")
 	rootCommand.AddFlag("update", "u", true, "")
 	rootCommand.AddFlag("help", "h", true, "")
@@ -74,14 +73,6 @@ func main() {
 			// Can discard this err, the root command's flags will always be parsable bools
 			if ok, _ := strconv.ParseBool(val.Value); ok {
 				switch flag {
-				case "dependencies":
-					err := cmd.CheckPath("pandoc")
-					if err != nil {
-						msg.Error(err.Error())
-						os.Exit(1)
-					}
-					msg.Success("All the dependencies are installed. You're ready to go!")
-
 				case "version":
 					msg.Info("You are running Doctor " + VERSION)
 
