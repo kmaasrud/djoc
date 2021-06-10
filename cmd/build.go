@@ -87,18 +87,12 @@ func Build() error {
 	}
 	msg.Info(fmt.Sprintf("Found %d source file%s!", len(secs), plural))
 
-	// Temporarily write any Lua filters to file and add them to command
+	// Add Lua filters
 	if config.Build.LuaFilters {
-		msg.Info("Adding Lua filters...")
-		for filename, filter := range lua.Filters {
-			err := os.WriteFile(filepath.Join(rootPath, filename), filter, 0644)
-			if err != nil {
-				msg.Warning("Could not create Lua file, skipping it. " + err.Error())
-				continue
-			}
-			cmdArgs = append(cmdArgs, "-L", filename)
+		msg.Info("Running with Lua filters...")
+		for _, filter := range lua.Filters() {
+			cmdArgs = append(cmdArgs, "-L", filter)
 		}
-		defer cleanUpLua(rootPath)
 	}
 
 	// If references.bib exists, run with citeproc and add bibliography
@@ -172,15 +166,6 @@ func runPandocWith(cmdArgs []string) error {
 		return &WarningError{string(stderr)}
 	}
 	return nil
-}
-
-func cleanUpLua(rootPath string) {
-	for filename := range lua.Filters {
-		err := os.Remove(filepath.Join(rootPath, filename))
-		if err != nil {
-			msg.Error("Failed to remove Lua filter " + filename + ". " + err.Error())
-		}
-	}
 }
 
 func cleanUpJson(rootPath string) {
