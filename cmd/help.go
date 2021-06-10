@@ -30,7 +30,6 @@ Commands:
     remove          Remove a section
 
 Flags:
-    --dependencies  Checks if all dependencies are installed
     --help          Shows this text
     --update        Checks if an update is available and offers to download it
     --version       Prints the current version
