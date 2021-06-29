@@ -47,6 +47,10 @@ func main() {
 	listCommand, _ := registry.Register("list")
 	listCommand.AddFlag("help", "h", true, "")
 
+    statsCommand, _ := registry.Register("stats")
+    statsCommand.AddFlag("wordcount", "w", true, "")
+	statsCommand.AddFlag("help", "h", true, "")
+
 	// Parse commands
 	command, err := registry.Parse(os.Args[1:])
 

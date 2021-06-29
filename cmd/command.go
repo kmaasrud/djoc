@@ -113,6 +113,12 @@ func DoCommand(command *clapper.CommandConfig, version string) error {
 		if err != nil {
             return err
 		}
+
+    case "stats":
+        err := Stats()
+        if err != nil {
+            return err
+        }
 	}
 
     return nil

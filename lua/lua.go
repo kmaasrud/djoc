@@ -4,6 +4,7 @@ import (
 	_ "embed"
 	"os"
 	"path/filepath"
+    "errors"
 
 	"github.com/kmaasrud/doctor/utils"
 	"github.com/kmaasrud/doctor/msg"
@@ -34,6 +35,12 @@ func BuildFilters() []string {
         return paths
     }
 
+    err = utils.EnsureDir(dataDir)
+    if err != nil {
+        msg.Warning("Skipping Lua filters. Could not ensure Doctor data directory exists:\n    " + err.Error())
+        return paths
+    }
+
     for filename, filter := range buildFilters {
         path := filepath.Join(dataDir, filename)
 
@@ -41,7 +48,7 @@ func BuildFilters() []string {
             msg.Info("Writing filter '" + filename + "' to '" + dataDir + "'.")
 			err := os.WriteFile(path, filter, 0644)
 			if err != nil {
-				msg.Warning("Could not create " + filename + ", skipping it. " + err.Error())
+				msg.Warning("Could not create '" + filename + "', skipping it. " + err.Error())
 				continue
 			}
         }
@@ -50,4 +57,28 @@ func BuildFilters() []string {
     }
 
     return paths
+}
+
+func WordCountFilter() (string, error) {
+    dataDir, err := utils.FindDoctorDataDir()
+    if err != nil {
+        return "", errors.New("Could not determine the Doctor data directory.")
+    }
+
+    err = utils.EnsureDir(dataDir)
+    if err != nil {
+        return "", err
+    }
+
+    path := filepath.Join(dataDir, "wordcount.lua")
+
+    if _, err := os.Stat(path); os.IsNotExist(err) {
+        msg.Info("Writing filter 'wordcount.lua' to '" + dataDir + "'.")
+        err := os.WriteFile(path, wordcount, 0644)
+        if err != nil {
+            return "", errors.New("Could not create 'wordcount.lua'. " + err.Error())
+        }
+    }
+    
+    return path, nil
 }
