@@ -90,7 +90,7 @@ func Build() error {
 	// Add Lua filters
 	if config.Build.LuaFilters {
 		msg.Info("Running with Lua filters...")
-		for _, filter := range lua.Filters() {
+		for _, filter := range lua.BuildFilters() {
 			cmdArgs = append(cmdArgs, "-L", filter)
 		}
 	}
