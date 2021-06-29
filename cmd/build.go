@@ -1,11 +1,9 @@
 package cmd
 
 import (
-	"bytes"
 	"errors"
 	"fmt"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"strings"
 
@@ -16,22 +14,6 @@ import (
 	"github.com/kmaasrud/doctor/msg"
 	"github.com/kmaasrud/doctor/utils"
 )
-
-type WarningError struct {
-	Stderr string
-}
-
-func (e *WarningError) Error() string {
-	return e.Stderr
-}
-
-type FatalError struct {
-	Stderr string
-}
-
-func (e *FatalError) Error() string {
-	return e.Stderr
-}
 
 func Build() error {
 	// Check for dependencies
@@ -126,17 +108,18 @@ func Build() error {
 	// Execute command
 	done := make(chan struct{})
 	go msg.Do("Building document with Pandoc", done)
-	err = runPandocWith(cmdArgs)
+    // Ignore stdout, only catch stderr
+	_, err = utils.RunPandocWith(cmdArgs)
 	msg.CloseDo(done)
 
 	// Handle errors
 	if err != nil {
 		var warnStr, errStr string
 		switch thisErr := err.(type) {
-		case *FatalError:
+		case *utils.FatalError:
 			_, errStr = msg.CleanStderrMsg(thisErr.Stderr)
 			return errors.New("An error happened during build:\n\n" + errStr)
-		case *WarningError:
+		case *utils.WarningError:
 			warnStr, _ = msg.CleanStderrMsg(thisErr.Stderr)
 			msg.Success("Document built.")
 			msg.Warning("A warning was thrown during build:\n\n" + warnStr)
@@ -146,25 +129,6 @@ func Build() error {
 		}
 	}
 	msg.Success("Document built.")
-	return nil
-}
-
-func runPandocWith(cmdArgs []string) error {
-	var stderr bytes.Buffer
-	cmd := exec.Command("pandoc", cmdArgs...)
-	cmd.Stderr = &stderr
-
-	err := cmd.Run()
-
-	// Fatal error
-	if err != nil {
-		return &FatalError{string(stderr.Bytes())}
-	}
-
-	// Non-fatal, but stderr is not empty, so it includes warnings
-	if stderr := string(stderr.Bytes()); len(stderr) != 0 {
-		return &WarningError{string(stderr)}
-	}
 	return nil
 }
 
