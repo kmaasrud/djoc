@@ -2,9 +2,14 @@
 
 ## Doctor v0.2.7 (Unreleased)
 
+### New features
+
+- [x] New command: `doctor stats`. Currently only supports a simple wordcount, which you get by running `doctor stats --wordcount`. Does nothing when run without a flag, at the moment. Expect lots of fun statistics about your document here.
+- [ ] New command: `doctor edit`. Use this to open a section directly in your preferred editor (respects `$EDITOR`). Uses the same section finding method as the `remove` and `move` commands.
+
 ### Improvements
 
-- [x] Lua filters are now written to the Doctor data directory (which respects `XDG_DATA_DIR`). This avoids the need for writing and deleting the filters on every build, while still keeping the project directory clean.
+- [ ] Lua filters are now written to the Doctor data directory (which respects `XDG_DATA_DIR`). This avoids the need for writing and deleting the filters on every build, while still keeping the project directory clean. If filters are changed in a future Doctor update, they will be rewritten.
 
 
 ## Doctor v0.2.6 (2020-06-04)
