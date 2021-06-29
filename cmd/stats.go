@@ -6,7 +6,6 @@ import (
     "strconv"
 
     "github.com/kmaasrud/doctor/core"
-    "github.com/kmaasrud/doctor/msg"
     "github.com/kmaasrud/doctor/utils"
     "github.com/kmaasrud/doctor/lua"
 	"github.com/thatisuday/clapper"
@@ -19,17 +18,16 @@ func Stats(flags map[string]*clapper.Flag) error {
         // Check for dependencies
         _, err := utils.CheckPath("pandoc")
         if err != nil {
-            return errors.New("Build failed. " + err.Error())
+            return errors.New("Wordcount failed. " + err.Error())
         }
 
         // Find root
         rootPath, err := utils.FindDoctorRoot()
         if err != nil {
-            return errors.New("Build failed. " + err.Error())
+            return errors.New("Wordcount failed. " + err.Error())
         }
 
         // Find source files
-        msg.Info("Looking for source files...")
         secs, err := utils.FindSections(rootPath)
         if err != nil {
             return err
@@ -48,7 +46,7 @@ func Stats(flags map[string]*clapper.Flag) error {
             return err
         }
 
-        fmt.Println(out)
+        fmt.Print(out)
     }
 
     return nil
