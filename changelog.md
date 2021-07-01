@@ -9,7 +9,7 @@
 
 ### Improvements
 
-- [ ] Lua filters are now written to the Doctor data directory (which respects `XDG_DATA_DIR`). This avoids the need for writing and deleting the filters on every build, while still keeping the project directory clean. If filters are changed in a future Doctor update, they will be rewritten.
+- [x] Lua filters are now written to the Doctor data directory (which respects `XDG_DATA_DIR`). This avoids the need for writing and deleting the filters on every build, while still keeping the project directory clean. If filters are changed in a future Doctor update, they will be rewritten.
 
 
 ## Doctor v0.2.6 (2020-06-04)
