@@ -4,10 +4,12 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 
-	"github.com/blang/semver"
 	"github.com/kmaasrud/doctor/msg"
+	"github.com/kmaasrud/doctor/utils"
+	"github.com/blang/semver"
 	"github.com/rhysd/go-github-selfupdate/selfupdate"
 )
 
@@ -28,6 +30,12 @@ func Update(ver string) error {
 		return nil
 	}
 
+	exe, err := os.Executable()
+	if err != nil {
+		return errors.New(`Could not locate executable path.
+There might be an issue with the permissions of you Doctor binary, or you might have symlinked Doctor.`)
+	}
+
 	var confirmString string
 	fmt.Printf("Do you want to update to version %s? (Y/n) ", msg.Style(latest.Version.String(), "Bold"))
 	fmt.Scanln(&confirmString)
@@ -36,15 +44,19 @@ func Update(ver string) error {
 		return nil
 	}
 
-	exe, err := os.Executable()
-	if err != nil {
-		return errors.New("Could not locate executable path")
-	}
-
 	if err := selfupdate.UpdateTo(latest.AssetURL, exe); err != nil {
 		return errors.New("Error occurred while updating binary: " + err.Error())
 	}
 
-	msg.Success("Successfully updated to version " + latest.Version.String())
+    // Remove the cached embedded files, so they can be rewritten with any changes in the update.
+    dataDir, err := utils.FindDoctorDataDir()
+    if err == nil {
+        err = os.RemoveAll(filepath.Join(dataDir, "embedded"))
+        if err != nil {
+            msg.Warning("Tried to remove cached help files, but encountered an error: " + err.Error())
+        }
+    }
+
+	msg.Success("Successfully updated to version " + latest.Version.String() + "!")
 	return nil
 }
