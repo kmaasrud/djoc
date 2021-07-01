@@ -28,6 +28,7 @@ Commands:
     move            Move a section
     new             Creates a new document
     remove          Remove a section
+    stats           Show document statistics
 
 Flags:
     --help          Shows this text
@@ -95,4 +96,13 @@ overview, you can run 'doctor list' to list all sections and their indices.
 Options:
     --confirm       Do not ask for confirmation before deleting.
                     Use this option with caution...`,
+
+    // ---
+    "stats": `Show statistics about the current Doctor document.
+
+Usage:
+    doctor stats [options]
+
+Options:
+    --wordcount     Show the number of words and characters in the document.`,
 }
