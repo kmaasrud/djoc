@@ -108,7 +108,7 @@ func Build() error {
 	// Execute command
 	done := make(chan struct{})
 	go msg.Do("Building document with Pandoc", done)
-    // Ignore stdout, only catch stderr
+	// Ignore stdout, only catch stderr
 	_, err = utils.RunPandocWith(cmdArgs)
 	msg.CloseDo(done)
 

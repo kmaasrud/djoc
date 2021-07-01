@@ -97,8 +97,8 @@ Options:
     --confirm       Do not ask for confirmation before deleting.
                     Use this option with caution...`,
 
-    // ---
-    "stats": `Show statistics about the current Doctor document.
+	// ---
+	"stats": `Show statistics about the current Doctor document.
 
 Usage:
     doctor stats [options]

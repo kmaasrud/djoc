@@ -93,11 +93,11 @@ func CheckPath(program string) (string, error) {
 
 // Ensures a directory exists. If not, creates it (and any needed parents.)
 func EnsureDir(path string) error {
-    if _, err := os.Stat(path); os.IsNotExist(err) {
-        err := os.MkdirAll(path, os.ModePerm)
-        if err != nil {
-            return err
-        }
-    }
-    return nil
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		err := os.MkdirAll(path, os.ModePerm)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }

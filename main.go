@@ -13,7 +13,7 @@ import (
 var VERSION = "DEV"
 
 func main() {
-    // Set up registry with commands
+	// Set up registry with commands
 	registry := clapper.NewRegistry()
 
 	rootCommand, _ := registry.Register("")
@@ -47,8 +47,8 @@ func main() {
 	listCommand, _ := registry.Register("list")
 	listCommand.AddFlag("help", "h", true, "")
 
-    statsCommand, _ := registry.Register("stats")
-    statsCommand.AddFlag("wordcount", "w", true, "")
+	statsCommand, _ := registry.Register("stats")
+	statsCommand.AddFlag("wordcount", "w", true, "")
 	statsCommand.AddFlag("help", "h", true, "")
 
 	// Parse commands
@@ -66,14 +66,14 @@ func main() {
 		os.Exit(1)
 	}
 
-    // Run command
-    err = cmd.DoCommand(command, VERSION)
+	// Run command
+	err = cmd.DoCommand(command, VERSION)
 
-    if err != nil {
-        // Some error messages are handled within the build function and just return an empty error
-        if err.Error() != "" {
-            msg.Error(err.Error())
-        }
-        os.Exit(1)
-    }
+	if err != nil {
+		// Some error messages are handled within the build function and just return an empty error
+		if err.Error() != "" {
+			msg.Error(err.Error())
+		}
+		os.Exit(1)
+	}
 }

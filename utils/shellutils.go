@@ -1,8 +1,8 @@
 package utils
 
 import (
-    "os/exec"
-    "bytes"
+	"bytes"
+	"os/exec"
 )
 
 type WarningError struct {
@@ -22,15 +22,15 @@ func (e *FatalError) Error() string {
 }
 
 func RunPandocWith(args []string) (string, error) {
-    var stdout bytes.Buffer
+	var stdout bytes.Buffer
 	var stderr bytes.Buffer
 	cmd := exec.Command("pandoc", args...)
-    cmd.Stdout = &stdout
+	cmd.Stdout = &stdout
 	cmd.Stderr = &stderr
 
 	err := cmd.Run()
 
-    out := string(stdout.Bytes())
+	out := string(stdout.Bytes())
 
 	// Fatal error
 	if err != nil {

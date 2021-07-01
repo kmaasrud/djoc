@@ -1,13 +1,13 @@
 package cmd
 
 import (
-    "strconv"
+	"errors"
+	"fmt"
+	"strconv"
 	"strings"
-    "errors"
-    "fmt"
 
-	"github.com/kmaasrud/doctor/msg"
 	"github.com/kmaasrud/doctor/cmd/update"
+	"github.com/kmaasrud/doctor/msg"
 	"github.com/thatisuday/clapper"
 )
 
@@ -49,14 +49,14 @@ func DoCommand(command *clapper.CommandConfig, version string) error {
 
 		err := CreateDocumentAt(path, makeDefault)
 		if err != nil {
-            return err
+			return err
 		}
 
 	// Build the document command
 	case "build":
 		err := Build()
 		if err != nil {
-            return err
+			return err
 		}
 
 	// Add a new section to the document
@@ -67,20 +67,20 @@ func DoCommand(command *clapper.CommandConfig, version string) error {
 		} else if indexString := command.Flags["at"].Value; indexString != "" {
 			index, err := strconv.Atoi(indexString)
 			if err != nil {
-                return errors.New("Could not parse index: " + indexString + ". " + err.Error())
+				return errors.New("Could not parse index: " + indexString + ". " + err.Error())
 			}
 			err = Add(command.Args["name"].Value, index)
 		} else {
 			err = Add(command.Args["name"].Value, -1)
 			if err != nil {
-                return err
+				return err
 			}
 		}
 
 	// Remove a section from the document
 	case "remove":
 		if command.Args["sections"].Value == "" {
-            return errors.New("Please supply the name or index of the section(s) you want to remove.")
+			return errors.New("Please supply the name or index of the section(s) you want to remove.")
 		}
 
 		// Can discard this err, command.Flags["confirm"].Value will always be a parsable bool
@@ -88,7 +88,7 @@ func DoCommand(command *clapper.CommandConfig, version string) error {
 
 		err := Remove(strings.Split(command.Args["sections"].Value, ","), confirm)
 		if err != nil {
-            return err
+			return err
 		}
 
 	// Move a section from one position to another
@@ -96,32 +96,32 @@ func DoCommand(command *clapper.CommandConfig, version string) error {
 		section := command.Args["section"].Value
 		toStr := command.Args["to"].Value
 		if section == "" || toStr == "" {
-            return errors.New("Please supply the section you want to move and the index you want to move it to.")
+			return errors.New("Please supply the section you want to move and the index you want to move it to.")
 		}
 
 		to, err := strconv.Atoi(toStr)
 		if err != nil {
-            return errors.New("Could not parse " + toStr + " as an index. Please supply a valid number.")
+			return errors.New("Could not parse " + toStr + " as an index. Please supply a valid number.")
 		}
 
 		err = Move(section, to)
 		if err != nil {
-            return err
+			return err
 		}
 
 	// List out all sections
 	case "list":
 		err := List()
 		if err != nil {
-            return err
+			return err
 		}
 
-    case "stats":
-        err := Stats(command.Flags)
-        if err != nil {
-            return err
-        }
+	case "stats":
+		err := Stats(command.Flags)
+		if err != nil {
+			return err
+		}
 	}
 
-    return nil
+	return nil
 }
