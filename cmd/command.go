@@ -8,6 +8,8 @@ import (
 
 	"github.com/kmaasrud/doctor/cmd/update"
 	"github.com/kmaasrud/doctor/msg"
+	"github.com/kmaasrud/doctor/utils"
+	"github.com/kmaasrud/doctor/core"
 	"github.com/thatisuday/clapper"
 )
 
@@ -121,6 +123,32 @@ func DoCommand(command *clapper.CommandConfig, version string) error {
 		if err != nil {
 			return err
 		}
+
+    case "edit":
+        rootPath, err := utils.FindDoctorRoot()
+        if err != nil {
+            return err
+        }
+
+        // Find all existing sections
+        secs, err := utils.FindSections(rootPath)
+        if err != nil {
+            if _, ok := err.(*utils.NoSectionsError); !ok {
+                return err
+            }
+            return errors.New("Could not load section list. " + err.Error())
+        }
+
+        // Find the section we want to move
+        matches, err := core.FindSectionMatches(command.Args["section"].Value, secs, 0)
+        if err != nil {
+            return err
+        }
+
+        err = utils.OpenFileWithEditor(matches[0].Path)
+        if err != nil {
+            return err
+        }
 	}
 
 	return nil

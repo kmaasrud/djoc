@@ -51,6 +51,10 @@ func main() {
 	statsCommand.AddFlag("wordcount", "w", true, "")
 	statsCommand.AddFlag("help", "h", true, "")
 
+	editCommand, _ := registry.Register("edit")
+    editCommand.AddArg("section", "0")
+	editCommand.AddFlag("help", "h", true, "")
+
 	// Parse commands
 	command, err := registry.Parse(os.Args[1:])
 

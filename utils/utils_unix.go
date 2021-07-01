@@ -1,10 +1,12 @@
-// +build aix darwin dragonfly freebsd js,wasm linux nacl netbsd openbsd solaris
+// +build aix dragonfly freebsd js,wasm linux nacl netbsd openbsd solaris
 
 package utils
 
 import (
 	"os"
+	"os/exec"
 	"path/filepath"
+
 )
 
 const ResourceSep string = ":"
@@ -13,8 +15,7 @@ const ResourceSep string = ":"
 func FindDoctorDataDir() (string, error) {
 	var doctorPath string
 
-	datadirEnv := "XDG_DATA_DIR"
-	dataDir, exists := os.LookupEnv(datadirEnv)
+    dataDir, exists := os.LookupEnv("XDG_DATA_DIR")
 	if exists {
 		doctorPath = filepath.Join(dataDir, "doctor")
 	} else {
@@ -27,4 +28,26 @@ func FindDoctorDataDir() (string, error) {
 	}
 
 	return doctorPath, nil
+}
+
+func OpenFileWithEditor(file string) error {
+    cmd := exec.Command("dg-open", file)
+    err := cmd.Run()
+    if err == nil {
+        return nil
+    }
+
+    editor, exists := os.LookupEnv("EDITOR")
+    if !exists {
+        cmd = exec.Command(editor, file)
+    } else {
+        cmd = exec.Command("nano", file)
+    }
+
+    err = cmd.Run()
+    if err != nil {
+        return err
+    }
+
+    return nil
 }
