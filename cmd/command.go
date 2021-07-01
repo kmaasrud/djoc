@@ -6,6 +6,7 @@ import (
     "errors"
 
 	"github.com/kmaasrud/doctor/msg"
+	"github.com/kmaasrud/doctor/cmd/update"
 	"github.com/thatisuday/clapper"
 )
 
@@ -25,7 +26,7 @@ func DoCommand(command *clapper.CommandConfig, version string) error {
 					msg.Info("You are running Doctor " + version)
 
 				case "update":
-					err := Update(version)
+					err := update.Update(version)
 					if err != nil {
 						return err
 					}
