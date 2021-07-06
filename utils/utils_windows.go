@@ -27,15 +27,9 @@ func FindDoctorDataDir() (string, error) {
 	return doctorPath, nil
 }
 
-func OpenFileWithEditor(file string) error {
-    cmd := exec.Command("start", file)
+func OpenFile(path string) error {
+    cmd := exec.Command("start", path)
     err := cmd.Run()
-    if err == nil {
-        return nil
-    }
-
-    cmd = exec.Command("nano", file)
-    err = cmd.Run()
     if err != nil {
         return err
     }

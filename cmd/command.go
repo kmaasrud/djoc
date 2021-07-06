@@ -145,7 +145,7 @@ func DoCommand(command *clapper.CommandConfig, version string) error {
             return err
         }
 
-        err = utils.OpenFileWithEditor(matches[0].Path)
+        err = utils.OpenFile(matches[0].Path)
         if err != nil {
             return err
         }
