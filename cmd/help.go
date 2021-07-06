@@ -24,6 +24,7 @@ Usage:
 Commands:
     add             Add a section
     build           Build the document
+    edit            Open a section in an editor
     list            List the document structure
     move            Move a section
     new             Creates a new document
@@ -105,4 +106,13 @@ Usage:
 
 Options:
     --wordcount     Show the number of words and characters in the document.`,
+
+	// ---
+	"edit": `Open a section in your preferred editor. 
+
+Usage:
+    doctor edit <section>
+
+Uses the environment variable EDITOR if it is available. If not, 'xdg-open',
+'open' or 'start' will be used, depending on the operating system.`,
 }
