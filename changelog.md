@@ -1,11 +1,11 @@
 # Changelogs
 
-## Doctor v0.2.7 (Unreleased)
+## Doctor v0.2.7 (Unreleased - Currently testing)
 
 ### New features
 
 - [x] New command: `doctor stats`. Currently only supports a simple wordcount, which you get by running `doctor stats --wordcount`. Does nothing when run without a flag, at the moment. Expect lots of fun statistics about your document here.
-- [ ] New command: `doctor edit`. Use this to open a section directly in your preferred editor (respects `$EDITOR`). Uses the same section finding method as the `remove` and `move` commands.
+- [x] New command: `doctor edit`. Use this to open a section directly in your preferred editor (respects `$EDITOR`). Uses the same section finding method as the `remove` and `move` commands.
 
 ### Improvements
 
