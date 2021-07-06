@@ -1,6 +1,6 @@
 # Changelogs
 
-## Doctor v0.2.7 (Unreleased - Currently testing)
+## Doctor v0.2.7 (2020-07-06)
 
 ### New features
 
