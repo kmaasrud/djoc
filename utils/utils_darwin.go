@@ -2,7 +2,7 @@ package utils
 
 import (
 	"os"
-    "os/exec"
+	"os/exec"
 	"path/filepath"
 )
 
@@ -12,7 +12,7 @@ const ResourceSep string = ":"
 func FindDoctorDataDir() (string, error) {
 	var doctorPath string
 
-    dataDir, exists := os.LookupEnv("XDG_DATA_DIR")
+	dataDir, exists := os.LookupEnv("XDG_DATA_DIR")
 	if exists {
 		doctorPath = filepath.Join(dataDir, "doctor")
 	} else {
@@ -28,22 +28,22 @@ func FindDoctorDataDir() (string, error) {
 }
 
 func OpenFile(path string) error {
-    var cmd *exec.Cmd
+	var cmd *exec.Cmd
 
-    editor, exists := os.LookupEnv("EDITOR")
-    if exists {
-        cmd = exec.Command(editor, path) 
-    } else {
-        cmd = exec.Command("open", path)
-    }
+	editor, exists := os.LookupEnv("EDITOR")
+	if exists {
+		cmd = exec.Command(editor, path)
+	} else {
+		cmd = exec.Command("open", path)
+	}
 
-    cmd.Stdin = os.Stdin
-    cmd.Stdout = os.Stdout
-    cmd.Stderr = os.Stderr
-    err := cmd.Run()
-    if err != nil {
-        return err
-    }
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	err := cmd.Run()
+	if err != nil {
+		return err
+	}
 
-    return nil
+	return nil
 }

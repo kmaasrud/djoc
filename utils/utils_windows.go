@@ -2,7 +2,7 @@ package utils
 
 import (
 	"os"
-    "os/exec"
+	"os/exec"
 	"path/filepath"
 )
 
@@ -28,11 +28,11 @@ func FindDoctorDataDir() (string, error) {
 }
 
 func OpenFile(path string) error {
-    cmd := exec.Command("start", path)
-    err := cmd.Run()
-    if err != nil {
-        return err
-    }
+	cmd := exec.Command("start", path)
+	err := cmd.Run()
+	if err != nil {
+		return err
+	}
 
-    return nil
+	return nil
 }

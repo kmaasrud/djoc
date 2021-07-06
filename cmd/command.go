@@ -122,11 +122,11 @@ func DoCommand(command *clapper.CommandConfig, version string) error {
 			return err
 		}
 
-    case "edit":
-        err := Edit(command.Args["section"].Value)
-        if err != nil {
-            return err
-        }
+	case "edit":
+		err := Edit(command.Args["section"].Value)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil

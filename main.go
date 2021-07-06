@@ -52,7 +52,7 @@ func main() {
 	statsCommand.AddFlag("help", "h", true, "")
 
 	editCommand, _ := registry.Register("edit")
-    editCommand.AddArg("section", "0")
+	editCommand.AddArg("section", "0")
 	editCommand.AddFlag("help", "h", true, "")
 
 	// Parse commands
