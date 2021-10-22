@@ -1,0 +1,11 @@
+[package]
+name = "doctor"
+version = "0.3.0"
+authors = ["Knut Magnus Aasrud <km@aasrud.com>"]
+description = "Modern PDF creation through Markdown and LaTeX"
+edition = "2018"
+license-file = "LICENSE"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
