@@ -6,16 +6,22 @@ description = "Modern PDF creation through Markdown and LaTeX"
 edition = "2018"
 license-file = "LICENSE"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+# Error handling
+anyhow = "1.0"
+thiserror = "1.0"
+# CLI
 structopt = "0.3"
+colored = "2.0"
+# LaTeX
 tectonic = "0.8"
 
+
+# VCPKG
 [package.metadata.vcpkg]
 git = "https://github.com/microsoft/vcpkg"
 rev = "997cd412fa4dff71bec6c99dea95f0b9a3c2c240"
-
 [package.metadata.vcpkg.target]
 x86_64-apple-darwin = { install = ["freetype","harfbuzz[icu,graphite2]"] }
 aarch64-apple-darwin = { triplet = "arm64-osx", install = ["freetype","harfbuzz[icu,graphite2]"] }
