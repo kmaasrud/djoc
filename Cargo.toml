@@ -10,3 +10,14 @@ license-file = "LICENSE"
 
 [dependencies]
 structopt = "0.3"
+tectonic = "0.8"
+
+[package.metadata.vcpkg]
+git = "https://github.com/microsoft/vcpkg"
+rev = "997cd412fa4dff71bec6c99dea95f0b9a3c2c240"
+
+[package.metadata.vcpkg.target]
+x86_64-apple-darwin = { install = ["freetype","harfbuzz[icu,graphite2]"] }
+aarch64-apple-darwin = { triplet = "arm64-osx", install = ["freetype","harfbuzz[icu,graphite2]"] }
+x86_64-unknown-linux-gnu = { install = ["fontconfig","freetype","harfbuzz[icu,graphite2]"] }
+x86_64-pc-windows-msvc = { triplet = "x64-windows-static", install = ["fontconfig","freetype","harfbuzz[icu,graphite2]"] }
