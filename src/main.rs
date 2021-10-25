@@ -1,9 +1,9 @@
-use doctor::Document;
-use std::fs::File;
-use std::io::BufReader;
-use std::io::prelude::*;
-use std::path::{PathBuf, Path};
+use anyhow::Result;
+use std::path::PathBuf;
+use colored::Colorize;
 use structopt::StructOpt;
+
+mod cmd;
 
 #[derive(StructOpt)]
 #[structopt(
@@ -20,7 +20,7 @@ struct App {
 enum Command {
     #[structopt(about = "Builds a file or document")]
     Build {
-        #[structopt(parse(from_os_str))]
+        #[structopt(about = "File to build into PDF (optional)", parse(from_os_str))]
         file: Option<PathBuf>
     },
 
@@ -31,23 +31,12 @@ enum Command {
     List,
 }
 
-fn main() {
+fn run() -> Result<()> {
     let app = App::from_args();
 
     match app.command {
         Command::Build{ file } => {
-            let content = match file {
-                Some(path) => {
-                    let mut file = String::new();
-                    BufReader::new(File::open(path).unwrap()).read_to_string(&mut file).ok();
-                    file
-                },
-                None => "Didn't find file".to_owned(),
-            };
-
-            let doc = Document::from_str(content);
-            let pdf_data = tectonic::latex_to_pdf(doc.latex()).expect("PDF creation failed");
-            doctor::utils::write_file(&Path::new("main.pdf"), &pdf_data);
+            cmd::build(file)?;
         }
 
         Command::Init => {
@@ -57,5 +46,23 @@ fn main() {
         Command::List => {
             println!("Listing");
         }
+    }
+
+    Ok(())
+}
+
+fn main() {
+    if let Err(e) = run() {
+        eprintln!("  {} {}", "E".red(), e);
+        let chain = e.chain().skip(1);
+        if chain.len() > 0 {
+            eprintln!("  {}", "│".bright_black());
+            eprintln!("  {} Caused by:", "│".bright_black());
+            chain.for_each(|cause| {
+                eprintln!("  {}     {}", "│".bright_black(), cause);
+            });
+            eprintln!("  {}", "╵".bright_black());
+        }
+        std::process::exit(1);
     }
 }
