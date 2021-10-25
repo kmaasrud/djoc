@@ -1,4 +1,4 @@
-use anyhow::{Result, Context, anyhow};
+use anyhow::{Result, Context};
 use doctor::{Document, utils::write_file};
 use std::{
     fs::File,
@@ -23,8 +23,8 @@ pub fn build(file: Option<PathBuf>) -> Result<()> {
 
     let doc = Document::from_str(content);
 
-    let pdf_data = tectonic::latex_to_pdf(doc.latex())
-        .map_err(|err| anyhow!("{}", err.description()))?;
+    let pdf_data = doctor::latex_to_pdf(doc.latex()?)?;
+
     write_file(&Path::new("main.pdf"), &pdf_data)
         .context("Could not write to PDF file")?;
 
