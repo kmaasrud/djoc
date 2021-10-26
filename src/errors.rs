@@ -5,12 +5,8 @@ pub enum Error {
     #[error("IO-error: {0}")]
     Io(#[from] std::io::Error),
 
-    #[error("Error from Tectonic: {0}")]
-    Tectonic(String)
+    #[error(transparent)]
+    Tectonic(#[from] tectonic::Error)
 } 
 
-impl From<tectonic::Error> for Error {
-    fn from(e: tectonic::Error) -> Self {
-        Error::Tectonic(e.to_string())
-    }
-}
+unsafe impl Sync for Error {}
