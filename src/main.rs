@@ -7,7 +7,7 @@ mod cmd;
 
 #[derive(StructOpt)]
 #[structopt(
-    name = "doctor",
+    name = "mdoc",
     about = "Modern PDF creation through Markdown and LaTeX",
     author = "Knut Magnus Aasrud",
 )]

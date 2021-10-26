@@ -65,7 +65,7 @@ pub fn latex_to_pdf<T: AsRef<str>>(latex: T) -> Result<Vec<u8>> {
             .format_cache_path(format_cache_path)
             .keep_logs(false)
             .keep_intermediates(false)
-            .print_stdout(false)
+            .print_stdout(true)
             .output_format(tectonic::driver::OutputFormat::Pdf)
             .do_not_write_output_files();
 

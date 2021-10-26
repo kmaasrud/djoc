@@ -1,5 +1,5 @@
 use anyhow::{Result, Context};
-use doctor::{Document, utils::write_file};
+use mdoc::{Document, utils::write_file};
 use std::{
     fs::File,
     io::{prelude::*, BufReader},
@@ -23,7 +23,7 @@ pub fn build(file: Option<PathBuf>) -> Result<()> {
 
     let doc = Document::from_str(content);
 
-    let pdf_data = doctor::latex_to_pdf(doc.latex()?)?;
+    let pdf_data = mdoc::latex_to_pdf(doc.latex()?)?;
 
     write_file(&Path::new("main.pdf"), &pdf_data)
         .context("Could not write to PDF file")?;

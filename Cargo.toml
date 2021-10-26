@@ -1,5 +1,5 @@
 [package]
-name = "doctor"
+name = "mdoc"
 version = "0.3.0"
 authors = ["Knut Magnus Aasrud <km@aasrud.com>"]
 description = "Modern PDF creation through Markdown and LaTeX"
