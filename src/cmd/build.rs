@@ -21,9 +21,9 @@ pub fn build(file: Option<PathBuf>) -> Result<()> {
         None => "Didn't find file".to_owned(),
     };
 
-    let doc = Document::from_str(content);
+    let doc = Document::from(content);
 
-    let pdf_data = mdoc::latex_to_pdf(&doc.latex_bytes()?)?;
+    let pdf_data = doc.build()?;
 
     write_file(&Path::new("main.pdf"), &pdf_data)
         .context("Could not write to PDF file")?;

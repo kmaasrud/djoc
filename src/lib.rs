@@ -12,11 +12,11 @@ pub struct Document {
 }
 
 impl Document {
-    pub fn from_str(content: impl Into<String>) -> Self {
+    pub fn from(content: impl Into<String>) -> Self {
         Document { content: content.into() }
     }
 
-    pub fn latex_bytes(&self) -> Result<Vec<u8>> {
+    fn latex_bytes(&self) -> Result<Vec<u8>> {
         let mut pandoc = Command::new("pandoc")
             .args([
                 "-s",
@@ -37,53 +37,55 @@ impl Document {
 
         Ok(pandoc.wait_with_output().expect("Failed to read output").stdout)
     }
-}
 
-pub fn latex_to_pdf(latex: &[u8]) -> Result<Vec<u8>> {
-    let mut status = tectonic::status::NoopStatusBackend::default();
+    pub fn build(&self) -> Result<Vec<u8>> {
+        let latex_bytes = self.latex_bytes()?;
 
-    let config = tectonic::config::PersistentConfig::open(false)
-        .map_err(|e| Error::Tectonic(e))
-        .context("Failed to open the default configuration file")?;
+        let mut status = tectonic::status::NoopStatusBackend::default();
 
-    let only_cached = false;
-    let bundle = config.default_bundle(only_cached, &mut status)
-        .map_err(|e| Error::Tectonic(e))
-        .context("Failed to load the default resource bundle")?;
-
-    let format_cache_path = config.format_cache_path()
-        .map_err(|e| Error::Tectonic(e))
-        .context("Failed to set up the format cache")?;
-
-    let mut files = {
-        // Looking forward to non-lexical lifetimes!
-        let mut sb = tectonic::driver::ProcessingSessionBuilder::default();
-        sb.bundle(bundle)
-            .primary_input_buffer(latex)
-            .tex_input_name("texput.tex")
-            .format_name("latex")
-            .format_cache_path(format_cache_path)
-            .keep_logs(false)
-            .keep_intermediates(false)
-            .print_stdout(true)
-            .output_format(tectonic::driver::OutputFormat::Pdf)
-            .do_not_write_output_files();
-
-        let mut sess = sb.create(&mut status)
+        let config = tectonic::config::PersistentConfig::open(false)
             .map_err(|e| Error::Tectonic(e))
-            .context("Failed to initialize the LaTeX processing session")?;
+            .context("Failed to open the default configuration file")?;
 
-        sess.run(&mut status)
+        let only_cached = false;
+        let bundle = config.default_bundle(only_cached, &mut status)
             .map_err(|e| Error::Tectonic(e))
-            .context("The LaTeX engine failed")?;
+            .context("Failed to load the default resource bundle")?;
 
-        sess.into_file_data()
-    };
+        let format_cache_path = config.format_cache_path()
+            .map_err(|e| Error::Tectonic(e))
+            .context("Failed to set up the format cache")?;
 
-    match files.remove("texput.pdf") {
-        Some(file) => Ok(file.data),
-        None => Err(Error::Io(
-            std::io::Error::new(std::io::ErrorKind::Other, "LaTeX didn't report failure, but no PDF was created (??)")
-        ).into()),
+        let mut files = {
+            // Looking forward to non-lexical lifetimes!
+            let mut sb = tectonic::driver::ProcessingSessionBuilder::default();
+            sb.bundle(bundle)
+                .primary_input_buffer(&latex_bytes)
+                .tex_input_name("texput.tex")
+                .format_name("latex")
+                .format_cache_path(format_cache_path)
+                .keep_logs(false)
+                .keep_intermediates(false)
+                .print_stdout(true)
+                .output_format(tectonic::driver::OutputFormat::Pdf)
+                .do_not_write_output_files();
+
+            let mut sess = sb.create(&mut status)
+                .map_err(|e| Error::Tectonic(e))
+                .context("Failed to initialize the LaTeX processing session")?;
+
+            sess.run(&mut status)
+                .map_err(|e| Error::Tectonic(e))
+                .context("The LaTeX engine failed")?;
+
+            sess.into_file_data()
+        };
+
+        match files.remove("texput.pdf") {
+            Some(file) => Ok(file.data),
+            None => Err(Error::Io(
+                std::io::Error::new(std::io::ErrorKind::Other, "LaTeX didn't report failure, but no PDF was created (??)")
+            ).into()),
+        }
     }
 }
