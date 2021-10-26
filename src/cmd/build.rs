@@ -14,7 +14,7 @@ pub fn build(file: Option<PathBuf>) -> Result<()> {
 
             let mut content = String::new();
             BufReader::new(&file).read_to_string(&mut content)
-                .with_context(|| format!("Could not read '{:?}' to string", file))?;
+                .with_context(|| format!("Could not read {:?} to memory", file))?;
 
             content
         },
