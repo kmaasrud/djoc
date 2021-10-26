@@ -23,7 +23,7 @@ pub fn build(file: Option<PathBuf>) -> Result<()> {
 
     let doc = Document::from_str(content);
 
-    let pdf_data = mdoc::latex_to_pdf(doc.latex()?)?;
+    let pdf_data = mdoc::latex_to_pdf(&doc.latex_bytes()?)?;
 
     write_file(&Path::new("main.pdf"), &pdf_data)
         .context("Could not write to PDF file")?;
