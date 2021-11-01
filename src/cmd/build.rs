@@ -1,4 +1,4 @@
-use anyhow::{Result, Context};
+use anyhow::{Result, Context, bail};
 use mdoc::{Document, utils::write_file};
 use std::{
     fs::File,
@@ -7,21 +7,12 @@ use std::{
 };
 
 pub fn build(file: Option<PathBuf>) -> Result<()> {
-    let content = match file {
+    let doc = match file {
         Some(path) => {
-            let file = File::open(&path)
-                .with_context(|| format!("Could not open file {:?}", path))?;
-
-            let mut content = String::new();
-            BufReader::new(&file).read_to_string(&mut content)
-                .with_context(|| format!("Could not read {:?} to memory", file))?;
-
-            content
+            Document::load_from_single(&path)?
         },
-        None => "Didn't find file".to_owned(),
+        None => bail!("Can't load project yet"),
     };
-
-    let doc = Document::from(content);
 
     let pdf_data = doc.build()?;
 

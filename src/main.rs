@@ -32,7 +32,7 @@ enum Command {
 }
 
 fn run() -> Result<()> {
-    let app = App::from_args();
+    let app = App::from_args_safe()?;
 
     match app.command {
         Command::Build{ file } => {

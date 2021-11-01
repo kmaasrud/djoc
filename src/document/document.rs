@@ -1,15 +1,28 @@
 use anyhow::{Result, Context};
-use crate::Error;
+use crate::{Error, Chapter};
 use std::process::{Command, Stdio};
 use std::io::Write;
+use std::path::PathBuf;
 
 pub struct Document {
-    content: String,
+    chapters: Vec<Chapter>,
 }
 
 impl Document {
     pub fn from(content: impl Into<String>) -> Self {
-        Document { content: content.into() }
+        Document { chapters: vec![Chapter::new(content)] }
+    }
+
+    pub fn load_from_single(path: impl Into<PathBuf>) -> Result<Self> {
+        Ok(Document { chapters: vec![Chapter::load(path)?] })
+    }
+
+    fn content(&self) -> String {
+        let mut content = String::new();
+        for ch in self.chapters.iter() {
+            content.push_str(&ch.content);
+        }
+        content
     }
 
     fn latex_bytes(&self) -> Result<Vec<u8>> {
@@ -26,7 +39,7 @@ impl Document {
         let stdin = pandoc.stdin.as_mut()
             .context("Failed to open stdin")?;
 
-        stdin.write_all(&self.content.as_bytes())
+        stdin.write_all(&self.content().as_bytes())
             .context("Failed to write")?;
 
         Ok(pandoc.wait_with_output().expect("Failed to read output").stdout)
