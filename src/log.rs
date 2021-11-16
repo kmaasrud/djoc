@@ -8,8 +8,8 @@ static MAX_LOG_LEVEL: AtomicUsize = AtomicUsize::new(0);
 ///
 /// The loggin levels use the following nomenclature:
 ///
-/// - 0: Off
-/// - 1: Error and success
+/// - 0: Error
+/// - 1: Success
 /// - 2: Warning
 /// - 3: Info and success
 /// - >4: Debug
@@ -26,14 +26,12 @@ pub fn max_level() -> usize {
 #[macro_export]
 macro_rules! error {
     ($($arg:tt)*) => ({
-        if $crate::log::max_level() >= 1 {
-            let text = format!($($arg)*);
-            let mut lines = text.lines();
-            if let Some(line) = lines.next() {
-                eprintln!("  \x1B[31mE\x1B[0m {}", line);
-                for line in lines {
-                    eprintln!("    {}", line);
-                }
+        let text = format!($($arg)*);
+        let mut lines = text.lines();
+        if let Some(line) = lines.next() {
+            eprintln!("  \x1B[31mE\x1B[0m {}", line);
+            for line in lines {
+                eprintln!("    {}", line);
             }
         }
     })
@@ -126,6 +124,6 @@ pub fn handle_anyhow_error(e: Error) {
             .collect::<Vec<String>>()
             .join("\n");
 
-        error!("{}\n\n\x1B[4mCaused by:\x1B[0m\n\n{}", e, rest);
+        error!("{}\n\n\x1B[4mCaused by:\x1B[0m\n{}", e, rest);
     }
 }

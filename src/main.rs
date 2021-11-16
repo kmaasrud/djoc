@@ -1,19 +1,33 @@
 use anyhow::Result;
-use std::path::PathBuf;
 use colored::Colorize;
+use std::path::PathBuf;
 use structopt::StructOpt;
 
 mod cmd;
 
 #[derive(StructOpt)]
 #[structopt(
-    name = "mdoc",
+    name = "MDoc",
     about = "Modern PDF creation through Markdown and LaTeX",
-    author = "Knut Magnus Aasrud",
+    author = "Knut Magnus Aasrud"
 )]
 struct App {
     #[structopt(subcommand)]
-    command: Command, 
+    command: Command,
+
+    #[structopt(
+        short = "q",
+        long = "quiet",
+        help = "Make MDoc quiet. Only errors will get reported."
+    )]
+    quiet: bool,
+
+    #[structopt(
+        short = "d",
+        long = "debug",
+        help = "Make MDoc's output verbose. Used for debugging.",
+    )]
+    debug: bool,
 }
 
 #[derive(Debug, StructOpt)]
@@ -21,7 +35,7 @@ enum Command {
     #[structopt(about = "Builds a file or document")]
     Build {
         #[structopt(about = "File to build into PDF (optional)", parse(from_os_str))]
-        file: Option<PathBuf>
+        file: Option<PathBuf>,
     },
 
     #[structopt(about = "Initializes a new document")]
@@ -34,17 +48,25 @@ enum Command {
 fn run() -> Result<()> {
     let app = App::from_args_safe()?;
 
+    match (app.debug, app.quiet) {
+        (false, false) => mdoc::log::set_max_level(3),
+        (true, _) => mdoc::log::set_max_level(4),
+        (false, true) => mdoc::log::set_max_level(1),
+
+
+    }
+
     match app.command {
-        Command::Build{ file } => {
+        Command::Build { file } => {
             cmd::build(file)?;
         }
 
         Command::Init => {
-            println!("Initializing");
+            mdoc::info!("Initializing");
         }
 
         Command::List => {
-            println!("Listing");
+            mdoc::info!("Listing");
         }
     }
 
@@ -53,16 +75,7 @@ fn run() -> Result<()> {
 
 fn main() {
     if let Err(e) = run() {
-        eprintln!("  {} {}", "E".red(), e);
-        let chain = e.chain().skip(1);
-        if chain.len() > 0 {
-            eprintln!("  {}", "│".bright_black());
-            eprintln!("  {} Caused by:", "│".bright_black());
-            chain.for_each(|cause| {
-                eprintln!("  {}     {}", "│".bright_black(), cause);
-            });
-            eprintln!("  {}", "╵".bright_black());
-        }
+        mdoc::log::handle_anyhow_error(e);
         std::process::exit(1);
     }
 }

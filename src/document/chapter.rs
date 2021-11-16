@@ -1,4 +1,4 @@
-use anyhow::{Result, Context};
+use anyhow::{Context, Result};
 use std::{
     fs::File,
     io::{prelude::*, BufReader},
@@ -12,18 +12,24 @@ pub struct Chapter {
 
 impl Chapter {
     pub fn new(content: impl Into<String>) -> Self {
-        Self { content: content.into(), path: None } 
+        Self {
+            content: content.into(),
+            path: None,
+        }
     }
 
     pub fn load(path: impl Into<PathBuf>) -> Result<Self> {
         let path: PathBuf = path.into();
-        let file = File::open(&path)
-            .with_context(|| format!("Could not open file {:?}", path))?;
+        let file = File::open(&path).with_context(|| format!("Could not open file {:?}", path))?;
 
         let mut content = String::new();
-        BufReader::new(&file).read_to_string(&mut content)
+        BufReader::new(&file)
+            .read_to_string(&mut content)
             .with_context(|| format!("Could not read {:?} to string", file))?;
 
-        Ok(Self { path: Some(path), content })
+        Ok(Self {
+            path: Some(path),
+            content,
+        })
     }
 }

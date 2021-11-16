@@ -1,9 +1,9 @@
 pub mod document;
-pub mod lib;
 pub mod errors;
+pub mod log;
 pub mod utils;
 
-pub use document::{Document, Chapter};
 pub use document::DocumentBuilder;
+pub use document::{Chapter, Document};
 
 pub use errors::Error;

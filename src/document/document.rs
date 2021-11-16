@@ -1,8 +1,8 @@
-use anyhow::{Result, Context};
-use crate::{Error, Chapter};
-use std::process::{Command, Stdio};
+use crate::{Chapter, Error};
+use anyhow::{Context, Result};
 use std::io::Write;
 use std::path::PathBuf;
+use std::process::{Command, Stdio};
 
 pub struct Document {
     chapters: Vec<Chapter>,
@@ -10,11 +10,15 @@ pub struct Document {
 
 impl Document {
     pub fn from(content: impl Into<String>) -> Self {
-        Document { chapters: vec![Chapter::new(content)] }
+        Document {
+            chapters: vec![Chapter::new(content)],
+        }
     }
 
     pub fn load_from_single(path: impl Into<PathBuf>) -> Result<Self> {
-        Ok(Document { chapters: vec![Chapter::load(path)?] })
+        Ok(Document {
+            chapters: vec![Chapter::load(path)?],
+        })
     }
 
     fn content(&self) -> String {
@@ -27,22 +31,21 @@ impl Document {
 
     fn latex_bytes(&self) -> Result<Vec<u8>> {
         let mut pandoc = Command::new("pandoc")
-            .args([
-                "-s",
-                "--from=markdown",
-                "--to=latex",
-            ])
+            .args(["-s", "--from=markdown", "--to=latex"])
             .stdin(Stdio::piped())
             .stdout(Stdio::piped())
             .spawn()?;
 
-        let stdin = pandoc.stdin.as_mut()
-            .context("Failed to open stdin")?;
+        let stdin = pandoc.stdin.as_mut().context("Failed to open stdin")?;
 
-        stdin.write_all(&self.content().as_bytes())
+        stdin
+            .write_all(&self.content().as_bytes())
             .context("Failed to write")?;
 
-        Ok(pandoc.wait_with_output().expect("Failed to read output").stdout)
+        Ok(pandoc
+            .wait_with_output()
+            .expect("Failed to read output")
+            .stdout)
     }
 
     pub fn build(&self) -> Result<Vec<u8>> {
@@ -55,11 +58,13 @@ impl Document {
             .context("Failed to open the default configuration file")?;
 
         let only_cached = false;
-        let bundle = config.default_bundle(only_cached, &mut status)
+        let bundle = config
+            .default_bundle(only_cached, &mut status)
             .map_err(|e| Error::Tectonic(e))
             .context("Failed to load the default resource bundle")?;
 
-        let format_cache_path = config.format_cache_path()
+        let format_cache_path = config
+            .format_cache_path()
             .map_err(|e| Error::Tectonic(e))
             .context("Failed to set up the format cache")?;
 
@@ -77,7 +82,8 @@ impl Document {
                 .output_format(tectonic::driver::OutputFormat::Pdf)
                 .do_not_write_output_files();
 
-            let mut sess = sb.create(&mut status)
+            let mut sess = sb
+                .create(&mut status)
                 .map_err(|e| Error::Tectonic(e))
                 .context("Failed to initialize the LaTeX processing session")?;
 
@@ -90,9 +96,11 @@ impl Document {
 
         match files.remove("texput.pdf") {
             Some(file) => Ok(file.data),
-            None => Err(Error::Io(
-                std::io::Error::new(std::io::ErrorKind::Other, "LaTeX didn't report failure, but no PDF was created (??)")
-            ).into()),
+            None => Err(Error::Io(std::io::Error::new(
+                std::io::ErrorKind::Other,
+                "LaTeX didn't report failure, but no PDF was created (??)",
+            ))
+            .into()),
         }
     }
 }

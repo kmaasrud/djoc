@@ -1,6 +1,6 @@
 mod builder;
-mod document;
 mod chapter;
+mod document;
 
 pub use builder::DocumentBuilder;
 pub use chapter::Chapter;

@@ -1,7 +1,7 @@
-use anyhow::{Result, Context};
+use anyhow::{Context, Result};
 use std::fs::{self, File};
-use std::path::Path;
 use std::io::Write;
+use std::path::Path;
 
 /// Ease-of-use function for creating a file and writing bytes to it
 pub fn write_file(path: &Path, bytes: &[u8]) -> Result<()> {

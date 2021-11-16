@@ -6,7 +6,7 @@ pub enum Error {
     Io(#[from] std::io::Error),
 
     #[error(transparent)]
-    Tectonic(#[from] tectonic::Error)
-} 
+    Tectonic(#[from] tectonic::Error),
+}
 
 unsafe impl Sync for Error {}
