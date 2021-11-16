@@ -1,11 +1,10 @@
 use crate::{Chapter, Error};
 use anyhow::{Context, Result};
 use std::io::Write;
-use std::path::PathBuf;
 use std::process::{Command, Stdio};
 
 pub struct Document {
-    chapters: Vec<Chapter>,
+    pub chapters: Vec<Chapter>,
 }
 
 impl Document {
@@ -13,12 +12,6 @@ impl Document {
         Document {
             chapters: vec![Chapter::new(content)],
         }
-    }
-
-    pub fn load_from_single(path: impl Into<PathBuf>) -> Result<Self> {
-        Ok(Document {
-            chapters: vec![Chapter::load(path)?],
-        })
     }
 
     fn content(&self) -> String {

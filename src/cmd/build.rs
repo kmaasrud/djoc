@@ -1,14 +1,12 @@
 use anyhow::{bail, Context, Result};
-use mdoc::{utils::write_file, Document};
-use std::{
-    fs::File,
-    io::{prelude::*, BufReader},
-    path::{Path, PathBuf},
-};
+use mdoc::{utils::write_file, DocumentBuilder};
+use std::path::{Path, PathBuf};
 
 pub fn build(file: Option<PathBuf>) -> Result<()> {
     let doc = match file {
-        Some(path) => Document::load_from_single(&path)?,
+        Some(path) => DocumentBuilder::new()
+            .source(path)
+            .build()?,
         None => bail!("Can't load project yet"),
     };
 
