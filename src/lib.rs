@@ -1,4 +1,5 @@
 pub mod document;
+pub mod lib;
 pub mod errors;
 pub mod utils;
 
