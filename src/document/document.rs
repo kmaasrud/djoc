@@ -51,7 +51,7 @@ impl Document {
     pub fn build(&self) -> Result<Vec<u8>> {
         let latex_bytes = self.latex_bytes()?;
 
-        let mut status = tectonic::status::NoopStatusBackend::default();
+        let mut status = crate::log::MdocTectonicStatusBackend;
 
         let config = tectonic::config::PersistentConfig::open(false)
             .map_err(|e| Error::Tectonic(e))
@@ -78,7 +78,7 @@ impl Document {
                 .format_cache_path(format_cache_path)
                 .keep_logs(false)
                 .keep_intermediates(false)
-                .print_stdout(true)
+                .print_stdout(false)
                 .output_format(tectonic::driver::OutputFormat::Pdf)
                 .do_not_write_output_files();
 

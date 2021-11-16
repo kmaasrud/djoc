@@ -25,7 +25,7 @@ struct App {
     #[structopt(
         short = "d",
         long = "debug",
-        help = "Make MDoc's output verbose. Used for debugging.",
+        help = "Make MDoc's output verbose. Used for debugging."
     )]
     debug: bool,
 }
@@ -52,8 +52,6 @@ fn run() -> Result<()> {
         (false, false) => mdoc::log::set_max_level(3),
         (true, _) => mdoc::log::set_max_level(4),
         (false, true) => mdoc::log::set_max_level(1),
-
-
     }
 
     match app.command {
@@ -75,7 +73,7 @@ fn run() -> Result<()> {
 
 fn main() {
     if let Err(e) = run() {
-        mdoc::log::handle_anyhow_error(e);
+        mdoc::error!("{}{}", e, mdoc::log::format_chain(e.chain()));
         std::process::exit(1);
     }
 }

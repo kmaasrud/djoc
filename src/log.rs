@@ -1,4 +1,4 @@
-use anyhow::Error;
+use anyhow::{anyhow, Error};
 use std::sync::atomic::{AtomicUsize, Ordering};
 
 /// The maximum logging level, stored statically in the memory as an atomic usize.
@@ -101,29 +101,51 @@ macro_rules! debug {
     })
 }
 
-pub fn handle_anyhow_error(e: Error) {
+pub fn format_chain(chain: anyhow::Chain) -> String {
+    let mut out = String::new();
+
     fn begin_line_with(i: usize) -> String {
         if i == 0 { "- " } else { "  " }.to_owned()
     }
 
-    if e.chain().len() == 1 {
-        error!("{}", e);
-    } else {
-        let rest = e
-            .chain()
-            .skip(1)
-            .map(|chain| {
-                chain
-                    .to_string()
-                    .lines()
-                    .enumerate()
-                    .map(|(i, line)| begin_line_with(i) + line)
-                    .collect::<Vec<String>>()
-                    .join("\n")
-            })
-            .collect::<Vec<String>>()
-            .join("\n");
+    for link in chain.skip(1) {
+        for (i, line) in link.to_string().lines().enumerate() {
+            out.push_str("\n");
+            out.push_str(&begin_line_with(i));
+            out.push_str(line);
+        }
+    }
 
-        error!("{}\n\n\x1B[4mCaused by:\x1B[0m\n{}", e, rest);
+    out
+}
+
+pub struct MdocTectonicStatusBackend;
+
+impl tectonic::status::StatusBackend for MdocTectonicStatusBackend {
+    fn report(
+        &mut self,
+        kind: tectonic::status::MessageKind,
+        args: std::fmt::Arguments,
+        err: Option<&Error>,
+    ) {
+        match kind {
+            tectonic::status::MessageKind::Error => {
+                let msg = format!("{}", args);
+
+                error!("{}{}",
+                    msg
+                        .trim_end_matches("See the LaTeX manual or LaTeX Companion for explanation.\nType  H <return>  for immediate help")
+                        .trim_start_matches("!")
+                        .trim(),
+                    crate::log::format_chain(err.unwrap_or(&anyhow!("")).chain())
+                );
+            }
+            tectonic::status::MessageKind::Warning => warn!("{}", args),
+            tectonic::status::MessageKind::Note => info!("{}", args),
+        }
+    }
+
+    fn dump_error_logs(&mut self, output: &[u8]) {
+        error!("{}", String::from_utf8_lossy(output));
     }
 }
