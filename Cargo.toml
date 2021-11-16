@@ -21,7 +21,7 @@ tectonic = "0.8"
 # VCPKG
 [package.metadata.vcpkg]
 git = "https://github.com/microsoft/vcpkg"
-rev = "997cd412fa4dff71bec6c99dea95f0b9a3c2c240"
+rev = "master"
 [package.metadata.vcpkg.target]
 x86_64-apple-darwin = { install = ["freetype","harfbuzz[icu,graphite2]"] }
 aarch64-apple-darwin = { triplet = "arm64-osx", install = ["freetype","harfbuzz[icu,graphite2]"] }
