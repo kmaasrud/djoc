@@ -1,5 +1,4 @@
 use anyhow::Result;
-use colored::Colorize;
 use std::path::PathBuf;
 use structopt::StructOpt;
 

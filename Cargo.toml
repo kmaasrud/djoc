@@ -13,9 +13,8 @@ anyhow = "1.0"
 thiserror = "1.0"
 # CLI
 structopt = "0.3"
-colored = "2.0"
 # LaTeX
-tectonic = "0.8"
+tectonic = { version = "0.8", default-features = false, features = ["geturl-reqwest"] }
 
 
 # VCPKG

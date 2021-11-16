@@ -195,17 +195,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "colored"
-version = "2.0.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b3616f750b84d8f0de8a58bda93e08e2a81ad3f523089b05f1dffecab48c6cbd"
-dependencies = [
- "atty",
- "lazy_static",
- "winapi 0.3.9",
-]
-
-[[package]]
 name = "combine"
 version = "4.6.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -923,7 +912,6 @@ name = "mdoc"
 version = "0.3.0"
 dependencies = [
  "anyhow",
- "colored",
  "structopt",
  "tectonic",
  "thiserror",
@@ -1620,20 +1608,6 @@ name = "serde"
 version = "1.0.130"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f12d06de37cf59146fbdecab66aa99f9fe4f78722e3607577a5375d66bd0c913"
-dependencies = [
- "serde_derive",
-]
-
-[[package]]
-name = "serde_derive"
-version = "1.0.130"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d7bc1a1ab1961464eae040d96713baa5a724a8152c1222492465b54322ec508b"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn",
-]
 
 [[package]]
 name = "serde_json"
@@ -1763,12 +1737,10 @@ dependencies = [
  "md-5",
  "open",
  "quick-xml",
- "serde",
  "sha2",
  "structopt",
  "tectonic_bridge_core",
  "tectonic_bundles",
- "tectonic_docmodel",
  "tectonic_engine_bibtex",
  "tectonic_engine_xdvipdfmx",
  "tectonic_engine_xetex",
@@ -1780,7 +1752,6 @@ dependencies = [
  "tectonic_xetex_layout",
  "tempfile",
  "termcolor",
- "toml",
  "url",
  "watchexec",
  "zip",
@@ -1883,17 +1854,6 @@ checksum = "d2705c886df6a9241a88c4c28416b4960e99c55825c92c7969a057c9640e2051"
 dependencies = [
  "pkg-config",
  "vcpkg",
-]
-
-[[package]]
-name = "tectonic_docmodel"
-version = "0.1.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ff5185796c15baac928715686764be6afcea8470205e46625056b6a0ae1a0d48"
-dependencies = [
- "serde",
- "tectonic_errors",
- "toml",
 ]
 
 [[package]]
