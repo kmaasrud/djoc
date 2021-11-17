@@ -5,6 +5,7 @@ use std::{
     path::PathBuf,
 };
 
+#[derive(Debug)]
 pub struct Chapter {
     pub content: String,
     pub path: Option<PathBuf>,

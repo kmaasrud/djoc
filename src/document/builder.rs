@@ -57,8 +57,12 @@ impl DocumentBuilder {
             },
             SourceType::None => (PathBuf::from(""), vec![]),
         };
+
+        debug!("Building document with {} chapters.", chapters.len());
         
         let config = self.config.unwrap_or_else(|| Config::default());
+
+        debug!("Using config: {:#?}", config);
 
         Ok(Document {
             chapters,

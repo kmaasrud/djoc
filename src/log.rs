@@ -29,9 +29,9 @@ macro_rules! error {
         let text = format!($($arg)*);
         let mut lines = text.lines();
         if let Some(line) = lines.next() {
-            eprintln!("  \x1B[31mE\x1B[0m {}", line);
+            eprintln!("\x1B[31mE\x1B[0m {}", line);
             for line in lines {
-                eprintln!("    {}", line);
+                eprintln!("  {}", line);
             }
         }
     })
@@ -44,9 +44,9 @@ macro_rules! success {
             let text = format!($($arg)*);
             let mut lines = text.lines();
             if let Some(line) = lines.next() {
-                println!("  \x1B[32m✓\x1B[0m {}", line);
+                println!("\x1B[32m✓\x1B[0m {}", line);
                 for line in lines {
-                    println!("    {}", line);
+                    println!("  {}", line);
                 }
             }
         }
@@ -60,9 +60,9 @@ macro_rules! warn {
             let text = format!($($arg)*);
             let mut lines = text.lines();
             if let Some(line) = lines.next() {
-                eprintln!("  \x1B[33mW\x1B[0m {}", line);
+                eprintln!("\x1B[33mW\x1B[0m {}", line);
                 for line in lines {
-                    eprintln!("    {}", line);
+                    eprintln!("  {}", line);
                 }
             }
         }
@@ -76,9 +76,9 @@ macro_rules! info {
             let text = format!($($arg)*);
             let mut lines = text.lines();
             if let Some(line) = lines.next() {
-                println!("  \x1B[90m> {}\x1B[0m", line);
+                println!("  \x1B[90m{}\x1B[0m", line);
                 for line in lines {
-                    println!("    \x1B[90m{}\x1B[0m", line);
+                    println!("  \x1B[90m{}\x1B[0m", line);
                 }
             }
         }
@@ -92,9 +92,9 @@ macro_rules! debug {
             let text = format!($($arg)*);
             let mut lines = text.lines();
             if let Some(line) = lines.next() {
-                println!("  D {}", line);
+                println!("D {}", line);
                 for line in lines {
-                    println!("    {}", line);
+                    println!("  {}", line);
                 }
             }
         }
