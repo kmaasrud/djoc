@@ -8,11 +8,15 @@ license-file = "LICENSE"
 
 
 [dependencies]
+ignore = "0.4"
+
 # Error handling
 anyhow = "1.0"
 thiserror = "1.0"
+
 # CLI
 structopt = "0.3"
+
 # LaTeX
 tectonic = { version = "0.8", default-features = false, features = ["geturl-reqwest"] }
 
