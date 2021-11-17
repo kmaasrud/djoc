@@ -1,16 +1,18 @@
-use crate::{Chapter, Error};
+use crate::{Chapter, Error, config::Config};
 use anyhow::{Context, Result};
 use std::io::Write;
 use std::process::{Command, Stdio};
 
 pub struct Document {
     pub chapters: Vec<Chapter>,
+    pub config: Config,
 }
 
 impl Document {
     pub fn from(content: impl Into<String>) -> Self {
         Document {
             chapters: vec![Chapter::new(content)],
+            config: Config::default(),
         }
     }
 
@@ -18,6 +20,7 @@ impl Document {
         let mut content = String::new();
         for ch in self.chapters.iter() {
             content.push_str(&ch.content);
+            content.push_str("\n\n");
         }
         content
     }
