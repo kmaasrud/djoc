@@ -1,4 +1,4 @@
-use crate::{Chapter, Error, config::Config};
+use crate::{config::Config, Chapter, Error};
 use anyhow::{Context, Result};
 use std::io::Write;
 use std::process::{Command, Stdio};

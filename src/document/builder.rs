@@ -1,4 +1,4 @@
-use crate::{Document, Chapter, config::Config};
+use crate::{config::Config, Chapter, Document};
 
 use anyhow::Result;
 use ignore::WalkBuilder;
@@ -62,16 +62,13 @@ impl DocumentBuilder {
                 };
 
                 (Config::default(), load_chapters(root))
-            },
+            }
         };
 
         debug!("Building document with {} chapters.", chapters.len());
         debug!("Using config: {:#?}", config);
 
-        Ok(Document {
-            chapters,
-            config
-        })
+        Ok(Document { chapters, config })
     }
 }
 

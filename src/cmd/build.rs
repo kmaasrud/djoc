@@ -5,9 +5,7 @@ use std::path::{Path, PathBuf};
 pub fn build(file: Option<PathBuf>) -> Result<()> {
     let builder = DocumentBuilder::new();
     let doc = match file {
-        Some(path) => builder
-            .source(path)
-            .build()?,
+        Some(path) => builder.source(path).build()?,
         None => builder.build()?,
     };
 
