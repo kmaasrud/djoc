@@ -72,6 +72,12 @@ impl DocumentBuilder {
     }
 }
 
+impl Default for DocumentBuilder {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 fn load_chapters<P: AsRef<Path>>(path: P) -> Vec<Chapter> {
     WalkBuilder::new(path)
         .build()

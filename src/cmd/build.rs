@@ -11,7 +11,7 @@ pub fn build(file: Option<PathBuf>) -> Result<()> {
 
     let pdf_data = doc.build()?;
 
-    write_file(&Path::new("main.pdf"), &pdf_data).context("Could not write to PDF file")?;
+    write_file(Path::new("main.pdf"), &pdf_data).context("Could not write to PDF file")?;
 
     Ok(())
 }

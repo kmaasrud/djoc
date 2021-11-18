@@ -110,7 +110,7 @@ pub fn format_chain(chain: anyhow::Chain) -> String {
 
     for link in chain.skip(1) {
         for (i, line) in link.to_string().lines().enumerate() {
-            out.push_str("\n");
+            out.push('\n');
             out.push_str(&begin_line_with(i));
             out.push_str(line);
         }
@@ -135,7 +135,7 @@ impl tectonic::status::StatusBackend for MdocTectonicStatusBackend {
                 error!("{}{}",
                     msg
                         .trim_end_matches("See the LaTeX manual or LaTeX Companion for explanation.\nType  H <return>  for immediate help")
-                        .trim_start_matches("!")
+                        .trim_start_matches('!')
                         .trim(),
                     crate::log::format_chain(err.unwrap_or(&anyhow!("")).chain())
                 );
