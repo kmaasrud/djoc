@@ -42,26 +42,30 @@ impl DocumentBuilder {
     }
 
     pub fn build(self) -> Result<Document> {
-        let (_, chapters) = match self.source {
-            SourceType::File(ref path) => (PathBuf::from(""), vec![Chapter::load(path)?]),
-            SourceType::Dir(ref path) => {
-                let mut chapters = Vec::new();
-                for entry in WalkBuilder::new(path).build() {
-                    if let Ok(entry) = entry {
-                        if entry.path().is_file() {
-                            chapters.push(Chapter::load(entry.path())?);
+        let (config, chapters) = match self.source {
+            SourceType::File(ref path) => (Config::default(), vec![Chapter::load(path)?]),
+            SourceType::Dir(ref path) => (Config::default(), load_chapters(path)),
+            SourceType::None => {
+                let root = {
+                    let mut path: PathBuf = std::env::current_dir().unwrap();
+                    let look_for = Path::new("mdoc.toml");
+                    loop {
+                        path.push(look_for);
+                        if path.is_file() {
+                            path.pop();
+                            break path;
+                        }
+                        if !(path.pop() && path.pop()) {
+                            anyhow::bail!("Unable to find a \"mdoc.toml\" file.")
                         }
                     }
-                }
-                (path.join("mdoc.toml"), chapters)
+                };
+
+                (Config::default(), load_chapters(root))
             },
-            SourceType::None => (PathBuf::from(""), vec![]),
         };
 
         debug!("Building document with {} chapters.", chapters.len());
-        
-        let config = self.config.unwrap_or_else(|| Config::default());
-
         debug!("Using config: {:#?}", config);
 
         Ok(Document {
@@ -69,4 +73,14 @@ impl DocumentBuilder {
             config
         })
     }
+}
+
+fn load_chapters<P: AsRef<Path>>(path: P) -> Vec<Chapter> {
+    WalkBuilder::new(path)
+        .build()
+        .filter_map(|e| e.ok())
+        .filter(|e| e.path().is_file())
+        .map(|e| Chapter::load(e.path()))
+        .filter_map(|e| e.map_err(|err| warn!("{}", err)).ok())
+        .collect()
 }
