@@ -2,9 +2,9 @@ use anyhow::{Context, Result};
 use mdoc::{utils::write_file, DocumentBuilder};
 use std::path::{Path, PathBuf};
 
-pub fn build(file: Option<PathBuf>) -> Result<()> {
+pub fn build(path: Option<PathBuf>) -> Result<()> {
     let builder = DocumentBuilder::new();
-    let doc = match file {
+    let doc = match path {
         Some(path) => builder.source(path).build()?,
         None => builder.build()?,
     };

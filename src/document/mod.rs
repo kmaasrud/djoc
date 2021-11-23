@@ -47,7 +47,7 @@ impl Document {
         stdin
             .write_all(
                 self.content()
-                    .ok_or(anyhow::anyhow!("Document has no content."))?
+                    .ok_or_else(|| anyhow::anyhow!("Document has no content."))?
                     .as_bytes(),
             )
             .context("Failed to write to stdin.")?;

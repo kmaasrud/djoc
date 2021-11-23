@@ -34,7 +34,7 @@ enum Command {
     #[structopt(about = "Builds a file or document")]
     Build {
         #[structopt(about = "File to build into PDF (optional)", parse(from_os_str))]
-        file: Option<PathBuf>,
+        path: Option<PathBuf>,
     },
 
     #[structopt(about = "Initializes a new document")]
@@ -54,8 +54,8 @@ fn run() -> Result<()> {
     }
 
     match app.command {
-        Command::Build { file } => {
-            cmd::build(file)?;
+        Command::Build { path } => {
+            cmd::build(path)?;
         }
 
         Command::Init => {

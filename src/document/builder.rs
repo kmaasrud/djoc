@@ -10,7 +10,6 @@ enum SourceType {
     None,
 }
 
-#[allow(dead_code)]
 pub struct DocumentBuilder {
     source: SourceType,
     config: Option<Config>,
@@ -44,7 +43,7 @@ impl DocumentBuilder {
     pub fn build(self) -> Result<Document> {
         let (config, chapters) = match self.source {
             SourceType::File(ref path) => (
-                self.config.unwrap_or_else(|| Config::default()),
+                self.config.unwrap_or_default(),
                 vec![Chapter::load(path)?],
             ),
             SourceType::Dir(ref path) => (
