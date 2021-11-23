@@ -1,8 +1,3 @@
----
-title: Creating your first document
-toc: false
----
-
 To get started with Doctor, create a new document by running
 
 ```shell

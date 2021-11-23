@@ -1,8 +1,3 @@
----
-title: Code
-toc: true
----
-
 # Code blocks
 
 ## Indented code blocks

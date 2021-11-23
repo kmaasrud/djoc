@@ -1,7 +1,3 @@
----
-title: Headings
-toc: true
----
 
 There are two kinds of headings: [Setext](#setext-headers) and [ATX](#atx-headers). Both heading types can contain inline formatting, such as emphasis (see [Formatting](formatting)).
 

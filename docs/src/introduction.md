@@ -1,8 +1,3 @@
----
-title: Introduction and key concepts
-toc: false
----
-
 Doctor aims at giving you the most streamlined writing experience possible. It is somewhat opinionated in how it enforces a specific workflow and workspace structure. This is simply so that you don't have to concern yourself with structuring your project and keeping it organized manually - which I know from experience can be extremely time-draining.
 
 You write in Pandoc Markdown, with a few Doctor-specific syntax elights sprinkled in. If at any time you feel this markup language is limiting, you can simply write some $\LaTeX$ or HTML and it will be parsed as expected. I do however challenge you to avoid this as much as you can to really feel how refreshingly simple Pandoc Markdown can be, and to reassess how *fancy* your document really needs to be. You can read more on my choice of Pandoc Markdown [here](markdown), and learn the markup rules in the sections under **Markdown**.

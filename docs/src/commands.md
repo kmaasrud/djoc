@@ -1,8 +1,3 @@
----
-title: Commands
-toc: True
----
-
 # `doctor new`
 
 Used like:

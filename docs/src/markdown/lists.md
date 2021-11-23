@@ -1,8 +1,3 @@
----
-title: Lists
-toc: true
----
-
 # Ordered lists
 
 To make an ordered list of items, write a decimal number, followed by a period, a space and the content you want as part of that list item.

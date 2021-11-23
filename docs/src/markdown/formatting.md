@@ -1,8 +1,3 @@
----
-title: Formatting
-toc: true
----
-
 # Bold and italic text
 
 To make text *italic*, surround it with single `*` or `_` symbols, like this:

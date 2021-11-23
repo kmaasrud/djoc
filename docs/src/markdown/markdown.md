@@ -1,7 +1,3 @@
----
-title: Markdown
----
-
 Doctor uses Pandoc Markdown (with a few carefully selected additions) as it's markup language. This choice was a simple one; the creator of Markdown, [John Gruber](https://daringfireball.net/projects/markdown/syntax#philosophy), puts it best himself:
 
 > Markdown is intended to be as easy-to-read and easy-to-write as is feasible. Readability, however, is emphasized above all else. A Markdown-formatted document should be publishable as-is, as plain text, without looking like it’s been marked up with tags or formatting instructions.

@@ -1,8 +1,3 @@
----
-title: Configuring
-toc: true
----
-
 Your Doctor document can be configured quite extensively with the `doctor.toml` file. This file allows you to specify metadata, apply styling, supply information to Pandoc and/or the $\TeX$ engine, and much more. I've chosen the TOML specification since I consider it the most human-friendly configuration interface - it's legibility being the main draw.
 
 The configuration file has six main *tables* (which is TOML terminology for a collection of key-value pairs following a header): `[meta]`, `[build]`, `[style]`, `[bib]`, `[latex]` and `[html]`. They contain the configurations as listed below.

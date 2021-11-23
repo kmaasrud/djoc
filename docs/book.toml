@@ -1,0 +1,6 @@
+[book]
+authors = ["kmaasrud"]
+language = "en"
+multilingual = false
+src = "src"
+title = "MDoc Documentation"

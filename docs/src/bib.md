@@ -1,7 +1,3 @@
----
-title: Doctor's bibliography tool
----
-
 # Citation Style Language {#csl}
 
 Doctor comes with a few common CSL styles prepackaged. To use these, just apply them like `csl = "<csl name>"` in the `doctor.toml` file and Doctor will automatically add it to the `assets` directory. Your options are

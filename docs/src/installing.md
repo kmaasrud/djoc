@@ -1,8 +1,3 @@
----
-title: Installing Doctor
-toc: false
----
-
 The latest stable release of Doctor is available on the [**download page**](https://github.com/kmaasrud/doctor/releases){target="_blank" rel="noopener noreferrer"}. If you are on a Unix system with Bash installed, there's a short shell script that automatically downloads the binary locally and adds it to your `PATH`. Just run
 
 ```shell
