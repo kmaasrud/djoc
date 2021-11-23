@@ -22,13 +22,17 @@ impl Document {
         }
     }
 
-    fn content(&self) -> String {
+    fn content(&self) -> Option<String> {
         let mut content = String::new();
         for ch in self.chapters.iter() {
             content.push_str(&ch.content);
             content.push_str("\n\n");
         }
-        content
+        if content.trim().is_empty() {
+            None
+        } else {
+            Some(content)
+        }
     }
 
     fn latex_bytes(&self) -> Result<Vec<u8>> {
@@ -41,8 +45,12 @@ impl Document {
         let stdin = pandoc.stdin.as_mut().context("Failed to open stdin.")?;
 
         stdin
-            .write_all(self.content().as_bytes())
-            .context("Failed to write.")?;
+            .write_all(
+                self.content()
+                    .ok_or(anyhow::anyhow!("Document has no content."))?
+                    .as_bytes(),
+            )
+            .context("Failed to write to stdin.")?;
 
         Ok(pandoc
             .wait_with_output()
