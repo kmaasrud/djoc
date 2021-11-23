@@ -21,12 +21,12 @@ impl Chapter {
 
     pub fn load(path: impl Into<PathBuf>) -> Result<Self> {
         let path: PathBuf = path.into();
-        let file = File::open(&path).with_context(|| format!("Could not open file {:?}", path))?;
+        let file = File::open(&path).with_context(|| format!("Could not open file {:?}.", path))?;
 
         let mut content = String::new();
         BufReader::new(&file)
             .read_to_string(&mut content)
-            .with_context(|| format!("Could not read {:?} to string", file))?;
+            .with_context(|| format!("Could not read {:?} to string.", file))?;
 
         Ok(Self {
             path: Some(path),

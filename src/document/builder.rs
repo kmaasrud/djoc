@@ -1,7 +1,7 @@
-use crate::{config::Config, Chapter, Document};
+use crate::{config::Config, utils::find_root, Chapter, Document};
 
 use anyhow::Result;
-use ignore::WalkBuilder;
+use ignore::{types::TypesBuilder, WalkBuilder};
 use std::path::{Path, PathBuf};
 
 enum SourceType {
@@ -43,27 +43,27 @@ impl DocumentBuilder {
 
     pub fn build(self) -> Result<Document> {
         let (config, chapters) = match self.source {
-            SourceType::File(ref path) => (Config::default(), vec![Chapter::load(path)?]),
-            SourceType::Dir(ref path) => (Config::default(), load_chapters(path)),
+            SourceType::File(ref path) => (
+                self.config.unwrap_or_else(|| Config::default()),
+                vec![Chapter::load(path)?],
+            ),
+            SourceType::Dir(ref path) => (
+                self.config
+                    .unwrap_or(Config::from_file(path.join("mdoc.toml"))?),
+                load_chapters(path),
+            ),
             SourceType::None => {
-                let root = {
-                    let mut path: PathBuf = std::env::current_dir().unwrap();
-                    let look_for = Path::new("mdoc.toml");
-                    loop {
-                        path.push(look_for);
-                        if path.is_file() {
-                            path.pop();
-                            break path;
-                        }
-                        if !(path.pop() && path.pop()) {
-                            anyhow::bail!("Unable to find a \"mdoc.toml\" file.")
-                        }
-                    }
-                };
-
-                (Config::default(), load_chapters(root))
+                let root = find_root()?;
+                let config = self
+                    .config
+                    .unwrap_or(Config::from_file(root.join("mdoc.toml"))?);
+                (config, load_chapters(root))
             }
         };
+
+        if chapters.is_empty() {
+            anyhow::bail!("No chapters found.");
+        }
 
         debug!("Building document with {} chapters.", chapters.len());
         debug!("Using config: {:#?}", config);
@@ -79,11 +79,18 @@ impl Default for DocumentBuilder {
 }
 
 fn load_chapters<P: AsRef<Path>>(path: P) -> Vec<Chapter> {
-    WalkBuilder::new(path)
+    let md_types = TypesBuilder::new()
+        .add_defaults()
+        .select("markdown")
         .build()
-        .filter_map(|e| e.ok())
-        .filter(|e| e.path().is_file())
-        .map(|e| Chapter::load(e.path()))
-        .filter_map(|e| e.map_err(|err| warn!("{}", err)).ok())
+        .unwrap();
+
+    WalkBuilder::new(path)
+        .types(md_types)
+        .build()
+        .filter_map(|entry| entry.ok())
+        .filter(|entry| entry.path().is_file())
+        .map(|entry| Chapter::load(entry.path()))
+        .filter_map(|ch| ch.map_err(|err| warn!("{}. Skipping...", err)).ok())
         .collect()
 }
