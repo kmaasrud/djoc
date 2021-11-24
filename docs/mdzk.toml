@@ -1,4 +1,5 @@
-[book]
+[mdzk]
+generate-summary = false
 authors = ["kmaasrud"]
 language = "en"
 multilingual = false
