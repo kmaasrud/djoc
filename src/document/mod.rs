@@ -55,17 +55,21 @@ impl Document {
             .context("Failed to write to stdin.")?;
 
         let mut meta = String::new();
-        meta.push_str(&format!("\\title{{{}}}", self.config.title));
-        meta.push_str(&self.config.date.as_ref().map(|s| format!("\\date{{{}}}", s)).unwrap_or_default());
-        meta.push_str(&format!("\\author{{{}}}", self.config.authors.join(" \\and ")));
+        meta.push_str(&format!(
+            "\\title{{{}}}\n\\author{{{}}}\n\\date{{{}}}",
+            self.config.title,
+            self.config.date.as_ref().unwrap_or(&String::default()),
+            self.config.authors.join(" \\and "),
+        ));
 
         let bytes = [
             PREAMBLE,
             meta.as_bytes(),
             "\n\n\\begin{document}\n\\maketitle\n\n".as_bytes(),
             &pandoc.wait_with_output()?.stdout,
-            "\n\n\\end{document}".as_bytes()
-        ].concat();
+            "\n\n\\end{document}".as_bytes(),
+        ]
+        .concat();
 
         Ok(bytes)
     }

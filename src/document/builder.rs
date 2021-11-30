@@ -42,10 +42,9 @@ impl DocumentBuilder {
 
     pub fn build(self) -> Result<Document> {
         let (config, chapters) = match self.source {
-            SourceType::File(ref path) => (
-                self.config.unwrap_or_default(),
-                vec![Chapter::load(path)?],
-            ),
+            SourceType::File(ref path) => {
+                (self.config.unwrap_or_default(), vec![Chapter::load(path)?])
+            }
             SourceType::Dir(ref path) => (
                 self.config
                     .unwrap_or(Config::from_file(path.join("mdoc.toml"))?),
