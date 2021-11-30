@@ -9,6 +9,8 @@ use anyhow::{Context, Result};
 use std::io::Write;
 use std::process::{Command, Stdio};
 
+const PREAMBLE: &[u8] = include_bytes!("preamble.tex");
+
 pub struct Document {
     pub chapters: Vec<Chapter>,
     pub config: Config,
@@ -37,7 +39,7 @@ impl Document {
 
     fn latex_bytes(&self) -> Result<Vec<u8>> {
         let mut pandoc = Command::new("pandoc")
-            .args(["-s", "--from=markdown", "--to=latex"])
+            .args(["--from=markdown", "--to=latex"])
             .stdin(Stdio::piped())
             .stdout(Stdio::piped())
             .spawn()?;
@@ -52,10 +54,20 @@ impl Document {
             )
             .context("Failed to write to stdin.")?;
 
-        Ok(pandoc
-            .wait_with_output()
-            .expect("Failed to read output.")
-            .stdout)
+        let mut meta = String::new();
+        meta.push_str(&format!("\\title{{{}}}", self.config.title));
+        meta.push_str(&self.config.date.as_ref().map(|s| format!("\\date{{{}}}", s)).unwrap_or_default());
+        meta.push_str(&format!("\\author{{{}}}", self.config.authors.join(" \\and ")));
+
+        let bytes = [
+            PREAMBLE,
+            meta.as_bytes(),
+            "\n\n\\begin{document}\n\\maketitle\n\n".as_bytes(),
+            &pandoc.wait_with_output()?.stdout,
+            "\n\n\\end{document}".as_bytes()
+        ].concat();
+
+        Ok(bytes)
     }
 
     pub fn build(&self) -> Result<Vec<u8>> {

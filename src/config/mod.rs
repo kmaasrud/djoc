@@ -8,7 +8,7 @@ use std::path::Path;
 #[serde(default, rename_all = "kebab-case")]
 pub struct Config {
     pub title: String,
-    pub authors: Option<Vec<String>>,
+    pub authors: Vec<String>,
     pub date: Option<String>,
 
     pub build: BuildConfig,
