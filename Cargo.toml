@@ -5,6 +5,8 @@ authors = ["Knut Magnus Aasrud <km@aasrud.com>"]
 description = "Modern PDF creation through Markdown and LaTeX"
 edition = "2018"
 license-file = "LICENSE"
+homepage = "https://github.com/kmaasrud/mdoc"
+repository = "https://github.com/kmaasrud/mdoc"
 
 
 [dependencies]
