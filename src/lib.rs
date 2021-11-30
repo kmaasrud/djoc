@@ -10,3 +10,5 @@ pub use document::DocumentBuilder;
 pub use document::{Chapter, Document};
 
 pub use errors::Error;
+
+pub const CONFIG_FILE: &str = "mdoc.toml";

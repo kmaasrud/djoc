@@ -38,7 +38,10 @@ enum Command {
     },
 
     #[structopt(about = "Initializes a new document")]
-    Init,
+    Init {
+        #[structopt(about = "Directory to initialize the document in.", parse(from_os_str))]
+        path: Option<PathBuf>,
+    },
 
     #[structopt(about = "Lists the document structure")]
     List,
@@ -58,8 +61,8 @@ fn run() -> Result<()> {
             cmd::build(path)?;
         }
 
-        Command::Init => {
-            mdoc::info!("Initializing");
+        Command::Init { path } => {
+            cmd::init(path)?;
         }
 
         Command::List => {

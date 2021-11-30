@@ -1,10 +1,10 @@
 use crate::utils::read_file;
 
 use anyhow::Result;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use std::path::Path;
 
-#[derive(Debug, Default, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 #[serde(default, rename_all = "kebab-case")]
 pub struct Config {
     pub title: String,
@@ -21,7 +21,18 @@ impl Config {
     }
 }
 
-#[derive(Debug, Deserialize)]
+impl Default for Config {
+    fn default() -> Self {
+        Self {
+            title: "Document title".to_owned(),
+            authors: vec![],
+            date: None,
+            build: BuildConfig::default(),
+        }
+    }
+}
+
+#[derive(Debug, Deserialize, Serialize)]
 #[serde(default, rename_all = "kebab-case")]
 pub struct BuildConfig {
     pub filename: String,
