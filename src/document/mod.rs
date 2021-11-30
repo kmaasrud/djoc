@@ -60,6 +60,7 @@ impl Document {
 
     pub fn build(&self) -> Result<Vec<u8>> {
         let latex_bytes = self.latex_bytes()?;
+        let filename = &self.config.build.filename;
 
         let mut status = crate::log::MdocTectonicStatusBackend;
 
@@ -82,7 +83,7 @@ impl Document {
             let mut sb = tectonic::driver::ProcessingSessionBuilder::default();
             sb.bundle(bundle)
                 .primary_input_buffer(&latex_bytes)
-                .tex_input_name("mdoc.tex")
+                .tex_input_name(&format!("{}.tex", filename))
                 .format_name("latex")
                 .format_cache_path(format_cache_path)
                 .output_format(tectonic::driver::OutputFormat::Pdf)
@@ -100,7 +101,7 @@ impl Document {
             sess.into_file_data()
         };
 
-        match files.remove("mdoc.pdf") {
+        match files.remove(&format!("{}.pdf", filename)) {
             Some(file) => Ok(file.data),
             None => Err(std::io::Error::new(
                 std::io::ErrorKind::Other,
