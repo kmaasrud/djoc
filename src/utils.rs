@@ -2,6 +2,7 @@ use anyhow::{Context, Result};
 use std::fs::{self, File};
 use std::io::{Read, Write};
 use std::path::{Path, PathBuf};
+use std::process::Command;
 
 /// Ease-of-use function for loading a file from a path.
 pub(crate) fn read_file<P: AsRef<Path>>(path: P) -> Result<String> {
@@ -47,5 +48,20 @@ pub fn find_root() -> Result<PathBuf> {
         if !(path.pop() && path.pop()) {
             anyhow::bail!("Unable to find an \"mdoc.toml\" file.")
         }
+    }
+}
+
+// Function fetched from https://github.com/rust-lang/mdBook/blob/master/src/cmd/init.rs
+/// Obtains author name from git config file by running the `git config` command.
+pub fn get_author_name() -> Option<String> {
+    let output = Command::new("git")
+        .args(&["config", "--get", "user.name"])
+        .output()
+        .ok()?;
+
+    if output.status.success() {
+        Some(String::from_utf8_lossy(&output.stdout).trim().to_owned())
+    } else {
+        None
     }
 }
