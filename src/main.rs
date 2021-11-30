@@ -1,15 +1,15 @@
 use anyhow::Result;
 use std::path::PathBuf;
-use structopt::StructOpt;
+use structopt::{StructOpt, clap};
 
 mod cmd;
 
 #[derive(StructOpt)]
 #[structopt(
     name = "MDoc",
-    about = "Modern PDF creation through Markdown and LaTeX",
-    author = "Knut Magnus Aasrud"
+    author = "Knut Magnus Aasrud",
 )]
+/// LaTeX for the modern world.
 struct App {
     #[structopt(subcommand)]
     command: Command,
@@ -17,15 +17,15 @@ struct App {
     #[structopt(
         short = "q",
         long = "quiet",
-        help = "Make MDoc quiet. Only errors will get reported."
     )]
+    /// Make MDoc quiet. Only errors will get reported.
     quiet: bool,
 
     #[structopt(
         short = "d",
         long = "debug",
-        help = "Make MDoc's output verbose. Used for debugging."
     )]
+    /// Make MDoc's output verbose. Used for debugging.
     debug: bool,
 }
 
@@ -33,17 +33,20 @@ struct App {
 enum Command {
     #[structopt(about = "Builds a file or document")]
     Build {
-        #[structopt(about = "File to build into PDF (optional)", parse(from_os_str))]
+        #[structopt(parse(from_os_str))]
+        /// File to build into PDF (optional).
         path: Option<PathBuf>,
     },
 
     #[structopt(about = "Initializes a new document")]
     Init {
-        #[structopt(about = "Directory to initialize the document in.", parse(from_os_str))]
+        #[structopt(parse(from_os_str))]
+        /// Directory to initialize the document in.
         path: Option<PathBuf>,
     },
 
-    #[structopt(about = "Lists the document structure")]
+    #[structopt()]
+    /// Lists the document structure.
     List,
 }
 
@@ -75,7 +78,18 @@ fn run() -> Result<()> {
 
 fn main() {
     if let Err(e) = run() {
-        mdoc::error!("{}{}", e, mdoc::log::format_chain(e.chain()));
-        std::process::exit(1);
+        match e.downcast_ref::<clap::Error>() {
+            Some(e) if e.kind == clap::ErrorKind::HelpDisplayed => {
+                println!("{}", e)
+            },
+            Some(e) => {
+                mdoc::error!("{}", e.to_string().trim_start_matches("\u{1b}[1;31merror:\u{1b}[0m "));
+                std::process::exit(1);
+            }
+            _ => {
+                mdoc::error!("{}{}", e, mdoc::log::format_chain(e.chain()));
+                std::process::exit(1);
+            }
+        }
     }
 }
