@@ -31,7 +31,6 @@ struct App {
 
 #[derive(Debug, StructOpt)]
 enum Command {
-    #[structopt()]
     /// Builds a file or document
     Build {
         #[structopt(parse(from_os_str))]
@@ -39,7 +38,6 @@ enum Command {
         path: Option<PathBuf>,
     },
 
-    #[structopt()]
     /// Initializes a new document
     Init {
         #[structopt(parse(from_os_str))]
@@ -47,7 +45,6 @@ enum Command {
         path: Option<PathBuf>,
     },
 
-    #[structopt()]
     /// Lists the document structure.
     List,
 }
@@ -94,4 +91,6 @@ fn main() {
             }
         }
     }
+
+    mdoc::info!("Data dir is: {:?}", mdoc::utils::data_dir());
 }
