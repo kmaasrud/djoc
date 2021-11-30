@@ -24,5 +24,7 @@ pub fn init(path: Option<PathBuf>) -> Result<()> {
         &toml::to_vec(&config).context("Could not serialize configuration to TOML.")?,
     ).context("Could not write configuration to file.")?;
 
+    mdoc::success!("Created a new document in {:?}.", root);
+
     Ok(())
 }

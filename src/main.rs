@@ -31,14 +31,16 @@ struct App {
 
 #[derive(Debug, StructOpt)]
 enum Command {
-    #[structopt(about = "Builds a file or document")]
+    #[structopt()]
+    /// Builds a file or document
     Build {
         #[structopt(parse(from_os_str))]
         /// File to build into PDF (optional).
         path: Option<PathBuf>,
     },
 
-    #[structopt(about = "Initializes a new document")]
+    #[structopt()]
+    /// Initializes a new document
     Init {
         #[structopt(parse(from_os_str))]
         /// Directory to initialize the document in.
