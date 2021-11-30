@@ -12,3 +12,4 @@ pub use document::{Chapter, Document};
 pub use errors::Error;
 
 pub const CONFIG_FILE: &str = "mdoc.toml";
+pub const SRC_DIR: &str = "src";
