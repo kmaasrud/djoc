@@ -67,5 +67,7 @@ pub fn get_author_name() -> Option<String> {
 }
 
 pub fn data_dir() -> PathBuf {
-    dirs::data_dir().expect("Unable to get the data directory.").join("mdoc")
+    dirs::data_dir()
+        .expect("Unable to get the data directory.")
+        .join("mdoc")
 }

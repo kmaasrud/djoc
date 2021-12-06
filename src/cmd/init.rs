@@ -1,12 +1,16 @@
 use anyhow::{Context, Result};
-use mdoc::{config::Config, utils::{write_file, get_author_name}, CONFIG_FILE, SRC_DIR};
+use mdoc::{
+    config::Config,
+    utils::{get_author_name, write_file},
+    CONFIG_FILE, SRC_DIR,
+};
 use std::path::PathBuf;
 
 /// Initializes a document in the path provided. Defaults to the current directory if no path is
 /// provided.
 pub fn init(path: Option<PathBuf>) -> Result<()> {
     // Use path argument, or default from current directory
-    let root = path.unwrap_or_else(|| PathBuf::from(".")); 
+    let root = path.unwrap_or_else(|| PathBuf::from("."));
 
     // Recursively create all directories
     std::fs::create_dir_all(&root.join(SRC_DIR))
@@ -22,7 +26,8 @@ pub fn init(path: Option<PathBuf>) -> Result<()> {
     write_file(
         &root.join(CONFIG_FILE),
         &toml::to_vec(&config).context("Could not serialize configuration to TOML.")?,
-    ).context("Could not write configuration to file.")?;
+    )
+    .context("Could not write configuration to file.")?;
 
     mdoc::success!("Created a new document in {:?}.", root);
 

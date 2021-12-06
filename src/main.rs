@@ -1,30 +1,21 @@
 use anyhow::Result;
 use std::path::PathBuf;
-use structopt::{StructOpt, clap};
+use structopt::{clap, StructOpt};
 
 mod cmd;
 
 #[derive(StructOpt)]
-#[structopt(
-    name = "MDoc",
-    author = "Knut Magnus Aasrud",
-)]
+#[structopt(name = "MDoc", author = "Knut Magnus Aasrud")]
 /// LaTeX for the modern world.
 struct App {
     #[structopt(subcommand)]
     command: Command,
 
-    #[structopt(
-        short = "q",
-        long = "quiet",
-    )]
+    #[structopt(short = "q", long = "quiet")]
     /// Make MDoc quiet. Only errors will get reported.
     quiet: bool,
 
-    #[structopt(
-        short = "d",
-        long = "debug",
-    )]
+    #[structopt(short = "d", long = "debug")]
     /// Make MDoc's output verbose. Used for debugging.
     debug: bool,
 }
@@ -80,9 +71,13 @@ fn main() {
         match e.downcast_ref::<clap::Error>() {
             Some(e) if e.kind == clap::ErrorKind::HelpDisplayed => {
                 println!("{}", e)
-            },
+            }
             Some(e) => {
-                mdoc::error!("{}", e.to_string().trim_start_matches("\u{1b}[1;31merror:\u{1b}[0m "));
+                mdoc::error!(
+                    "{}",
+                    e.to_string()
+                        .trim_start_matches("\u{1b}[1;31merror:\u{1b}[0m ")
+                );
                 std::process::exit(1);
             }
             _ => {
