@@ -1,11 +1,8 @@
+There are two kinds of headings: [Setext](#setext-headers) and [ATX](#atx-headers). They are equivalent, so choose the style you prefer. Both heading types can contain inline [[Formatting|formatting]], such as *emphasis*, or [[Math|math]].
 
-There are two kinds of headings: [Setext](#setext-headers) and [ATX](#atx-headers). Both heading types can contain inline formatting, such as emphasis (see [Formatting](formatting)).
+## ATX headers
 
-> **Note**: You of course choose to use whatever style you prefer, but as a convention, you should use [ATX headers](#atx-headers) when writing with Doctor.
-
-# ATX headers
-
-An ATX-style heading consists of one to six `#` signs and a line of text, optionally followed by any number of `#` signs. The number of `#` signs at the beginning of the line is the heading level:
+The most commonly used header style, an ATX heading consists of one to six `#` signs and a line of text, optionally followed by any number of `#` signs. The number of `#` signs at the beginning of the line is the heading level:
 
 ```markdown
 ## A level-two heading
@@ -13,22 +10,9 @@ An ATX-style heading consists of one to six `#` signs and a line of text, option
 ### A level-three heading ###
 ```
 
-The heading text can contain formatting:
+> 📄 MDoc requires a blank line before and after a heading (except, of course, at the beginning of the document.) Additionally, a space between the opening `#` signs of an ATX heading and the heading text is required.
 
-```markdown
-# A level-one heading with a [link](/url) and *emphasis*
-```
-
-Standard Markdown syntax does not require a blank line before a heading. Doctor does require this (except, of course, at the beginning of the document). The reason for the requirement is that it is all too easy for a `#` to end up at the beginning of a line by accident (perhaps through line wrapping). Consider, for example:
-
-```
-I like several of their flavors of ice cream:
-#22, for example, and #5.
-```
-
-You should also include a blank line *after* the heading. In addition, many Markdown implementations do not require a space between the opening `#` signs of an ATX heading and the heading text, so that `#5` bolt and `#hashtag` count as headings. Doctor and Pandoc do require the space.
-
-# Setext headers
+## Setext headers
 
 A setext-style heading is a line of text “underlined” with a row of = signs (for a level-one heading) or - signs (for a level-two heading):
 
@@ -39,10 +23,6 @@ A level-one heading
 A level-two heading
 -------------------
 ```
-
-When writing a Doctor document, you should preferably not use these types of headers.
-
-# Identifiers and cross-referencing
 
 ## Identifiers
 
@@ -61,23 +41,11 @@ My other heading   {#foo}
 ---------------
 ```
 
-> **Note**: All headers are automatically assigned an identifier corresponding to their slug cased title (e.g. `# This is my header!` will have the identifier `#this-is-my-header`).
+> 📄 All headers are automatically assigned an identifier corresponding to their slug cased title (e.g. `# This is my header!` will have the identifier `#this-is-my-header`.)
 
-## Linking and cross-referencing
+## Numbering of headers
 
-These identifiers can be used to link to a header, e.g.
-
-```markdown
-# Foo section {#foo}
-
-[This](#foo) is a link to the above section.
-```
-
-When [section numbering](config#number-sections) is enabled, you can also easily cross-reference a section by writing `[@sec:foo]` (the `sec:` part is required) to get the number of the section automatically inserted.
-
-## Avoid numbering of headers
-
-Headings with the class `unnumbered` will not be numbered, even if [`number-sections`](config#number-sections) is specified in `doctor.toml`. A single hyphen (`{-}`) is equivalent to this, so the following headers,
+You can enable numbering of headers by setting `number-sections = true` under `[style]` in `mdoc.toml`. If you want to avoid numbering on certain headers, simply specify the class `unnumbered` on the,. A single hyphen (`{-}`) is equivalent to this, so the following headers:
 
 ```markdown
 # My heading {-}
@@ -85,4 +53,4 @@ Headings with the class `unnumbered` will not be numbered, even if [`number-sect
 # My heading {.unnumbered}
 ```
 
-will never be numbered, regardless of the options supplied in [`doctor.toml`](config).
+will never be numbered.

@@ -1,7 +1,10 @@
 [mdzk]
-generate-summary = false
+title = "MDoc Documentation"
 authors = ["kmaasrud"]
 language = "en"
 multilingual = false
 src = "src"
-title = "MDoc Documentation"
+generate-summary = false
+
+[build]
+backlinks = false
