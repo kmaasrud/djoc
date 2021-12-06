@@ -1,134 +1,221 @@
-<!DOCTYPE html>
-<html>
-  <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link href="css/main.css" rel="stylesheet" type="text/css">
-	<link href="css/normalize.css" rel="stylesheet" type="text/css">
-	<link href="css/out.css" rel="stylesheet" type="text/css">
-	<link rel="icon" type="image/svg" href="assets/favicon.svg">
-	<title>Doctor documentation - Introduction and key concepts</title>
-		  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.js"></script>
-    <script>document.addEventListener("DOMContentLoaded", function () {
-     var mathElements = document.getElementsByClassName("math");
-     var macros = [];
-     for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-       katex.render(texText.data, mathElements[i], {
-        displayMode: mathElements[i].classList.contains('display'),
-        throwOnError: false,
-        macros: macros,
-        fleqn: false
-       });
-    }}});
-    </script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css" />
-		<!--[if lt IE 9]>
-	<script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
-	<![endif]-->
-  </head>
-  <body>
-		<input type="checkbox" class="hidden toggle" id="menu-control">
-		<input type="checkbox" class="hidden toggle" id="toc-control">
-		<main class="container flex">
-		<aside class="book-menu" id="TOC" role="doc-toc">
-			<div class="book-menu-content">
-				<nav>
-					<img class="book-brand" id="main-logo" src="assets/favicon.svg">
-					<ul>
-						<li class="book-section-flat">
-							<span>Getting started</span>
-							<ul>
-								<li><a href="installing">Installing</a></li>
-								<li><a href="introduction">Introduction and key concepts</a></li>
-								<li><a href="creating-your-first-document">Creating your first document</a></li>
-							</ul>
-						</li>
-						<li class="book-section-flat">
-							<span>Using Doctor</span>
-							<ul>
-								<li><a href="cli">Command line tool</a></li>
-								<li><a href="config">Configuration</a></li>
-							</ul>
-						</li>
-						<li class="book-section-flat">
-							<a href="markdown">Markdown</span>
-							<ul>
-								<li><a href="paragraphs">Paragraphs</a></li>
-								<li><a href="headings">Headings</a></li>
-								<li><a href="formatting">Formatting</a></li>
-								<li><a href="lists">Lists</a></li>
-								<li><a href="images-and-figures">Images and figures</a></li>
-								<li><a href="code">Code</a></li>
-								<li><a href="math">Math</a></li>
-								<li><a href="block-quotes">Block quotes</a></li>
-							</ul>
-						</li>
-						<!-- <li class="book-section-flat">
-							<a href="conventions">Conventions</span>
-							<ul>
-								<li><a href="placeholder">Placeholder</a></li>
-							</ul>
-						</li> -->
-					</ul>
-				</nav>
-			</div>
-		</aside>
-<div class="book-page">
-<header class="book-header">
-<div class="flex align-center justify-between">
-<label for="menu-control">
-<img src="https://themes.gohugo.io//theme/hugo-book/svg/menu.svg" class="book-icon" alt="Menu">
-</label>
-<strong>Introduction and key concepts</strong>
-<label for="toc-control">
-<img src="https://themes.gohugo.io//theme/hugo-book/svg/toc.svg" class="book-icon" alt="Table of Contents">
-</label>
-</div>
-</header>
-<article class="markdown">
-<h1 class="page-title">Introduction and key concepts</h1>
-<p>Doctor aims at giving you the most streamlined writing experience possible. It is somewhat opinionated in how it enforces a specific workflow and workspace structure. This is simply so that you don’t have to concern yourself with structuring your project and keeping it organized manually - which I know from experience can be extremely time-draining.</p>
-<p>You write in Pandoc Markdown, with a few Doctor-specific syntax elights sprinkled in. If at any time you feel this markup language is limiting, you can simply write some <span class="math inline">\LaTeX</span> or HTML and it will be parsed as expected. I do however challenge you to avoid this as much as you can to really feel how refreshingly simple Pandoc Markdown can be, and to reassess how <em>fancy</em> your document really needs to be. You can read more on my choice of Pandoc Markdown <a href="markdown">here</a>, and learn the markup rules in the sections under <strong>Markdown</strong>.</p>
-<p>The Doctor tooling is focused on users familiar with the command line. As such, using a text editor with easy access to a terminal is highly advised. Visual Studio Code has an option of opening a terminal “panel” for example, which is a great way of working with Doctor. Using the embedded terminal in an editor like Neovim also works very smoothly! For previewing the document, I personally just open the PDF in my favorite PDF viewer and rebuild whenever I need to see the changes. There are also a bunch of extensions for Visual Studio Code which give a live preview of your current section. Some more guides pertaining to different editors will arrive here shortly…</p>
-<h2 id="key-concepts">Key concepts</h2>
-<h3 id="documents">Documents</h3>
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Introduction and key concepts - MDoc Documentation</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="docs.html"><strong aria-hidden="true">1.</strong> Welcome!</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">2.</strong> Getting started</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="installing.html"><strong aria-hidden="true">2.1.</strong> Installing</a></li><li class="chapter-item expanded "><a href="introduction.html" class="active"><strong aria-hidden="true">2.2.</strong> Introduction and key concepts</a></li><li class="chapter-item expanded "><a href="creating-your-first-document.html"><strong aria-hidden="true">2.3.</strong> Creating your first document</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">3.</strong> Using MDoc</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="commands.html"><strong aria-hidden="true">3.1.</strong> Command line tool</a></li><li class="chapter-item expanded "><a href="config.html"><strong aria-hidden="true">3.2.</strong> Configuration</a></li><li class="chapter-item expanded "><a href="bib.html"><strong aria-hidden="true">3.3.</strong> The bibliography tool</a></li></ol></li><li class="chapter-item expanded "><a href="markdown/markdown.html"><strong aria-hidden="true">4.</strong> Markdown</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="markdown/paragraphs.html"><strong aria-hidden="true">4.1.</strong> Paragraphs</a></li><li class="chapter-item expanded "><a href="markdown/headings.html"><strong aria-hidden="true">4.2.</strong> Headings</a></li><li class="chapter-item expanded "><a href="markdown/formatting.html"><strong aria-hidden="true">4.3.</strong> Formatting</a></li><li class="chapter-item expanded "><a href="markdown/lists.html"><strong aria-hidden="true">4.4.</strong> Lists</a></li><li class="chapter-item expanded "><a href="markdown/images-and-figures.html"><strong aria-hidden="true">4.5.</strong> Images and figures</a></li><li class="chapter-item expanded "><a href="markdown/code.html"><strong aria-hidden="true">4.6.</strong> Code</a></li><li class="chapter-item expanded "><a href="markdown/math.html"><strong aria-hidden="true">4.7.</strong> Math</a></li><li class="chapter-item expanded "><a href="markdown/block-quotes.html"><strong aria-hidden="true">4.8.</strong> Block quotes</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">MDoc Documentation</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <p>Doctor aims at giving you the most streamlined writing experience possible. It is somewhat opinionated in how it enforces a specific workflow and workspace structure. This is simply so that you don't have to concern yourself with structuring your project and keeping it organized manually - which I know from experience can be extremely time-draining.</p>
+<p>You write in Pandoc Markdown, with a few Doctor-specific syntax elights sprinkled in. If at any time you feel this markup language is limiting, you can simply write some <span class="katex-inline">\LaTeX</span> or HTML and it will be parsed as expected. I do however challenge you to avoid this as much as you can to really feel how refreshingly simple Pandoc Markdown can be, and to reassess how <em>fancy</em> your document really needs to be. You can read more on my choice of Pandoc Markdown <a href="markdown">here</a>, and learn the markup rules in the sections under <strong>Markdown</strong>.</p>
+<p>The Doctor tooling is focused on users familiar with the command line. As such, using a text editor with easy access to a terminal is highly advised. Visual Studio Code has an option of opening a terminal &quot;panel&quot; for example, which is a great way of working with Doctor. Using the embedded terminal in an editor like Neovim also works very smoothly! For previewing the document, I personally just open the PDF in my favorite PDF viewer and rebuild whenever I need to see the changes. There are also a bunch of extensions for Visual Studio Code which give a live preview of your current section. Some more guides pertaining to different editors will arrive here shortly...</p>
+<h1 id="key-concepts"><a class="header" href="#key-concepts">Key concepts</a></h1>
+<h2 id="documents-documents"><a class="header" href="#documents-documents">Documents {#documents}</a></h2>
 <p>In Doctor terminology, a <em>document</em> is simply a directory containing everything needed for Doctor to produce your desired output. The directory has the following structure:</p>
 <ul>
 <li><code>secs/</code>: This directory will contain the sections of your document, each represented by a Markdown file.</li>
 <li><code>assets/</code>: This is a directory for all the assets needed by your document. This could be figures, CSL styles, bibliographies or anything you need, really.</li>
 <li><code>doctor.toml</code>: This configuration file specifies key aspects of your document, like the title, author(s), and more. For more info, see <a href="config">Configuring</a></li>
 </ul>
-<p>As a rule, you should not manually create, rename or move files in a document - except within the <code>assets</code> directory of course. Rather, you should let Doctor handle the dirty work of maintaining the workspace, and focus on what you’re best at: Writing amazing content!</p>
-<h3 id="sections">Sections</h3>
+<p>As a rule, you should not manually create, rename or move files in a document - except within the <code>assets</code> directory of course. Rather, you should let Doctor handle the dirty work of maintaining the workspace, and focus on what you're best at: Writing amazing content!</p>
+<h2 id="sections-sections"><a class="header" href="#sections-sections">Sections {#sections}</a></h2>
 <p>A <em>section</em> in a Doctor document is just a single Markdown file in the <code>secs</code> directory. By design, this file should represent only <strong>one</strong> single section of the document. This ensures a consistent structure that is simple to maintain. A good rule of thumb is to start each section with the title of that section as a top level header, and only use subheaders below it.</p>
 <p>Doctor automatically assigns an index to your new sections. The indices are used to determine the order in which the sections appear in the final output. If you insist, you can rename the files to reorder the sections yourself, but it is adviced to use the Doctor command line tool for this task. It will make sure the correct order is kept when adding, removing or moving sections.</p>
-</article>
-<div class="book-comments">
-<label for="menu-control" class="hidden book-menu-overlay"></label>
-</div>
-</div>
-			  </main>
-	  <script>
-		(function() {
-		  var menu = document.querySelector("aside.book-menu nav");
-		  addEventListener("beforeunload", function(event) {
-			  localStorage.setItem("menu.scrollTop", menu.scrollTop);
-		  });
-		  menu.scrollTop = localStorage.getItem("menu.scrollTop");
-		})();
-	  </script>
-    <!-- Syntax highlighting through highlight.js -->
-    <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@10.4.0/styles/stackoverflow-light.min.css">
-    <script src="https://unpkg.com/@highlightjs/cdn-assets@10.4.0/highlight.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.18/dist/katex.min.css" integrity="sha384-zTROYFVGOfTw7JV7KUu8udsvW2fx4lWOsCEDqhBreBwlHI4ioVRtmIvEThzJHGET" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.20/dist/katex.min.js" integrity="sha384-ov99pRO2tAc0JuxTVzf63RHHeQTJ0CIawbDZFiFTzB07aqFZwEu2pz4uzqL+5OPG" crossorigin="anonymous"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var math = document.querySelectorAll("[class^=katex]");
+    for (var i = 0; i < math.length; i++) {
+      // Convert escaped ampersands before rendering
+      var toRender = math[i].textContent.replace(/&amp;/g, '&');
+      katex.render(toRender, math[i]);
+    }
+}, false)
+</script>
+                    </main>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', (event) => {
-          document.querySelectorAll('pre code').forEach((block) => {
-            hljs.highlightBlock(block);
-          });
-        });
-    </script>
-  </body>
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="installing.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="creating-your-first-document.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="installing.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="creating-your-first-document.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </body>
 </html>

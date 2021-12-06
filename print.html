@@ -1,0 +1,892 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>MDoc Documentation</title>
+        <meta name="robots" content="noindex" />
+
+
+        <!-- Custom HTML head -->
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="docs.html"><strong aria-hidden="true">1.</strong> Welcome!</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">2.</strong> Getting started</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="installing.html"><strong aria-hidden="true">2.1.</strong> Installing</a></li><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">2.2.</strong> Introduction and key concepts</a></li><li class="chapter-item expanded "><a href="creating-your-first-document.html"><strong aria-hidden="true">2.3.</strong> Creating your first document</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">3.</strong> Using MDoc</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="commands.html"><strong aria-hidden="true">3.1.</strong> Command line tool</a></li><li class="chapter-item expanded "><a href="config.html"><strong aria-hidden="true">3.2.</strong> Configuration</a></li><li class="chapter-item expanded "><a href="bib.html"><strong aria-hidden="true">3.3.</strong> The bibliography tool</a></li></ol></li><li class="chapter-item expanded "><a href="markdown/markdown.html"><strong aria-hidden="true">4.</strong> Markdown</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="markdown/paragraphs.html"><strong aria-hidden="true">4.1.</strong> Paragraphs</a></li><li class="chapter-item expanded "><a href="markdown/headings.html"><strong aria-hidden="true">4.2.</strong> Headings</a></li><li class="chapter-item expanded "><a href="markdown/formatting.html"><strong aria-hidden="true">4.3.</strong> Formatting</a></li><li class="chapter-item expanded "><a href="markdown/lists.html"><strong aria-hidden="true">4.4.</strong> Lists</a></li><li class="chapter-item expanded "><a href="markdown/images-and-figures.html"><strong aria-hidden="true">4.5.</strong> Images and figures</a></li><li class="chapter-item expanded "><a href="markdown/code.html"><strong aria-hidden="true">4.6.</strong> Code</a></li><li class="chapter-item expanded "><a href="markdown/math.html"><strong aria-hidden="true">4.7.</strong> Math</a></li><li class="chapter-item expanded "><a href="markdown/block-quotes.html"><strong aria-hidden="true">4.8.</strong> Block quotes</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">MDoc Documentation</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <p>It is time for academic writing to step out of it's archaic ways and into the modern world! With the rise of Markdown as the de facto markup language of the internet, why should academia lag behind. You should be able to write scientific content, confident that it is publishable both physically and on the web, along with the comfort of knowing the content is readable in it's raw form and will stand the test of time.</p>
+<h2 id="the-issue-with-latex"><a class="header" href="#the-issue-with-latex">The issue with <span class="katex-inline">\LaTeX</span></a></h2>
+<p><a href="https://www.latex-project.org/"><span class="katex-inline">\LaTeX</span></a> is incredible, but it has three key flaws.</p>
+<ul>
+<li>It's tooling is fractioned (to say the least).</li>
+<li>It is difficult to learn. </li>
+<li>The syntax is very obscure.</li>
+</ul>
+<p>The latter issue is exemplified on <a href="https://www.latex-project.org/about/">it's own introduction page</a>:</p>
+<pre><code class="language-tex">\documentclass{article}
+\title{Cartesian closed categories and the price of eggs}
+\author{Jane Doe}
+\date{September 1994}
+\begin{document}
+   \maketitle
+   Hello world!
+\end{document}
+</code></pre>
+<p>All this for a simple hello world and a title... Compare that with the same document written in Markdown<sup class="footnote-reference"><a href="#1">1</a></sup>:</p>
+<pre><code class="language-markdown">Hello world!
+</code></pre>
+<p>I am obviously glossing over the information that each line in that example holds, but I would wager most LaTeX users are familiar with how much boilerplate is needed to get a working document. Additionally, the <code>\command{argument}</code> syntax is messy and hard to read. </p>
+<div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
+<p>Without the title, of course, but we'll get to that.</p>
+</div>
+<h2 id="the-solution"><a class="header" href="#the-solution">The solution</a></h2>
+<p>Blabla</p>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.18/dist/katex.min.css" integrity="sha384-zTROYFVGOfTw7JV7KUu8udsvW2fx4lWOsCEDqhBreBwlHI4ioVRtmIvEThzJHGET" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.20/dist/katex.min.js" integrity="sha384-ov99pRO2tAc0JuxTVzf63RHHeQTJ0CIawbDZFiFTzB07aqFZwEu2pz4uzqL+5OPG" crossorigin="anonymous"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var math = document.querySelectorAll("[class^=katex]");
+    for (var i = 0; i < math.length; i++) {
+      // Convert escaped ampersands before rendering
+      var toRender = math[i].textContent.replace(/&amp;/g, '&');
+      katex.render(toRender, math[i]);
+    }
+}, false)
+</script><div style="break-before: page; page-break-before: always;"></div><p>For the time being, you will have to compile MDoc yourself to install it. It is published on <a href="https://crates.io/crates/mdoc">crates.io</a>, so this is done easily by running</p>
+<pre><code>$ cargo install mdoc
+</code></pre>
+<p>If you want to compile from upstream, clone <a href="https://github.com/kmaasrud/mdoc">the repo</a> and install from path with these commands:</p>
+<pre><code>$ git clone https://github.com/kmaasrud/mdoc.git
+$ cd mdoc
+$ cargo install --path .
+</code></pre>
+<p>MDoc depends on <a href="https://pandoc.org/">Pandoc</a> for parsing the Markdown content. Have a look at <a href="https://pandoc.org/installing.html">Installing Pandoc</a> and make sure it is available in your <code>PATH</code> by running <code>pandoc -v</code>.</p>
+<h2 id="notes-on-building"><a class="header" href="#notes-on-building">Notes on building</a></h2>
+<p>Depending on your platform, you might get some <a href="https://tectonic-typesetting.github.io/book/latest/howto/build-tectonic/cargo-vcpkg-dep-install.html">build errors when compiling Tectonic</a>. To solve these, you must clone the repo and build using vcpkg to handle the C dependencies. First install <code>cargo-vcpkg</code> by running</p>
+<pre><code>$ cargo install cargo-vcpkg
+</code></pre>
+<p>Then obtain the dependencies with</p>
+<pre><code>$ cargo vcpkg build
+</code></pre>
+<p>Following this, you need to set a couple of environment variables that makes sure you use vcpkg when compiling. These are the following:</p>
+<pre><code>$ export VCPKG_ROOT=&quot;${CARGO_TARGET_DIR:-$(pwd)/target}/vcpkg&quot;
+$ export TECTONIC_DEP_BACKEND=vcpkg
+</code></pre>
+<p>If you are building on Windows, you probably have to run with the following environment variable as well:</p>
+<pre><code>$ export RUSTFLAGS='-Ctarget-feature=+crt-static'
+</code></pre>
+<p>After all this, you should be ready to compile normally.</p>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.18/dist/katex.min.css" integrity="sha384-zTROYFVGOfTw7JV7KUu8udsvW2fx4lWOsCEDqhBreBwlHI4ioVRtmIvEThzJHGET" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.20/dist/katex.min.js" integrity="sha384-ov99pRO2tAc0JuxTVzf63RHHeQTJ0CIawbDZFiFTzB07aqFZwEu2pz4uzqL+5OPG" crossorigin="anonymous"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var math = document.querySelectorAll("[class^=katex]");
+    for (var i = 0; i < math.length; i++) {
+      // Convert escaped ampersands before rendering
+      var toRender = math[i].textContent.replace(/&amp;/g, '&');
+      katex.render(toRender, math[i]);
+    }
+}, false)
+</script><div style="break-before: page; page-break-before: always;"></div><p>Doctor aims at giving you the most streamlined writing experience possible. It is somewhat opinionated in how it enforces a specific workflow and workspace structure. This is simply so that you don't have to concern yourself with structuring your project and keeping it organized manually - which I know from experience can be extremely time-draining.</p>
+<p>You write in Pandoc Markdown, with a few Doctor-specific syntax elights sprinkled in. If at any time you feel this markup language is limiting, you can simply write some <span class="katex-inline">\LaTeX</span> or HTML and it will be parsed as expected. I do however challenge you to avoid this as much as you can to really feel how refreshingly simple Pandoc Markdown can be, and to reassess how <em>fancy</em> your document really needs to be. You can read more on my choice of Pandoc Markdown <a href="markdown">here</a>, and learn the markup rules in the sections under <strong>Markdown</strong>.</p>
+<p>The Doctor tooling is focused on users familiar with the command line. As such, using a text editor with easy access to a terminal is highly advised. Visual Studio Code has an option of opening a terminal &quot;panel&quot; for example, which is a great way of working with Doctor. Using the embedded terminal in an editor like Neovim also works very smoothly! For previewing the document, I personally just open the PDF in my favorite PDF viewer and rebuild whenever I need to see the changes. There are also a bunch of extensions for Visual Studio Code which give a live preview of your current section. Some more guides pertaining to different editors will arrive here shortly...</p>
+<h1 id="key-concepts"><a class="header" href="#key-concepts">Key concepts</a></h1>
+<h2 id="documents-documents"><a class="header" href="#documents-documents">Documents {#documents}</a></h2>
+<p>In Doctor terminology, a <em>document</em> is simply a directory containing everything needed for Doctor to produce your desired output. The directory has the following structure:</p>
+<ul>
+<li><code>secs/</code>: This directory will contain the sections of your document, each represented by a Markdown file.</li>
+<li><code>assets/</code>: This is a directory for all the assets needed by your document. This could be figures, CSL styles, bibliographies or anything you need, really.</li>
+<li><code>doctor.toml</code>: This configuration file specifies key aspects of your document, like the title, author(s), and more. For more info, see <a href="config">Configuring</a></li>
+</ul>
+<p>As a rule, you should not manually create, rename or move files in a document - except within the <code>assets</code> directory of course. Rather, you should let Doctor handle the dirty work of maintaining the workspace, and focus on what you're best at: Writing amazing content!</p>
+<h2 id="sections-sections"><a class="header" href="#sections-sections">Sections {#sections}</a></h2>
+<p>A <em>section</em> in a Doctor document is just a single Markdown file in the <code>secs</code> directory. By design, this file should represent only <strong>one</strong> single section of the document. This ensures a consistent structure that is simple to maintain. A good rule of thumb is to start each section with the title of that section as a top level header, and only use subheaders below it.</p>
+<p>Doctor automatically assigns an index to your new sections. The indices are used to determine the order in which the sections appear in the final output. If you insist, you can rename the files to reorder the sections yourself, but it is adviced to use the Doctor command line tool for this task. It will make sure the correct order is kept when adding, removing or moving sections.</p>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.18/dist/katex.min.css" integrity="sha384-zTROYFVGOfTw7JV7KUu8udsvW2fx4lWOsCEDqhBreBwlHI4ioVRtmIvEThzJHGET" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.20/dist/katex.min.js" integrity="sha384-ov99pRO2tAc0JuxTVzf63RHHeQTJ0CIawbDZFiFTzB07aqFZwEu2pz4uzqL+5OPG" crossorigin="anonymous"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var math = document.querySelectorAll("[class^=katex]");
+    for (var i = 0; i < math.length; i++) {
+      // Convert escaped ampersands before rendering
+      var toRender = math[i].textContent.replace(/&amp;/g, '&');
+      katex.render(toRender, math[i]);
+    }
+}, false)
+</script><div style="break-before: page; page-break-before: always;"></div><p>To get started with Doctor, create a new document by running</p>
+<pre><code class="language-shell">doctor new &quot;Awesome document&quot;
+</code></pre>
+<p>This will create a new <a href="introduction#documents">document</a> inside a directory conveniently named <code>Awesome document</code>. Next, add a section by running</p>
+<pre><code class="language-shell">doctor add introduction
+</code></pre>
+<p>This will create a new Markdown file named <code>00_introduction.md</code> under the directory <code>secs</code> and adds a top level header <code># Introduction</code> to it. Go ahead and add some more Markdown content to this file. You can write whatever you want, so make it something fun and add some <span class="katex-inline">\TeX</span> math or code listings if you want! To get your document built into a PDF, simply run</p>
+<pre><code class="language-shell">doctor build
+</code></pre>
+<p>This will produce a PDF called <code>document.pdf</code> in your root directory. Open it with your preferred PDF viewer and marvel at how simple it was to create this beautiful <span class="katex-inline">\LaTeX</span>-formatted PDF - no <code>\begin{document}</code> needed.</p>
+<p>Now, you might not be quite as impressed as I make it out to be yet... For instance, the author is &quot;AUTHOR&quot;, how do you change that? Have a look inside <code>doctor.toml</code>. This file is where you'll find your document's metadata, build and style instructions, bibliography details and many more options - having this in a separate file is a crucial step in ensuring separation of concerns. Change the <code>title</code>, <code>author</code> and <code>date</code> field into whatever you desire and run <code>doctor build</code> again to see the changes get applied.</p>
+<p>You are now ready to add more sections... (WIP)</p>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.18/dist/katex.min.css" integrity="sha384-zTROYFVGOfTw7JV7KUu8udsvW2fx4lWOsCEDqhBreBwlHI4ioVRtmIvEThzJHGET" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.20/dist/katex.min.js" integrity="sha384-ov99pRO2tAc0JuxTVzf63RHHeQTJ0CIawbDZFiFTzB07aqFZwEu2pz4uzqL+5OPG" crossorigin="anonymous"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var math = document.querySelectorAll("[class^=katex]");
+    for (var i = 0; i < math.length; i++) {
+      // Convert escaped ampersands before rendering
+      var toRender = math[i].textContent.replace(/&amp;/g, '&');
+      katex.render(toRender, math[i]);
+    }
+}, false)
+</script><div style="break-before: page; page-break-before: always;"></div><h1 id="doctor-new"><a class="header" href="#doctor-new"><code>doctor new</code></a></h1>
+<p>Used like:</p>
+<pre><code class="language-shell">doctor new &lt;name&gt;
+</code></pre>
+<p>This will create a new document inside a directory with the specified name. Omitting <code>&lt;name&gt;</code> creates a document in the current directory.</p>
+<h1 id="doctor-build"><a class="header" href="#doctor-build"><code>doctor build</code></a></h1>
+<p>Used like:</p>
+<pre><code class="language-shell">doctor build
+</code></pre>
+<p>Will build the current document into a PDF.</p>
+<h1 id="doctor-add"><a class="header" href="#doctor-add"><code>doctor add</code></a></h1>
+<p>Used like:</p>
+<pre><code class="language-shell">doctor add &lt;name of section&gt;
+</code></pre>
+<p>Adds a new section to your document, automatically assigning an index to it. If you want to specify which index you want it to have, run</p>
+<pre><code class="language-shell">doctor add &lt;name of section&gt; --at &lt;index&gt;
+</code></pre>
+<blockquote>
+<p>You may also use <code>doctor add &lt;name&gt; -i &lt;index&gt;</code>, <code>doctor add &lt;name&gt; --at=&lt;index&gt;</code> or <code>doctor add &lt;name&gt; -i=&lt;index&gt;</code>.</p>
+</blockquote>
+<p>This will add the new section at the specified index, reordering the other sections accordingly.</p>
+<h1 id="doctor-remove"><a class="header" href="#doctor-remove"><code>doctor remove</code></a></h1>
+<p>Used like:</p>
+<pre><code class="language-shell">doctor remove &lt;identifier&gt; ...
+</code></pre>
+<p>Will search for a section that has an index or name that matches <code>&lt;identifier&gt;</code> and remove it, reordering the other sections accordingly. The <code>remove</code> command allows multiple arguments, meaning you can supply multiple identifiers, and Doctor will remove them one after one.</p>
+<p>Removing a section requires confirmation, which Doctor will ask for. If you want to skip this step (e.g. when deleting a lot of sections), run with the <code>--confirm</code> or <code>-c</code> flag. This will proceed with removing sections without asking for confirmation.</p>
+<h1 id="doctor-move"><a class="header" href="#doctor-move"><code>doctor move</code></a></h1>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.18/dist/katex.min.css" integrity="sha384-zTROYFVGOfTw7JV7KUu8udsvW2fx4lWOsCEDqhBreBwlHI4ioVRtmIvEThzJHGET" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.20/dist/katex.min.js" integrity="sha384-ov99pRO2tAc0JuxTVzf63RHHeQTJ0CIawbDZFiFTzB07aqFZwEu2pz4uzqL+5OPG" crossorigin="anonymous"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var math = document.querySelectorAll("[class^=katex]");
+    for (var i = 0; i < math.length; i++) {
+      // Convert escaped ampersands before rendering
+      var toRender = math[i].textContent.replace(/&amp;/g, '&');
+      katex.render(toRender, math[i]);
+    }
+}, false)
+</script><div style="break-before: page; page-break-before: always;"></div><p>Your Doctor document can be configured quite extensively with the <code>doctor.toml</code> file. This file allows you to specify metadata, apply styling, supply information to Pandoc and/or the <span class="katex-inline">\TeX</span> engine, and much more. I've chosen the TOML specification since I consider it the most human-friendly configuration interface - it's legibility being the main draw.</p>
+<p>The configuration file has six main <em>tables</em> (which is TOML terminology for a collection of key-value pairs following a header): <code>[meta]</code>, <code>[build]</code>, <code>[style]</code>, <code>[bib]</code>, <code>[latex]</code> and <code>[html]</code>. They contain the configurations as listed below.</p>
+<h1 id="meta"><a class="header" href="#meta"><code>[meta]</code></a></h1>
+<p>These options relate to the metadata of your document.</p>
+<table><thead><tr><th><strong>Config name</strong></th><th align="left"><strong>Description</strong></th></tr></thead><tbody>
+<tr><td><code>title</code></td><td align="left">The document's title.</td></tr>
+<tr><td><code>author</code></td><td align="left">The document's author or a list of authors.</td></tr>
+<tr><td><code>date</code></td><td align="left">The date of your document. If the date is <code>&quot;today&quot;</code> or <code>&quot;now&quot;</code>, Doctor will insert the current date.</td></tr>
+</tbody></table>
+<p>Here's an example of a <code>[meta]</code> table:</p>
+<pre><code class="language-toml">[meta]
+title = &quot;Our amazing report&quot;
+author = [&quot;Jane Doe&quot;, &quot;John Doe&quot;]
+date = &quot;February 17th 1998&quot;
+</code></pre>
+<h1 id="build"><a class="header" href="#build"><code>[build]</code></a></h1>
+<p>These options allow you to tune how the document is built.</p>
+<table><thead><tr><th><strong>Config name</strong></th><th align="left"><strong>Description</strong></th></tr></thead><tbody>
+<tr><td><code>engine</code></td><td align="left">The <span class="katex-inline">\TeX</span> engine you want to use to build your PDF. The options are: <code>pdflatex</code>, <code>lualatex</code>, <code>xelatex</code>, <code>latexmk</code> and <code>tectonic</code>. If no engine is specified, Doctor will use <code>pdflatex</code> as the default.</td></tr>
+<tr><td><code>filename</code></td><td align="left">The filename you want for your exported document. You do not need to specify an extension, Doctor will automatically append <code>.pdf</code> when exporting as a PDF and <code>.html</code> when exporting as HTML.</td></tr>
+<tr><td><code>output-format</code></td><td align="left">The format of your exported document. The options are <code>&quot;html&quot;</code> or <code>&quot;pdf&quot;</code>.</td></tr>
+<tr><td><code>lua-filters</code></td><td align="left">Boolean that specifies whether or not to use the embedded Lua filters. This option is mainly for debugging. The default is <code>true</code>, and turning it <code>false</code> will stop some functionality like cross-referencing.</td></tr>
+</tbody></table>
+<p>Here's an example of a <code>[build]</code> table:</p>
+<pre><code class="language-toml">[build]
+engine = &quot;lualatex&quot;
+filename = &quot;awesome-document&quot;
+output-format = &quot;html&quot;
+lua-filters = false
+</code></pre>
+<h1 id="style"><a class="header" href="#style"><code>[style]</code></a></h1>
+<p>These are options that specify how you want your document presented.</p>
+<table><thead><tr><th><strong>Config name</strong></th><th align="left"><strong>Description</strong></th></tr></thead><tbody>
+<tr><td><code>two-column</code></td><td align="left">If this option is <code>true</code>, the PDF document will be formatted with two columns on each page. The default is <code>false</code>.</td></tr>
+<tr><td><code>number-sections</code></td><td align="left">Boolean that specifies whether or not you want the sections of your document numbered. If you want to use cross-referencing with sections, this option must be true.</td></tr>
+<tr><td><code>document-class</code></td><td align="left">The <span class="katex-inline">\LaTeX</span> document class you want to use. Can be any of the ones listed <a href="https://ctan.org/topic/class">here</a>. Beware that not all classes are tested with the Doctor syntax, so some might not work as expected.</td></tr>
+<tr><td><code>class-options</code></td><td align="left">Options for the document class. The available options depend on the chosen document class, but some commonly used ones are listed <a href="https://en.wikibooks.org/wiki/LaTeX/Document_Structure#Document_Class_Options">here</a>.</td></tr>
+</tbody></table>
+<p>Here's an example of a <code>[style]</code> table:</p>
+<pre><code class="language-toml">[style]
+two-column = true
+number-sections = true
+document-class = &quot;report&quot;
+class-options = &quot;landscape&quot;
+</code></pre>
+<h1 id="bib"><a class="header" href="#bib"><code>[bib]</code></a></h1>
+<p>These options all relate to citations and the bibliography of your document.</p>
+<table><thead><tr><th><strong>Config name</strong></th><th align="left"><strong>Description</strong></th></tr></thead><tbody>
+<tr><td><code>csl</code></td><td align="left">The CSL (<a href="https://citationstyles.org/">Citation Style Language</a>) style to use for your citations. You can either use one of the CSL styles that come prepackaged with Doctor (listed <a href="bib#csl">here</a>), a CSL file in your <code>assets</code> folder or a URL that points to a CSL file available on the internet. For local files, you need only specify the name, not the <code>.csl</code> extension. The default CSL style is the <a href="https://csl.mendeley.com/styleInfo/?styleId=http%3A%2F%2Fwww.zotero.org%2Fstyles%2Fchicago-author-date">Chicago Manual of Style 17th edition</a>.</td></tr>
+<tr><td><code>bibliography-title</code></td><td align="left">The title of the bibliography section. The default is no title.</td></tr>
+<tr><td><code>bibliography-file</code></td><td align="left">The name of your BibTeX file. All paths are relative to the <code>assets</code> directory. The default is <code>references.bib</code></td></tr>
+<tr><td><code>include-bibliography</code></td><td align="left">Boolean that specifies whether or not you want your bibliography included in your document. The default is <code>true</code>.</td></tr>
+</tbody></table>
+<p>Here's an example of a <code>[bib]</code> table:</p>
+<pre><code class="language-toml">[bib]
+csl = &quot;apa&quot;
+bibliography-title = &quot;References&quot;
+include-bibliography = false
+</code></pre>
+<h1 id="latex"><a class="header" href="#latex"><code>[latex]</code></a></h1>
+<p>These are options that are specific for <span class="katex-inline">\LaTeX</span> and PDF output.</p>
+<table><thead><tr><th><strong>Config name</strong></th><th align="left"><strong>Description</strong></th></tr></thead><tbody>
+<tr><td><code>packages</code></td><td align="left">A list of strings specifying the packages you want used. This is similar to <code>\usepackage{package}</code> in a <span class="katex-inline">\LaTeX</span> document, but much less verbose. If you want to supply options to you package inclusion, you can write them with brackets as you would normally. An example could be when you want to specify a language to Babel. In this case, you could write <code>packages = [&quot;[norsk]{babel}&quot;]</code>.</td></tr>
+<tr><td><code>header</code></td><td align="left">Whatever you want parsed by <span class="katex-inline">\LaTeX</span> as header content. For simple package inclusions, the above option is recommended, but if more advanced headers are required, you can use this option. To avoid having to escape macros or manually write newline characters, you can use a multiline literal string, which is surrounded by <code>'''</code>.</td></tr>
+</tbody></table>
+<p>Here's an example of a <code>[latex]</code> table:</p>
+<pre><code class="language-toml">[latex]
+packages = [&quot;graphicx&quot;, &quot;placeins&quot;, &quot;[utf8]{inputenc}&quot;]
+header = '''\makeatletter
+\newcommand*{\centerfloat}{%
+  \parindent \z@
+  \leftskip \z@ \@plus 1fil \@minus \textwidth
+  \rightskip\leftskip
+  \parfillskip \z@skip}
+\makeatother'''
+</code></pre>
+<h1 id="html"><a class="header" href="#html"><code>[html]</code></a></h1>
+<p>These are options that are specific for HTML output, but since you cannot output HTML yet, these do nothing at the moment.</p>
+<table><thead><tr><th><strong>Config name</strong></th><th align="left"><strong>Description</strong></th></tr></thead><tbody>
+<tr><td><code>header</code></td><td align="left">Whatever you want included in the <code>&lt;head&gt;</code> of you HTML document. To avoid having to escape macros or manually write newline characters, you can use a multiline literal string, which is surrounded by <code>'''</code>.</td></tr>
+</tbody></table>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.18/dist/katex.min.css" integrity="sha384-zTROYFVGOfTw7JV7KUu8udsvW2fx4lWOsCEDqhBreBwlHI4ioVRtmIvEThzJHGET" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.20/dist/katex.min.js" integrity="sha384-ov99pRO2tAc0JuxTVzf63RHHeQTJ0CIawbDZFiFTzB07aqFZwEu2pz4uzqL+5OPG" crossorigin="anonymous"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var math = document.querySelectorAll("[class^=katex]");
+    for (var i = 0; i < math.length; i++) {
+      // Convert escaped ampersands before rendering
+      var toRender = math[i].textContent.replace(/&amp;/g, '&');
+      katex.render(toRender, math[i]);
+    }
+}, false)
+</script><div style="break-before: page; page-break-before: always;"></div><h1 id="citation-style-language-csl"><a class="header" href="#citation-style-language-csl">Citation Style Language {#csl}</a></h1>
+<p>Doctor comes with a few common CSL styles prepackaged. To use these, just apply them like <code>csl = &quot;&lt;csl name&gt;&quot;</code> in the <code>doctor.toml</code> file and Doctor will automatically add it to the <code>assets</code> directory. Your options are</p>
+<ul>
+<li><a href="https://csl.mendeley.com/styleInfo/?styleId=http%3A%2F%2Fwww.zotero.org%2Fstyles%2Fapa">American Psychological Associtaton 6th editon</a>, which you can use with <code>csl = &quot;apa&quot;</code>.</li>
+<li><a href="https://csl.mendeley.com/styleInfo/?styleId=http%3A%2F%2Fwww.zotero.org%2Fstyles%2Fieee">IEEE</a>, which you can use with <code>csl = &quot;ieee&quot;</code>.</li>
+<li><a href="https://csl.mendeley.com/styleInfo/?styleId=http%3A%2F%2Fwww.zotero.org%2Fstyles%2Fharvard-cite-them-right">Cite Them Right 10th edition - Harvard</a>, which you can use with <code>csl = &quot;harvard&quot;</code>.</li>
+<li><a href="https://csl.mendeley.com/styleInfo/?styleId=http%3A%2F%2Fwww.zotero.org%2Fstyles%2Fnature">Nature</a>, which you can use with <code>csl = &quot;nature&quot;</code>.</li>
+<li><a href="https://csl.mendeley.com/styleInfo/?styleId=http%3A%2F%2Fwww.zotero.org%2Fstyles%2Fvancouver">Vancouver</a>, which you can use with <code>csl = &quot;vancouver&quot;</code>.</li>
+</ul>
+<p>For more CSL styles, a good source is the <a href="https://csl.mendeley.com/searchByName/">Mendeley CSL database</a>. There you can find a style you like, copy the URL from the install button and put it as the CSL style like <code>csl = &quot;&lt;url&gt;&quot;</code>. Doctor will then fetch the style from the internet when building your document.</p>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.18/dist/katex.min.css" integrity="sha384-zTROYFVGOfTw7JV7KUu8udsvW2fx4lWOsCEDqhBreBwlHI4ioVRtmIvEThzJHGET" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.20/dist/katex.min.js" integrity="sha384-ov99pRO2tAc0JuxTVzf63RHHeQTJ0CIawbDZFiFTzB07aqFZwEu2pz4uzqL+5OPG" crossorigin="anonymous"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var math = document.querySelectorAll("[class^=katex]");
+    for (var i = 0; i < math.length; i++) {
+      // Convert escaped ampersands before rendering
+      var toRender = math[i].textContent.replace(/&amp;/g, '&');
+      katex.render(toRender, math[i]);
+    }
+}, false)
+</script><div style="break-before: page; page-break-before: always;"></div><p>MDoc uses Pandoc Markdown (with a few carefully selected additions) as it's markup language. This choice was a simple one; the creator of Markdown, <a href="https://daringfireball.net/projects/markdown/syntax#philosophy">John Gruber</a>, puts it best himself:</p>
+<blockquote>
+<p>Markdown is intended to be as easy-to-read and easy-to-write as is feasible. Readability, however, is emphasized above all else. A Markdown-formatted document should be publishable as-is, as plain text, without looking like it’s been marked up with tags or formatting instructions.</p>
+</blockquote>
+<p>This is at the heart of most of my choices when creating MDoc, as I'm sure also was the case for <a href="https://johnmacfarlane.net/">John MacFarlane</a> when he made the canonical additions that make up Pandoc Markdown.</p>
+<p>But why yet another Markdown flavor? Well, the goals of Pandoc, and subsequently of MDoc, is to produce a more complex output than a simple HTML page. To conform with the abovementioned philosophy, writing inline HTML or TeX (although permitted) to achieve this complexity, is simply not good enough. Thus, a few additions are needed, but should come as second nature to those already familiar with Markdown.</p>
+<p>This part of the documentation contains a modified copy of <a href="https://pandoc.org/MANUAL.html#pandocs-markdown">Pandoc's User Guide</a>. I've done this to explain the syntax at the perspective of MDoc's goals and to specify the changes and conventions MDoc introduces.</p>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.18/dist/katex.min.css" integrity="sha384-zTROYFVGOfTw7JV7KUu8udsvW2fx4lWOsCEDqhBreBwlHI4ioVRtmIvEThzJHGET" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.20/dist/katex.min.js" integrity="sha384-ov99pRO2tAc0JuxTVzf63RHHeQTJ0CIawbDZFiFTzB07aqFZwEu2pz4uzqL+5OPG" crossorigin="anonymous"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var math = document.querySelectorAll("[class^=katex]");
+    for (var i = 0; i < math.length; i++) {
+      // Convert escaped ampersands before rendering
+      var toRender = math[i].textContent.replace(/&amp;/g, '&');
+      katex.render(toRender, math[i]);
+    }
+}, false)
+</script><div style="break-before: page; page-break-before: always;"></div><p>A paragraph is one or more lines of text followed by one or more blank lines. Newlines are treated as spaces, so you can reflow your paragraphs as you like. Pandoc's Markdown is strict, so if you need a hard line break, you have three options:</p>
+<ul>
+<li>Use two newlines or more (essentially separating each paragraph by a blank line). This is the recommended and most readable way.</li>
+<li>Use a backslash directly followed by a single newline. <strong>Note</strong>: in multiline and grid table cells, this is the only way to create a hard line break, since trailing spaces in the cells are ignored.</li>
+<li>Use two or more spaces at the end of a line. This method should only be used if absolutely necessary, as it makes the document source less readable.</li>
+</ul>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.18/dist/katex.min.css" integrity="sha384-zTROYFVGOfTw7JV7KUu8udsvW2fx4lWOsCEDqhBreBwlHI4ioVRtmIvEThzJHGET" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.20/dist/katex.min.js" integrity="sha384-ov99pRO2tAc0JuxTVzf63RHHeQTJ0CIawbDZFiFTzB07aqFZwEu2pz4uzqL+5OPG" crossorigin="anonymous"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var math = document.querySelectorAll("[class^=katex]");
+    for (var i = 0; i < math.length; i++) {
+      // Convert escaped ampersands before rendering
+      var toRender = math[i].textContent.replace(/&amp;/g, '&');
+      katex.render(toRender, math[i]);
+    }
+}, false)
+</script><div style="break-before: page; page-break-before: always;"></div><p>There are two kinds of headings: <a href="markdown/headings.html#setext-headers">Setext</a> and <a href="markdown/headings.html#atx-headers">ATX</a>. They are equivalent, so choose the style you prefer. Both heading types can contain inline <a href="markdown/formatting.html">formatting</a>, such as <em>emphasis</em>, or <a href="markdown/math.html">math</a>.</p>
+<h2 id="atx-headers"><a class="header" href="#atx-headers">ATX headers</a></h2>
+<p>The most commonly used header style, an ATX heading consists of one to six <code>#</code> signs and a line of text, optionally followed by any number of <code>#</code> signs. The number of <code>#</code> signs at the beginning of the line is the heading level:</p>
+<pre><code class="language-markdown">## A level-two heading
+
+### A level-three heading ###
+</code></pre>
+<blockquote>
+<p>📄 MDoc requires a blank line before and after a heading (except, of course, at the beginning of the document.) Additionally, a space between the opening <code>#</code> signs of an ATX heading and the heading text is required.</p>
+</blockquote>
+<h2 id="setext-headers"><a class="header" href="#setext-headers">Setext headers</a></h2>
+<p>A setext-style heading is a line of text “underlined” with a row of = signs (for a level-one heading) or - signs (for a level-two heading):</p>
+<pre><code class="language-markdown">A level-one heading
+===================
+
+A level-two heading
+-------------------
+</code></pre>
+<h2 id="identifiers"><a class="header" href="#identifiers">Identifiers</a></h2>
+<p>Headings can be assigned attributes using the following syntax at the end of the line containing the heading text:</p>
+<pre><code>{#identifier .class .class key=value key=value}
+</code></pre>
+<p>Thus, for example, the following headings will all be assigned the identifier <code>foo</code>:</p>
+<pre><code class="language-markdown"># My heading {#foo}
+
+## My heading ##    {#foo}
+
+My other heading   {#foo}
+---------------
+</code></pre>
+<blockquote>
+<p>📄 All headers are automatically assigned an identifier corresponding to their slug cased title (e.g. <code># This is my header!</code> will have the identifier <code>#this-is-my-header</code>.)</p>
+</blockquote>
+<h2 id="numbering-of-headers"><a class="header" href="#numbering-of-headers">Numbering of headers</a></h2>
+<p>You can enable numbering of headers by setting <code>number-sections = true</code> under <code>[style]</code> in <code>mdoc.toml</code>. If you want to avoid numbering on certain headers, simply specify the class <code>unnumbered</code> on the,. A single hyphen (<code>{-}</code>) is equivalent to this, so the following headers:</p>
+<pre><code class="language-markdown"># My heading {-}
+
+# My heading {.unnumbered}
+</code></pre>
+<p>will never be numbered.</p>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.18/dist/katex.min.css" integrity="sha384-zTROYFVGOfTw7JV7KUu8udsvW2fx4lWOsCEDqhBreBwlHI4ioVRtmIvEThzJHGET" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.20/dist/katex.min.js" integrity="sha384-ov99pRO2tAc0JuxTVzf63RHHeQTJ0CIawbDZFiFTzB07aqFZwEu2pz4uzqL+5OPG" crossorigin="anonymous"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var math = document.querySelectorAll("[class^=katex]");
+    for (var i = 0; i < math.length; i++) {
+      // Convert escaped ampersands before rendering
+      var toRender = math[i].textContent.replace(/&amp;/g, '&');
+      katex.render(toRender, math[i]);
+    }
+}, false)
+</script><div style="break-before: page; page-break-before: always;"></div><h1 id="bold-and-italic-text"><a class="header" href="#bold-and-italic-text">Bold and italic text</a></h1>
+<p>To make text <em>italic</em>, surround it with single <code>*</code> or <code>_</code> symbols, like this:</p>
+<pre><code class="language-markdown">This text is _italicized with underscores_, and this
+is *italicized with asterisks*.
+</code></pre>
+<p>Surrounding with double <code>*</code> or <code>_</code> symbols, produces <strong>bold</strong> text, e.g.</p>
+<pre><code class="language-markdown">This is **bold text** and __with underscores__.
+</code></pre>
+<p>A <code>*</code> or <code>_</code> character surrounded by spaces, or backslash-escaped, will not trigger emphasis:</p>
+<pre><code class="language-shell">This is * not emphasized *, and \*neither is this\*.
+</code></pre>
+<p>Because <code>_</code> is sometimes used inside words or identifiers, Pandoc will not interpret <code>_</code> as a marker if it's surrounded by characters. For this reason, it is advised to use <code>*</code> to avoid having to shift markers throughout the text.</p>
+<h1 id="strikeout"><a class="header" href="#strikeout">Strikeout</a></h1>
+<p>You can <del>strikeout</del> text by surrounding it with <code>~~</code>. For example:</p>
+<pre><code class="language-markdown">This ~~is deleted text.~~
+</code></pre>
+<h1 id="superscript-and-subscript"><a class="header" href="#superscript-and-subscript">Superscript and subscript</a></h1>
+<p>^Super^scripts may be written by surrounding the superscripted text by <code>^</code> characters (intuitively enough); ~sub~scripts may be written by surrounding the subscripted text with <code>~</code> characters (not as intuitive.) Thus, for example,</p>
+<pre><code class="language-markdown">H~2~O is a liquid.  2^10^ is 1024.
+</code></pre>
+<blockquote>
+<p><strong>Note</strong>: The text between <code>^...^</code> or <code>~...~</code> may not contain spaces or newlines. If the superscripted or subscripted text contains spaces, these spaces must be escaped with backslashes. (This is to prevent accidental superscripting and subscripting through the ordinary use of <code>~</code> and <code>^</code>, as well as bad interactions with footnotes.) Thus, if you want the letter P with ‘a cat’ in subscripts, you write <code>P~a\ cat~</code>, not <code>P~a cat~</code>.</p>
+</blockquote>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.18/dist/katex.min.css" integrity="sha384-zTROYFVGOfTw7JV7KUu8udsvW2fx4lWOsCEDqhBreBwlHI4ioVRtmIvEThzJHGET" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.20/dist/katex.min.js" integrity="sha384-ov99pRO2tAc0JuxTVzf63RHHeQTJ0CIawbDZFiFTzB07aqFZwEu2pz4uzqL+5OPG" crossorigin="anonymous"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var math = document.querySelectorAll("[class^=katex]");
+    for (var i = 0; i < math.length; i++) {
+      // Convert escaped ampersands before rendering
+      var toRender = math[i].textContent.replace(/&amp;/g, '&');
+      katex.render(toRender, math[i]);
+    }
+}, false)
+</script><div style="break-before: page; page-break-before: always;"></div><h1 id="ordered-lists"><a class="header" href="#ordered-lists">Ordered lists</a></h1>
+<p>To make an ordered list of items, write a decimal number, followed by a period, a space and the content you want as part of that list item.</p>
+<pre><code class="language-markdown">1.  one
+2.  two
+3.  three
+</code></pre>
+<p>This will produce a “compact” list. If you want a “loose” list, in which each item is formatted as a paragraph, put spaces between the items:</p>
+<pre><code class="language-markdown">5.  one
+
+34.  two
+
+8.  three
+</code></pre>
+<p>Only the first number is parsed, which means the above list will be formatted as the sequence <code>5.</code>, <code>6.</code> and <code>7.</code>. You can make use of this by specifying only the starting number, and using a <code>#.</code> in place of the following numbers. However, in the name of legibilty I recommend writing the numbers as you intend them.</p>
+<p>Multiple styles of alphanumeric sequences are allowed. These are uppercase/lowercase letters and roman numerals, in addition to normal Arabic numerals. You can use the regular dot notation (<code>2.</code>), enclose the index in parentheses (<code>(i)</code>) or follow it by a single closing-parentheses (<code>a)</code>). This variation of styles is utilized when one needs a new list directly following another or to make a sublist. The following are all valid lists:</p>
+<pre><code class="language-shell"> 9) Ninth
+10) Tenth
+11) Eleventh
+       i. subone
+      ii. subtwo
+     iii. subthree
+
+(2) Two
+(5) Three
+1.  One
+#.  Two
+</code></pre>
+<p>which gives the following output:</p>
+<hr />
+<ol start="9">
+<li>Ninth</li>
+<li>Tenth</li>
+<li>Eleventh
+i. subone
+ii. subtwo
+iii. subthree</li>
+</ol>
+<p>(2) Two
+(5) Three</p>
+<ol>
+<li>One
+#.  Two</li>
+</ol>
+<hr />
+<h1 id="unordered-lists"><a class="header" href="#unordered-lists">Unordered lists</a></h1>
+<p>An unordered list is a list of bulleted list items that are not numbered. They work exactly like ordered lists (except the numbering of course,) but use <code>*</code>, <code>+</code> or <code>-</code> as markers.</p>
+<pre><code class="language-markdown">- one
+- two
+- three
+</code></pre>
+<p>The bullets need not be flush with the left margin; they may be indented one, two, or three spaces. The bullet must be followed by whitespace.</p>
+<h2 id="task-lists"><a class="header" href="#task-lists">Task lists</a></h2>
+<p>You can also make unordered lists that have a checkmark, in order to create a task list. The Github-Flavored Markdown syntax is used, which is as follows</p>
+<pre><code class="language-markdown">- [ ] an unchecked task list item
+- [x] checked item
+</code></pre>
+<h1 id="block-content-in-lists"><a class="header" href="#block-content-in-lists">Block content in lists</a></h1>
+<p>A list item may contain multiple paragraphs and other block-level content. However, subsequent paragraphs must be preceded by a blank line and indented to line up with the first non-space content after the list marker.</p>
+<pre><code class="language-markdown">* First paragraph.
+
+  Continued.
+
+* Second paragraph. With a code block, which must be indented
+  eight spaces:
+
+      { code }
+</code></pre>
+<p>List items may include other lists, like in the last ordered list example. In this case the preceding blank line is optional. The nested list must be indented to line up with the first non-space character after the list marker of the containing list item.</p>
+<pre><code class="language-markdown">* fruits
+  + apples
+    - macintosh
+    - red delicious
+  + pears
+  + peaches
+* vegetables
+  + broccoli
+  + chard
+</code></pre>
+<p>Markdown allows you to write list items “lazily,” and reflow your text with a single newline instead of indenting continuation lines. However, if there are multiple paragraphs or other blocks in a list item, the first line of each must be indented.</p>
+<pre><code class="language-shell">+ A lazy, lazy, list
+item.
+
++ Another one; this looks
+bad but is legal.
+
+    Second paragraph of second
+list item.
+</code></pre>
+<p>But what if you want to put an indented code block directly after a list? Consider the following:</p>
+<pre><code class="language-markdown">-   item one
+-   item two
+
+    { my code block }
+</code></pre>
+<p><code>{ my code block }</code> will here get treated as the second paragraph of the second list item. In order to “cut off” the list after item two, you can insert some non-indented content (an HTML comment would be a great choice,) which won’t produce visible output in any format. An example of this could be:</p>
+<pre><code class="language-markdown">-   item one
+-   item two
+
+&lt;!-- end of list --&gt;
+
+    { my code block }
+</code></pre>
+<h1 id="extra-list-types"><a class="header" href="#extra-list-types">Extra list types</a></h1>
+<h2 id="definition-lists"><a class="header" href="#definition-lists">Definition lists</a></h2>
+<p>Definition lists are made of terms and definitions of these terms, much like in a dictionary. A simple definition list is made of a single-line term followed by a colon and the definition for that term.</p>
+<pre><code class="language-markdown">Apple
+
+:   Pomaceous fruit of plants of the genus Malus in the family Rosaceae.
+
+Orange
+
+:   The fruit of an evergreen tree of the genus Citrus.
+
+        { some code, part of Definition 2 }
+
+    Third paragraph of definition 2.
+</code></pre>
+<p>Each term must fit on one line, which may optionally be followed by a blank line, and must be followed by one or more definitions. A definition begins with a <code>:</code> or <code>~</code>, which may be indented one or two spaces. A term may have multiple definitions, and each definition may consist of one or more block elements (paragraph, code block, list, etc.), each indented four spaces or one tab stop. The body of the definition (including the first line, aside from the <code>:</code> or <code>~</code>) should be indented four spaces. However, as with other Markdown lists, you can “lazily” omit indentation except at the beginning of a paragraph or other block element:</p>
+<pre><code class="language-markdown">Term 1
+
+:   Definition
+with lazy continuation.
+
+    Second paragraph of the definition.
+</code></pre>
+<p>If you leave space before the definition (as in the example above), the text of the definition will be treated as a paragraph. In some output formats, this will mean greater spacing between term/definition pairs. For a more compact definition list, omit the space before the definition:</p>
+<pre><code class="language-markdown">Term 1
+  ~ Definition 1
+
+Term 2
+  ~ Definition 2a
+  ~ Definition 2b
+</code></pre>
+<p>Note that space between items in a definition list is required.</p>
+<h2 id="numbered-example-lists"><a class="header" href="#numbered-example-lists">Numbered example lists</a></h2>
+<p>The special list marker <code>@</code> can be used for sequentially numbered examples. The first list item with a <code>@</code> marker will be numbered 1, the next 2, and so on, throughout the document. The numbered examples need not occur in a single list; each new list using <code>@</code> will take up where the last stopped. So, for example:</p>
+<pre><code class="language-markdown">(@)  My first example will be numbered (1).
+(@)  My second example will be numbered (2).
+
+Explanation of examples.
+
+(@)  My third example will be numbered (3).
+</code></pre>
+<p>Numbered examples can be labeled and referred to elsewhere in the document:</p>
+<pre><code class="language-markdown">(@good)  This is a good example.
+
+As (@good) illustrates, ...
+</code></pre>
+<p>The label can be any string of alphanumeric characters, underscores, or hyphens.</p>
+<blockquote>
+<p><strong>Note</strong>: continuation paragraphs in example lists must always be indented four spaces, regardless of the length of the list marker. This is because example labels tend to be long, and indenting content to the first non-space character after the label would be awkward.</p>
+</blockquote>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.18/dist/katex.min.css" integrity="sha384-zTROYFVGOfTw7JV7KUu8udsvW2fx4lWOsCEDqhBreBwlHI4ioVRtmIvEThzJHGET" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.20/dist/katex.min.js" integrity="sha384-ov99pRO2tAc0JuxTVzf63RHHeQTJ0CIawbDZFiFTzB07aqFZwEu2pz4uzqL+5OPG" crossorigin="anonymous"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var math = document.querySelectorAll("[class^=katex]");
+    for (var i = 0; i < math.length; i++) {
+      // Convert escaped ampersands before rendering
+      var toRender = math[i].textContent.replace(/&amp;/g, '&');
+      katex.render(toRender, math[i]);
+    }
+}, false)
+</script><div style="break-before: page; page-break-before: always;"></div><h1 id="single-figures"><a class="header" href="#single-figures">Single figures</a></h1>
+<h2 id="positioning"><a class="header" href="#positioning">Positioning</a></h2>
+<h1 id="subfigures"><a class="header" href="#subfigures">Subfigures</a></h1>
+<h1 id="cross-referencing"><a class="header" href="#cross-referencing">Cross-referencing</a></h1>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.18/dist/katex.min.css" integrity="sha384-zTROYFVGOfTw7JV7KUu8udsvW2fx4lWOsCEDqhBreBwlHI4ioVRtmIvEThzJHGET" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.20/dist/katex.min.js" integrity="sha384-ov99pRO2tAc0JuxTVzf63RHHeQTJ0CIawbDZFiFTzB07aqFZwEu2pz4uzqL+5OPG" crossorigin="anonymous"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var math = document.querySelectorAll("[class^=katex]");
+    for (var i = 0; i < math.length; i++) {
+      // Convert escaped ampersands before rendering
+      var toRender = math[i].textContent.replace(/&amp;/g, '&');
+      katex.render(toRender, math[i]);
+    }
+}, false)
+</script><div style="break-before: page; page-break-before: always;"></div><h1 id="code-blocks"><a class="header" href="#code-blocks">Code blocks</a></h1>
+<h2 id="indented-code-blocks"><a class="header" href="#indented-code-blocks">Indented code blocks</a></h2>
+<p>A block of text indented four spaces (or one tab) is treated as a code block. For example,</p>
+<pre><code class="language-markdown">Paragraph here
+
+    if (a &gt; 3) {
+      moveShip(5 * gravity, DOWN);
+    }
+</code></pre>
+<p>The initial (four space or one tab) indentation is not considered part of the verbatim text, and is removed in the output.</p>
+<h2 id="fenced-code-blocks"><a class="header" href="#fenced-code-blocks">Fenced code blocks</a></h2>
+<p>In addition to standard indented code blocks, Doctor supports fenced code blocks. These begin with a row of three or more backticks (<code>```</code>) and end with a row of backticks that must be at least as long as the starting row. Everything between these lines is treated as code and no indentation is necessary:</p>
+<pre><code class="language-markdown">```
+if (a &gt; 3) {
+  moveShip(5 * gravity, DOWN);
+}
+```
+</code></pre>
+<p>Like regular code blocks, fenced code blocks must be separated from surrounding text by blank lines. If the code itself contains a row of backticks, just use a longer row of tildes or backticks at the start and end:</p>
+<pre><code class="language-markdown">``````
+```
+if (a &gt; 3) {
+  moveShip(5 * gravity, DOWN);
+}
+```
+``````
+</code></pre>
+<p>If you want to specify the language of the code block, you can write</p>
+<pre><pre class="playground"><code class="language-rust">
+<span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>```rust
+match foo {
+    Some(a) =&gt; println!(&quot;Something: {}&quot;, a),
+    None =&gt; println!(&quot;Nothing&quot;)
+}
+```
+<span class="boring">}
+</span></code></pre></pre>
+<p>This is just a shorthand for attaching the language as a class, like <code>{.rust}</code>. You can attach further attributes to a fenced code block by using this syntax:</p>
+<pre><code class="language-markdown">```{#mycode .haskell .numberLines startFrom=&quot;100&quot;}
+qsort []     = []
+qsort (x:xs) = qsort (filter (&lt; x) xs) ++ [x] ++
+               qsort (filter (&gt;= x) xs)
+```
+</code></pre>
+<p>Here <code>mycode</code> is an identifier, <code>haskell</code> and <code>numberLines</code> are classes, and <code>startFrom</code> is an attribute with value <code>100</code>.</p>
+<h1 id="inline-code"><a class="header" href="#inline-code">Inline code</a></h1>
+<p>To write inline code, put the text between backticks, e.g.</p>
+<pre><code class="language-markdown">What is the difference between `&gt;&gt;=` and `&gt;&gt;`?
+</code></pre>
+<p>If you want to include a literal backtick as part of the code, use double backticks (the spaces before and after the enclosed backtick will be ignored.)</p>
+<pre><code class="language-markdown">Here is a literal backtick `` ` ``.
+</code></pre>
+<blockquote>
+<p><strong>NOTE</strong>: Backslash-escapes (and other Markdown constructs) do not work inside verbatim (code) contexts:</p>
+<pre><code class="language-markdown">This is a backslash followed by an asterisk: `\*`.
+</code></pre>
+</blockquote>
+<p>As with <a href="markdown/code.html#code-blocks">code blocks</a>, you can attach attributes to inline code as well. The syntax is similar:</p>
+<pre><code class="language-markdown">This is Haskell code: `&lt;$&gt;`{.haskell}
+</code></pre>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.18/dist/katex.min.css" integrity="sha384-zTROYFVGOfTw7JV7KUu8udsvW2fx4lWOsCEDqhBreBwlHI4ioVRtmIvEThzJHGET" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.20/dist/katex.min.js" integrity="sha384-ov99pRO2tAc0JuxTVzf63RHHeQTJ0CIawbDZFiFTzB07aqFZwEu2pz4uzqL+5OPG" crossorigin="anonymous"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var math = document.querySelectorAll("[class^=katex]");
+    for (var i = 0; i < math.length; i++) {
+      // Convert escaped ampersands before rendering
+      var toRender = math[i].textContent.replace(/&amp;/g, '&');
+      katex.render(toRender, math[i]);
+    }
+}, false)
+</script><div style="break-before: page; page-break-before: always;"></div><h2 id="inline-math"><a class="header" href="#inline-math">Inline math</a></h2>
+<p>Anything between two <code>$</code> characters will be treated as <span class="katex-inline">\TeX</span> math. The opening $ must have a non-space character immediately to its right, while the closing $ must have a non-space character immediately to its left, and must not be followed immediately by a digit. Thus, <code>$20,000</code> and <code>$30,000</code> won’t parse as math. If for some reason you need to enclose text in literal $ characters, escape them with a blackslash and they won’t be treated as math delimiters.</p>
+<pre><code class="language-markdown">Here is some text and here is some math: $E = mc^2$.
+</code></pre>
+<h2 id="display-math"><a class="header" href="#display-math">Display math</a></h2>
+<p>For display math, use <code>$$</code> delimiters. In this case, the delimiters may be separated from the formula by whitespace. However, there can be no blank lines betwen the opening and closing delimiters.</p>
+<pre><code class="language-markdown">And God said
+
+$$ \nabla \cdot \vec D = \rho_\nu, $$
+$$ \nabla \cdot \vec B = 0, $$
+$$ \nabla \times \vec E = -\frac{\partial \vec B}{\partial t}, $$
+$$ \nabla \times \vec H = \vec J_\text{free} + \frac{\partial \vec D}{\partial t}, $$
+
+and then there was light.
+</code></pre>
+<p>and then there was light.</p>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.18/dist/katex.min.css" integrity="sha384-zTROYFVGOfTw7JV7KUu8udsvW2fx4lWOsCEDqhBreBwlHI4ioVRtmIvEThzJHGET" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.20/dist/katex.min.js" integrity="sha384-ov99pRO2tAc0JuxTVzf63RHHeQTJ0CIawbDZFiFTzB07aqFZwEu2pz4uzqL+5OPG" crossorigin="anonymous"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var math = document.querySelectorAll("[class^=katex]");
+    for (var i = 0; i < math.length; i++) {
+      // Convert escaped ampersands before rendering
+      var toRender = math[i].textContent.replace(/&amp;/g, '&');
+      katex.render(toRender, math[i]);
+    }
+}, false)
+</script><div style="break-before: page; page-break-before: always;"></div><p>Pandoc Markdown uses email conventions for block quotes. A block quotation is one or more paragraphs or other block elements (such as lists or headings), with each line preceded by a <code>&gt;</code> character and an optional space.</p>
+<pre><code class="language-shell">&gt; This is a block quote. This
+&gt; paragraph has two lines.
+&gt;
+&gt; 1. This is a list inside a block quote.
+&gt; 2. Second item.
+</code></pre>
+<p>If you are feeling lazy, the following is also allowed (ignore the wonky highlighting, this is the same as above):</p>
+<pre><code class="language-shell">&gt; This is a block quote. This
+paragraph has two lines.
+
+&gt; 1. This is a list inside a block quote.
+2. Second item.
+</code></pre>
+<p>Block quotes can contain most other Markdown elements. Among them are other blockquotes, which means they can be nested, like this:</p>
+<pre><code class="language-shell">&gt; This is a block quote.
+&gt;
+&gt; &gt; A block quote within a block quote.
+</code></pre>
+<p>Standard Markdown syntax does not require a blank line before a block quote. Doctor does require this (except, of course, at the beginning of the document). The reason for the requirement is that it is all too easy for a <code>&gt;</code> to end up at the beginning of a line by accident (perhaps through line wrapping). </p>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.18/dist/katex.min.css" integrity="sha384-zTROYFVGOfTw7JV7KUu8udsvW2fx4lWOsCEDqhBreBwlHI4ioVRtmIvEThzJHGET" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.20/dist/katex.min.js" integrity="sha384-ov99pRO2tAc0JuxTVzf63RHHeQTJ0CIawbDZFiFTzB07aqFZwEu2pz4uzqL+5OPG" crossorigin="anonymous"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var math = document.querySelectorAll("[class^=katex]");
+    for (var i = 0; i < math.length; i++) {
+      // Convert escaped ampersands before rendering
+      var toRender = math[i].textContent.replace(/&amp;/g, '&');
+      katex.render(toRender, math[i]);
+    }
+}, false)
+</script>
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+
+
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+
+        <script type="text/javascript">
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+
+    </body>
+</html>
