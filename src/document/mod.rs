@@ -58,8 +58,8 @@ impl Document {
         meta.push_str(&format!(
             "\\title{{{}}}\n\\author{{{}}}\n\\date{{{}}}",
             self.config.title,
-            self.config.date.as_ref().unwrap_or(&String::default()),
-            self.config.authors.join(" \\and "),
+            self.config.date(),
+            self.config.latex_authors(),
         ));
 
         let bytes = [
@@ -103,6 +103,7 @@ impl Document {
                 .format_name("latex")
                 .format_cache_path(format_cache_path)
                 .output_format(tectonic::driver::OutputFormat::Pdf)
+                .build_date(std::time::SystemTime::now())
                 .do_not_write_output_files();
 
             let mut sess = sb

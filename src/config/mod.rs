@@ -19,6 +19,17 @@ impl Config {
         let config_content = read_file(path)?;
         Ok(toml::from_str(&config_content)?)
     }
+
+    pub fn latex_authors(&self) -> String {
+        self.authors.join(" \\and ")
+    }
+
+    pub fn date(&self) -> String {
+        self.date
+            .to_owned()
+            .unwrap_or_default()
+            .replace("today", "\\today")
+    }
 }
 
 impl Default for Config {
