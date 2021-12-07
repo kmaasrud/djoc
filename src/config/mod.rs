@@ -10,6 +10,7 @@ pub struct Config {
     pub title: String,
     pub authors: Vec<String>,
     pub date: Option<String>,
+    pub number_sections: bool,
 
     pub build: BuildConfig,
 }
@@ -30,6 +31,14 @@ impl Config {
             .unwrap_or_default()
             .replace("today", "\\today")
     }
+
+    pub fn number_sections(&self) -> String {
+        if self.number_sections {
+            "5".to_owned()
+        } else {
+            "-\\maxdimen".to_owned()
+        }
+    }
 }
 
 impl Default for Config {
@@ -38,6 +47,7 @@ impl Default for Config {
             title: "Document title".to_owned(),
             authors: vec![],
             date: None,
+            number_sections: false,
             build: BuildConfig::default(),
         }
     }
