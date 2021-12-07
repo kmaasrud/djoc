@@ -1,4 +1,4 @@
-use crate::utils::read_file;
+use crate::utils::{read_file, kebab};
 
 use anyhow::Result;
 use serde::{Deserialize, Serialize};
@@ -21,23 +21,27 @@ impl Config {
         Ok(toml::from_str(&config_content)?)
     }
 
-    pub fn latex_authors(&self) -> String {
+    pub(crate) fn latex_authors(&self) -> String {
         self.authors.join(" \\and ")
     }
 
-    pub fn date(&self) -> String {
+    pub(crate) fn date(&self) -> String {
         self.date
             .to_owned()
             .unwrap_or_default()
             .replace("today", "\\today")
     }
 
-    pub fn number_sections(&self) -> String {
+    pub(crate) fn number_sections(&self) -> String {
         if self.number_sections {
-            "5".to_owned()
+            "\\setcounter{secnumdepth}{5}".to_owned()
         } else {
-            "-\\maxdimen".to_owned()
+            "\\setcounter{secnumdepth}{-\\maxdimen}".to_owned()
         }
+    }
+
+    pub fn filename(&self) -> String {
+        self.build.filename.to_owned().unwrap_or_else(|| kebab(&self.title))
     }
 }
 
@@ -56,13 +60,13 @@ impl Default for Config {
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(default, rename_all = "kebab-case")]
 pub struct BuildConfig {
-    pub filename: String,
+    pub filename: Option<String>,
 }
 
 impl Default for BuildConfig {
     fn default() -> Self {
         Self {
-            filename: "mdoc".to_owned(),
+            filename: None,
         }
     }
 }

@@ -71,3 +71,19 @@ pub fn data_dir() -> PathBuf {
         .expect("Unable to get the data directory.")
         .join("mdoc")
 }
+
+/// Make kebab-cased string
+pub fn kebab(s: impl AsRef<str>) -> String {
+    s.as_ref()
+        .chars()
+        .filter_map(|ch| {
+            if ch.is_alphanumeric() || ch == '_' || ch == '-' {
+                Some(ch.to_ascii_lowercase())
+            } else if ch.is_whitespace() {
+                Some('-')
+            } else {
+                None
+            }
+        })
+        .collect()
+}

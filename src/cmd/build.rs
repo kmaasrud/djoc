@@ -16,7 +16,7 @@ pub fn build(path: Option<PathBuf>) -> Result<()> {
 
     // Write PDF data to file
     write_file(
-        &Path::new(&doc.config.build.filename).with_extension("pdf"),
+        &Path::new(&doc.config.filename()).with_extension("pdf"),
         &pdf_data,
     )
     .context("Could not write to PDF file")?;

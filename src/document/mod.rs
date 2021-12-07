@@ -67,7 +67,7 @@ impl Document {
 
         let mut meta = String::new();
         meta.push_str(&format!(
-            "\\title{{{}}}\n\\author{{{}}}\n\\date{{{}}}\n\\setcounter{{secnumdepth}}{{{}}}",
+            "\\title{{{}}}\n\\author{{{}}}\n\\date{{{}}}\n{}",
             self.config.title,
             self.config.date(),
             self.config.latex_authors(),
@@ -88,7 +88,7 @@ impl Document {
 
     pub fn build(&self) -> Result<Vec<u8>> {
         let latex_bytes = self.latex_bytes()?;
-        let filename = &self.config.build.filename;
+        let filename = &self.config.filename();
 
         let mut status = crate::log::MdocTectonicStatusBackend;
 
