@@ -13,13 +13,16 @@ pub fn build(path: Option<PathBuf>) -> Result<()> {
 
     // Make PDF data
     let pdf_data = doc.build()?;
+    let pdf_filename = Path::new(&doc.config.filename()).with_extension("pdf");
 
     // Write PDF data to file
     write_file(
-        &Path::new(&doc.config.filename()).with_extension("pdf"),
+        &pdf_filename,
         &pdf_data,
     )
     .context("Could not write to PDF file")?;
+
+    mdoc::success!("{:?}, built!", pdf_filename);
 
     Ok(())
 }

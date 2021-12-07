@@ -86,6 +86,4 @@ fn main() {
             }
         }
     }
-
-    mdoc::info!("Data dir is: {:?}", mdoc::utils::data_dir());
 }

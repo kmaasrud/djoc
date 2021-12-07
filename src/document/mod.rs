@@ -5,7 +5,7 @@ mod lua;
 pub use builder::*;
 pub use chapter::*;
 
-use crate::{config::Config, Error};
+use crate::{bib, config::Config, Error};
 use anyhow::{Context, Result};
 use std::ffi::OsStr;
 use std::io::Write;
@@ -40,7 +40,7 @@ impl Document {
     }
 
     fn latex_bytes(&self) -> Result<Vec<u8>> {
-        let mut pandoc_args = vec![OsStr::new("--from=markdown"), OsStr::new("--to=latex")];
+        let mut pandoc_args = vec![OsStr::new("--from=markdown"), OsStr::new("--to=latex"), OsStr::new("-C")];
         let filters = lua::get_filters()?;
         pandoc_args.extend(
             filters
@@ -48,6 +48,9 @@ impl Document {
                 .map(|l| [OsStr::new("-L"), l.as_os_str()])
                 .flatten(),
         );
+        let csl_path = bib::get_csl(&self.config.bib.csl)?;
+        pandoc_args.push(OsStr::new("--csl"));
+        pandoc_args.push(csl_path.as_os_str());
 
         let mut pandoc = Command::new("pandoc")
             .args(&pandoc_args)
