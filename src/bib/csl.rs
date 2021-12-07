@@ -1,5 +1,5 @@
-use anyhow::{anyhow, Result};
 use crate::utils::{data_dir, write_file};
+use anyhow::{anyhow, Result};
 use std::io::Read;
 use std::path::PathBuf;
 use url::Url;
@@ -12,10 +12,19 @@ pub fn get_csl(id: &str) -> Result<PathBuf> {
             .join(&format!("{}.csl", id))?
     };
 
-    let filename = url.path_segments().unwrap().last().ok_or_else(|| anyhow!("blabla"))?;
+    let filename = url
+        .path_segments()
+        .ok_or_else(|| anyhow!("Could not determine the segments of \"{}\".\nDoes your URL point to a valid CSL file?", url))?
+        .last()
+        .ok_or_else(|| anyhow!("Unable to find the filename of \"{}\".\nDoes your URL point to a valid CSL file?"))?;
     let path = data_dir().join("csl").join(filename).with_extension("csl");
+
     if !path.exists() {
-        info!("Fetching \"{}\" from \"{}\"...", filename, url);
+        info!(
+            "Fetching {:?} from \"{}\" ...",
+            path.file_name().unwrap(),
+            url
+        );
         let resp = ureq::get(url.as_str()).call()?;
 
         let mut bytes = Vec::new();

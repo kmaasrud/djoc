@@ -40,7 +40,11 @@ impl Document {
     }
 
     fn latex_bytes(&self) -> Result<Vec<u8>> {
-        let mut pandoc_args = vec![OsStr::new("--from=markdown"), OsStr::new("--to=latex"), OsStr::new("-C")];
+        let mut pandoc_args = vec![
+            OsStr::new("--from=markdown"),
+            OsStr::new("--to=latex"),
+            OsStr::new("-C"),
+        ];
         let filters = lua::get_filters()?;
         pandoc_args.extend(
             filters

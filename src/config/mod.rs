@@ -79,7 +79,9 @@ pub struct BibConfig {
 
 impl Default for BibConfig {
     fn default() -> Self {
-        Self { csl: "apa".to_owned() }
+        Self {
+            csl: "apa".to_owned(),
+        }
     }
 }
 
