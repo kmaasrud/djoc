@@ -67,11 +67,12 @@ impl Document {
 
         let mut meta = String::new();
         meta.push_str(&format!(
-            "\\title{{{}}}\n\\author{{{}}}\n\\date{{{}}}\n{}",
+            "\n\\title{{{}}}\n\\author{{{}}}\n\\date{{{}}}\n{}\n{}",
             self.config.title,
             self.config.date(),
             self.config.latex_authors(),
             self.config.number_sections(),
+            self.config.latex_head,
         ));
 
         let bytes = [

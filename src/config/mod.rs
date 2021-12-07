@@ -7,11 +7,17 @@ use std::path::Path;
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(default, rename_all = "kebab-case")]
 pub struct Config {
+    pub(crate) src: Option<toml::Value>,
+
+    // Metadata
     pub title: String,
     pub authors: Vec<String>,
     pub date: Option<String>,
-    pub(crate) src: Option<toml::Value>,
 
+    // LaTeX configuration
+    pub latex_head: String,
+
+    // Subtables
     pub build: BuildConfig,
     pub style: StyleConfig,
 }
@@ -52,10 +58,11 @@ impl Config {
 impl Default for Config {
     fn default() -> Self {
         Self {
+            src: None,
             title: "Document title".to_owned(),
             authors: vec![],
             date: None,
-            src: None,
+            latex_head: "".to_owned(),
             build: BuildConfig::default(),
             style: StyleConfig::default(),
         }
