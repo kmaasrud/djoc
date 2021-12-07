@@ -1,4 +1,4 @@
-use crate::utils::{read_file, kebab};
+use crate::utils::{kebab, read_file};
 
 use anyhow::Result;
 use serde::{Deserialize, Serialize};
@@ -10,6 +10,7 @@ pub struct Config {
     pub title: String,
     pub authors: Vec<String>,
     pub date: Option<String>,
+    pub(crate) src: Option<toml::Value>,
 
     pub build: BuildConfig,
     pub style: StyleConfig,
@@ -41,7 +42,10 @@ impl Config {
     }
 
     pub fn filename(&self) -> String {
-        self.build.filename.to_owned().unwrap_or_else(|| kebab(&self.title))
+        self.build
+            .filename
+            .to_owned()
+            .unwrap_or_else(|| kebab(&self.title))
     }
 }
 
@@ -51,36 +55,21 @@ impl Default for Config {
             title: "Document title".to_owned(),
             authors: vec![],
             date: None,
+            src: None,
             build: BuildConfig::default(),
             style: StyleConfig::default(),
         }
     }
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Default, Deserialize, Serialize)]
 #[serde(default, rename_all = "kebab-case")]
 pub struct BuildConfig {
     pub filename: Option<String>,
 }
 
-impl Default for BuildConfig {
-    fn default() -> Self {
-        Self {
-            filename: None,
-        }
-    }
-}
-
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Default, Deserialize, Serialize)]
 #[serde(default, rename_all = "kebab-case")]
 pub struct StyleConfig {
     pub number_sections: bool,
-}
-
-impl Default for StyleConfig {
-    fn default() -> Self {
-        Self {
-            number_sections: false,
-        }
-    }
 }
