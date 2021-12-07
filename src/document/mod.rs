@@ -1,11 +1,13 @@
 mod builder;
 mod chapter;
+mod lua;
 
 pub use builder::*;
 pub use chapter::*;
 
 use crate::{config::Config, Error};
 use anyhow::{Context, Result};
+use std::ffi::OsStr;
 use std::io::Write;
 use std::process::{Command, Stdio};
 
@@ -39,7 +41,7 @@ impl Document {
 
     fn latex_bytes(&self) -> Result<Vec<u8>> {
         let mut pandoc = Command::new("pandoc")
-            .args(["--from=markdown", "--to=latex"])
+            .args([OsStr::new("--from=markdown"), OsStr::new("--to=latex"), OsStr::new("-L"), lua::get_filters()?.as_os_str()])
             .stdin(Stdio::piped())
             .stdout(Stdio::piped())
             .spawn()?;
