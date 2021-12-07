@@ -40,8 +40,17 @@ impl Document {
     }
 
     fn latex_bytes(&self) -> Result<Vec<u8>> {
+        let mut pandoc_args = vec![OsStr::new("--from=markdown"), OsStr::new("--to=latex")];
+        let filters = lua::get_filters()?;
+        pandoc_args.extend(
+            filters
+                .iter()
+                .map(|l| [OsStr::new("-L"), l.as_os_str()])
+                .flatten(),
+        );
+
         let mut pandoc = Command::new("pandoc")
-            .args([OsStr::new("--from=markdown"), OsStr::new("--to=latex"), OsStr::new("-L"), lua::get_filters()?.as_os_str()])
+            .args(&pandoc_args)
             .stdin(Stdio::piped())
             .stdout(Stdio::piped())
             .spawn()?;
