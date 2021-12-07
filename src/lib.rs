@@ -1,6 +1,7 @@
 #[macro_use]
 pub mod log;
 
+pub mod bib;
 pub mod config;
 pub mod document;
 pub mod errors;

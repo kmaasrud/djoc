@@ -18,6 +18,7 @@ pub struct Config {
     pub latex_head: String,
 
     // Subtables
+    pub bib: BibConfig,
     pub build: BuildConfig,
     pub style: StyleConfig,
 }
@@ -63,9 +64,22 @@ impl Default for Config {
             authors: vec![],
             date: None,
             latex_head: "".to_owned(),
+            bib: BibConfig::default(),
             build: BuildConfig::default(),
             style: StyleConfig::default(),
         }
+    }
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(default, rename_all = "kebab-case")]
+pub struct BibConfig {
+    pub csl: String,
+}
+
+impl Default for BibConfig {
+    fn default() -> Self {
+        Self { csl: "apa".to_owned() }
     }
 }
 
