@@ -10,9 +10,9 @@ pub struct Config {
     pub title: String,
     pub authors: Vec<String>,
     pub date: Option<String>,
-    pub number_sections: bool,
 
     pub build: BuildConfig,
+    pub style: StyleConfig,
 }
 
 impl Config {
@@ -33,7 +33,7 @@ impl Config {
     }
 
     pub(crate) fn number_sections(&self) -> String {
-        if self.number_sections {
+        if self.style.number_sections {
             "\\setcounter{secnumdepth}{5}".to_owned()
         } else {
             "\\setcounter{secnumdepth}{-\\maxdimen}".to_owned()
@@ -51,8 +51,8 @@ impl Default for Config {
             title: "Document title".to_owned(),
             authors: vec![],
             date: None,
-            number_sections: false,
             build: BuildConfig::default(),
+            style: StyleConfig::default(),
         }
     }
 }
@@ -67,6 +67,20 @@ impl Default for BuildConfig {
     fn default() -> Self {
         Self {
             filename: None,
+        }
+    }
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(default, rename_all = "kebab-case")]
+pub struct StyleConfig {
+    pub number_sections: bool,
+}
+
+impl Default for StyleConfig {
+    fn default() -> Self {
+        Self {
+            number_sections: false,
         }
     }
 }
