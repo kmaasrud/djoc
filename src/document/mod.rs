@@ -7,15 +7,16 @@ pub use chapter::*;
 
 use crate::{bib, config::Config, Error};
 use anyhow::{Context, Result};
-use std::ffi::OsStr;
 use std::io::Write;
 use std::process::{Command, Stdio};
+use std::path::PathBuf;
 
 const PREAMBLE: &[u8] = include_bytes!("preamble.tex");
 
 pub struct Document {
     pub chapters: Vec<Chapter>,
     pub config: Config,
+    pub root: Option<PathBuf>,
 }
 
 impl Document {
@@ -23,6 +24,7 @@ impl Document {
         Document {
             chapters: vec![Chapter::new(content)],
             config: Config::default(),
+            root: None,
         }
     }
 
@@ -40,21 +42,26 @@ impl Document {
     }
 
     fn latex_bytes(&self) -> Result<Vec<u8>> {
-        let mut pandoc_args = vec![
-            OsStr::new("--from=markdown"),
-            OsStr::new("--to=latex"),
-            OsStr::new("-C"),
-        ];
-        let filters = lua::get_filters()?;
-        pandoc_args.extend(
-            filters
-                .iter()
-                .map(|l| [OsStr::new("-L"), l.as_os_str()])
-                .flatten(),
-        );
+        let mut pandoc_args: Vec<String> = Vec::new();
+
+        // Lua filters
+        for filter in lua::get_filters()?.iter().filter_map(|f| f.to_str()) {
+            pandoc_args.push(format!("--lua-filter={}", filter))
+        }
+
+        // Bibliography files
+        for bib_file in bib::get_bib_files(self.root.as_ref()).iter().filter_map(|b| b.to_str()) {
+            pandoc_args.push(format!("--bibliography={}", bib_file));
+        }
+
+        // CSL definition
         let csl_path = bib::get_csl(&self.config.bib.csl)?;
-        pandoc_args.push(OsStr::new("--csl"));
-        pandoc_args.push(csl_path.as_os_str());
+        pandoc_args.push("--csl".to_owned());
+        pandoc_args.push(csl_path.to_string_lossy().to_string());
+
+        pandoc_args.push("-C".to_owned());
+        pandoc_args.push("--from=markdown".to_owned());
+        pandoc_args.push("--to=latex".to_owned());
 
         let mut pandoc = Command::new("pandoc")
             .args(&pandoc_args)

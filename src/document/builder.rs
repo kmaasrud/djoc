@@ -41,9 +41,9 @@ impl DocumentBuilder {
     }
 
     pub fn build(self) -> Result<Document> {
-        let (config, chapters) = match self.source {
+        let (config, chapters, root) = match self.source {
             SourceType::File(ref path) => {
-                (self.config.unwrap_or_default(), vec![Chapter::load(path)?])
+                (self.config.unwrap_or_default(), vec![Chapter::load(path)?], None)
             }
 
             SourceType::Dir(ref path) => {
@@ -52,7 +52,7 @@ impl DocumentBuilder {
                     .unwrap_or(Config::from_file(path.join("mdoc.toml"))?);
                 let chapters = load_chapters(path, &config)?;
 
-                (config, chapters)
+                (config, chapters, Some(path.to_owned()))
             }
 
             SourceType::None => {
@@ -60,9 +60,9 @@ impl DocumentBuilder {
                 let config = self
                     .config
                     .unwrap_or(Config::from_file(root.join("mdoc.toml"))?);
-                let chapters = load_chapters(root, &config)?;
+                let chapters = load_chapters(&root, &config)?;
 
-                (config, chapters)
+                (config, chapters, Some(root))
             }
         };
 
@@ -73,7 +73,7 @@ impl DocumentBuilder {
         debug!("Building document with {} chapters.", chapters.len());
         debug!("Using config: {:#?}", config);
 
-        Ok(Document { chapters, config })
+        Ok(Document { chapters, config, root})
     }
 }
 
