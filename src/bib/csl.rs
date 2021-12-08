@@ -16,7 +16,7 @@ pub fn get_csl(id: &str) -> Result<PathBuf> {
         .path_segments()
         .ok_or_else(|| anyhow!("Could not determine the segments of \"{}\".\nDoes your URL point to a valid CSL file?", url))?
         .last()
-        .ok_or_else(|| anyhow!("Unable to find the filename of \"{}\".\nDoes your URL point to a valid CSL file?"))?;
+        .ok_or_else(|| anyhow!("Unable to find the filename of \"{}\".\nDoes your URL point to a valid CSL file?", url))?;
     let path = data_dir().join("csl").join(filename).with_extension("csl");
 
     if !path.exists() {
