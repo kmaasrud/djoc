@@ -8,8 +8,8 @@ pub use chapter::*;
 use crate::{bib, config::Config, Error};
 use anyhow::{Context, Result};
 use std::io::Write;
-use std::process::{Command, Stdio};
 use std::path::PathBuf;
+use std::process::{Command, Stdio};
 
 const PREAMBLE: &[u8] = include_bytes!("preamble.tex");
 
@@ -50,16 +50,20 @@ impl Document {
         }
 
         // Bibliography files
-        for bib_file in bib::get_bib_files(self.root.as_ref()).iter().filter_map(|b| b.to_str()) {
+        for bib_file in bib::get_bib_files(self.root.as_ref())
+            .iter()
+            .filter_map(|b| b.to_str())
+        {
             pandoc_args.push(format!("--bibliography={}", bib_file));
         }
 
-        // CSL definition
+        // CSL style
         let csl_path = bib::get_csl(&self.config.bib.csl)?;
         pandoc_args.push("--csl".to_owned());
         pandoc_args.push(csl_path.to_string_lossy().to_string());
 
-        pandoc_args.push("-C".to_owned());
+        pandoc_args.push("-C".to_owned()); // Use citeproc
+        pandoc_args.push("--metadata=link-citations".to_owned()); // Link to citations (TODO: Make this optional)
         pandoc_args.push("--from=markdown".to_owned());
         pandoc_args.push("--to=latex".to_owned());
 

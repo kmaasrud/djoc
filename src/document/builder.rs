@@ -42,9 +42,11 @@ impl DocumentBuilder {
 
     pub fn build(self) -> Result<Document> {
         let (config, chapters, root) = match self.source {
-            SourceType::File(ref path) => {
-                (self.config.unwrap_or_default(), vec![Chapter::load(path)?], None)
-            }
+            SourceType::File(ref path) => (
+                self.config.unwrap_or_default(),
+                vec![Chapter::load(path)?],
+                None,
+            ),
 
             SourceType::Dir(ref path) => {
                 let config = self
@@ -73,7 +75,11 @@ impl DocumentBuilder {
         debug!("Building document with {} chapters.", chapters.len());
         debug!("Using config: {:#?}", config);
 
-        Ok(Document { chapters, config, root})
+        Ok(Document {
+            chapters,
+            config,
+            root,
+        })
     }
 }
 
