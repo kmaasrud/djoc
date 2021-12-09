@@ -27,6 +27,10 @@ enum Command {
         #[structopt(parse(from_os_str))]
         /// File to build into PDF (optional).
         path: Option<PathBuf>,
+
+        #[structopt(long = "tex")]
+        /// Build document into a raw TeX file.
+        tex: bool,
     },
 
     /// Clean up files from a project or the data directory.
@@ -57,7 +61,7 @@ fn run() -> Result<()> {
     }
 
     match app.command {
-        Command::Build { path } => cmd::build(path)?,
+        Command::Build { path, tex } => cmd::build(path, tex)?,
 
         Command::Clean { data } => cmd::clean(data)?,
 

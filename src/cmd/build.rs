@@ -3,7 +3,7 @@ use mdoc::{utils::write_file, DocumentBuilder};
 use std::path::{Path, PathBuf};
 
 /// Builds a document. If no path is provided, searches up the filetree for a document to build.
-pub fn build(path: Option<PathBuf>) -> Result<()> {
+pub fn build(path: Option<PathBuf>, tex: bool) -> Result<()> {
     // Initialize Document
     let builder = DocumentBuilder::new();
     let doc = match path {
@@ -11,14 +11,22 @@ pub fn build(path: Option<PathBuf>) -> Result<()> {
         None => builder.build()?,
     };
 
-    // Make PDF data
-    let pdf_data = doc.build()?;
-    let pdf_filename = Path::new(&doc.config.filename()).with_extension("pdf");
+    let (data, filename) = if tex {
+        (
+            doc.latex_bytes()?,
+            Path::new(&doc.config.filename()).with_extension("tex"),
+        )
+    } else {
+        (
+            doc.build()?,
+            Path::new(&doc.config.filename()).with_extension("pdf"),
+        )
+    };
 
-    // Write PDF data to file
-    write_file(&pdf_filename, &pdf_data).context("Could not write to PDF file")?;
+    // Write data to file
+    write_file(&filename, &data).context("Could not write to PDF file")?;
 
-    mdoc::success!("{:?}, built!", pdf_filename);
+    mdoc::success!("{:?}, built!", filename);
 
     Ok(())
 }

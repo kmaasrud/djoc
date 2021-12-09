@@ -41,7 +41,7 @@ impl Document {
         }
     }
 
-    fn latex_bytes(&self) -> Result<Vec<u8>> {
+    pub fn latex_bytes(&self) -> Result<Vec<u8>> {
         let mut pandoc_args: Vec<String> = Vec::new();
 
         // Lua filters
