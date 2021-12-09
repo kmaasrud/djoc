@@ -75,12 +75,14 @@ impl Default for Config {
 #[serde(default, rename_all = "kebab-case")]
 pub struct BibConfig {
     pub csl: String,
+    pub src: Option<String>,
 }
 
 impl Default for BibConfig {
     fn default() -> Self {
         Self {
             csl: "apa".to_owned(),
+            src: None,
         }
     }
 }

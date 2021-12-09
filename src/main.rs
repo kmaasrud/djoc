@@ -22,14 +22,21 @@ struct App {
 
 #[derive(Debug, StructOpt)]
 enum Command {
-    /// Builds a file or document
+    /// Builds a file or document.
     Build {
         #[structopt(parse(from_os_str))]
         /// File to build into PDF (optional).
         path: Option<PathBuf>,
     },
 
-    /// Initializes a new document
+    /// Clean up files from a project or the data directory.
+    Clean {
+        #[structopt(long = "data")]
+        /// Delete the data directory.
+        data: bool,
+    },
+
+    /// Initializes a new document.
     Init {
         #[structopt(parse(from_os_str))]
         /// Directory to initialize the document in.
@@ -50,17 +57,13 @@ fn run() -> Result<()> {
     }
 
     match app.command {
-        Command::Build { path } => {
-            cmd::build(path)?;
-        }
+        Command::Build { path } => cmd::build(path)?,
 
-        Command::Init { path } => {
-            cmd::init(path)?;
-        }
+        Command::Clean { data } => cmd::clean(data)?,
 
-        Command::List => {
-            mdoc::info!("Listing");
-        }
+        Command::Init { path } => cmd::init(path)?,
+
+        Command::List => mdoc::info!("Listing"),
     }
 
     Ok(())
