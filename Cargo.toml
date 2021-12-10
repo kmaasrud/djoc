@@ -7,6 +7,11 @@ edition = "2021"
 license-file = "LICENSE"
 homepage = "https://github.com/kmaasrud/mdoc"
 repository = "https://github.com/kmaasrud/mdoc"
+include = [
+    "**/*.rs",
+    "**/*.tex",
+    "**/*.lua",  
+]
 
 
 [dependencies]
