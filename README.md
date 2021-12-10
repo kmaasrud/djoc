@@ -2,7 +2,7 @@
 
 <h1 align="center">MDoc</h1>
 
-<p align="center"><code>$ cargo install --git https://github.com/kmaasrud/mdoc.git</code></p>
+<p align="center"><code>$ cargo install mdoc</code></p>
 
 > It is time for academic writing to step out of it's archaic ways and into the modern world. LaTeX - for all it's greatness - is simply too complex and unreadable to be the face of academia. We can do better.
 
