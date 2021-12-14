@@ -1,6 +1,5 @@
 use anyhow::{Context, Result};
 use mdoc::{
-    config::Config,
     utils::{get_author_name, write_file},
     CONFIG_FILE, SRC_DIR,
 };
@@ -17,17 +16,14 @@ pub fn init(path: Option<PathBuf>) -> Result<()> {
         .context("Failed at creating the directory structure.")?;
 
     // Make default config with author name fetched from Git
-    let mut config = Config::default();
+    let mut config = "title = \"Document title\"".to_string();
     if let Some(author) = get_author_name() {
-        config.authors.push(author);
+        config.push_str(&format!("\nauthor = \"{}\"", author))
     }
 
     // Write config file
-    write_file(
-        &root.join(CONFIG_FILE),
-        &toml::to_vec(&config).context("Could not serialize configuration to TOML.")?,
-    )
-    .context("Could not write configuration to file.")?;
+    write_file(&root.join(CONFIG_FILE), config.as_bytes())
+        .context("Could not write configuration to file.")?;
 
     mdoc::success!("Created a new document in {:?}.", root);
 

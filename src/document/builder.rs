@@ -103,7 +103,10 @@ fn load_chapters<P: AsRef<Path>>(path: P, config: &Config) -> Result<Vec<Chapter
             .filter_map(|entry| entry.ok())
             .filter(|entry| entry.path().is_file())
             .map(|entry| Chapter::load(entry.path()))
-            .filter_map(|ch| ch.map_err(|err| warn!("{}. Skipping...", err)).ok())
+            .filter_map(|ch| {
+                ch.map_err(|err| warn!("{} Skipping this chapter...", err))
+                    .ok()
+            })
             .collect()
     };
 
@@ -112,7 +115,10 @@ fn load_chapters<P: AsRef<Path>>(path: P, config: &Config) -> Result<Vec<Chapter
             .iter()
             .filter_map(|val| val.as_str())
             .map(|p| Chapter::load(Path::new(p)))
-            .filter_map(|ch| ch.map_err(|err| warn!("{}. Skipping...", err)).ok())
+            .filter_map(|ch| {
+                ch.map_err(|err| warn!("{} Skipping this chapter...", err))
+                    .ok()
+            })
             .collect()),
 
         Some(toml::Value::String(path)) => {
