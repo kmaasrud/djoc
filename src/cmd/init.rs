@@ -18,7 +18,7 @@ pub fn init(path: Option<PathBuf>) -> Result<()> {
     // Make default config with author name fetched from Git
     let mut config = "title = \"Document title\"".to_string();
     if let Some(author) = get_author_name() {
-        config.push_str(&format!("\nauthor = \"{}\"", author))
+        config.push_str(&format!("\nauthors = [\"{}\"]", author))
     }
 
     // Write config file
