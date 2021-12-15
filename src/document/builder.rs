@@ -72,7 +72,7 @@ impl DocumentBuilder {
             bail!("No chapters found.");
         }
 
-        debug!("Building document with {} chapters.", chapters.len());
+        debug!("Building document with {} chapters:\n{:#?}", chapters.len(), chapters);
         debug!("Using config: {:#?}", config);
 
         Ok(Document {
@@ -99,6 +99,7 @@ fn load_chapters<P: AsRef<Path>>(path: P, config: &Config) -> Result<Vec<Chapter
 
         WalkBuilder::new(path)
             .types(md_types)
+            .sort_by_file_path(Path::cmp)
             .build()
             .filter_map(|entry| entry.ok())
             .filter(|entry| entry.path().is_file())
