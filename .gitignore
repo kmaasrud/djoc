@@ -9,3 +9,10 @@
 
 # Env script
 env.sh
+
+# MacOS
+.DS_Store
+
+# Editors
+.vscode
+.idea
