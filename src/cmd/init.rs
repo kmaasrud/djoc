@@ -19,14 +19,14 @@ pub fn init(path: Option<PathBuf>) -> Result<()> {
     let mut config = String::new();
     config.push_str(r#"# This is the configuration file of your document.
 # It is used to specify metadata, build instructions, styling and more."#);
-    config.push_str("\ntitle = \"Document title\"");
+    config.push_str("\n\ntitle = \"Document title\"");
 
     // Add author name from Git if available
     if let Some(author) = get_author_name() {
         config.push_str(&format!("\nauthors = [\"{}\"]", author))
     }
 
-    config.push_str("\n# For more options, visit https://kmaasrud.com/mdoc/config");
+    config.push_str("\n\n# For more options, visit https://kmaasrud.com/mdoc/config");
 
     // Write to file
     write_file(&root.join(CONFIG_FILE), config.as_bytes())
