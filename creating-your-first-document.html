@@ -81,7 +81,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="docs.html"><strong aria-hidden="true">1.</strong> Welcome!</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">2.</strong> Getting started</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="installing.html"><strong aria-hidden="true">2.1.</strong> Installing</a></li><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">2.2.</strong> Introduction and key concepts</a></li><li class="chapter-item expanded "><a href="creating-your-first-document.html" class="active"><strong aria-hidden="true">2.3.</strong> Creating your first document</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">3.</strong> Using MDoc</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="commands.html"><strong aria-hidden="true">3.1.</strong> Command line tool</a></li><li class="chapter-item expanded "><a href="config.html"><strong aria-hidden="true">3.2.</strong> Configuration</a></li><li class="chapter-item expanded "><a href="bib.html"><strong aria-hidden="true">3.3.</strong> The bibliography tool</a></li></ol></li><li class="chapter-item expanded "><a href="markdown/markdown.html"><strong aria-hidden="true">4.</strong> Markdown</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="markdown/paragraphs.html"><strong aria-hidden="true">4.1.</strong> Paragraphs</a></li><li class="chapter-item expanded "><a href="markdown/headings.html"><strong aria-hidden="true">4.2.</strong> Headings</a></li><li class="chapter-item expanded "><a href="markdown/formatting.html"><strong aria-hidden="true">4.3.</strong> Formatting</a></li><li class="chapter-item expanded "><a href="markdown/lists.html"><strong aria-hidden="true">4.4.</strong> Lists</a></li><li class="chapter-item expanded "><a href="markdown/images-and-figures.html"><strong aria-hidden="true">4.5.</strong> Images and figures</a></li><li class="chapter-item expanded "><a href="markdown/code.html"><strong aria-hidden="true">4.6.</strong> Code</a></li><li class="chapter-item expanded "><a href="markdown/math.html"><strong aria-hidden="true">4.7.</strong> Math</a></li><li class="chapter-item expanded "><a href="markdown/block-quotes.html"><strong aria-hidden="true">4.8.</strong> Block quotes</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="docs.html"><strong aria-hidden="true">1.</strong> Preface</a></li><li class="chapter-item expanded "><a href="terminology.html"><strong aria-hidden="true">2.</strong> Terminology</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">3.</strong> Getting started</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="installing.html"><strong aria-hidden="true">3.1.</strong> Installing</a></li><li class="chapter-item expanded "><a href="creating-your-first-document.html" class="active"><strong aria-hidden="true">3.2.</strong> Creating your first document</a></li><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">3.3.</strong> Key concepts</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">4.</strong> Using MDoc</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="commands.html"><strong aria-hidden="true">4.1.</strong> Command line tool</a></li><li class="chapter-item expanded "><a href="config.html"><strong aria-hidden="true">4.2.</strong> Configuration</a></li><li class="chapter-item expanded "><a href="bib.html"><strong aria-hidden="true">4.3.</strong> The bibliography tool</a></li></ol></li><li class="chapter-item expanded "><a href="markdown/markdown.html"><strong aria-hidden="true">5.</strong> Markdown</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="markdown/paragraphs.html"><strong aria-hidden="true">5.1.</strong> Paragraphs</a></li><li class="chapter-item expanded "><a href="markdown/headings.html"><strong aria-hidden="true">5.2.</strong> Headings</a></li><li class="chapter-item expanded "><a href="markdown/formatting.html"><strong aria-hidden="true">5.3.</strong> Formatting</a></li><li class="chapter-item expanded "><a href="markdown/lists.html"><strong aria-hidden="true">5.4.</strong> Lists</a></li><li class="chapter-item expanded "><a href="markdown/images-and-figures.html"><strong aria-hidden="true">5.5.</strong> Images and figures</a></li><li class="chapter-item expanded "><a href="markdown/code.html"><strong aria-hidden="true">5.6.</strong> Code</a></li><li class="chapter-item expanded "><a href="markdown/math.html"><strong aria-hidden="true">5.7.</strong> Math</a></li><li class="chapter-item expanded "><a href="markdown/block-quotes.html"><strong aria-hidden="true">5.8.</strong> Block quotes</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -142,18 +142,18 @@
 
                 <div id="content" class="content">
                     <main>
-                        <p>To get started with Doctor, create a new document by running</p>
-<pre><code class="language-shell">doctor new &quot;Awesome document&quot;
+                        <p>To get started with a new document, run the following command</p>
+<pre><code class="language-shell">mdoc init &quot;Awesome document&quot;
 </code></pre>
-<p>This will create a new <a href="introduction#documents">document</a> inside a directory conveniently named <code>Awesome document</code>. Next, add a section by running</p>
-<pre><code class="language-shell">doctor add introduction
+<p>This will create directory named <code>Awesome document</code>, containing a file called <code>mdoc.toml</code> and a directory called <code>src</code>.</p>
+<blockquote>
+<p>📖 If you want to initialize a document in the current working drive, simply run <code>mdzk init</code> without any arguments.</p>
+</blockquote>
+<p>Next, open some Markdown files in your favorite editor. These can be located anywhere inside the document directory, but the <code>src</code> folder is the conventional place to put them. Go ahead and write content! You can write whatever you want, so make it something fun and be sure to add some <span class="katex-inline">\TeX</span> math or code listings if you want! To get your document built into a PDF, simply run</p>
+<pre><code class="language-shell">mdoc build
 </code></pre>
-<p>This will create a new Markdown file named <code>00_introduction.md</code> under the directory <code>secs</code> and adds a top level header <code># Introduction</code> to it. Go ahead and add some more Markdown content to this file. You can write whatever you want, so make it something fun and add some <span class="katex-inline">\TeX</span> math or code listings if you want! To get your document built into a PDF, simply run</p>
-<pre><code class="language-shell">doctor build
-</code></pre>
-<p>This will produce a PDF called <code>document.pdf</code> in your root directory. Open it with your preferred PDF viewer and marvel at how simple it was to create this beautiful <span class="katex-inline">\LaTeX</span>-formatted PDF - no <code>\begin{document}</code> needed.</p>
-<p>Now, you might not be quite as impressed as I make it out to be yet... For instance, the author is &quot;AUTHOR&quot;, how do you change that? Have a look inside <code>doctor.toml</code>. This file is where you'll find your document's metadata, build and style instructions, bibliography details and many more options - having this in a separate file is a crucial step in ensuring separation of concerns. Change the <code>title</code>, <code>author</code> and <code>date</code> field into whatever you desire and run <code>doctor build</code> again to see the changes get applied.</p>
-<p>You are now ready to add more sections... (WIP)</p>
+<p>This will produce a PDF called <code>awesome-document.pdf</code> in your root directory. Open it with your preferred PDF viewer and marvel at how simple it was to create this beautiful PDF - no <code>\begin{document}</code> needed!</p>
+<p>Now, you might not be blown away yet... How do I configure this document to look the way I like? Have a look inside <code>mdoc.toml</code>. This file is where you'll find your document's metadata, build instructions, styling, bibliography details and many more options. Try changing the <code>title</code> field into something else, and run <code>mdoc build</code> again to see the changes get applied.</p>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.18/dist/katex.min.css" integrity="sha384-zTROYFVGOfTw7JV7KUu8udsvW2fx4lWOsCEDqhBreBwlHI4ioVRtmIvEThzJHGET" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.20/dist/katex.min.js" integrity="sha384-ov99pRO2tAc0JuxTVzf63RHHeQTJ0CIawbDZFiFTzB07aqFZwEu2pz4uzqL+5OPG" crossorigin="anonymous"></script>
 <script>
@@ -170,11 +170,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="introduction.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="installing.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next" href="commands.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="introduction.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -184,11 +184,11 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="introduction.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="installing.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next" href="commands.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next" href="introduction.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Introduction and key concepts - MDoc Documentation</title>
+        <title>Key concepts - MDoc Documentation</title>
 
 
         <!-- Custom HTML head -->
@@ -81,7 +81,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="docs.html"><strong aria-hidden="true">1.</strong> Welcome!</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">2.</strong> Getting started</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="installing.html"><strong aria-hidden="true">2.1.</strong> Installing</a></li><li class="chapter-item expanded "><a href="introduction.html" class="active"><strong aria-hidden="true">2.2.</strong> Introduction and key concepts</a></li><li class="chapter-item expanded "><a href="creating-your-first-document.html"><strong aria-hidden="true">2.3.</strong> Creating your first document</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">3.</strong> Using MDoc</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="commands.html"><strong aria-hidden="true">3.1.</strong> Command line tool</a></li><li class="chapter-item expanded "><a href="config.html"><strong aria-hidden="true">3.2.</strong> Configuration</a></li><li class="chapter-item expanded "><a href="bib.html"><strong aria-hidden="true">3.3.</strong> The bibliography tool</a></li></ol></li><li class="chapter-item expanded "><a href="markdown/markdown.html"><strong aria-hidden="true">4.</strong> Markdown</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="markdown/paragraphs.html"><strong aria-hidden="true">4.1.</strong> Paragraphs</a></li><li class="chapter-item expanded "><a href="markdown/headings.html"><strong aria-hidden="true">4.2.</strong> Headings</a></li><li class="chapter-item expanded "><a href="markdown/formatting.html"><strong aria-hidden="true">4.3.</strong> Formatting</a></li><li class="chapter-item expanded "><a href="markdown/lists.html"><strong aria-hidden="true">4.4.</strong> Lists</a></li><li class="chapter-item expanded "><a href="markdown/images-and-figures.html"><strong aria-hidden="true">4.5.</strong> Images and figures</a></li><li class="chapter-item expanded "><a href="markdown/code.html"><strong aria-hidden="true">4.6.</strong> Code</a></li><li class="chapter-item expanded "><a href="markdown/math.html"><strong aria-hidden="true">4.7.</strong> Math</a></li><li class="chapter-item expanded "><a href="markdown/block-quotes.html"><strong aria-hidden="true">4.8.</strong> Block quotes</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="docs.html"><strong aria-hidden="true">1.</strong> Preface</a></li><li class="chapter-item expanded "><a href="terminology.html"><strong aria-hidden="true">2.</strong> Terminology</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">3.</strong> Getting started</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="installing.html"><strong aria-hidden="true">3.1.</strong> Installing</a></li><li class="chapter-item expanded "><a href="creating-your-first-document.html"><strong aria-hidden="true">3.2.</strong> Creating your first document</a></li><li class="chapter-item expanded "><a href="introduction.html" class="active"><strong aria-hidden="true">3.3.</strong> Key concepts</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">4.</strong> Using MDoc</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="commands.html"><strong aria-hidden="true">4.1.</strong> Command line tool</a></li><li class="chapter-item expanded "><a href="config.html"><strong aria-hidden="true">4.2.</strong> Configuration</a></li><li class="chapter-item expanded "><a href="bib.html"><strong aria-hidden="true">4.3.</strong> The bibliography tool</a></li></ol></li><li class="chapter-item expanded "><a href="markdown/markdown.html"><strong aria-hidden="true">5.</strong> Markdown</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="markdown/paragraphs.html"><strong aria-hidden="true">5.1.</strong> Paragraphs</a></li><li class="chapter-item expanded "><a href="markdown/headings.html"><strong aria-hidden="true">5.2.</strong> Headings</a></li><li class="chapter-item expanded "><a href="markdown/formatting.html"><strong aria-hidden="true">5.3.</strong> Formatting</a></li><li class="chapter-item expanded "><a href="markdown/lists.html"><strong aria-hidden="true">5.4.</strong> Lists</a></li><li class="chapter-item expanded "><a href="markdown/images-and-figures.html"><strong aria-hidden="true">5.5.</strong> Images and figures</a></li><li class="chapter-item expanded "><a href="markdown/code.html"><strong aria-hidden="true">5.6.</strong> Code</a></li><li class="chapter-item expanded "><a href="markdown/math.html"><strong aria-hidden="true">5.7.</strong> Math</a></li><li class="chapter-item expanded "><a href="markdown/block-quotes.html"><strong aria-hidden="true">5.8.</strong> Block quotes</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -142,21 +142,9 @@
 
                 <div id="content" class="content">
                     <main>
-                        <p>Doctor aims at giving you the most streamlined writing experience possible. It is somewhat opinionated in how it enforces a specific workflow and workspace structure. This is simply so that you don't have to concern yourself with structuring your project and keeping it organized manually - which I know from experience can be extremely time-draining.</p>
-<p>You write in Pandoc Markdown, with a few Doctor-specific syntax elights sprinkled in. If at any time you feel this markup language is limiting, you can simply write some <span class="katex-inline">\LaTeX</span> or HTML and it will be parsed as expected. I do however challenge you to avoid this as much as you can to really feel how refreshingly simple Pandoc Markdown can be, and to reassess how <em>fancy</em> your document really needs to be. You can read more on my choice of Pandoc Markdown <a href="markdown">here</a>, and learn the markup rules in the sections under <strong>Markdown</strong>.</p>
-<p>The Doctor tooling is focused on users familiar with the command line. As such, using a text editor with easy access to a terminal is highly advised. Visual Studio Code has an option of opening a terminal &quot;panel&quot; for example, which is a great way of working with Doctor. Using the embedded terminal in an editor like Neovim also works very smoothly! For previewing the document, I personally just open the PDF in my favorite PDF viewer and rebuild whenever I need to see the changes. There are also a bunch of extensions for Visual Studio Code which give a live preview of your current section. Some more guides pertaining to different editors will arrive here shortly...</p>
-<h1 id="key-concepts"><a class="header" href="#key-concepts">Key concepts</a></h1>
-<h2 id="documents-documents"><a class="header" href="#documents-documents">Documents {#documents}</a></h2>
-<p>In Doctor terminology, a <em>document</em> is simply a directory containing everything needed for Doctor to produce your desired output. The directory has the following structure:</p>
-<ul>
-<li><code>secs/</code>: This directory will contain the sections of your document, each represented by a Markdown file.</li>
-<li><code>assets/</code>: This is a directory for all the assets needed by your document. This could be figures, CSL styles, bibliographies or anything you need, really.</li>
-<li><code>doctor.toml</code>: This configuration file specifies key aspects of your document, like the title, author(s), and more. For more info, see <a href="config">Configuring</a></li>
-</ul>
-<p>As a rule, you should not manually create, rename or move files in a document - except within the <code>assets</code> directory of course. Rather, you should let Doctor handle the dirty work of maintaining the workspace, and focus on what you're best at: Writing amazing content!</p>
-<h2 id="sections-sections"><a class="header" href="#sections-sections">Sections {#sections}</a></h2>
-<p>A <em>section</em> in a Doctor document is just a single Markdown file in the <code>secs</code> directory. By design, this file should represent only <strong>one</strong> single section of the document. This ensures a consistent structure that is simple to maintain. A good rule of thumb is to start each section with the title of that section as a top level header, and only use subheaders below it.</p>
-<p>Doctor automatically assigns an index to your new sections. The indices are used to determine the order in which the sections appear in the final output. If you insist, you can rename the files to reorder the sections yourself, but it is adviced to use the Doctor command line tool for this task. It will make sure the correct order is kept when adding, removing or moving sections.</p>
+                        <p>MDoc documents are written in <a href="markdown/markdown.html">Pandoc's flavor of Markdown</a>, with a few syntactic delights sprinkled in. If at any time you feel this markup language is limiting, you can simply write inline LaTeX or HTML and it will be parsed as expected. However, I challenge you to avoid this as much as you can to get a feel for Markdown's refreshing simplicity, and to reassess how <em>fancy</em> your document really needs to be.</p>
+<p>The MDoc tooling is focused on users familiar with the command line. As such, using a text editor with easy access to a terminal is highly recommended. Visual Studio Code has an option of opening a terminal &quot;panel&quot;, for example, which is a great way of working with MDoc. Using the embedded terminal in an editor like Neovim also works smoothly.</p>
+<p>A live-updating <code>watch</code> command will soon arrive to MDoc, but for the time being I personally just open the built PDF in my favorite PDF viewer and rebuild whenever I need to preview my changes. There are also a bunch of extensions for Visual Studio Code which give a live preview of your current section.</p>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.18/dist/katex.min.css" integrity="sha384-zTROYFVGOfTw7JV7KUu8udsvW2fx4lWOsCEDqhBreBwlHI4ioVRtmIvEThzJHGET" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.20/dist/katex.min.js" integrity="sha384-ov99pRO2tAc0JuxTVzf63RHHeQTJ0CIawbDZFiFTzB07aqFZwEu2pz4uzqL+5OPG" crossorigin="anonymous"></script>
 <script>
@@ -173,11 +161,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="installing.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="creating-your-first-document.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next" href="creating-your-first-document.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="commands.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -187,11 +175,11 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="installing.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="creating-your-first-document.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next" href="creating-your-first-document.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next" href="commands.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

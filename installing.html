@@ -81,7 +81,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="docs.html"><strong aria-hidden="true">1.</strong> Welcome!</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">2.</strong> Getting started</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="installing.html" class="active"><strong aria-hidden="true">2.1.</strong> Installing</a></li><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">2.2.</strong> Introduction and key concepts</a></li><li class="chapter-item expanded "><a href="creating-your-first-document.html"><strong aria-hidden="true">2.3.</strong> Creating your first document</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">3.</strong> Using MDoc</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="commands.html"><strong aria-hidden="true">3.1.</strong> Command line tool</a></li><li class="chapter-item expanded "><a href="config.html"><strong aria-hidden="true">3.2.</strong> Configuration</a></li><li class="chapter-item expanded "><a href="bib.html"><strong aria-hidden="true">3.3.</strong> The bibliography tool</a></li></ol></li><li class="chapter-item expanded "><a href="markdown/markdown.html"><strong aria-hidden="true">4.</strong> Markdown</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="markdown/paragraphs.html"><strong aria-hidden="true">4.1.</strong> Paragraphs</a></li><li class="chapter-item expanded "><a href="markdown/headings.html"><strong aria-hidden="true">4.2.</strong> Headings</a></li><li class="chapter-item expanded "><a href="markdown/formatting.html"><strong aria-hidden="true">4.3.</strong> Formatting</a></li><li class="chapter-item expanded "><a href="markdown/lists.html"><strong aria-hidden="true">4.4.</strong> Lists</a></li><li class="chapter-item expanded "><a href="markdown/images-and-figures.html"><strong aria-hidden="true">4.5.</strong> Images and figures</a></li><li class="chapter-item expanded "><a href="markdown/code.html"><strong aria-hidden="true">4.6.</strong> Code</a></li><li class="chapter-item expanded "><a href="markdown/math.html"><strong aria-hidden="true">4.7.</strong> Math</a></li><li class="chapter-item expanded "><a href="markdown/block-quotes.html"><strong aria-hidden="true">4.8.</strong> Block quotes</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="docs.html"><strong aria-hidden="true">1.</strong> Preface</a></li><li class="chapter-item expanded "><a href="terminology.html"><strong aria-hidden="true">2.</strong> Terminology</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">3.</strong> Getting started</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="installing.html" class="active"><strong aria-hidden="true">3.1.</strong> Installing</a></li><li class="chapter-item expanded "><a href="creating-your-first-document.html"><strong aria-hidden="true">3.2.</strong> Creating your first document</a></li><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">3.3.</strong> Key concepts</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">4.</strong> Using MDoc</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="commands.html"><strong aria-hidden="true">4.1.</strong> Command line tool</a></li><li class="chapter-item expanded "><a href="config.html"><strong aria-hidden="true">4.2.</strong> Configuration</a></li><li class="chapter-item expanded "><a href="bib.html"><strong aria-hidden="true">4.3.</strong> The bibliography tool</a></li></ol></li><li class="chapter-item expanded "><a href="markdown/markdown.html"><strong aria-hidden="true">5.</strong> Markdown</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="markdown/paragraphs.html"><strong aria-hidden="true">5.1.</strong> Paragraphs</a></li><li class="chapter-item expanded "><a href="markdown/headings.html"><strong aria-hidden="true">5.2.</strong> Headings</a></li><li class="chapter-item expanded "><a href="markdown/formatting.html"><strong aria-hidden="true">5.3.</strong> Formatting</a></li><li class="chapter-item expanded "><a href="markdown/lists.html"><strong aria-hidden="true">5.4.</strong> Lists</a></li><li class="chapter-item expanded "><a href="markdown/images-and-figures.html"><strong aria-hidden="true">5.5.</strong> Images and figures</a></li><li class="chapter-item expanded "><a href="markdown/code.html"><strong aria-hidden="true">5.6.</strong> Code</a></li><li class="chapter-item expanded "><a href="markdown/math.html"><strong aria-hidden="true">5.7.</strong> Math</a></li><li class="chapter-item expanded "><a href="markdown/block-quotes.html"><strong aria-hidden="true">5.8.</strong> Block quotes</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -145,14 +145,15 @@
                         <p>For the time being, you will have to compile MDoc yourself to install it. It is published on <a href="https://crates.io/crates/mdoc">crates.io</a>, so this is done easily by running</p>
 <pre><code>$ cargo install mdoc
 </code></pre>
+<h3 id="building-from-source"><a class="header" href="#building-from-source">Building from source</a></h3>
 <p>If you want to compile from upstream, clone <a href="https://github.com/kmaasrud/mdoc">the repo</a> and install from path with these commands:</p>
 <pre><code>$ git clone https://github.com/kmaasrud/mdoc.git
 $ cd mdoc
 $ cargo install --path .
 </code></pre>
 <p>MDoc depends on <a href="https://pandoc.org/">Pandoc</a> for parsing the Markdown content. Have a look at <a href="https://pandoc.org/installing.html">Installing Pandoc</a> and make sure it is available in your <code>PATH</code> by running <code>pandoc -v</code>.</p>
-<h2 id="notes-on-building"><a class="header" href="#notes-on-building">Notes on building</a></h2>
-<p>Depending on your platform, you might get some <a href="https://tectonic-typesetting.github.io/book/latest/howto/build-tectonic/cargo-vcpkg-dep-install.html">build errors when compiling Tectonic</a>. To solve these, you must clone the repo and build using vcpkg to handle the C dependencies. First install <code>cargo-vcpkg</code> by running</p>
+<h4 id="some-notes-on-building"><a class="header" href="#some-notes-on-building">Some notes on building</a></h4>
+<p>Tectonic needs a few <a href="https://tectonic-typesetting.github.io/book/latest/howto/build-tectonic/index.html#third-party-dependencies">third party C dependencies</a> when building. Depending on your platform, you might not have them available. A cross-platform solution is to use VCPKG to handle these dependencies. First install <code>cargo-vcpkg</code> by running</p>
 <pre><code>$ cargo install cargo-vcpkg
 </code></pre>
 <p>Then obtain the dependencies with</p>
@@ -162,7 +163,7 @@ $ cargo install --path .
 <pre><code>$ export VCPKG_ROOT=&quot;${CARGO_TARGET_DIR:-$(pwd)/target}/vcpkg&quot;
 $ export TECTONIC_DEP_BACKEND=vcpkg
 </code></pre>
-<p>If you are building on Windows, you probably have to run with the following environment variable as well:</p>
+<p>If you are building on Windows, you have to run with the following environment variable exported as well:</p>
 <pre><code>$ export RUSTFLAGS='-Ctarget-feature=+crt-static'
 </code></pre>
 <p>After all this, you should be ready to compile normally.</p>
@@ -182,11 +183,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="docs.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="terminology.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next" href="introduction.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="creating-your-first-document.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -196,11 +197,11 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="docs.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="terminology.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next" href="introduction.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next" href="creating-your-first-document.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
