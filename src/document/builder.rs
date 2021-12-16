@@ -72,7 +72,11 @@ impl DocumentBuilder {
             bail!("No chapters found.");
         }
 
-        debug!("Building document with {} chapters:\n{:#?}", chapters.len(), chapters);
+        debug!(
+            "Building document with {} chapters:\n{:#?}",
+            chapters.len(),
+            chapters
+        );
         debug!("Using config: {:#?}", config);
 
         Ok(Document {
