@@ -16,6 +16,7 @@ pub struct Config {
 
     // LaTeX configuration
     pub latex_head: String,
+    pub latex_packages: Vec<String>,
 
     // Subtables
     pub bib: BibConfig,
@@ -31,6 +32,13 @@ impl Config {
 
     pub(crate) fn latex_authors(&self) -> String {
         self.authors.join(" \\and ")
+    }
+
+    pub(crate) fn latex_packages(&self) -> String {
+        self.latex_packages
+            .iter()
+            .map(|package| format!("\\usepackage{{{}}}\n", package))
+            .collect()
     }
 
     pub(crate) fn date(&self) -> String {
@@ -64,6 +72,7 @@ impl Default for Config {
             authors: vec![],
             date: None,
             latex_head: "".to_owned(),
+            latex_packages: vec![],
             bib: BibConfig::default(),
             build: BuildConfig::default(),
             style: StyleConfig::default(),

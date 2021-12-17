@@ -85,11 +85,12 @@ impl Document {
 
         let mut meta = String::new();
         meta.push_str(&format!(
-            "\n\\title{{{}}}\n\\author{{{}}}\n\\date{{{}}}\n{}\n{}",
+            "\n\\title{{{}}}\n\\author{{{}}}\n\\date{{{}}}\n{}\n{}\n{}",
             self.config.title,
-            self.config.date(),
             self.config.latex_authors(),
+            self.config.date(),
             self.config.number_sections(),
+            self.config.latex_packages(),
             self.config.latex_head,
         ));
 
