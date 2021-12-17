@@ -30,7 +30,7 @@ thiserror = "1.0"
 structopt = "0.3"
 
 # LaTeX
-tectonic = { version = "0.8", default-features = false, features = ["geturl-reqwest"] }
+tectonic = { version = "0.8", default-features = false, features = ["geturl-reqwest", "native-tls-vendored"] }
 
 
 # VCPKG
