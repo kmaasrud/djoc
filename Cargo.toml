@@ -1,6 +1,6 @@
 [package]
 name = "mdoc"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Knut Magnus Aasrud <km@aasrud.com>"]
 description = "Modern PDF creation through Markdown and LaTeX"
 edition = "2021"
