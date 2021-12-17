@@ -91,7 +91,7 @@ impl Document {
             self.config.date(),
             self.config.number_sections(),
             self.config.latex_packages(),
-            self.config.latex_head,
+            self.config.latex.head,
         ));
 
         let bytes = [

@@ -14,13 +14,10 @@ pub struct Config {
     pub authors: Vec<String>,
     pub date: Option<String>,
 
-    // LaTeX configuration
-    pub latex_head: String,
-    pub latex_packages: Vec<String>,
-
     // Subtables
     pub bib: BibConfig,
     pub build: BuildConfig,
+    pub latex: LatexConfig,
     pub style: StyleConfig,
 }
 
@@ -35,7 +32,8 @@ impl Config {
     }
 
     pub(crate) fn latex_packages(&self) -> String {
-        self.latex_packages
+        self.latex
+            .packages
             .iter()
             .map(|package| format!("\\usepackage{{{}}}\n", package))
             .collect()
@@ -71,10 +69,9 @@ impl Default for Config {
             title: "Document title".to_owned(),
             authors: vec![],
             date: None,
-            latex_head: "".to_owned(),
-            latex_packages: vec![],
             bib: BibConfig::default(),
             build: BuildConfig::default(),
+            latex: LatexConfig::default(),
             style: StyleConfig::default(),
         }
     }
@@ -106,4 +103,11 @@ pub struct BuildConfig {
 #[serde(default, rename_all = "kebab-case")]
 pub struct StyleConfig {
     pub number_sections: bool,
+}
+
+#[derive(Debug, Default, Deserialize, Serialize)]
+#[serde(default, rename_all = "kebab-case")]
+pub struct LatexConfig {
+    pub head: String,
+    pub packages: Vec<String>,
 }
