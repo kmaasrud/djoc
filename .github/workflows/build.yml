@@ -22,7 +22,7 @@ jobs:
           target
         key: linux-stable
     
-    - name: Install dependencies 🦀
+    - name: Install dependencies
       run: sudo apt-get install -y libfontconfig1-dev libgraphite2-dev libharfbuzz-dev libicu-dev libssl-dev zlib1g-dev
 
     - name: Build
