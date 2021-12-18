@@ -1,4 +1,4 @@
-<h1 align="center">MDoc</h1>
+# MDoc
 
 **The power of LaTeX and simplicity of Markdown**
 
