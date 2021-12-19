@@ -6,7 +6,7 @@ pub use builder::*;
 pub use chapter::*;
 
 use crate::{bib, config::Config, Error};
-use anyhow::{Context, Result};
+use anyhow::{anyhow, Context, Result};
 use std::io::Write;
 use std::path::PathBuf;
 use std::process::{Command, Stdio};
@@ -67,6 +67,8 @@ impl Document {
         pandoc_args.push("--from=markdown".to_owned());
         pandoc_args.push("--to=latex".to_owned());
 
+        debug!("Pandoc arguments: {:?}", pandoc_args);
+
         let mut pandoc = Command::new("pandoc")
             .args(&pandoc_args)
             .stdin(Stdio::piped())
@@ -78,7 +80,7 @@ impl Document {
         stdin
             .write_all(
                 self.content()
-                    .ok_or_else(|| anyhow::anyhow!("Document has no content."))?
+                    .ok_or_else(|| anyhow!("Document has no content."))?
                     .as_bytes(),
             )
             .context("Failed to write to stdin.")?;
@@ -94,11 +96,13 @@ impl Document {
             self.config.latex.head,
         ));
 
+        let stdout = pandoc.wait_with_output()?.stdout;
+
         let bytes = [
             PREAMBLE,
             meta.as_bytes(),
             "\n\n\\begin{document}\n\\maketitle\n\n".as_bytes(),
-            &pandoc.wait_with_output()?.stdout,
+            &stdout,
             "\n\n\\end{document}".as_bytes(),
         ]
         .concat();
@@ -107,7 +111,6 @@ impl Document {
     }
 
     pub fn build(&self) -> Result<Vec<u8>> {
-        let latex_bytes = self.latex_bytes()?;
         let filename = &self.config.filename();
 
         let mut status = crate::log::MdocTectonicStatusBackend;
@@ -130,7 +133,7 @@ impl Document {
         let mut files = {
             let mut sb = tectonic::driver::ProcessingSessionBuilder::default();
             sb.bundle(bundle)
-                .primary_input_buffer(&latex_bytes)
+                .primary_input_buffer(&self.latex_bytes()?)
                 .tex_input_name(&format!("{}.tex", filename))
                 .format_name("latex")
                 .format_cache_path(format_cache_path)

@@ -130,7 +130,7 @@ impl tectonic::status::StatusBackend for MdocTectonicStatusBackend {
     ) {
         match kind {
             tectonic::status::MessageKind::Error => {
-                let msg = format!("{}", args);
+                let msg = args.to_string();
 
                 error!("{}{}",
                     msg
@@ -140,7 +140,13 @@ impl tectonic::status::StatusBackend for MdocTectonicStatusBackend {
                     crate::log::format_chain(err.unwrap_or(&anyhow!("")).chain())
                 );
             }
-            tectonic::status::MessageKind::Warning => warn!("{}", args),
+            tectonic::status::MessageKind::Warning => {
+                let msg = args.to_string();
+                // Remove all underfull/overfull hbox messages. TODO: Make this optional
+                if !(msg.contains(r"Underfull \hbox") || msg.contains(r"Overfull \hbox")) {
+                    warn!("{}", args);
+                }
+            }
             tectonic::status::MessageKind::Note => info!("{}", args),
         }
     }
