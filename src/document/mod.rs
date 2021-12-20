@@ -1,17 +1,15 @@
 mod builder;
 mod chapter;
-mod lua;
 
 pub use builder::*;
 pub use chapter::*;
 
-use crate::{bib, config::Config, Error};
+use crate::pandoc::make_pandoc_args;
+use crate::{config::Config, Error};
 use anyhow::{anyhow, Context, Result};
 use std::io::Write;
 use std::path::PathBuf;
 use std::process::{Command, Stdio};
-
-const PREAMBLE: &[u8] = include_bytes!("preamble.tex");
 
 pub struct Document {
     pub chapters: Vec<Chapter>,
@@ -42,30 +40,7 @@ impl Document {
     }
 
     pub fn latex_bytes(&self) -> Result<Vec<u8>> {
-        let mut pandoc_args: Vec<String> = Vec::new();
-
-        // Lua filters
-        for filter in lua::get_filters()?.iter().filter_map(|f| f.to_str()) {
-            pandoc_args.push(format!("--lua-filter={}", filter))
-        }
-
-        // Bibliography files
-        for bib_file in bib::get_bib_files(self.root.as_ref())
-            .iter()
-            .filter_map(|b| b.to_str())
-        {
-            pandoc_args.push(format!("--bibliography={}", bib_file));
-        }
-
-        // CSL style
-        let csl_path = bib::get_csl(&self.config.bib.csl)?;
-        pandoc_args.push("--csl".to_owned());
-        pandoc_args.push(csl_path.to_string_lossy().to_string());
-
-        pandoc_args.push("-C".to_owned()); // Use citeproc
-        pandoc_args.push("--metadata=link-citations".to_owned()); // Link to citations (TODO: Make this optional)
-        pandoc_args.push("--from=markdown".to_owned());
-        pandoc_args.push("--to=latex".to_owned());
+        let pandoc_args = make_pandoc_args(&self.config, self.root.as_ref())?;
 
         debug!("Pandoc arguments: {:?}", pandoc_args);
 
@@ -85,29 +60,29 @@ impl Document {
             )
             .context("Failed to write to stdin.")?;
 
-        let mut meta = String::new();
-        meta.push_str(&format!(
-            "\n\\title{{{}}}\n\\author{{{}}}\n\\date{{{}}}\n{}\n{}\n{}",
-            self.config.title,
-            self.config.latex_authors(),
-            self.config.date(),
-            self.config.number_sections(),
-            self.config.latex_packages(),
-            self.config.latex.head,
-        ));
+        // let mut meta = String::new();
+        // meta.push_str(&format!(
+        //     "\n\\title{{{}}}\n\\author{{{}}}\n\\date{{{}}}\n{}\n{}\n{}",
+        //     self.config.title,
+        //     self.config.latex_authors(),
+        //     self.config.date(),
+        //     self.config.number_sections(),
+        //     self.config.latex_packages(),
+        //     self.config.latex.head,
+        // ));
 
-        let stdout = pandoc.wait_with_output()?.stdout;
+        // let stdout = pandoc.wait_with_output()?.stdout;
+        //
+        // let bytes = [
+        //     PREAMBLE,
+        //     meta.as_bytes(),
+        //     "\n\n\\begin{document}\n\\maketitle\n\n".as_bytes(),
+        //     &stdout,
+        //     "\n\n\\end{document}".as_bytes(),
+        // ]
+        // .concat();
 
-        let bytes = [
-            PREAMBLE,
-            meta.as_bytes(),
-            "\n\n\\begin{document}\n\\maketitle\n\n".as_bytes(),
-            &stdout,
-            "\n\n\\end{document}".as_bytes(),
-        ]
-        .concat();
-
-        Ok(bytes)
+        Ok(pandoc.wait_with_output()?.stdout)
     }
 
     pub fn build(&self) -> Result<Vec<u8>> {

@@ -27,10 +27,7 @@ impl Config {
         Ok(toml::from_str(&config_content)?)
     }
 
-    pub(crate) fn latex_authors(&self) -> String {
-        self.authors.join(" \\and ")
-    }
-
+    #[allow(dead_code)]
     pub(crate) fn latex_packages(&self) -> String {
         self.latex
             .packages
@@ -44,14 +41,6 @@ impl Config {
             .to_owned()
             .unwrap_or_default()
             .replace("today", "\\today")
-    }
-
-    pub(crate) fn number_sections(&self) -> String {
-        if self.style.number_sections {
-            "\\setcounter{secnumdepth}{5}".to_owned()
-        } else {
-            "\\setcounter{secnumdepth}{-\\maxdimen}".to_owned()
-        }
     }
 
     pub fn filename(&self) -> String {
