@@ -1,6 +1,7 @@
 use crate::utils::{kebab, read_file};
 
 use anyhow::Result;
+use chrono::Local;
 use serde::{Deserialize, Serialize};
 use std::path::Path;
 
@@ -37,10 +38,14 @@ impl Config {
     }
 
     pub(crate) fn date(&self) -> String {
-        self.date
-            .to_owned()
-            .unwrap_or_default()
-            .replace("today", "\\today")
+        match self.date.as_deref() {
+            Some("now") => {
+                let now = Local::now();
+                now.format(&self.style.date_format).to_string()
+            },
+            Some(date) => date.to_owned(),
+            None => String::default(),
+        }
     }
 
     pub fn filename(&self) -> String {
@@ -88,10 +93,20 @@ pub struct BuildConfig {
     pub filename: Option<String>,
 }
 
-#[derive(Debug, Default, Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize)]
 #[serde(default, rename_all = "kebab-case")]
 pub struct StyleConfig {
     pub number_sections: bool,
+    pub date_format: String,
+}
+
+impl Default for StyleConfig {
+    fn default() -> Self {
+        Self {
+            number_sections: false,
+            date_format: "%e %B %Y".to_owned()
+        }
+    }
 }
 
 #[derive(Debug, Default, Deserialize, Serialize)]
