@@ -1,7 +1,7 @@
 pub mod lua;
 pub mod opts;
 
-pub use opts::{PandocOption, PandocFormat};
+pub use opts::{PandocFormat, PandocOption};
 
 use anyhow::{Context, Result};
 use std::io::Write;
@@ -15,7 +15,10 @@ pub struct Pandoc {
 
 impl Pandoc {
     pub fn new() -> Self {
-        Self { path: PathBuf::from("pandoc"), opts: vec![] }
+        Self {
+            path: PathBuf::from("pandoc"),
+            opts: vec![],
+        }
     }
 
     pub fn push_opt(&mut self, opt: PandocOption) {
@@ -23,10 +26,7 @@ impl Pandoc {
     }
 
     pub fn run(&self, buf: &[u8]) -> Result<Vec<u8>> {
-        let args: Vec<String> = self.opts
-            .iter()
-            .map(ToString::to_string)
-            .collect();
+        let args: Vec<String> = self.opts.iter().map(ToString::to_string).collect();
 
         debug!("Running Pandoc with opts: {:#?}", args);
 
@@ -38,9 +38,7 @@ impl Pandoc {
 
         let stdin = cmd.stdin.as_mut().context("Failed to open stdin.")?;
 
-        stdin
-            .write_all(buf)
-            .context("Failed to write to stdin.")?;
+        stdin.write_all(buf).context("Failed to write to stdin.")?;
 
         Ok(cmd.wait_with_output()?.stdout)
     }

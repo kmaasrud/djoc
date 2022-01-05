@@ -23,6 +23,7 @@ impl DocumentBuilder {
         }
     }
 
+    #[must_use]
     pub fn source(mut self, path: impl AsRef<Path>) -> Self {
         let path = path.as_ref();
 
@@ -35,6 +36,7 @@ impl DocumentBuilder {
         self
     }
 
+    #[must_use]
     pub fn config(mut self, config: Config) -> Self {
         self.config = Some(config);
         self

@@ -42,7 +42,7 @@ impl Config {
             Some("now") => {
                 let now = Local::now();
                 now.format(&self.style.date_format).to_string()
-            },
+            }
             Some(date) => {
                 // NOTE: When formatting with invalid format strings (e.g. time formatters when
                 // time is not available), chrono panics with a really vague message. I am unable
@@ -51,13 +51,13 @@ impl Config {
                 // Related issue: https://github.com/chronotope/chrono/issues/575
                 // Related PR: https://github.com/chronotope/chrono/pull/614
                 if let Ok(dt) = date.parse::<NaiveDateTime>() {
-                    return dt.format(&self.style.date_format).to_string()
+                    return dt.format(&self.style.date_format).to_string();
                 }
                 if let Ok(dt) = date.parse::<NaiveDate>() {
-                    return dt.format(&self.style.date_format).to_string()
+                    return dt.format(&self.style.date_format).to_string();
                 }
                 date.to_owned()
-            },
+            }
             None => String::default(),
         }
     }
@@ -118,7 +118,7 @@ impl Default for StyleConfig {
     fn default() -> Self {
         Self {
             number_sections: false,
-            date_format: "%e %B %Y".to_owned()
+            date_format: "%e %B %Y".to_owned(),
         }
     }
 }

@@ -38,7 +38,7 @@ impl Display for PandocOption {
             Author(ref author) => write!(f, "--metadata=author:{}", author),
             Date(ref date) => write!(f, "--metadata=date:{}", date),
         }
-    }    
+    }
 }
 
 pub enum PandocFormat {

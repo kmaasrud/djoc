@@ -7,8 +7,8 @@ pub use chapter::*;
 use crate::{
     bib,
     config::Config,
+    pandoc::{lua, Pandoc, PandocFormat, PandocOption},
     Error,
-    pandoc::{lua, Pandoc, PandocFormat, PandocOption}
 };
 use anyhow::{anyhow, Context, Result};
 use std::path::PathBuf;
@@ -52,7 +52,7 @@ impl Document {
             for bib_file in bib::get_bib_files(self.root.as_ref()).iter() {
                 pandoc.push_opt(PandocOption::Bibliography(bib_file.to_owned()));
             }
-                
+
             for author in self.config.authors.iter() {
                 pandoc.push_opt(PandocOption::Author(author.to_owned()));
             }
@@ -72,8 +72,7 @@ impl Document {
 
             pandoc.run(content.as_bytes())
         } else {
-            Err(anyhow!("The document has no content."))
-                .context("Cannot convert to LaTeX.")
+            Err(anyhow!("The document has no content.")).context("Cannot convert to LaTeX.")
         }
     }
 

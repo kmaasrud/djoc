@@ -4,7 +4,7 @@ use std::path::PathBuf;
 
 const FILTERS: [(&str, &[u8]); 2] = [
     ("abstract.lua", include_bytes!("abstract.lua")),
-    ("crossref.lua", include_bytes!("crossref.lua"))
+    ("crossref.lua", include_bytes!("crossref.lua")),
 ];
 
 pub(crate) fn get_filters() -> Result<Vec<PathBuf>> {
