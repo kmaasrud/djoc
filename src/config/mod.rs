@@ -1,7 +1,7 @@
 use crate::utils::{kebab, read_file};
 
 use anyhow::Result;
-use chrono::Local;
+use chrono::{Local, NaiveDate, NaiveDateTime};
 use serde::{Deserialize, Serialize};
 use std::path::Path;
 
@@ -43,7 +43,21 @@ impl Config {
                 let now = Local::now();
                 now.format(&self.style.date_format).to_string()
             },
-            Some(date) => date.to_owned(),
+            Some(date) => {
+                // NOTE: When formatting with invalid format strings (e.g. time formatters when
+                // time is not available), chrono panics with a really vague message. I am unable
+                // to fix this myself and will just have to hope this does not happen.
+                //
+                // Related issue: https://github.com/chronotope/chrono/issues/575
+                // Related PR: https://github.com/chronotope/chrono/pull/614
+                if let Ok(dt) = date.parse::<NaiveDateTime>() {
+                    return dt.format(&self.style.date_format).to_string()
+                }
+                if let Ok(dt) = date.parse::<NaiveDate>() {
+                    return dt.format(&self.style.date_format).to_string()
+                }
+                date.to_owned()
+            },
             None => String::default(),
         }
     }
