@@ -1,50 +1,47 @@
-mod lua;
+pub mod lua;
+pub mod opts;
 
-use anyhow::Result;
-use crate::{config::Config, bib};
-use std::path::Path;
+pub use opts::{PandocOption, PandocFormat};
 
-pub fn make_pandoc_args(config: &Config, root: Option<impl AsRef<Path>>) -> Result<Vec<String>> {
-    let mut args = Vec::new();
+use anyhow::{Context, Result};
+use std::io::Write;
+use std::path::PathBuf;
+use std::process::{Command, Stdio};
 
-    // Metadata
-    args.push(format!("--metadata=title:{}", config.title));
-    args.push(format!("--metadata=date:{}", config.date()));
-        
-    for author in config.authors.iter() {
-        args.push(format!("--metadata=author:{}", author));
+pub struct Pandoc {
+    path: PathBuf,
+    opts: Vec<PandocOption>,
+}
+
+impl Pandoc {
+    pub fn new() -> Self {
+        Self { path: PathBuf::from("pandoc"), opts: vec![] }
     }
 
-    if config.style.number_sections {
-        args.push("--number-sections".to_owned());
+    pub fn push_opt(&mut self, opt: PandocOption) {
+        self.opts.push(opt);
     }
 
-    // Lua filters
-    for filter in lua::get_filters()?.iter().filter_map(|f| f.to_str()) {
-        args.push(format!("--lua-filter={}", filter))
+    pub fn run(&self, buf: &[u8]) -> Result<Vec<u8>> {
+        let args: Vec<String> = self.opts
+            .iter()
+            .map(ToString::to_string)
+            .collect();
+
+        debug!("Running Pandoc with opts: {:#?}", args);
+
+        let mut cmd = Command::new(&self.path)
+            .args(&args)
+            .stdin(Stdio::piped())
+            .stdout(Stdio::piped())
+            .spawn()?;
+
+        let stdin = cmd.stdin.as_mut().context("Failed to open stdin.")?;
+
+        stdin
+            .write_all(buf)
+            .context("Failed to write to stdin.")?;
+
+        Ok(cmd.wait_with_output()?.stdout)
     }
-
-    // Bibliography files
-    for bib_file in bib::get_bib_files(root)
-        .iter()
-        .filter_map(|b| b.to_str())
-    {
-        args.push(format!("--bibliography={}", bib_file));
-    }
-
-    // LaTeX options
-    // args.push(format!("--metadata=header-includes:{}", config.latex.head));
-
-    // CSL style
-    let csl_path = bib::get_csl(&config.bib.csl)?;
-    args.push("--csl".to_owned());
-    args.push(csl_path.to_string_lossy().to_string());
-
-    args.push("-C".to_owned()); // Use citeproc
-    args.push("--metadata=link-citations".to_owned()); // Link to citations (TODO: Make this optional)
-    args.push("-s".to_owned());
-    args.push("--from=markdown".to_owned());
-    args.push("--to=latex".to_owned());
-
-    Ok(args)
 }

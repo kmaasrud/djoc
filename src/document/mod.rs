@@ -4,12 +4,14 @@ mod chapter;
 pub use builder::*;
 pub use chapter::*;
 
-use crate::pandoc::make_pandoc_args;
-use crate::{config::Config, Error};
+use crate::{
+    bib,
+    config::Config,
+    Error,
+    pandoc::{lua, Pandoc, PandocFormat, PandocOption}
+};
 use anyhow::{anyhow, Context, Result};
-use std::io::Write;
 use std::path::PathBuf;
-use std::process::{Command, Stdio};
 
 pub struct Document {
     pub chapters: Vec<Chapter>,
@@ -40,49 +42,39 @@ impl Document {
     }
 
     pub fn latex_bytes(&self) -> Result<Vec<u8>> {
-        let pandoc_args = make_pandoc_args(&self.config, self.root.as_ref())?;
+        if let Some(content) = self.content() {
+            let mut pandoc = Pandoc::new();
 
-        debug!("Pandoc arguments: {:?}", pandoc_args);
+            for filter in lua::get_filters()?.iter() {
+                pandoc.push_opt(PandocOption::LuaFilter(filter.to_owned()))
+            }
 
-        let mut pandoc = Command::new("pandoc")
-            .args(&pandoc_args)
-            .stdin(Stdio::piped())
-            .stdout(Stdio::piped())
-            .spawn()?;
+            for bib_file in bib::get_bib_files(self.root.as_ref()).iter() {
+                pandoc.push_opt(PandocOption::Bibliography(bib_file.to_owned()));
+            }
+                
+            for author in self.config.authors.iter() {
+                pandoc.push_opt(PandocOption::Author(author.to_owned()));
+            }
 
-        let stdin = pandoc.stdin.as_mut().context("Failed to open stdin.")?;
+            if self.config.style.number_sections {
+                pandoc.push_opt(PandocOption::NumberSections);
+            }
 
-        stdin
-            .write_all(
-                self.content()
-                    .ok_or_else(|| anyhow!("Document has no content."))?
-                    .as_bytes(),
-            )
-            .context("Failed to write to stdin.")?;
+            pandoc.push_opt(PandocOption::Csl(bib::get_csl(&self.config.bib.csl)?));
+            pandoc.push_opt(PandocOption::Title(self.config.title.to_owned()));
+            pandoc.push_opt(PandocOption::Date(self.config.date()));
+            pandoc.push_opt(PandocOption::Citeproc); // Use citeproc
+            pandoc.push_opt(PandocOption::LinkCitations); // Link to citations (TODO: Make this optional)
+            pandoc.push_opt(PandocOption::Standalone);
+            pandoc.push_opt(PandocOption::From(PandocFormat::Markdown));
+            pandoc.push_opt(PandocOption::To(PandocFormat::Latex));
 
-        // let mut meta = String::new();
-        // meta.push_str(&format!(
-        //     "\n\\title{{{}}}\n\\author{{{}}}\n\\date{{{}}}\n{}\n{}\n{}",
-        //     self.config.title,
-        //     self.config.latex_authors(),
-        //     self.config.date(),
-        //     self.config.number_sections(),
-        //     self.config.latex_packages(),
-        //     self.config.latex.head,
-        // ));
-
-        // let stdout = pandoc.wait_with_output()?.stdout;
-        //
-        // let bytes = [
-        //     PREAMBLE,
-        //     meta.as_bytes(),
-        //     "\n\n\\begin{document}\n\\maketitle\n\n".as_bytes(),
-        //     &stdout,
-        //     "\n\n\\end{document}".as_bytes(),
-        // ]
-        // .concat();
-
-        Ok(pandoc.wait_with_output()?.stdout)
+            pandoc.run(content.as_bytes())
+        } else {
+            Err(anyhow!("The document has no content."))
+                .context("Cannot convert to LaTeX.")
+        }
     }
 
     pub fn build(&self) -> Result<Vec<u8>> {
