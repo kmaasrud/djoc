@@ -4,7 +4,7 @@ pub mod opts;
 pub use opts::{PandocFormat, PandocOption};
 
 use anyhow::{Context, Result};
-use std::io::Write;
+use std::io::{Write, BufRead, BufReader};
 use std::path::PathBuf;
 use std::process::{Command, Stdio};
 
@@ -33,6 +33,7 @@ impl Pandoc {
         let mut cmd = Command::new(&self.path)
             .args(&args)
             .stdin(Stdio::piped())
+            .stderr(Stdio::piped())
             .stdout(Stdio::piped())
             .spawn()?;
 
@@ -40,6 +41,28 @@ impl Pandoc {
 
         stdin.write_all(buf).context("Failed to write to stdin.")?;
 
-        Ok(cmd.wait_with_output()?.stdout)
+        let output = cmd.wait_with_output()?;
+
+        match output.status.code() {
+            Some(0) => {
+                for line in BufReader::new(&*output.stderr).lines() {
+                    warn!("{}", line?.trim_start_matches("[WARNING] "));
+                }
+
+                Ok(output.stdout)
+            }
+
+            // TODO: Handle different Pandoc errors (convert to MDoc error type)
+            Some(code) => {
+                error!("Exited with code {}", code);
+                Ok(vec![])
+            }
+
+            None => {
+                error!("Exited with no code");
+                Ok(vec![])
+            }
+        }
+
     }
 }
