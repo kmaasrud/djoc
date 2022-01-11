@@ -11,6 +11,10 @@
 - [#59](https://github.com/kmaasrud/mdoc/issues/59) MDoc now has a custom interface with Pandoc, and Pandoc now handles most of the Markdown to LaTeX conversion. This should lead to less unexpected behavior, and make it easier for me to change to another LaTeX generation method, if I want to.
 - When `date` is a RFC 3339 compliant string, it will get parsed into a datetime and formatted according to the `date-format`. Timezones are currently ignored.
 
+### Improved
+
+- Warnings from Pandoc are now caught by MDoc and printed as expected.
+
 ## 0.1.1 (2020-12-17)
 
 ### Changed
