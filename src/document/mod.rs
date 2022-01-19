@@ -61,6 +61,10 @@ impl Document {
                 pandoc.push_opt(PandocOption::NumberSections);
             }
 
+            if let Some(header) = self.config.latex_header() {
+                pandoc.include_in_header(&header)?;
+            }
+
             pandoc.push_opt(PandocOption::Csl(bib::get_csl(&self.config.bib.csl)?));
             pandoc.push_opt(PandocOption::Title(self.config.title.to_owned()));
             pandoc.push_opt(PandocOption::Date(self.config.date()));

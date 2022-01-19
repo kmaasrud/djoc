@@ -28,13 +28,20 @@ impl Config {
         Ok(toml::from_str(&config_content)?)
     }
 
-    #[allow(dead_code)]
-    pub(crate) fn latex_packages(&self) -> String {
-        self.latex
-            .packages
-            .iter()
-            .map(|package| format!("\\usepackage{{{}}}\n", package))
-            .collect()
+    pub(crate) fn latex_header(&self) -> Option<String> {
+        if self.latex.head.is_empty() && self.latex.packages.is_empty() {
+            None
+        } else {
+            let mut header = String::new();
+            header.push_str(&self.latex.head);
+            let packages: String = self.latex
+                .packages
+                .iter()
+                .map(|package| format!("\\usepackage{{{}}}\n", package))
+                .collect();
+            header.push_str(&packages);
+            Some(header)
+        }
     }
 
     pub(crate) fn date(&self) -> String {
