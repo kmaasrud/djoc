@@ -1,6 +1,12 @@
 # Changelog
 
-## 0.1.2 (Unreleased)
+## 0.1.3
+
+### Fixed
+
+- Formatting in the title or author field is no longer escaped.
+
+## 0.1.2 (2022-01-19)
 
 ### Added
 
@@ -19,7 +25,7 @@
 
 - [#58](https://github.com/kmaasrud/mdoc/issues/58): Some scaling artifacts would sometimes appear on images. This is now fixed by virtue of Pandoc fully handling the LaTeX conversion.
 
-## 0.1.1 (2020-12-17)
+## 0.1.1 (2021-12-17)
 
 ### Changed
 

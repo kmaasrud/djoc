@@ -36,9 +36,9 @@ impl Display for PandocOption {
             LuaFilter(ref path) => write!(f, "--lua-filter={}", path.display()),
             Bibliography(ref path) => write!(f, "--bibliography={}", path.display()),
             IncludeInHeader(ref path) => write!(f, "--include-in-header={}", path.display()),
-            Title(ref title) => write!(f, "--metadata=title:{title}"),
-            Author(ref author) => write!(f, "--metadata=author:{author}"),
-            Date(ref date) => write!(f, "--metadata=date:{date}"),
+            Title(ref title) => write!(f, "--variable=title:{title}"),
+            Author(ref author) => write!(f, "--variable=author:{author}"),
+            Date(ref date) => write!(f, "--variable=date:{date}"),
         }
     }
 }
