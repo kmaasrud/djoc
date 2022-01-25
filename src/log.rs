@@ -137,7 +137,7 @@ impl tectonic::status::StatusBackend for MdocTectonicStatusBackend {
                         .trim_end_matches("See the LaTeX manual or LaTeX Companion for explanation.\nType  H <return>  for immediate help")
                         .trim_start_matches('!')
                         .trim(),
-                    crate::log::format_chain(err.unwrap_or(&anyhow!("")).chain())
+                    format_chain(err.unwrap_or(&anyhow!("")).chain())
                 );
             }
             tectonic::status::MessageKind::Warning => {
