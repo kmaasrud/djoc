@@ -2,12 +2,12 @@ pub mod errors;
 pub mod lua;
 pub mod opts;
 
-pub use opts::{PandocFormat, PandocOption};
 pub use errors::PandocError;
+pub use opts::{PandocFormat, PandocOption};
 
-use anyhow::{bail, Context, Result};
 use crate::utils;
-use std::io::{Write, BufRead, BufReader};
+use anyhow::{bail, Context, Result};
+use std::io::{BufRead, BufReader, Write};
 use std::path::PathBuf;
 use std::process::{Command, Stdio};
 
@@ -77,7 +77,14 @@ impl Pandoc {
 
             // TODO: Handle different Pandoc errors (convert to MDoc error type)
             Some(code) => {
-                let err = PandocError::from_code(code, String::from_utf8_lossy(&output.stderr).to_string());
+                let err = PandocError::from_code(
+                    code,
+                    String::from_utf8_lossy(&output.stderr)
+                        .lines()
+                        .filter(|line| !line.starts_with("[WARNING]"))
+                        .collect::<Vec<&str>>()
+                        .join("\n"),
+                );
 
                 Err(err.into())
             }
@@ -86,6 +93,5 @@ impl Pandoc {
                 bail!("Pandoc exited unsuccsessfully, but with no exit code..")
             }
         }
-
     }
 }

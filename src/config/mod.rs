@@ -34,7 +34,8 @@ impl Config {
         } else {
             let mut header = String::new();
             header.push_str(&self.latex.head);
-            let packages: String = self.latex
+            let packages: String = self
+                .latex
                 .packages
                 .iter()
                 .map(|package| format!("\\usepackage{{{}}}\n", package))
