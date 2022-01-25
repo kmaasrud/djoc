@@ -77,11 +77,9 @@ impl Pandoc {
 
             // TODO: Handle different Pandoc errors (convert to MDoc error type)
             Some(code) => {
-                let _err = PandocError::from_code(code, "");
+                let err = PandocError::from_code(code, String::from_utf8_lossy(&output.stderr).to_string());
 
-                error!("Pandoc exited with code {}", code);
-
-                Ok(vec![])
+                Err(err.into())
             }
 
             None => {
