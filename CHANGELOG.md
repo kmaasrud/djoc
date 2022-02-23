@@ -1,10 +1,18 @@
 # Changelog
 
-## 0.1.3
+## 0.2.0 (Unreleased)
 
-### Fixed
+### Features
 
-- Formatting in the title or author field is no longer escaped.
+- [#61](https://github.com/kmaasrud/mdoc/issues/61): Added `document-class` option under `[style]` in `mdoc.toml`. This allows setting the LaTeX document class. You can find a comprehensive list of different classes [here](https://ctan.org/topic/class).
+
+    4d83eba: `feat: add document-class option in config`
+
+### Fixes
+
+- [#62](https://github.com/kmaasrud/mdoc/issues/62): Formatting in the title or author field is no longer escaped.
+
+    9362675: `Fix lack of formatting in metadata fields`
 
 ## 0.1.2 (2022-01-19)
 
