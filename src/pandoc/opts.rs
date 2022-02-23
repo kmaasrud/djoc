@@ -20,6 +20,7 @@ pub enum PandocOption {
     Title(String),
     Author(String),
     Date(String),
+    DocumentClass(String),
 }
 
 impl Display for PandocOption {
@@ -39,6 +40,7 @@ impl Display for PandocOption {
             Title(ref title) => write!(f, "--variable=title:{title}"),
             Author(ref author) => write!(f, "--variable=author:{author}"),
             Date(ref date) => write!(f, "--variable=date:{date}"),
+            DocumentClass(ref class) => write!(f, "--variable=documentclass:{class}"),
         }
     }
 }

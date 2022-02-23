@@ -120,6 +120,7 @@ pub struct BuildConfig {
 pub struct StyleConfig {
     pub number_sections: bool,
     pub date_format: String,
+    pub document_class: Option<String>,
 }
 
 impl Default for StyleConfig {
@@ -127,6 +128,7 @@ impl Default for StyleConfig {
         Self {
             number_sections: false,
             date_format: "%e %B %Y".to_owned(),
+            document_class: None,
         }
     }
 }

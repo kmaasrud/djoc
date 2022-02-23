@@ -61,6 +61,10 @@ impl Document {
                 pandoc.push_opt(PandocOption::NumberSections);
             }
 
+            if let Some(ref class) = self.config.style.document_class {
+                pandoc.push_opt(PandocOption::DocumentClass(class.to_owned()));
+            }
+
             if let Some(header) = self.config.latex_header() {
                 pandoc.include_in_header(&header)?;
             }
@@ -68,8 +72,8 @@ impl Document {
             pandoc.push_opt(PandocOption::Csl(bib::get_csl(&self.config.bib.csl)?));
             pandoc.push_opt(PandocOption::Title(self.config.title.to_owned()));
             pandoc.push_opt(PandocOption::Date(self.config.date()));
-            pandoc.push_opt(PandocOption::Citeproc); // Use citeproc
-            pandoc.push_opt(PandocOption::LinkCitations); // Link to citations (TODO: Make this optional)
+            pandoc.push_opt(PandocOption::Citeproc);
+            pandoc.push_opt(PandocOption::LinkCitations);
             pandoc.push_opt(PandocOption::Standalone);
             pandoc.push_opt(PandocOption::From(PandocFormat::Markdown));
             pandoc.push_opt(PandocOption::To(PandocFormat::Latex));
