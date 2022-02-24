@@ -18,29 +18,52 @@
           inherit system;
           overlays = [ (import rust) ];
         };
+
+        inherit (pkgs) rustPlatform mkShell stdenv lib;
+        inherit (pkgs.darwin.apple_sdk.frameworks) ApplicationServices Cocoa;
+
+        nativeBuildInputs = with pkgs; [ pkg-config ];
+
+        buildDeps = with pkgs; [
+          fontconfig
+          graphite2
+          harfbuzz
+          icu
+          libpng
+          openssl
+          zlib
+        ] ++ lib.optionals stdenv.isDarwin [
+          ApplicationServices
+          Cocoa
+        ];
       in
       {
+        # `nix build`
+        defaultPackage = rustPlatform.buildRustPackage {
+          inherit nativeBuildInputs pname version;
+
+          src = ./.;
+          
+          cargoSha256 = "sha256-jzQKjZTB8cgmxrF4ukcZC7nOiz0EpPsiYNT1m+X6idA=";
+
+          buildInputs = buildDeps;
+
+          # Needed to get openssl-sys to use pkg-config
+          OPENSSL_NO_VENDOR = 1;
+        };
+
         # `nix develop`
-        devShell = pkgs.mkShell {
-          nativeBuildInputs = with pkgs; [
+        devShell = mkShell {
+          inherit nativeBuildInputs;
+
+          buildInputs = with pkgs; [
             # Rust toolchain
             rust-bin.nightly.latest.default
 
             # Handy dev tools
             rust-analyzer
             convco
-
-            # Tectonic dependencies
-            fontconfig
-            graphite2
-            harfbuzz
-            arcan.harfbuzz
-            icu
-            libpng
-            pkg-config
-            openssl
-            zlib
-          ];
+          ] ++ buildDeps;
         };
       }
     );
