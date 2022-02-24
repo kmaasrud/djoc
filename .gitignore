@@ -16,3 +16,6 @@ env.sh
 # Editors
 .vscode
 .idea
+
+# Nix
+result
