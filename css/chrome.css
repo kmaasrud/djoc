@@ -1,7 +1,5 @@
 /* CSS for UI elements (a.k.a. chrome) */
 
-@import 'variables.css';
-
 ::-webkit-scrollbar {
     background: var(--bg);
 }
@@ -55,9 +53,10 @@ a > .hljs {
     position: relative;
     padding: 0 8px;
     z-index: 10;
-    line-height: var(--menu-bar-height);
     cursor: pointer;
-    transition: color 0.5s;
+    transition: color 150ms;
+    font-size: 18px;
+    height: 100%;
 }
 @media only screen and (max-width: 420px) {
     #menu-bar i, #menu-bar .icon-button {
@@ -91,19 +90,17 @@ a > .hljs {
 }
 
 .menu-title {
+    color: var(--fg);
     display: inline-block;
-    font-weight: 200;
+    font-weight: 700;
     font-size: 2.4rem;
-    line-height: var(--menu-bar-height);
+    line-height: 1;
     text-align: center;
     margin: 0;
     flex: 1;
-    white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;
-}
-.js .menu-title {
-    cursor: pointer;
+    padding-top: calc(var(--menu-bar-height) / 3);
+    padding-bottom: calc(var(--menu-bar-height) / 3);
 }
 
 .menu-bar,
@@ -122,62 +119,6 @@ a > .hljs {
 .nav-chapters:hover,
 .mobile-nav-chapters i:hover {
     color: var(--icons-hover);
-}
-
-/* Nav Icons */
-
-.nav-chapters {
-    font-size: 2.5em;
-    text-align: center;
-    text-decoration: none;
-
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    margin: 0;
-    max-width: 150px;
-    min-width: 90px;
-
-    display: flex;
-    justify-content: center;
-    align-content: center;
-    flex-direction: column;
-
-    transition: color 0.5s, background-color 0.5s;
-}
-
-.nav-chapters:hover {
-    text-decoration: none;
-    background-color: var(--theme-hover);
-    transition: background-color 0.15s, color 0.15s;
-}
-
-.nav-wrapper {
-    margin-top: 50px;
-    display: none;
-}
-
-.mobile-nav-chapters {
-    font-size: 2.5em;
-    text-align: center;
-    text-decoration: none;
-    width: 90px;
-    border-radius: 5px;
-    background-color: var(--sidebar-bg);
-}
-
-.previous {
-    float: left;
-}
-
-.next {
-    float: right;
-    right: var(--page-padding);
-}
-
-@media only screen and (max-width: 1080px) {
-    .nav-wide-wrapper { display: none; }
-    .nav-wrapper { display: block; }
 }
 
 @media only screen and (max-width: 1380px) {
@@ -202,8 +143,10 @@ a:hover > .hljs {
     text-decoration: underline;
 }
 
+/* Code blocks */
 pre {
     position: relative;
+    overflow: auto;
 }
 pre > .buttons {
     position: absolute;
@@ -228,6 +171,10 @@ pre > .buttons button {
 }
 pre > .result {
     margin-top: 10px;
+}
+/* Wrap Markdown code-blocks */
+pre > code.language-markdown {
+    white-space: pre-wrap;
 }
 
 /* Search */
@@ -257,18 +204,24 @@ mark.fade-out {
 }
 
 #searchbar {
+    outline: none;
     width: 100%;
     margin: 5px auto 0px auto;
     padding: 10px 16px;
-    transition: box-shadow 300ms ease-in-out;
-    border: 1px solid var(--searchbar-border-color);
-    border-radius: 3px;
+    transition: all 100ms ease-in-out;
+    border: none;
+    border-bottom: 1px solid var(--searchbar-border);
     background-color: var(--searchbar-bg);
     color: var(--searchbar-fg);
 }
+#searchbar::placeholder {
+    color: var(--searchbar-fg);
+    opacity: 0.3;
+}
 #searchbar:focus,
-#searchbar.active {
-    box-shadow: 0 0 3px var(--searchbar-shadow-color);
+#searchbar:active,
+#searchbar:focus-visible {
+    border-bottom-color: var(--searchbar-active);
 }
 
 .searchresults-header {
@@ -395,6 +348,7 @@ ul#searchresults span.teaser em {
     padding: 0;
     text-decoration: none;
     color: var(--sidebar-fg);
+    transition: color 100ms;
 }
 
 .chapter li a:hover {
@@ -411,11 +365,13 @@ ul#searchresults span.teaser em {
     margin-left: auto;
     padding: 0 10px;
     user-select: none;
-    opacity: 0.68;
+    color: var(--icons);
 }
-
+.chapter li > a.toggle:hover {
+    color: var(--sidebar-active);
+}
 .chapter li > a.toggle div {
-    transition: transform 0.5s;
+    transition: transform 150ms;
 }
 
 /* collapse the section */
@@ -450,46 +406,4 @@ ul#searchresults span.teaser em {
     list-style: none outside none;
     padding-left: 20px;
     line-height: 1.9em;
-}
-
-/* Theme Menu Popup */
-
-.theme-popup {
-    position: absolute;
-    left: 10px;
-    top: var(--menu-bar-height);
-    z-index: 1000;
-    border-radius: 4px;
-    font-size: 0.7em;
-    color: var(--fg);
-    background: var(--theme-popup-bg);
-    border: 1px solid var(--theme-popup-border);
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    display: none;
-}
-.theme-popup .default {
-    color: var(--icons);
-}
-.theme-popup .theme {
-    width: 100%;
-    border: 0;
-    margin: 0;
-    padding: 2px 10px;
-    line-height: 25px;
-    white-space: nowrap;
-    text-align: left;
-    cursor: pointer;
-    color: inherit;
-    background: inherit;
-    font-size: inherit;
-}
-.theme-popup .theme:hover {
-    background-color: var(--theme-hover);
-}
-.theme-popup .theme:hover:first-child,
-.theme-popup .theme:hover:last-child {
-    border-top-left-radius: inherit;
-    border-top-right-radius: inherit;
 }
