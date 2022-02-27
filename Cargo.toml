@@ -10,7 +10,7 @@ repository = "https://github.com/kmaasrud/mdoc"
 include = [
     "**/*.rs",
     "**/*.tex",
-    "**/*.lua",  
+    "**/*.lua",
 ]
 
 
@@ -32,6 +32,10 @@ structopt = "0.3"
 
 # LaTeX
 tectonic = { version = "0.8", default-features = false, features = ["geturl-reqwest", "native-tls-vendored"] }
+
+
+[profile.release]
+lto = true
 
 
 # VCPKG
