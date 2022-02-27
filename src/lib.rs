@@ -11,7 +11,7 @@ pub mod utils;
 pub use document::DocumentBuilder;
 pub use document::{Chapter, Document};
 
-pub use errors::Error;
+pub use errors::{Error, Result};
 
 pub const CONFIG_FILE: &str = "mdoc.toml";
 pub const SRC_DIR: &str = "src";
