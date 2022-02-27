@@ -2,6 +2,8 @@ use thiserror::Error;
 
 #[derive(Debug, Error)]
 pub enum PandocError {
+    #[error("Pandoc not found in PATH")]
+    Missing,
     #[error("Pandoc IO error: {0}")]
     Io(String),
     #[error("Pandoc app error: {0}")]

@@ -5,9 +5,8 @@ pub mod opts;
 pub use errors::PandocError;
 pub use opts::{PandocFormat, PandocOption};
 
-use crate::utils;
-use anyhow::{bail, Context, Result};
-use std::io::{BufRead, BufReader, Write};
+use crate::{utils, Error, Result};
+use std::io::{BufRead, BufReader, ErrorKind, Write};
 use std::path::PathBuf;
 use std::process::{Command, Stdio};
 
@@ -54,11 +53,18 @@ impl Pandoc {
             .stdin(Stdio::piped())
             .stderr(Stdio::piped())
             .stdout(Stdio::piped())
-            .spawn()?;
+            .spawn()
+            .map_err(|e| {
+                if let ErrorKind::NotFound = e.kind() {
+                    Error::from(PandocError::Missing) // Pandoc not found error
+                } else {
+                    e.into() // Other IO error
+                }
+            })?;
 
-        let stdin = cmd.stdin.as_mut().context("Failed to open stdin.")?;
+        let stdin = cmd.stdin.as_mut().unwrap();
 
-        stdin.write_all(buf).context("Failed to write to stdin.")?;
+        stdin.write_all(buf)?;
 
         let output = cmd.wait_with_output()?;
 
@@ -75,7 +81,6 @@ impl Pandoc {
                 Ok(output.stdout)
             }
 
-            // TODO: Handle different Pandoc errors (convert to MDoc error type)
             Some(code) => {
                 let err = PandocError::from_code(
                     code,
@@ -90,7 +95,11 @@ impl Pandoc {
             }
 
             None => {
-                bail!("Pandoc exited unsuccsessfully, but with no exit code..")
+                let err = PandocError::Other(
+                    "Pandoc exited unsuccsessfully, but with no exit code..".to_owned(),
+                );
+
+                Err(err.into())
             }
         }
     }

@@ -1,4 +1,4 @@
-use anyhow::{Context, Result};
+use crate::{Error, Result};
 use std::fs::{self, File};
 use std::io::{Read, Write};
 use std::path::{Path, PathBuf};
@@ -8,10 +8,7 @@ use std::process::Command;
 pub(crate) fn read_file<P: AsRef<Path>>(path: P) -> Result<String> {
     let mut buf = String::new();
 
-    File::open(&path)
-        .with_context(|| format!("Unable to open {:?}.", path.as_ref()))?
-        .read_to_string(&mut buf)
-        .with_context(|| format!("Could not read file {:?}.", path.as_ref()))?;
+    File::open(&path)?.read_to_string(&mut buf)?;
 
     Ok(buf)
 }
@@ -20,17 +17,14 @@ pub(crate) fn read_file<P: AsRef<Path>>(path: P) -> Result<String> {
 pub fn write_file(path: &Path, bytes: &[u8]) -> Result<()> {
     // Ensure parent directory (if present)
     if let Some(p) = path.parent() {
-        fs::create_dir_all(p)
-            .with_context(|| format!("Could not create parent directory for {:?}", path))?;
+        fs::create_dir_all(p)?;
     }
 
     // Create file
-    let mut f = File::create(path)
-        .with_context(|| format!("Could not create file from path {:?}", path))?;
+    let mut f = File::create(path)?;
 
     // Write bytes
-    f.write_all(bytes)
-        .with_context(|| format!("Error when writing bytes to {:?}", path))?;
+    f.write_all(bytes)?;
 
     Ok(())
 }
@@ -46,7 +40,10 @@ pub fn find_root() -> Result<PathBuf> {
             return Ok(path);
         }
         if !(path.pop() && path.pop()) {
-            anyhow::bail!("Unable to find an \"mdoc.toml\" file.")
+            return Err(Error::Io(std::io::Error::new(
+                std::io::ErrorKind::NotFound,
+                "Unable to find an \"mdoc.toml\" file.",
+            )));
         }
     }
 }
@@ -66,6 +63,7 @@ pub fn get_author_name() -> Option<String> {
     }
 }
 
+/// Finds the MDoc data directory
 pub fn data_dir() -> PathBuf {
     dirs::data_dir()
         .expect("Unable to get the data directory.")

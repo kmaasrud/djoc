@@ -78,7 +78,7 @@ impl Document {
             pandoc.push_opt(PandocOption::From(PandocFormat::Markdown));
             pandoc.push_opt(PandocOption::To(PandocFormat::Latex));
 
-            pandoc.run(content.as_bytes())
+            pandoc.run(content.as_bytes()).context("Pandoc errored.")
         } else {
             Err(anyhow!("The document has no content.")).context("Cannot convert to LaTeX.")
         }
