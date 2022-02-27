@@ -30,6 +30,7 @@
           harfbuzz
           icu
           libpng
+          pandoc
           openssl
           zlib
         ] ++ lib.optionals stdenv.isDarwin [
@@ -37,20 +38,21 @@
           Cocoa
         ];
       in
-      {
+      rec {
         # `nix build`
-        defaultPackage = rustPlatform.buildRustPackage {
+        packages.${pname} = rustPlatform.buildRustPackage {
           inherit nativeBuildInputs pname version;
-
-          src = ./.;
-          
-          cargoSha256 = "sha256-jzQKjZTB8cgmxrF4ukcZC7nOiz0EpPsiYNT1m+X6idA=";
-
           buildInputs = buildDeps;
-
-          # Needed to get openssl-sys to use pkg-config
-          OPENSSL_NO_VENDOR = 1;
+          src = ./.;
+          cargoSha256 = "sha256-jzQKjZTB8cgmxrF4ukcZC7nOiz0EpPsiYNT1m+X6idA=";
         };
+        defaultPackage = packages.${pname};
+
+        # `nix run`
+        apps.${pname} = utils.lib.mkApp {
+          drv = packages.${pname};
+        };
+        defaultApp = apps.${pname};
 
         # `nix develop`
         devShell = mkShell {
