@@ -143,7 +143,11 @@ impl tectonic::status::StatusBackend for MdocTectonicStatusBackend {
             tectonic::status::MessageKind::Warning => {
                 let msg = args.to_string();
                 // Remove all underfull/overfull hbox messages. TODO: Make this optional
-                if !(msg.contains(r"Underfull \hbox") || msg.contains(r"Overfull \hbox")) {
+                if !(
+                    msg.contains(r"Underfull \hbox")
+                    || msg.contains(r"Overfull \hbox")
+                    || msg.contains(r"warnings were issued by the TeX engine; use --print and/or --keep-logs for details.")
+                ) {
                     warn!("{}", args);
                 }
             }
