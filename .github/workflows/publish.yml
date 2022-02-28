@@ -29,7 +29,7 @@ jobs:
           toolchain: stable
 
       - name: Build mdzk 📝
-        run: cargo install mdzk
+        run: cargo install mdzk --force
 
       - name: Build 🔧
         run: |
