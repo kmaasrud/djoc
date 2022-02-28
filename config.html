@@ -59,7 +59,7 @@
     <!-- Sidebar -->
     <nav id="sidebar" class="sidebar" aria-label="Table of contents">
       <div class="sidebar-scrollbox">
-        <ol class="chapter"><li class="chapter-item expanded "><a href="docs.html"><strong aria-hidden="true">1.</strong> Preface</a></li><li class="chapter-item expanded "><a href="terminology.html"><strong aria-hidden="true">2.</strong> Terminology</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">3.</strong> Getting started</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="installing.html"><strong aria-hidden="true">3.1.</strong> Installing</a></li><li class="chapter-item expanded "><a href="creating-your-first-document.html"><strong aria-hidden="true">3.2.</strong> Creating your first document</a></li><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">3.3.</strong> Key concepts</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">4.</strong> Using MDoc</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="commands.html"><strong aria-hidden="true">4.1.</strong> Command line tool</a></li><li class="chapter-item expanded "><a href="config.html" class="active"><strong aria-hidden="true">4.2.</strong> Configuration</a></li><li class="chapter-item expanded "><a href="bib.html"><strong aria-hidden="true">4.3.</strong> The bibliography tool</a></li></ol></li><li class="chapter-item expanded "><a href="markdown/markdown.html"><strong aria-hidden="true">5.</strong> Markdown</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="markdown/paragraphs.html"><strong aria-hidden="true">5.1.</strong> Paragraphs</a></li><li class="chapter-item expanded "><a href="markdown/headings.html"><strong aria-hidden="true">5.2.</strong> Headings</a></li><li class="chapter-item expanded "><a href="markdown/formatting.html"><strong aria-hidden="true">5.3.</strong> Formatting</a></li><li class="chapter-item expanded "><a href="markdown/lists.html"><strong aria-hidden="true">5.4.</strong> Lists</a></li><li class="chapter-item expanded "><a href="markdown/images-and-figures.html"><strong aria-hidden="true">5.5.</strong> Images and figures</a></li><li class="chapter-item expanded "><a href="markdown/code.html"><strong aria-hidden="true">5.6.</strong> Code</a></li><li class="chapter-item expanded "><a href="markdown/math.html"><strong aria-hidden="true">5.7.</strong> Math</a></li><li class="chapter-item expanded "><a href="markdown/block-quotes.html"><strong aria-hidden="true">5.8.</strong> Block quotes</a></li></ol></li></ol>
+        <ol class="chapter"><li class="chapter-item expanded "><a href="index.html">Preface</a></li><li class="chapter-item expanded "><a href="terminology.html">Terminology</a></li><li class="chapter-item expanded "><a href="getting-started.html">Getting started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="installing.html">Installing</a></li><li class="chapter-item expanded "><a href="creating-your-first-document.html">Creating your first document</a></li><li class="chapter-item expanded "><div>The MDoc workflow</div></li></ol></li><li class="chapter-item expanded "><div>Using MDoc</div></li><li><ol class="section"><li class="chapter-item expanded "><div>Command line tool</div></li><li class="chapter-item expanded "><a href="config.html" class="active">Configuration</a></li><li class="chapter-item expanded "><div>The bibliography tool</div></li></ol></li><li class="chapter-item expanded "><a href="markdown/markdown.html">Markdown</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="markdown/paragraphs.html">Paragraphs</a></li><li class="chapter-item expanded "><a href="markdown/headings.html">Headings</a></li><li class="chapter-item expanded "><a href="markdown/formatting.html">Formatting</a></li><li class="chapter-item expanded "><a href="markdown/lists.html">Lists</a></li><li class="chapter-item expanded "><a href="markdown/images-and-figures.html">Images and figures</a></li><li class="chapter-item expanded "><a href="markdown/code.html">Code</a></li><li class="chapter-item expanded "><a href="markdown/math.html">Math</a></li><li class="chapter-item expanded "><a href="markdown/block-quotes.html">Block quotes</a></li></ol></li></ol>
         <p id="watermark"><a href="https://mdzk.app">Made with mdzk</a></p>
       </div>
       <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
@@ -106,7 +106,45 @@
 
         <div id="content" class="content">
           <main>
-              <p>WIP...</p>
+              <p>In bigger document projects, you will have an <code>mdzk.toml</code> file at the root of your document. This file is meant to configure your document to look and behave the way you want. The available options are:</p>
+<ul>
+<li><a href="#title"><code>title</code></a> (required)</li>
+<li><a href="#authors"><code>authors</code></a></li>
+<li><a href="#date"><code>date</code></a></li>
+<li><a href="#src"><code>src</code></a></li>
+</ul>
+<h3 id="title">The <code>title</code> field (required)</h3>
+<p>This field specifies the title of your document. It will be used for the title at the top of your generated PDF and to derive the filename of your output (unless another filename is specified.) The title can contain <a href="./markdown/formatting.html">inline Markdown formatting</a>.</p>
+<pre><code class="language-toml">title = &quot;My awesome document&quot;
+</code></pre>
+<h3 id="authors">The <code>authors</code> field</h3>
+<p>This is list of strings containing the authors of this document. At the moment, each author is only described by their name, but in the future you will be able to specify more complex information about each author (see <a href="https://github.com/kmaasrud/mdoc/issues/63">#63</a>).</p>
+<pre><code class="language-toml">authors = [ &quot;John McClane&quot;, &quot;Hans Gruber&quot; ]
+</code></pre>
+<h3 id="date">The <code>date</code> field</h3>
+<p>Here you can set the date which will be showed in the title of the document. The date can be any string you want, but if it is formatted according to <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO 8601</a>, additional formatting is supported (see <a href="#date-format"><code>date-format</code></a>). If this field is set to the string <code>now</code>, the current date and time will be used.</p>
+<pre><code class="language-toml">date = &quot;now&quot;
+</code></pre>
+<h3 id="src">The <code>src</code> field</h3>
+<p>This is a special field that does not need to be explicitly set. It defines which files will get built into your document. <code>src</code> can either be one of the following:</p>
+<ul>
+<li>
+<p>Nothing. This will deploy the default behavior where MDoc recursively searches for Markdown-files, starting from the document root. All files will get built into the finished document, ordered alphabetically by their path.</p>
+</li>
+<li>
+<p>A path to a directory, relative to the <code>mdzk.toml</code> file. This will tell MDoc to search for Markdown-files recursively inside only this directory. This is useful if you want to include a README or any other Markdown-file inside the document, but avoid building it as part of the document.</p>
+<pre><code class="language-toml">src = &quot;path/to/dir&quot;
+</code></pre>
+</li>
+<li>
+<p>A list of paths. Each path is relative to the <code>mdzk.toml</code> file and must point to other valid files. Using this list, you can explicitly define which sections you want included in your document. The order of the list is preserved, which makes this an excellent method to provide a custom (non-alphabetical) order your sections.</p>
+<pre><code class="language-toml">src = [
+  &quot;path/to/first-section.md&quot;,
+  &quot;second-section.md,
+]
+</code></pre>
+</li>
+</ul>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     var math = document.querySelectorAll("[class^=katex]");

@@ -59,7 +59,7 @@
     <!-- Sidebar -->
     <nav id="sidebar" class="sidebar" aria-label="Table of contents">
       <div class="sidebar-scrollbox">
-        <ol class="chapter"><li class="chapter-item expanded "><a href="../docs.html"><strong aria-hidden="true">1.</strong> Preface</a></li><li class="chapter-item expanded "><a href="../terminology.html"><strong aria-hidden="true">2.</strong> Terminology</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">3.</strong> Getting started</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../installing.html"><strong aria-hidden="true">3.1.</strong> Installing</a></li><li class="chapter-item expanded "><a href="../creating-your-first-document.html"><strong aria-hidden="true">3.2.</strong> Creating your first document</a></li><li class="chapter-item expanded "><a href="../introduction.html"><strong aria-hidden="true">3.3.</strong> Key concepts</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">4.</strong> Using MDoc</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands.html"><strong aria-hidden="true">4.1.</strong> Command line tool</a></li><li class="chapter-item expanded "><a href="../config.html"><strong aria-hidden="true">4.2.</strong> Configuration</a></li><li class="chapter-item expanded "><a href="../bib.html"><strong aria-hidden="true">4.3.</strong> The bibliography tool</a></li></ol></li><li class="chapter-item expanded "><a href="../markdown/markdown.html"><strong aria-hidden="true">5.</strong> Markdown</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../markdown/paragraphs.html"><strong aria-hidden="true">5.1.</strong> Paragraphs</a></li><li class="chapter-item expanded "><a href="../markdown/headings.html"><strong aria-hidden="true">5.2.</strong> Headings</a></li><li class="chapter-item expanded "><a href="../markdown/formatting.html"><strong aria-hidden="true">5.3.</strong> Formatting</a></li><li class="chapter-item expanded "><a href="../markdown/lists.html"><strong aria-hidden="true">5.4.</strong> Lists</a></li><li class="chapter-item expanded "><a href="../markdown/images-and-figures.html"><strong aria-hidden="true">5.5.</strong> Images and figures</a></li><li class="chapter-item expanded "><a href="../markdown/code.html"><strong aria-hidden="true">5.6.</strong> Code</a></li><li class="chapter-item expanded "><a href="../markdown/math.html"><strong aria-hidden="true">5.7.</strong> Math</a></li><li class="chapter-item expanded "><a href="../markdown/block-quotes.html" class="active"><strong aria-hidden="true">5.8.</strong> Block quotes</a></li></ol></li></ol>
+        <ol class="chapter"><li class="chapter-item expanded "><a href="../index.html">Preface</a></li><li class="chapter-item expanded "><a href="../terminology.html">Terminology</a></li><li class="chapter-item expanded "><a href="../getting-started.html">Getting started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../installing.html">Installing</a></li><li class="chapter-item expanded "><a href="../creating-your-first-document.html">Creating your first document</a></li><li class="chapter-item expanded "><div>The MDoc workflow</div></li></ol></li><li class="chapter-item expanded "><div>Using MDoc</div></li><li><ol class="section"><li class="chapter-item expanded "><div>Command line tool</div></li><li class="chapter-item expanded "><a href="../config.html">Configuration</a></li><li class="chapter-item expanded "><div>The bibliography tool</div></li></ol></li><li class="chapter-item expanded "><a href="../markdown/markdown.html">Markdown</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../markdown/paragraphs.html">Paragraphs</a></li><li class="chapter-item expanded "><a href="../markdown/headings.html">Headings</a></li><li class="chapter-item expanded "><a href="../markdown/formatting.html">Formatting</a></li><li class="chapter-item expanded "><a href="../markdown/lists.html">Lists</a></li><li class="chapter-item expanded "><a href="../markdown/images-and-figures.html">Images and figures</a></li><li class="chapter-item expanded "><a href="../markdown/code.html">Code</a></li><li class="chapter-item expanded "><a href="../markdown/math.html">Math</a></li><li class="chapter-item expanded "><a href="../markdown/block-quotes.html" class="active">Block quotes</a></li></ol></li></ol>
         <p id="watermark"><a href="https://mdzk.app">Made with mdzk</a></p>
       </div>
       <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
@@ -107,25 +107,18 @@
         <div id="content" class="content">
           <main>
               <p>Pandoc Markdown uses email conventions for block quotes. A block quotation is one or more paragraphs or other block elements (such as lists or headings), with each line preceded by a <code>&gt;</code> character and an optional space.</p>
-<pre><code class="language-shell">&gt; This is a block quote. This
+<pre><code class="language-markdown">&gt; This is a block quote. This
 &gt; paragraph has two lines.
 &gt;
 &gt; 1. This is a list inside a block quote.
 &gt; 2. Second item.
 </code></pre>
-<p>If you are feeling lazy, the following is also allowed (ignore the wonky highlighting, this is the same as above):</p>
-<pre><code class="language-shell">&gt; This is a block quote. This
-paragraph has two lines.
-
-&gt; 1. This is a list inside a block quote.
-2. Second item.
-</code></pre>
 <p>Block quotes can contain most other Markdown elements. Among them are other blockquotes, which means they can be nested, like this:</p>
-<pre><code class="language-shell">&gt; This is a block quote.
+<pre><code class="language-markdown">&gt; This is a block quote.
 &gt;
 &gt; &gt; A block quote within a block quote.
 </code></pre>
-<p>Standard Markdown syntax does not require a blank line before a block quote. Doctor does require this (except, of course, at the beginning of the document). The reason for the requirement is that it is all too easy for a <code>&gt;</code> to end up at the beginning of a line by accident (perhaps through line wrapping). </p>
+<p>Standard Markdown syntax does not require a blank line before a block quote. MDoc does require this (except, of course, at the beginning of the document). The reason for the requirement is that it is all too easy for a <code>&gt;</code> to end up at the beginning of a line by accident (perhaps through line wrapping).</p>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     var math = document.querySelectorAll("[class^=katex]");

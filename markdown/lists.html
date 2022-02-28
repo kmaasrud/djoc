@@ -59,7 +59,7 @@
     <!-- Sidebar -->
     <nav id="sidebar" class="sidebar" aria-label="Table of contents">
       <div class="sidebar-scrollbox">
-        <ol class="chapter"><li class="chapter-item expanded "><a href="../docs.html"><strong aria-hidden="true">1.</strong> Preface</a></li><li class="chapter-item expanded "><a href="../terminology.html"><strong aria-hidden="true">2.</strong> Terminology</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">3.</strong> Getting started</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../installing.html"><strong aria-hidden="true">3.1.</strong> Installing</a></li><li class="chapter-item expanded "><a href="../creating-your-first-document.html"><strong aria-hidden="true">3.2.</strong> Creating your first document</a></li><li class="chapter-item expanded "><a href="../introduction.html"><strong aria-hidden="true">3.3.</strong> Key concepts</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">4.</strong> Using MDoc</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands.html"><strong aria-hidden="true">4.1.</strong> Command line tool</a></li><li class="chapter-item expanded "><a href="../config.html"><strong aria-hidden="true">4.2.</strong> Configuration</a></li><li class="chapter-item expanded "><a href="../bib.html"><strong aria-hidden="true">4.3.</strong> The bibliography tool</a></li></ol></li><li class="chapter-item expanded "><a href="../markdown/markdown.html"><strong aria-hidden="true">5.</strong> Markdown</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../markdown/paragraphs.html"><strong aria-hidden="true">5.1.</strong> Paragraphs</a></li><li class="chapter-item expanded "><a href="../markdown/headings.html"><strong aria-hidden="true">5.2.</strong> Headings</a></li><li class="chapter-item expanded "><a href="../markdown/formatting.html"><strong aria-hidden="true">5.3.</strong> Formatting</a></li><li class="chapter-item expanded "><a href="../markdown/lists.html" class="active"><strong aria-hidden="true">5.4.</strong> Lists</a></li><li class="chapter-item expanded "><a href="../markdown/images-and-figures.html"><strong aria-hidden="true">5.5.</strong> Images and figures</a></li><li class="chapter-item expanded "><a href="../markdown/code.html"><strong aria-hidden="true">5.6.</strong> Code</a></li><li class="chapter-item expanded "><a href="../markdown/math.html"><strong aria-hidden="true">5.7.</strong> Math</a></li><li class="chapter-item expanded "><a href="../markdown/block-quotes.html"><strong aria-hidden="true">5.8.</strong> Block quotes</a></li></ol></li></ol>
+        <ol class="chapter"><li class="chapter-item expanded "><a href="../index.html">Preface</a></li><li class="chapter-item expanded "><a href="../terminology.html">Terminology</a></li><li class="chapter-item expanded "><a href="../getting-started.html">Getting started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../installing.html">Installing</a></li><li class="chapter-item expanded "><a href="../creating-your-first-document.html">Creating your first document</a></li><li class="chapter-item expanded "><div>The MDoc workflow</div></li></ol></li><li class="chapter-item expanded "><div>Using MDoc</div></li><li><ol class="section"><li class="chapter-item expanded "><div>Command line tool</div></li><li class="chapter-item expanded "><a href="../config.html">Configuration</a></li><li class="chapter-item expanded "><div>The bibliography tool</div></li></ol></li><li class="chapter-item expanded "><a href="../markdown/markdown.html">Markdown</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../markdown/paragraphs.html">Paragraphs</a></li><li class="chapter-item expanded "><a href="../markdown/headings.html">Headings</a></li><li class="chapter-item expanded "><a href="../markdown/formatting.html">Formatting</a></li><li class="chapter-item expanded "><a href="../markdown/lists.html" class="active">Lists</a></li><li class="chapter-item expanded "><a href="../markdown/images-and-figures.html">Images and figures</a></li><li class="chapter-item expanded "><a href="../markdown/code.html">Code</a></li><li class="chapter-item expanded "><a href="../markdown/math.html">Math</a></li><li class="chapter-item expanded "><a href="../markdown/block-quotes.html">Block quotes</a></li></ol></li></ol>
         <p id="watermark"><a href="https://mdzk.app">Made with mdzk</a></p>
       </div>
       <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
@@ -106,7 +106,7 @@
 
         <div id="content" class="content">
           <main>
-              <h1>Ordered lists</h1>
+              <h3>Ordered lists</h3>
 <p>To make an ordered list of items, write a decimal number, followed by a period, a space and the content you want as part of that list item.</p>
 <pre><code class="language-markdown">1.  one
 2.  two
@@ -133,36 +133,23 @@
 1.  One
 #.  Two
 </code></pre>
-<p>which gives the following output:</p>
+<p>The above will get rendered as such:</p>
+<p><img src="../../assets/lists_1.png" alt="" /></p>
 <hr />
-<ol start="9">
-<li>Ninth</li>
-<li>Tenth</li>
-<li>Eleventh
-i. subone
-ii. subtwo
-iii. subthree</li>
-</ol>
-<p>(2) Two
-(5) Three</p>
-<ol>
-<li>One
-#.  Two</li>
-</ol>
-<hr />
-<h1>Unordered lists</h1>
+<h3>Unordered lists</h3>
 <p>An unordered list is a list of bulleted list items that are not numbered. They work exactly like ordered lists (except the numbering of course,) but use <code>*</code>, <code>+</code> or <code>-</code> as markers.</p>
 <pre><code class="language-markdown">- one
 - two
 - three
 </code></pre>
-<p>The bullets need not be flush with the left margin; they may be indented one, two, or three spaces. The bullet must be followed by whitespace.</p>
-<h2>Task lists</h2>
+<p>The markers need not be flush with the left margin; they may be indented one, two, or three spaces. The marker must be followed by whitespace.</p>
+<h4>Task lists</h4>
 <p>You can also make unordered lists that have a checkmark, in order to create a task list. The Github-Flavored Markdown syntax is used, which is as follows</p>
 <pre><code class="language-markdown">- [ ] an unchecked task list item
 - [x] checked item
 </code></pre>
-<h1>Block content in lists</h1>
+<hr />
+<h3>Block content in lists</h3>
 <p>A list item may contain multiple paragraphs and other block-level content. However, subsequent paragraphs must be preceded by a blank line and indented to line up with the first non-space content after the list marker.</p>
 <pre><code class="language-markdown">* First paragraph.
 
@@ -185,7 +172,7 @@ iii. subthree</li>
   + chard
 </code></pre>
 <p>Markdown allows you to write list items “lazily,” and reflow your text with a single newline instead of indenting continuation lines. However, if there are multiple paragraphs or other blocks in a list item, the first line of each must be indented.</p>
-<pre><code class="language-shell">+ A lazy, lazy, list
+<pre><code class="language-markdown">+ A lazy, lazy, list
 item.
 
 + Another one; this looks
@@ -208,8 +195,9 @@ list item.
 
     { my code block }
 </code></pre>
-<h1>Extra list types</h1>
-<h2>Definition lists</h2>
+<hr />
+<h3>Extra list types</h3>
+<h4>Definition lists</h4>
 <p>Definition lists are made of terms and definitions of these terms, much like in a dictionary. A simple definition list is made of a single-line term followed by a colon and the definition for that term.</p>
 <pre><code class="language-markdown">Apple
 
@@ -240,7 +228,7 @@ Term 2
   ~ Definition 2b
 </code></pre>
 <p>Note that space between items in a definition list is required.</p>
-<h2>Numbered example lists</h2>
+<h4>Numbered example lists</h4>
 <p>The special list marker <code>@</code> can be used for sequentially numbered examples. The first list item with a <code>@</code> marker will be numbered 1, the next 2, and so on, throughout the document. The numbered examples need not occur in a single list; each new list using <code>@</code> will take up where the last stopped. So, for example:</p>
 <pre><code class="language-markdown">(@)  My first example will be numbered (1).
 (@)  My second example will be numbered (2).
@@ -256,7 +244,7 @@ As (@good) illustrates, ...
 </code></pre>
 <p>The label can be any string of alphanumeric characters, underscores, or hyphens.</p>
 <blockquote>
-<p><strong>Note</strong>: continuation paragraphs in example lists must always be indented four spaces, regardless of the length of the list marker. This is because example labels tend to be long, and indenting content to the first non-space character after the label would be awkward.</p>
+<p>📖 continuation paragraphs in example lists must always be indented four spaces, regardless of the length of the list marker. This is because example labels tend to be long, and indenting content to the first non-space character after the label would be awkward.</p>
 </blockquote>
 <script>
 document.addEventListener('DOMContentLoaded', function() {

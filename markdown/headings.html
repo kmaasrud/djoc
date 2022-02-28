@@ -59,7 +59,7 @@
     <!-- Sidebar -->
     <nav id="sidebar" class="sidebar" aria-label="Table of contents">
       <div class="sidebar-scrollbox">
-        <ol class="chapter"><li class="chapter-item expanded "><a href="../docs.html"><strong aria-hidden="true">1.</strong> Preface</a></li><li class="chapter-item expanded "><a href="../terminology.html"><strong aria-hidden="true">2.</strong> Terminology</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">3.</strong> Getting started</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../installing.html"><strong aria-hidden="true">3.1.</strong> Installing</a></li><li class="chapter-item expanded "><a href="../creating-your-first-document.html"><strong aria-hidden="true">3.2.</strong> Creating your first document</a></li><li class="chapter-item expanded "><a href="../introduction.html"><strong aria-hidden="true">3.3.</strong> Key concepts</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">4.</strong> Using MDoc</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands.html"><strong aria-hidden="true">4.1.</strong> Command line tool</a></li><li class="chapter-item expanded "><a href="../config.html"><strong aria-hidden="true">4.2.</strong> Configuration</a></li><li class="chapter-item expanded "><a href="../bib.html"><strong aria-hidden="true">4.3.</strong> The bibliography tool</a></li></ol></li><li class="chapter-item expanded "><a href="../markdown/markdown.html"><strong aria-hidden="true">5.</strong> Markdown</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../markdown/paragraphs.html"><strong aria-hidden="true">5.1.</strong> Paragraphs</a></li><li class="chapter-item expanded "><a href="../markdown/headings.html" class="active"><strong aria-hidden="true">5.2.</strong> Headings</a></li><li class="chapter-item expanded "><a href="../markdown/formatting.html"><strong aria-hidden="true">5.3.</strong> Formatting</a></li><li class="chapter-item expanded "><a href="../markdown/lists.html"><strong aria-hidden="true">5.4.</strong> Lists</a></li><li class="chapter-item expanded "><a href="../markdown/images-and-figures.html"><strong aria-hidden="true">5.5.</strong> Images and figures</a></li><li class="chapter-item expanded "><a href="../markdown/code.html"><strong aria-hidden="true">5.6.</strong> Code</a></li><li class="chapter-item expanded "><a href="../markdown/math.html"><strong aria-hidden="true">5.7.</strong> Math</a></li><li class="chapter-item expanded "><a href="../markdown/block-quotes.html"><strong aria-hidden="true">5.8.</strong> Block quotes</a></li></ol></li></ol>
+        <ol class="chapter"><li class="chapter-item expanded "><a href="../index.html">Preface</a></li><li class="chapter-item expanded "><a href="../terminology.html">Terminology</a></li><li class="chapter-item expanded "><a href="../getting-started.html">Getting started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../installing.html">Installing</a></li><li class="chapter-item expanded "><a href="../creating-your-first-document.html">Creating your first document</a></li><li class="chapter-item expanded "><div>The MDoc workflow</div></li></ol></li><li class="chapter-item expanded "><div>Using MDoc</div></li><li><ol class="section"><li class="chapter-item expanded "><div>Command line tool</div></li><li class="chapter-item expanded "><a href="../config.html">Configuration</a></li><li class="chapter-item expanded "><div>The bibliography tool</div></li></ol></li><li class="chapter-item expanded "><a href="../markdown/markdown.html">Markdown</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../markdown/paragraphs.html">Paragraphs</a></li><li class="chapter-item expanded "><a href="../markdown/headings.html" class="active">Headings</a></li><li class="chapter-item expanded "><a href="../markdown/formatting.html">Formatting</a></li><li class="chapter-item expanded "><a href="../markdown/lists.html">Lists</a></li><li class="chapter-item expanded "><a href="../markdown/images-and-figures.html">Images and figures</a></li><li class="chapter-item expanded "><a href="../markdown/code.html">Code</a></li><li class="chapter-item expanded "><a href="../markdown/math.html">Math</a></li><li class="chapter-item expanded "><a href="../markdown/block-quotes.html">Block quotes</a></li></ol></li></ol>
         <p id="watermark"><a href="https://mdzk.app">Made with mdzk</a></p>
       </div>
       <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
@@ -106,25 +106,33 @@
 
         <div id="content" class="content">
           <main>
-              <p>There are two kinds of headings: <a href="#setext-headers">Setext</a> and <a href="#atx-headers">ATX</a>. They are equivalent, so choose the style you prefer. Both heading types can contain inline <a href="formatting.html">formatting</a>, such as <em>emphasis</em>, or <a href="math.html">math</a>.</p>
-<h2>ATX headers</h2>
-<p>The most commonly used header style, an ATX heading consists of one to six <code>#</code> signs and a line of text, optionally followed by any number of <code>#</code> signs. The number of <code>#</code> signs at the beginning of the line is the heading level:</p>
+              <p>There are two kinds of headings: <a href="#setext-headers">Setext</a> and <a href="#atx-headers">ATX</a>. They are equivalent, so choose the style you prefer. Both heading types can contain inline <a href="formatting.html">formatting</a> or <a href="math.html">math</a>.</p>
+<h3 id="atx-headers">ATX headers</h3>
+<p>An ATX heading consists of one to six <code>#</code> signs and a line of text, optionally followed by any number of <code>#</code> signs. The number of <code>#</code> signs at the beginning of the line is the heading level:</p>
 <pre><code class="language-markdown">## A level-two heading
 
+A paragraph or some other content.
+
 ### A level-three heading ###
+
+More content...
 </code></pre>
 <blockquote>
-<p>📄 MDoc requires a blank line before and after a heading (except, of course, at the beginning of the document.) Additionally, a space between the opening <code>#</code> signs of an ATX heading and the heading text is required.</p>
+<p>📖 MDoc requires a blank line before and after a heading (except, of course, at the beginning of the document.) Additionally, a space between the opening <code>#</code> signs of an ATX heading and the heading text is required.</p>
 </blockquote>
-<h2>Setext headers</h2>
-<p>A setext-style heading is a line of text “underlined” with a row of = signs (for a level-one heading) or - signs (for a level-two heading):</p>
+<h3 id="setext-headers">Setext headers</h3>
+<p>A setext-style heading is a line of text <em>underlined</em> with a row of <code>=</code> signs (for a level-one heading) or <code>-</code> signs (for a level-two heading):</p>
 <pre><code class="language-markdown">A level-one heading
 ===================
 
+A paragraph or some content.
+
 A level-two heading
 -------------------
+
+More content...
 </code></pre>
-<h2>Identifiers</h2>
+<h3>Identifiers</h3>
 <p>Headings can be assigned attributes using the following syntax at the end of the line containing the heading text:</p>
 <pre><code>{#identifier .class .class key=value key=value}
 </code></pre>
@@ -137,10 +145,10 @@ My other heading   {#foo}
 ---------------
 </code></pre>
 <blockquote>
-<p>📄 All headers are automatically assigned an identifier corresponding to their slug cased title (e.g. <code># This is my header!</code> will have the identifier <code>#this-is-my-header</code>.)</p>
+<p>📖 All headers are automatically assigned an identifier corresponding to their <a href="https://en.wikipedia.org/wiki/Letter_case#Kebab_case">kebab cased</a> title (e.g. <code># This is my header!</code> will have the identifier <code>#this-is-my-header</code>.)</p>
 </blockquote>
-<h2>Numbering of headers</h2>
-<p>You can enable numbering of headers by setting <code>number-sections = true</code> under <code>[style]</code> in <code>mdoc.toml</code>. If you want to avoid numbering on certain headers, simply specify the class <code>unnumbered</code> on the,. A single hyphen (<code>{-}</code>) is equivalent to this, so the following headers:</p>
+<h3>Numbering of headers</h3>
+<p>You can enable numbering of headers by setting <code>number-sections = true</code> under <code>[style]</code> in <code>mdoc.toml</code>. If you want to avoid numbering on certain headers, simply specify the class <code>unnumbered</code> on them. A single hyphen (<code>{-}</code>) is equivalent to this, so the following headers:</p>
 <pre><code class="language-markdown"># My heading {-}
 
 # My heading {.unnumbered}

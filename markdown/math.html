@@ -59,7 +59,7 @@
     <!-- Sidebar -->
     <nav id="sidebar" class="sidebar" aria-label="Table of contents">
       <div class="sidebar-scrollbox">
-        <ol class="chapter"><li class="chapter-item expanded "><a href="../docs.html"><strong aria-hidden="true">1.</strong> Preface</a></li><li class="chapter-item expanded "><a href="../terminology.html"><strong aria-hidden="true">2.</strong> Terminology</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">3.</strong> Getting started</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../installing.html"><strong aria-hidden="true">3.1.</strong> Installing</a></li><li class="chapter-item expanded "><a href="../creating-your-first-document.html"><strong aria-hidden="true">3.2.</strong> Creating your first document</a></li><li class="chapter-item expanded "><a href="../introduction.html"><strong aria-hidden="true">3.3.</strong> Key concepts</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">4.</strong> Using MDoc</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands.html"><strong aria-hidden="true">4.1.</strong> Command line tool</a></li><li class="chapter-item expanded "><a href="../config.html"><strong aria-hidden="true">4.2.</strong> Configuration</a></li><li class="chapter-item expanded "><a href="../bib.html"><strong aria-hidden="true">4.3.</strong> The bibliography tool</a></li></ol></li><li class="chapter-item expanded "><a href="../markdown/markdown.html"><strong aria-hidden="true">5.</strong> Markdown</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../markdown/paragraphs.html"><strong aria-hidden="true">5.1.</strong> Paragraphs</a></li><li class="chapter-item expanded "><a href="../markdown/headings.html"><strong aria-hidden="true">5.2.</strong> Headings</a></li><li class="chapter-item expanded "><a href="../markdown/formatting.html"><strong aria-hidden="true">5.3.</strong> Formatting</a></li><li class="chapter-item expanded "><a href="../markdown/lists.html"><strong aria-hidden="true">5.4.</strong> Lists</a></li><li class="chapter-item expanded "><a href="../markdown/images-and-figures.html"><strong aria-hidden="true">5.5.</strong> Images and figures</a></li><li class="chapter-item expanded "><a href="../markdown/code.html"><strong aria-hidden="true">5.6.</strong> Code</a></li><li class="chapter-item expanded "><a href="../markdown/math.html" class="active"><strong aria-hidden="true">5.7.</strong> Math</a></li><li class="chapter-item expanded "><a href="../markdown/block-quotes.html"><strong aria-hidden="true">5.8.</strong> Block quotes</a></li></ol></li></ol>
+        <ol class="chapter"><li class="chapter-item expanded "><a href="../index.html">Preface</a></li><li class="chapter-item expanded "><a href="../terminology.html">Terminology</a></li><li class="chapter-item expanded "><a href="../getting-started.html">Getting started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../installing.html">Installing</a></li><li class="chapter-item expanded "><a href="../creating-your-first-document.html">Creating your first document</a></li><li class="chapter-item expanded "><div>The MDoc workflow</div></li></ol></li><li class="chapter-item expanded "><div>Using MDoc</div></li><li><ol class="section"><li class="chapter-item expanded "><div>Command line tool</div></li><li class="chapter-item expanded "><a href="../config.html">Configuration</a></li><li class="chapter-item expanded "><div>The bibliography tool</div></li></ol></li><li class="chapter-item expanded "><a href="../markdown/markdown.html">Markdown</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../markdown/paragraphs.html">Paragraphs</a></li><li class="chapter-item expanded "><a href="../markdown/headings.html">Headings</a></li><li class="chapter-item expanded "><a href="../markdown/formatting.html">Formatting</a></li><li class="chapter-item expanded "><a href="../markdown/lists.html">Lists</a></li><li class="chapter-item expanded "><a href="../markdown/images-and-figures.html">Images and figures</a></li><li class="chapter-item expanded "><a href="../markdown/code.html">Code</a></li><li class="chapter-item expanded "><a href="../markdown/math.html" class="active">Math</a></li><li class="chapter-item expanded "><a href="../markdown/block-quotes.html">Block quotes</a></li></ol></li></ol>
         <p id="watermark"><a href="https://mdzk.app">Made with mdzk</a></p>
       </div>
       <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
@@ -106,22 +106,30 @@
 
         <div id="content" class="content">
           <main>
-              <h2>Inline math</h2>
-<p>Anything between two <code>$</code> characters will be treated as <span class="katex-inline">\TeX</span> math. The opening $ must have a non-space character immediately to its right, while the closing $ must have a non-space character immediately to its left, and must not be followed immediately by a digit. Thus, <code>$20,000</code> and <code>$30,000</code> won’t parse as math. If for some reason you need to enclose text in literal $ characters, escape them with a blackslash and they won’t be treated as math delimiters.</p>
+              <h3>Inline math</h3>
+<p>Anything between two <code>$</code> characters will be treated as TeX math. For an excellent reference on what is possible here, have a look at the <a href="https://www.math.brown.edu/johsilve/ReferenceCards/TeXRefCard.v1.5.pdf">TeX reference card</a>.</p>
+<p>The opening $ must have a non-space character immediately to its right, while the closing $ must have a non-space character immediately to its left, and must not be followed immediately by a digit. Thus, <code>$20,000</code> and <code>$30,000</code> won’t parse as math. If for some reason you need to enclose text in literal <code>$</code> characters, escape them with a blackslash and they won’t be treated as math delimiters.</p>
 <pre><code class="language-markdown">Here is some text and here is some math: $E = mc^2$.
 </code></pre>
-<h2>Display math</h2>
+<h3>Display math</h3>
 <p>For display math, use <code>$$</code> delimiters. In this case, the delimiters may be separated from the formula by whitespace. However, there can be no blank lines betwen the opening and closing delimiters.</p>
+<pre><code class="language-markdown">$$ 1 + 2 = 3 $$
+</code></pre>
+<h3>Aligned equations</h3>
+<p>To get aligned equations, you can either write inline LaTeX and use it's provided <code>align</code> environment. This might however make it difficult for MDoc to keep track of equation numbers and cross-referencing, so the recommendation is to use the <code>aligned</code> environment - provided by TeX - inside a <code>$$</code> delimited display math context. Consider the following example:</p>
 <pre><code class="language-markdown">And God said
 
-$$ \nabla \cdot \vec D = \rho_\nu, $$
-$$ \nabla \cdot \vec B = 0, $$
-$$ \nabla \times \vec E = -\frac{\partial \vec B}{\partial t}, $$
-$$ \nabla \times \vec H = \vec J_\text{free} + \frac{\partial \vec D}{\partial t}, $$
+$$ \begin{aligned}
+    \nabla \cdot \vec D &amp;= \rho_\nu, \\
+    \nabla \cdot \vec B &amp;= 0, \\
+    \nabla \times \vec E &amp;= -\frac{\partial \vec B}{\partial t}, \\
+    \nabla \times \vec H &amp;= \vec J_\text{free} + \frac{\partial \vec D}{\partial t},
+\end{aligned} $$
 
 and then there was light.
 </code></pre>
-<p>and then there was light.</p>
+<p>This will get rendered as:</p>
+<p><img src="../../assets/math_1.png" alt="" /></p>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     var math = document.querySelectorAll("[class^=katex]");
@@ -132,9 +140,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 }, false)
 </script>
-<div class="backlinks">
-<p><a href="headings.html">Headings</a></p>
-</div>
           </main>
         </div>
       </div>

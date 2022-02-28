@@ -59,7 +59,7 @@
     <!-- Sidebar -->
     <nav id="sidebar" class="sidebar" aria-label="Table of contents">
       <div class="sidebar-scrollbox">
-        <ol class="chapter"><li class="chapter-item expanded "><a href="../docs.html"><strong aria-hidden="true">1.</strong> Preface</a></li><li class="chapter-item expanded "><a href="../terminology.html"><strong aria-hidden="true">2.</strong> Terminology</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">3.</strong> Getting started</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../installing.html"><strong aria-hidden="true">3.1.</strong> Installing</a></li><li class="chapter-item expanded "><a href="../creating-your-first-document.html"><strong aria-hidden="true">3.2.</strong> Creating your first document</a></li><li class="chapter-item expanded "><a href="../introduction.html"><strong aria-hidden="true">3.3.</strong> Key concepts</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">4.</strong> Using MDoc</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="../commands.html"><strong aria-hidden="true">4.1.</strong> Command line tool</a></li><li class="chapter-item expanded "><a href="../config.html"><strong aria-hidden="true">4.2.</strong> Configuration</a></li><li class="chapter-item expanded "><a href="../bib.html"><strong aria-hidden="true">4.3.</strong> The bibliography tool</a></li></ol></li><li class="chapter-item expanded "><a href="../markdown/markdown.html"><strong aria-hidden="true">5.</strong> Markdown</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../markdown/paragraphs.html"><strong aria-hidden="true">5.1.</strong> Paragraphs</a></li><li class="chapter-item expanded "><a href="../markdown/headings.html"><strong aria-hidden="true">5.2.</strong> Headings</a></li><li class="chapter-item expanded "><a href="../markdown/formatting.html"><strong aria-hidden="true">5.3.</strong> Formatting</a></li><li class="chapter-item expanded "><a href="../markdown/lists.html"><strong aria-hidden="true">5.4.</strong> Lists</a></li><li class="chapter-item expanded "><a href="../markdown/images-and-figures.html"><strong aria-hidden="true">5.5.</strong> Images and figures</a></li><li class="chapter-item expanded "><a href="../markdown/code.html" class="active"><strong aria-hidden="true">5.6.</strong> Code</a></li><li class="chapter-item expanded "><a href="../markdown/math.html"><strong aria-hidden="true">5.7.</strong> Math</a></li><li class="chapter-item expanded "><a href="../markdown/block-quotes.html"><strong aria-hidden="true">5.8.</strong> Block quotes</a></li></ol></li></ol>
+        <ol class="chapter"><li class="chapter-item expanded "><a href="../index.html">Preface</a></li><li class="chapter-item expanded "><a href="../terminology.html">Terminology</a></li><li class="chapter-item expanded "><a href="../getting-started.html">Getting started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../installing.html">Installing</a></li><li class="chapter-item expanded "><a href="../creating-your-first-document.html">Creating your first document</a></li><li class="chapter-item expanded "><div>The MDoc workflow</div></li></ol></li><li class="chapter-item expanded "><div>Using MDoc</div></li><li><ol class="section"><li class="chapter-item expanded "><div>Command line tool</div></li><li class="chapter-item expanded "><a href="../config.html">Configuration</a></li><li class="chapter-item expanded "><div>The bibliography tool</div></li></ol></li><li class="chapter-item expanded "><a href="../markdown/markdown.html">Markdown</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../markdown/paragraphs.html">Paragraphs</a></li><li class="chapter-item expanded "><a href="../markdown/headings.html">Headings</a></li><li class="chapter-item expanded "><a href="../markdown/formatting.html">Formatting</a></li><li class="chapter-item expanded "><a href="../markdown/lists.html">Lists</a></li><li class="chapter-item expanded "><a href="../markdown/images-and-figures.html">Images and figures</a></li><li class="chapter-item expanded "><a href="../markdown/code.html" class="active">Code</a></li><li class="chapter-item expanded "><a href="../markdown/math.html">Math</a></li><li class="chapter-item expanded "><a href="../markdown/block-quotes.html">Block quotes</a></li></ol></li></ol>
         <p id="watermark"><a href="https://mdzk.app">Made with mdzk</a></p>
       </div>
       <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
@@ -106,8 +106,7 @@
 
         <div id="content" class="content">
           <main>
-              <h1>Code blocks</h1>
-<h2>Indented code blocks</h2>
+              <h3>Indented code blocks</h3>
 <p>A block of text indented four spaces (or one tab) is treated as a code block. For example,</p>
 <pre><code class="language-markdown">Paragraph here
 
@@ -116,8 +115,8 @@
     }
 </code></pre>
 <p>The initial (four space or one tab) indentation is not considered part of the verbatim text, and is removed in the output.</p>
-<h2>Fenced code blocks</h2>
-<p>In addition to standard indented code blocks, Doctor supports fenced code blocks. These begin with a row of three or more backticks (<code>```</code>) and end with a row of backticks that must be at least as long as the starting row. Everything between these lines is treated as code and no indentation is necessary:</p>
+<h3>Fenced code blocks</h3>
+<p>In addition to standard indented code blocks, you can write fenced code blocks. These begin with a row of three or more backticks (<code>```</code>) and end with a row of backticks that must be at least as long as the starting row. Everything between these lines is treated as code and no indentation is necessary:</p>
 <pre><code class="language-markdown">```
 if (a &gt; 3) {
   moveShip(5 * gravity, DOWN);
@@ -149,19 +148,19 @@ qsort (x:xs) = qsort (filter (&lt; x) xs) ++ [x] ++
 ```
 </code></pre>
 <p>Here <code>mycode</code> is an identifier, <code>haskell</code> and <code>numberLines</code> are classes, and <code>startFrom</code> is an attribute with value <code>100</code>.</p>
-<h1>Inline code</h1>
-<p>To write inline code, put the text between backticks, e.g.</p>
+<h3>Inline code</h3>
+<p>To write <code>inline code</code>, put the text between backticks, e.g.</p>
 <pre><code class="language-markdown">What is the difference between `&gt;&gt;=` and `&gt;&gt;`?
 </code></pre>
 <p>If you want to include a literal backtick as part of the code, use double backticks (the spaces before and after the enclosed backtick will be ignored.)</p>
 <pre><code class="language-markdown">Here is a literal backtick `` ` ``.
 </code></pre>
 <blockquote>
-<p><strong>NOTE</strong>: Backslash-escapes (and other Markdown constructs) do not work inside verbatim (code) contexts:</p>
+<p>📖 Backslash-escapes (and other Markdown constructs) do not work inside verbatim (code) contexts:</p>
 <pre><code class="language-markdown">This is a backslash followed by an asterisk: `\*`.
 </code></pre>
 </blockquote>
-<p>As with <a href="#code-blocks">code blocks</a>, you can attach attributes to inline code as well. The syntax is similar:</p>
+<p>As with code blocks, you can attach attributes to inline code as well. The syntax is similar:</p>
 <pre><code class="language-markdown">This is Haskell code: `&lt;$&gt;`{.haskell}
 </code></pre>
 <script>

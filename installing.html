@@ -59,7 +59,7 @@
     <!-- Sidebar -->
     <nav id="sidebar" class="sidebar" aria-label="Table of contents">
       <div class="sidebar-scrollbox">
-        <ol class="chapter"><li class="chapter-item expanded "><a href="docs.html"><strong aria-hidden="true">1.</strong> Preface</a></li><li class="chapter-item expanded "><a href="terminology.html"><strong aria-hidden="true">2.</strong> Terminology</a></li><li class="chapter-item expanded "><div><strong aria-hidden="true">3.</strong> Getting started</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="installing.html" class="active"><strong aria-hidden="true">3.1.</strong> Installing</a></li><li class="chapter-item expanded "><a href="creating-your-first-document.html"><strong aria-hidden="true">3.2.</strong> Creating your first document</a></li><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">3.3.</strong> Key concepts</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">4.</strong> Using MDoc</div></li><li><ol class="section"><li class="chapter-item expanded "><a href="commands.html"><strong aria-hidden="true">4.1.</strong> Command line tool</a></li><li class="chapter-item expanded "><a href="config.html"><strong aria-hidden="true">4.2.</strong> Configuration</a></li><li class="chapter-item expanded "><a href="bib.html"><strong aria-hidden="true">4.3.</strong> The bibliography tool</a></li></ol></li><li class="chapter-item expanded "><a href="markdown/markdown.html"><strong aria-hidden="true">5.</strong> Markdown</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="markdown/paragraphs.html"><strong aria-hidden="true">5.1.</strong> Paragraphs</a></li><li class="chapter-item expanded "><a href="markdown/headings.html"><strong aria-hidden="true">5.2.</strong> Headings</a></li><li class="chapter-item expanded "><a href="markdown/formatting.html"><strong aria-hidden="true">5.3.</strong> Formatting</a></li><li class="chapter-item expanded "><a href="markdown/lists.html"><strong aria-hidden="true">5.4.</strong> Lists</a></li><li class="chapter-item expanded "><a href="markdown/images-and-figures.html"><strong aria-hidden="true">5.5.</strong> Images and figures</a></li><li class="chapter-item expanded "><a href="markdown/code.html"><strong aria-hidden="true">5.6.</strong> Code</a></li><li class="chapter-item expanded "><a href="markdown/math.html"><strong aria-hidden="true">5.7.</strong> Math</a></li><li class="chapter-item expanded "><a href="markdown/block-quotes.html"><strong aria-hidden="true">5.8.</strong> Block quotes</a></li></ol></li></ol>
+        <ol class="chapter"><li class="chapter-item expanded "><a href="index.html">Preface</a></li><li class="chapter-item expanded "><a href="terminology.html">Terminology</a></li><li class="chapter-item expanded "><a href="getting-started.html">Getting started</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="installing.html" class="active">Installing</a></li><li class="chapter-item expanded "><a href="creating-your-first-document.html">Creating your first document</a></li><li class="chapter-item expanded "><div>The MDoc workflow</div></li></ol></li><li class="chapter-item expanded "><div>Using MDoc</div></li><li><ol class="section"><li class="chapter-item expanded "><div>Command line tool</div></li><li class="chapter-item expanded "><a href="config.html">Configuration</a></li><li class="chapter-item expanded "><div>The bibliography tool</div></li></ol></li><li class="chapter-item expanded "><a href="markdown/markdown.html">Markdown</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="markdown/paragraphs.html">Paragraphs</a></li><li class="chapter-item expanded "><a href="markdown/headings.html">Headings</a></li><li class="chapter-item expanded "><a href="markdown/formatting.html">Formatting</a></li><li class="chapter-item expanded "><a href="markdown/lists.html">Lists</a></li><li class="chapter-item expanded "><a href="markdown/images-and-figures.html">Images and figures</a></li><li class="chapter-item expanded "><a href="markdown/code.html">Code</a></li><li class="chapter-item expanded "><a href="markdown/math.html">Math</a></li><li class="chapter-item expanded "><a href="markdown/block-quotes.html">Block quotes</a></li></ol></li></ol>
         <p id="watermark"><a href="https://mdzk.app">Made with mdzk</a></p>
       </div>
       <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
@@ -109,15 +109,38 @@
               <p>For the time being, you will have to compile MDoc yourself to install it. It is published on <a href="https://crates.io/crates/mdoc">crates.io</a>, so this is done easily by running</p>
 <pre><code>$ cargo install mdoc
 </code></pre>
+<p>MDoc depends on <a href="https://pandoc.org/">Pandoc</a> for parsing the Markdown content. Have a look at <a href="https://pandoc.org/installing.html">Installing Pandoc</a> and make sure it is available in your <code>PATH</code> by running <code>pandoc -v</code>.</p>
 <h3>Building from source</h3>
 <p>If you want to compile from upstream, clone <a href="https://github.com/kmaasrud/mdoc">the repo</a> and install from path with these commands:</p>
 <pre><code>$ git clone https://github.com/kmaasrud/mdoc.git
 $ cd mdoc
 $ cargo install --path .
 </code></pre>
-<p>MDoc depends on <a href="https://pandoc.org/">Pandoc</a> for parsing the Markdown content. Have a look at <a href="https://pandoc.org/installing.html">Installing Pandoc</a> and make sure it is available in your <code>PATH</code> by running <code>pandoc -v</code>.</p>
-<h4>Some notes on building</h4>
-<p>Tectonic needs a few <a href="https://tectonic-typesetting.github.io/book/latest/howto/build-tectonic/index.html#third-party-dependencies">third party C dependencies</a> when building. Depending on your platform, you might not have them available. A cross-platform solution is to use VCPKG to handle these dependencies. First install <code>cargo-vcpkg</code> by running</p>
+<p>Tectonic needs a few <a href="https://tectonic-typesetting.github.io/book/latest/howto/build-tectonic/index.html#third-party-dependencies">third party C dependencies</a> when building. Depending on your platform, you might not have them available. You can either install them manually, or you can try one of the methods explained below.</p>
+<h4>Using Nix</h4>
+<p>For Unix-based systems (or Windows with WSL,) this method is definitely recommended.</p>
+<ol>
+<li>
+<p>Install Nix by following the instructions for your platform <a href="https://nixos.org/download.html">here</a>.</p>
+</li>
+<li>
+<p>Clone the MDoc repo.</p>
+<pre><code> $ git clone https://github.com/kmaasrud/mdoc.git
+ $ cd mdoc
+</code></pre>
+</li>
+<li>
+<p>Run the following command:</p>
+<pre><code> $ nix --experimental-features &quot;nix-command flakes&quot; develop
+</code></pre>
+</li>
+</ol>
+<p>You will now get placed in a shell with all the required dependencies installed. Running <code>cargo build --release</code> should compile MDoc for you, and you can find the binary in <code>target/release</code>.</p>
+<blockquote>
+<p>📖 All dependencies are compiled statically into the binary with the exception of Pandoc. This means you can safely exit the Nix shell and run your compiled MDoc, as long as you have Pandoc installed on your system.</p>
+</blockquote>
+<h4>Using VCPKG</h4>
+<p>A fully cross-platform solution is to use VCPKG to handle the dependencies. First install <code>cargo-vcpkg</code> by running</p>
 <pre><code>$ cargo install cargo-vcpkg
 </code></pre>
 <p>Then obtain the dependencies with</p>
