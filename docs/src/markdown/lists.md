@@ -1,4 +1,4 @@
-# Ordered lists
+### Ordered lists
 
 To make an ordered list of items, write a decimal number, followed by a period, a space and the content you want as part of that list item.
 
@@ -36,25 +36,13 @@ Multiple styles of alphanumeric sequences are allowed. These are uppercase/lower
 #.  Two
 ```
 
-which gives the following output:
+The above will get rendered as such:
+
+![](../../assets/lists_1.png)
 
 ---
 
- 9) Ninth
-10) Tenth
-11) Eleventh
-       i. subone
-      ii. subtwo
-     iii. subthree
-
-(2) Two
-(5) Three
-1.  One
-#.  Two
-
----
-
-# Unordered lists
+### Unordered lists
 
 An unordered list is a list of bulleted list items that are not numbered. They work exactly like ordered lists (except the numbering of course,) but use `*`, `+` or `-` as markers.
 
@@ -64,9 +52,9 @@ An unordered list is a list of bulleted list items that are not numbered. They w
 - three
 ```
 
-The bullets need not be flush with the left margin; they may be indented one, two, or three spaces. The bullet must be followed by whitespace.
+The markers need not be flush with the left margin; they may be indented one, two, or three spaces. The marker must be followed by whitespace.
 
-## Task lists
+#### Task lists
 
 You can also make unordered lists that have a checkmark, in order to create a task list. The Github-Flavored Markdown syntax is used, which is as follows
 
@@ -75,7 +63,9 @@ You can also make unordered lists that have a checkmark, in order to create a ta
 - [x] checked item
 ```
 
-# Block content in lists
+---
+
+### Block content in lists
 
 A list item may contain multiple paragraphs and other block-level content. However, subsequent paragraphs must be preceded by a blank line and indented to line up with the first non-space content after the list marker.
 
@@ -106,7 +96,7 @@ List items may include other lists, like in the last ordered list example. In th
 
 Markdown allows you to write list items “lazily,” and reflow your text with a single newline instead of indenting continuation lines. However, if there are multiple paragraphs or other blocks in a list item, the first line of each must be indented.
 
-```shell
+```markdown
 + A lazy, lazy, list
 item.
 
@@ -137,9 +127,11 @@ But what if you want to put an indented code block directly after a list? Consid
     { my code block }
 ```
 
-# Extra list types
+---
 
-## Definition lists
+### Extra list types
+
+#### Definition lists
 
 Definition lists are made of terms and definitions of these terms, much like in a dictionary. A simple definition list is made of a single-line term followed by a colon and the definition for that term.
 
@@ -181,7 +173,7 @@ Term 2
 
 Note that space between items in a definition list is required.
 
-## Numbered example lists
+#### Numbered example lists
 
 The special list marker `@` can be used for sequentially numbered examples. The first list item with a `@` marker will be numbered 1, the next 2, and so on, throughout the document. The numbered examples need not occur in a single list; each new list using `@` will take up where the last stopped. So, for example:
 
@@ -204,4 +196,4 @@ As (@good) illustrates, ...
 
 The label can be any string of alphanumeric characters, underscores, or hyphens.
 
-> **Note**: continuation paragraphs in example lists must always be indented four spaces, regardless of the length of the list marker. This is because example labels tend to be long, and indenting content to the first non-space character after the label would be awkward.
+> 📖 continuation paragraphs in example lists must always be indented four spaces, regardless of the length of the list marker. This is because example labels tend to be long, and indenting content to the first non-space character after the label would be awkward.

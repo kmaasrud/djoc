@@ -1,7 +1,3 @@
----
-title = "Preface"
----
-
 It is time for academic writing to step out of it's archaic ways and into the modern world! With the rise of Markdown as the de facto markup language of the internet, why should academia lag behind. You should be able to write scientific content, confident that it is publishable both physically and on the web, along with the comfort of knowing the content is readable in it's raw form and will stand the test of time.
 
 ### The issue with $\LaTeX$
@@ -9,7 +5,7 @@ It is time for academic writing to step out of it's archaic ways and into the mo
 [$\LaTeX$](https://www.latex-project.org/) is incredible, but it has three key flaws.
 
 - It's tooling is fractioned (to say the least).
-- It is difficult to learn. 
+- It is difficult to learn.
 - The syntax is obscure.
 
 The latter issue is exemplified on [it's own introduction page](https://www.latex-project.org/about/):
@@ -31,7 +27,7 @@ All this for a simple hello world... I am intentionally ignoring the function of
 Hello world!
 ```
 
-How refreshing! 
+How refreshing!
 
 [^1]: Without the title, of course, but we'll get to that.
 

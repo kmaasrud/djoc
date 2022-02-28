@@ -7,4 +7,7 @@ src = "src"
 generate-summary = false
 
 [build]
-backlinks = false
+wikilinks = false
+
+[output.html]
+no-section-label = true
