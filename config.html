@@ -106,12 +106,36 @@
 
         <div id="content" class="content">
           <main>
-              <p>In bigger document projects, you will have an <code>mdzk.toml</code> file at the root of your document. This file is meant to configure your document to look and behave the way you want. The available options are:</p>
+              <p>In bigger document projects, you will have an <code>mdoc.toml</code> file at the root of your document. This file is meant to configure your document to look and behave the way you want. The available options are:</p>
 <ul>
 <li><a href="#title"><code>title</code></a> (required)</li>
 <li><a href="#authors"><code>authors</code></a></li>
 <li><a href="#date"><code>date</code></a></li>
 <li><a href="#src"><code>src</code></a></li>
+<li><a href="#build"><code>[build]</code></a>
+<ul>
+<li><a href="#build-filename"><code>filename</code></a></li>
+</ul>
+</li>
+<li><a href="#bib"><code>[bib]</code></a>
+<ul>
+<li><a href="#bib-csl"><code>csl</code></a></li>
+<li><a href="#bib-src"><code>src</code></a></li>
+</ul>
+</li>
+<li><a href="#style"><code>[style]</code></a>
+<ul>
+<li><a href="#style-number-sections"><code>number-sections</code></a></li>
+<li><a href="#style-date-format"><code>date-format</code></a></li>
+<li><a href="#style-document-class"><code>document-classe</code></a></li>
+</ul>
+</li>
+<li><a href="#latex"><code>[latex]</code></a>
+<ul>
+<li><a href="#latex-packages"><code>packages</code></a></li>
+<li><a href="#latex-head"><code>head</code></a></li>
+</ul>
+</li>
 </ul>
 <h3 id="title">The <code>title</code> field (required)</h3>
 <p>This field specifies the title of your document. It will be used for the title at the top of your generated PDF and to derive the filename of your output (unless another filename is specified.) The title can contain <a href="./markdown/formatting.html">inline Markdown formatting</a>.</p>
@@ -132,12 +156,12 @@
 <p>Nothing. This will deploy the default behavior where MDoc recursively searches for Markdown-files, starting from the document root. All files will get built into the finished document, ordered alphabetically by their path.</p>
 </li>
 <li>
-<p>A path to a directory, relative to the <code>mdzk.toml</code> file. This will tell MDoc to search for Markdown-files recursively inside only this directory. This is useful if you want to include a README or any other Markdown-file inside the document, but avoid building it as part of the document.</p>
+<p>A path to a directory, relative to the <code>mdoc.toml</code> file. This will tell MDoc to search for Markdown-files recursively inside only this directory. This is useful if you want to include a README or any other Markdown-file inside the document, but avoid building it as part of the document.</p>
 <pre><code class="language-toml">src = &quot;path/to/dir&quot;
 </code></pre>
 </li>
 <li>
-<p>A list of paths. Each path is relative to the <code>mdzk.toml</code> file and must point to other valid files. Using this list, you can explicitly define which sections you want included in your document. The order of the list is preserved, which makes this an excellent method to provide a custom (non-alphabetical) order your sections.</p>
+<p>A list of paths. Each path is relative to the <code>mdoc.toml</code> file and must point to other valid files. Using this list, you can explicitly define which sections you want included in your document. The order of the list is preserved, which makes this an excellent method to provide a custom (non-alphabetical) order your sections.</p>
 <pre><code class="language-toml">src = [
   &quot;path/to/first-section.md&quot;,
   &quot;second-section.md,
@@ -145,6 +169,64 @@
 </code></pre>
 </li>
 </ul>
+<h3 id="build">The <code>[build]</code> table</h3>
+<p>This table contains configuration related to the build process of your document.</p>
+<h4 id="build-filename">The <code>filename</code> field</h4>
+<p>With this field you can set the filename of your built output. You do not need to specify an extension, MDoc will handle that for you based on the output type. By default, MDoc will use the <a href="https://en.wikipedia.org/wiki/Letter_case#Kebab_case">kebab cased</a> <a href="#title"><code>title</code></a> field as the filename</p>
+<pre><code class="language-toml">[build]
+filename = &quot;my-document&quot;
+</code></pre>
+<p>Running <code>mdoc build</code> with the TOML above would build a file called <code>my-document.pdf</code>.</p>
+<h3 id="bib">The <code>[bib]</code> table</h3>
+<p>Under this table, you can set configuration values for MDoc's bibliography handling.</p>
+<h4 id="bib-csl">The <code>csl</code> field</h4>
+<p>If this field points to a valid <a href="">CSL</a> source, MDoc will use this a the style for your citations. You can set the field to any of these:</p>
+<ul>
+<li>
+<p>Any identifier listed in <a href="https://github.com/citation-style-language/styles">citation-style-language/styles</a>. MDoc will fetch the source and load the CSL style for you. You do not need to specify the <code>.csl</code> extension. The example below sets your style to <a href="https://github.com/citation-style-language/styles/blob/master/apa.csl">American Psychological Association 7th edition</a>.</p>
+<pre><code class="language-toml">[bib]
+csl = &quot;apa&quot;
+</code></pre>
+</li>
+<li>
+<p>A valid URL pointing to a CSL file.</p>
+<pre><code class="language-toml">[bib]
+csl = &quot;https://domain.com/this/points/to/file.csl
+</code></pre>
+</li>
+<li>
+<p><strong>NOT YET IMPLEMENTED</strong> (see <a href="https://github.com/kmaasrud/mdoc/issues/64">#64</a>): The path to a CSL in your filesystem. The path is relative to the <code>mdoc.toml</code> file.</p>
+</li>
+</ul>
+<h4 id="src">The <code>src</code> field</h4>
+<p><strong>NOT YET IMPLEMENTED</strong>. MDoc does not read this field yet (see <a href="https://github.com/kmaasrud/mdoc/issues/54">#54</a>): Here you can set the source of your bibliography. The source can be any of the following:</p>
+<ul>
+<li>
+<p>Nothing. MDoc will search recursively for <code>.bib</code> and <code>.bibtex</code> files from the root directory. Any bibliography file found will be read and added to the document.</p>
+</li>
+<li>
+<p>A path to a directory, relative to the <code>mdoc.toml</code> file. MDoc will search recursively inside this directory and deploy the method explained above.</p>
+<pre><code class="language-toml">[bib]
+src = &quot;path/to/bib/dir&quot;
+</code></pre>
+</li>
+<li>
+<p>A list of paths. Each path is relative to the <code>mdoc.toml</code> file and must point to valid bibliography files. Each file liste will get read and added to the document.</p>
+<pre><code class="language-toml">[bib]
+src = [
+    &quot;path/to/first.bib&quot;
+    &quot;path/second.bibtex&quot;
+]
+</code></pre>
+</li>
+</ul>
+<h3 id="style">The <code>[style]</code> table</h3>
+<p>This table contains all configuration fields related to styling your document.</p>
+<h4 id="style-number-sections">The <code>number-sections</code> field</h4>
+<p>A boolean, this field determines whether sections are numbered or not. The default is <code>false</code>.</p>
+<pre><code class="language-toml">[style]
+number-sections = true
+</code></pre>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     var math = document.querySelectorAll("[class^=katex]");
