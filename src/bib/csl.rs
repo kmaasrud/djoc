@@ -9,22 +9,19 @@ pub fn get_csl(id: &str) -> Result<PathBuf> {
         url
     } else {
         Url::parse("https://raw.githubusercontent.com/citation-style-language/styles/master/")?
-            .join(&format!("{}.csl", id))?
+            .join(&format!("{id}.csl"))?
     };
 
     let filename = url
         .path_segments()
-        .ok_or_else(|| anyhow!("Could not determine the segments of \"{}\".\nDoes your URL point to a valid CSL file?", url))?
+        .ok_or_else(|| anyhow!("Could not determine the segments of \"{url}\".\nDoes your URL point to a valid CSL file?"))?
         .last()
-        .ok_or_else(|| anyhow!("Unable to find the filename of \"{}\".\nDoes your URL point to a valid CSL file?", url))?;
+        .ok_or_else(|| anyhow!("Unable to find the filename of \"{url}\".\nDoes your URL point to a valid CSL file?"))?;
+
     let path = data_dir().join("csl").join(filename).with_extension("csl");
 
     if !path.exists() {
-        info!(
-            "Fetching {:?} from \"{}\" ...",
-            path.file_name().unwrap(),
-            url
-        );
+        info!("Fetching {:?} from \"{url}\" ...", path.file_name().unwrap());
         let resp = ureq::get(url.as_str()).call()?;
 
         let mut bytes = Vec::new();
