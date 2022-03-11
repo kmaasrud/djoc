@@ -44,7 +44,7 @@
           inherit nativeBuildInputs pname version;
           buildInputs = buildDeps;
           src = ./.;
-          cargoSha256 = "sha256-jzQKjZTB8cgmxrF4ukcZC7nOiz0EpPsiYNT1m+X6idA=";
+          cargoSha256 = "sha256-CGcNTIDcJLPC/XF6DDf1P6Z7tIqY9Z9rXaE8GAUxNFM=";
         };
         defaultPackage = packages.${pname};
 
@@ -63,7 +63,6 @@
             rust-bin.nightly.latest.default
 
             # Handy dev tools
-            rust-analyzer
             convco
           ] ++ buildDeps;
         };
