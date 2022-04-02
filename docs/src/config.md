@@ -95,10 +95,15 @@ If this field points to a valid [CSL]() source, MDoc will use this a the style f
 
     ```toml
     [bib]
-    csl = "https://domain.com/this/points/to/file.csl
+    csl = "https://domain.com/this/points/to/apa.csl"
     ```
 
-- **NOT YET IMPLEMENTED** (see [#64](https://github.com/kmaasrud/mdoc/issues/64)): The path to a CSL in your filesystem. The path is relative to the `mdoc.toml` file.
+- The path to a CSL in your filesystem. The path is relative to the `mdoc.toml` file.
+
+    ```toml
+    [bib]
+    csl = "./some/dir/apa.csl"
+    ```
 
 #### The `src` field {#src}
 
