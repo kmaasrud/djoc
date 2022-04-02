@@ -30,7 +30,7 @@
           harfbuzz
           icu
           libpng
-          pandoc
+          perl
           openssl
           zlib
         ] ++ lib.optionals stdenv.isDarwin [
@@ -44,7 +44,7 @@
           inherit nativeBuildInputs pname version;
           buildInputs = buildDeps;
           src = ./.;
-          cargoSha256 = "sha256-BvftSm97W5S4MQMXYaH3RHLixKVa8Qvmcr46yfLt/bU=";
+          cargoSha256 = "sha256-CGcNTIDcJLPC/XF6DDf1P6Z7tIqY9Z9rXaE8GAUxNFM=";
         };
         defaultPackage = packages.${pname};
 

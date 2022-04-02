@@ -971,7 +971,6 @@ dependencies = [
  "chrono",
  "dirs 4.0.0",
  "ignore",
- "native-tls",
  "serde",
  "structopt",
  "tectonic",
