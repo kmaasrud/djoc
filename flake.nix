@@ -37,12 +37,15 @@
           ApplicationServices
           Cocoa
         ];
+
+        runtimeDeps = with pkgs; [ pandoc ];
       in
       rec {
         # `nix build`
         packages.${pname} = rustPlatform.buildRustPackage {
           inherit nativeBuildInputs pname version;
           buildInputs = buildDeps;
+          propagatedBuildInputs = runtimeDeps;
           src = ./.;
           cargoSha256 = "sha256-CGcNTIDcJLPC/XF6DDf1P6Z7tIqY9Z9rXaE8GAUxNFM=";
         };
@@ -64,7 +67,7 @@
 
             # Handy dev tools
             convco
-          ] ++ buildDeps;
+          ] ++ buildDeps ++ runtimeDeps;
         };
       }
     );
