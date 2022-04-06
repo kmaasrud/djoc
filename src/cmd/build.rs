@@ -17,9 +17,14 @@ pub fn build(path: Option<PathBuf>, tex: bool) -> Result<()> {
             Path::new(&doc.config.filename()).with_extension("tex"),
         )
     } else {
+        let extension = match doc.config.build.output.as_str() {
+            "latex" => "tex",
+            other => other,
+        };
+
         (
             doc.build()?,
-            Path::new(&doc.config.filename()).with_extension("pdf"),
+            Path::new(&doc.config.filename()).with_extension(extension),
         )
     };
 

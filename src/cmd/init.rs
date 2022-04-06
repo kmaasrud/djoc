@@ -31,12 +31,12 @@ pub fn init(path: Option<PathBuf>) -> Result<()> {
     config.push_str("# This is the configuration file of your document.\n");
     config.push_str("# It is used to specify metadata, build instructions, styling and more.\n\n");
 
-    config.push_str(&format!("title = \"{}\"\n", title));
-    config.push_str("date = \"today\"\n");
+    config.push_str(&format!("title = \"{title}\"\n"));
+    config.push_str("date = \"now\"\n");
 
     // Add author name from Git if available
     if let Some(author) = get_author_name() {
-        config.push_str(&format!("authors = [\"{}\"]\n", author))
+        config.push_str(&format!("authors = [\"{author}\"]\n"))
     }
 
     config.push_str("\n# For more options, visit https://kmaasrud.com/mdoc/config");
