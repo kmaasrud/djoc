@@ -7,6 +7,7 @@ pub enum PandocOption {
     NumberSections,
     Standalone,
     LinkCitations,
+    Katex,
 
     // Other opts
     From(PandocFormat),
@@ -15,6 +16,7 @@ pub enum PandocOption {
     LuaFilter(PathBuf),
     Bibliography(PathBuf),
     IncludeInHeader(PathBuf),
+    Template(PathBuf),
 
     // Custom opts (through the `metadata` flag)
     Title(String),
@@ -31,12 +33,14 @@ impl Display for PandocOption {
             NumberSections => write!(f, "--number-sections"),
             Standalone => write!(f, "-s"),
             LinkCitations => write!(f, "--metadata=link-citations"),
+            Katex => write!(f, "--katex"),
             From(ref from) => write!(f, "--from={from}"),
             To(ref to) => write!(f, "--to={to}"),
             Csl(ref path) => write!(f, "--csl={}", path.display()),
             LuaFilter(ref path) => write!(f, "--lua-filter={}", path.display()),
             Bibliography(ref path) => write!(f, "--bibliography={}", path.display()),
             IncludeInHeader(ref path) => write!(f, "--include-in-header={}", path.display()),
+            Template(ref path) => write!(f, "--template={}", path.display()),
             Title(ref title) => write!(f, "--variable=title:{title}"),
             Author(ref author) => write!(f, "--variable=author:{author}"),
             Date(ref date) => write!(f, "--variable=date:{date}"),
@@ -46,15 +50,17 @@ impl Display for PandocOption {
 }
 
 pub enum PandocFormat {
-    Markdown,
+    Html,
     Latex,
+    Markdown,
 }
 
 impl Display for PandocFormat {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
         match *self {
-            PandocFormat::Markdown => write!(f, "markdown"),
+            PandocFormat::Html => write!(f, "html"),
             PandocFormat::Latex => write!(f, "latex"),
+            PandocFormat::Markdown => write!(f, "markdown"),
         }
     }
 }

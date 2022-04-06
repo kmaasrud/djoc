@@ -104,3 +104,12 @@ impl Pandoc {
         }
     }
 }
+
+
+pub(crate) fn html_template() -> Result<PathBuf> {
+    let path = utils::data_dir().join("templates").join("template.html");
+    if !path.exists() {
+        utils::write_file(&path, include_bytes!("template.html"))?;
+    }
+    Ok(path)
+}
