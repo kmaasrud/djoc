@@ -109,10 +109,20 @@ impl Default for BibConfig {
     }
 }
 
-#[derive(Debug, Default, Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize)]
 #[serde(default, rename_all = "kebab-case")]
 pub struct BuildConfig {
     pub filename: Option<String>,
+    pub output: String,
+}
+
+impl Default for BuildConfig {
+    fn default() -> Self {
+        Self {
+            filename: None,
+            output: "latex".to_owned(),
+        }
+    }
 }
 
 #[derive(Debug, Deserialize, Serialize)]
