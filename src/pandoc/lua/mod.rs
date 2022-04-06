@@ -2,9 +2,10 @@ use crate::utils::{data_dir, write_file};
 use anyhow::Result;
 use std::path::PathBuf;
 
-const FILTERS: [(&str, &[u8]); 2] = [
+const FILTERS: [(&str, &[u8]); 3] = [
     ("abstract.lua", include_bytes!("abstract.lua")),
     ("crossref.lua", include_bytes!("crossref.lua")),
+    ("sidenotes.lua", include_bytes!("sidenotes.lua")),
 ];
 
 pub(crate) fn get_filters() -> Result<Vec<PathBuf>> {
