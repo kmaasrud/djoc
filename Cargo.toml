@@ -34,7 +34,9 @@ tectonic = { version = "0.8", default-features = false, features = ["geturl-reqw
 
 
 [profile.release]
+codegen-units = 1
 lto = true
+strip = true
 
 
 # VCPKG
