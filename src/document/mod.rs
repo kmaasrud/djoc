@@ -105,65 +105,56 @@ impl Document {
         }
     }
 
-    pub fn build(&self) -> Result<Vec<u8>> {
+    pub fn pdf_bytes(&self) -> Result<Vec<u8>> {
         let filename = &self.config.filename();
 
-        match self.config.build.output.as_str() {
-            "latex" => {
-                let mut status = crate::log::MdocTectonicStatusBackend;
+        let mut status = crate::log::MdocTectonicStatusBackend;
 
-                let config = tectonic::config::PersistentConfig::open(false)
-                    .map_err(Error::Tectonic)
-                    .context("Failed to open the default configuration file.")?;
+        let config = tectonic::config::PersistentConfig::open(false)
+            .map_err(Error::Tectonic)
+            .context("Failed to open the default configuration file.")?;
 
-                let only_cached = false;
-                let bundle = config
-                    .default_bundle(only_cached, &mut status)
-                    .map_err(Error::Tectonic)
-                    .context("Failed to load the default resource bundle.")?;
+        let only_cached = false;
+        let bundle = config
+            .default_bundle(only_cached, &mut status)
+            .map_err(Error::Tectonic)
+            .context("Failed to load the default resource bundle.")?;
 
-                let format_cache_path = config
-                    .format_cache_path()
-                    .map_err(Error::Tectonic)
-                    .context("Failed to set up the format cache.")?;
+        let format_cache_path = config
+            .format_cache_path()
+            .map_err(Error::Tectonic)
+            .context("Failed to set up the format cache.")?;
 
-                let mut files = {
-                    let mut sb = tectonic::driver::ProcessingSessionBuilder::default();
-                    sb.bundle(bundle)
-                        .primary_input_buffer(&self.latex_bytes()?)
-                        .tex_input_name(&format!("{}.tex", filename))
-                        .format_name("latex")
-                        .format_cache_path(format_cache_path)
-                        .output_format(tectonic::driver::OutputFormat::Pdf)
-                        .build_date(std::time::SystemTime::now())
-                        .do_not_write_output_files();
+        let mut files = {
+            let mut sb = tectonic::driver::ProcessingSessionBuilder::default();
+            sb.bundle(bundle)
+                .primary_input_buffer(&self.latex_bytes()?)
+                .tex_input_name(&format!("{}.tex", filename))
+                .format_name("latex")
+                .format_cache_path(format_cache_path)
+                .output_format(tectonic::driver::OutputFormat::Pdf)
+                .build_date(std::time::SystemTime::now())
+                .do_not_write_output_files();
 
-                    let mut sess = sb
-                        .create(&mut status)
-                        .map_err(Error::Tectonic)
-                        .context("Failed to initialize the LaTeX processing session.")?;
+            let mut sess = sb
+                .create(&mut status)
+                .map_err(Error::Tectonic)
+                .context("Failed to initialize the LaTeX processing session.")?;
 
-                    sess.run(&mut status)
-                        .map_err(Error::Tectonic)
-                        .context("The LaTeX engine failed.")?;
+            sess.run(&mut status)
+                .map_err(Error::Tectonic)
+                .context("The LaTeX engine failed.")?;
 
-                    sess.into_file_data()
-                };
+            sess.into_file_data()
+        };
 
-                match files.remove(&format!("{}.pdf", filename)) {
-                    Some(file) => Ok(file.data),
-                    None => Err(std::io::Error::new(
-                        std::io::ErrorKind::Other,
-                        "LaTeX didn't report failure, but no PDF was created.",
-                    )
-                    .into()),
-                }
-            }
-
-            "html" => {
-                self.html_bytes()
-            }
-            other => Err(anyhow!("Unknown output format \"{}\"", other)),
+        match files.remove(&format!("{}.pdf", filename)) {
+            Some(file) => Ok(file.data),
+            None => Err(std::io::Error::new(
+                std::io::ErrorKind::Other,
+                "LaTeX didn't report failure, but no PDF was created.",
+            )
+            .into()),
         }
     }
 }

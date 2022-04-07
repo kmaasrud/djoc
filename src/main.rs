@@ -28,9 +28,9 @@ enum Command {
         /// File to build into PDF (optional).
         path: Option<PathBuf>,
 
-        #[structopt(long = "tex")]
-        /// Build document into a raw TeX file.
-        tex: bool,
+        #[structopt(short = "o", long = "output")]
+        /// The type of output you want to build to.
+        output: Option<String>,
     },
 
     /// Clean up files from a project or the data directory.
@@ -61,7 +61,7 @@ fn run() -> Result<()> {
     }
 
     match app.command {
-        Command::Build { path, tex } => cmd::build(path, tex)?,
+        Command::Build { path, output } => cmd::build(path, output)?,
 
         Command::Clean { data } => cmd::clean(data)?,
 
