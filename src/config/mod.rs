@@ -120,7 +120,7 @@ impl Default for BuildConfig {
     fn default() -> Self {
         Self {
             filename: None,
-            output: "latex".to_owned(),
+            output: "pdf".to_owned(),
         }
     }
 }
