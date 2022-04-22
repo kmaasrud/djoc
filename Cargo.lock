@@ -971,6 +971,7 @@ dependencies = [
  "chrono",
  "dirs 4.0.0",
  "ignore",
+ "lazy_static",
  "serde",
  "structopt",
  "tectonic",
