@@ -4,14 +4,13 @@ pub mod log;
 pub mod bib;
 pub mod config;
 pub mod document;
-pub mod errors;
+pub mod error;
 pub(crate) mod pandoc;
 pub mod utils;
 
+#[doc(inline)]
 pub use document::DocumentBuilder;
+#[doc(inline)]
 pub use document::{Chapter, Document};
 
-pub use errors::{Error, Result};
-
 pub const CONFIG_FILE: &str = "mdoc.toml";
-pub const SRC_DIR: &str = "src";

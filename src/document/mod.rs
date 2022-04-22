@@ -8,7 +8,7 @@ use crate::{
     bib,
     config::Config,
     pandoc::{lua, latex_template, html_template, Pandoc, PandocFormat, PandocOption},
-    Error,
+    error::Error,
 };
 use anyhow::{anyhow, Context, Result};
 use std::path::PathBuf;

@@ -9,11 +9,11 @@ static MAX_LOG_LEVEL: AtomicUsize = AtomicUsize::new(0);
 ///
 /// The loggin levels use the following nomenclature:
 ///
-/// - 0: Error
-/// - 1: Success
-/// - 2: Warning
-/// - 3: Info and success
-/// - >4: Debug
+/// - `0`: Error
+/// - `1`: Success
+/// - `2`: Warning
+/// - `3`: Info and success
+/// - `>4`: Debug
 #[inline]
 pub fn set_max_level(level: usize) {
     MAX_LOG_LEVEL.store(level, Ordering::SeqCst);

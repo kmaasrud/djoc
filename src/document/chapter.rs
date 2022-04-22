@@ -2,7 +2,7 @@ use anyhow::{Context, Result};
 use std::{
     fs::File,
     io::{prelude::*, BufReader},
-    path::PathBuf,
+    path::{Path, PathBuf},
 };
 
 #[derive(Debug)]
@@ -19,9 +19,9 @@ impl Chapter {
         }
     }
 
-    pub fn load(path: impl Into<PathBuf>) -> Result<Self> {
-        let path: PathBuf = path.into();
-        let file = File::open(&path).with_context(|| format!("Could not open file {:?}.", path))?;
+    pub fn load(path: impl AsRef<Path>) -> Result<Self> {
+        let path = path.as_ref();
+        let file = File::open(path).with_context(|| format!("Could not open file {:?}.", path))?;
 
         let mut content = String::new();
         BufReader::new(&file)
@@ -29,7 +29,7 @@ impl Chapter {
             .with_context(|| format!("Could not read {:?} to string.", file))?;
 
         Ok(Self {
-            path: Some(path),
+            path: Some(path.to_owned()),
             content,
         })
     }

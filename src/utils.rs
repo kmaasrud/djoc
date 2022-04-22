@@ -1,4 +1,4 @@
-use crate::{Error, Result};
+use crate::{CONFIG_FILE, error::{Error, Result}};
 use std::fs::{self, File};
 use std::io::{Read, Write};
 use std::path::{Path, PathBuf};
@@ -32,7 +32,7 @@ pub fn write_file(path: &Path, bytes: &[u8]) -> Result<()> {
 /// Finds the root of a MDoc document by looking for a `mdoc.toml` file.
 pub fn find_root() -> Result<PathBuf> {
     let mut path: PathBuf = std::env::current_dir().unwrap();
-    let look_for = Path::new("mdoc.toml");
+    let look_for = Path::new(CONFIG_FILE);
     loop {
         path.push(look_for);
         if path.is_file() {

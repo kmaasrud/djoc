@@ -5,7 +5,7 @@ pub mod opts;
 pub use errors::PandocError;
 pub use opts::{PandocFormat, PandocOption};
 
-use crate::{utils, Error, Result};
+use crate::{utils, error::{Error, Result}};
 use std::io::{BufRead, BufReader, ErrorKind, Write};
 use std::path::PathBuf;
 use std::process::{Command, Stdio};

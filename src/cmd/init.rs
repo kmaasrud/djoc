@@ -1,7 +1,7 @@
 use anyhow::{Context, Result};
 use mdoc::{
     utils::{get_author_name, write_file},
-    CONFIG_FILE, SRC_DIR,
+    CONFIG_FILE
 };
 use std::ffi::OsStr;
 use std::path::PathBuf;
@@ -23,7 +23,7 @@ pub fn init(path: Option<PathBuf>) -> Result<()> {
     };
 
     // Recursively create all directories
-    std::fs::create_dir_all(&root.join(SRC_DIR))
+    std::fs::create_dir_all(&root.join("src"))
         .context("Failed at creating the directory structure.")?;
 
     // Make default config

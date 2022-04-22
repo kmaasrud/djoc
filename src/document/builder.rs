@@ -1,4 +1,4 @@
-use crate::{config::Config, utils::find_root, Chapter, Document};
+use crate::{CONFIG_FILE, config::Config, utils::find_root, Chapter, Document};
 
 use anyhow::{anyhow, bail, Context, Result};
 use ignore::{types::TypesBuilder, WalkBuilder};
@@ -53,7 +53,7 @@ impl DocumentBuilder {
             SourceType::Dir(ref path) => {
                 let config = self
                     .config
-                    .unwrap_or(Config::from_file(path.join("mdoc.toml"))?);
+                    .unwrap_or(Config::from_file(path.join(CONFIG_FILE))?);
                 let chapters = load_chapters(path, &config)?;
 
                 (config, chapters, Some(path.to_owned()))
@@ -63,7 +63,7 @@ impl DocumentBuilder {
                 let root = find_root()?;
                 let config = self
                     .config
-                    .unwrap_or(Config::from_file(root.join("mdoc.toml"))?);
+                    .unwrap_or(Config::from_file(root.join(CONFIG_FILE))?);
                 let chapters = load_chapters(&root, &config)?;
 
                 (config, chapters, Some(root))
