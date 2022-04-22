@@ -16,6 +16,7 @@ In bigger document projects, you will have an `mdoc.toml` file at the root of yo
 - [`[latex]`](#latex)
     - [`packages`](#latex-packages)
     - [`head`](#latex-head)
+    - [`title-script`](#latex-title-script)
 
 
 ### The `title` field (required) {#title}
@@ -139,3 +140,13 @@ A boolean, this field determines whether sections are numbered or not. The defau
 [style]
 number-sections = true
 ```
+
+### The `latex` table {#latex}
+
+#### The `packages` field {#latex-packages}
+
+#### The `head` field {#latex-head}
+
+#### The `title-script` field {#latex-title-script}
+
+For PDF and LaTeX output, a `\maketitle` is automatically placed at the top of your document that inserts a title with the metadata you've set for your document. If you want to replace this, e.g. if you want an external package to generate your title, you can use this field to replace `\maketitle` with something of your choice. The content of this field is expected to be valid LaTeX, and will only get reflected in `tex` and `pdf` output.
