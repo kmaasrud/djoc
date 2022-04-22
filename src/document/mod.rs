@@ -7,7 +7,7 @@ pub use chapter::*;
 use crate::{
     bib,
     config::Config,
-    pandoc::{lua, html_template, Pandoc, PandocFormat, PandocOption},
+    pandoc::{lua, latex_template, html_template, Pandoc, PandocFormat, PandocOption},
     Error,
 };
 use anyhow::{anyhow, Context, Result};
@@ -60,12 +60,8 @@ impl Document {
             pandoc.push_opt(PandocOption::NumberSections);
         }
 
-        if let Some(ref class) = self.config.style.document_class {
+        if let Some(class) = &self.config.style.document_class {
             pandoc.push_opt(PandocOption::DocumentClass(class.to_owned()));
-        }
-
-        if let Some(header) = self.config.latex_header() {
-            pandoc.include_in_header(&header)?;
         }
 
         pandoc.push_opt(PandocOption::Csl(bib::get_csl(&self.config.bib.csl)?));
@@ -86,6 +82,15 @@ impl Document {
     pub fn latex_bytes(&self) -> Result<Vec<u8>> {
         if let Some(content) = self.content() {
             let mut pandoc = self.setup_pandoc()?;
+
+            if let Some(header) = self.config.latex_header() {
+                pandoc.include_in_header(&header)?;
+            }
+
+            if let Some(title_script) = &self.config.latex.title_script {
+                pandoc.push_opt(PandocOption::TitleScript(title_script.to_owned()))
+            }
+
             pandoc.push_opt(PandocOption::Template(latex_template()?));
             pandoc.push_opt(PandocOption::To(PandocFormat::Latex));
             pandoc.run(content.as_bytes()).context("Pandoc errored.")

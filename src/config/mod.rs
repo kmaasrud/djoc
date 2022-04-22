@@ -148,4 +148,5 @@ impl Default for StyleConfig {
 pub struct LatexConfig {
     pub head: String,
     pub packages: Vec<String>,
+    pub title_script: Option<String>,
 }

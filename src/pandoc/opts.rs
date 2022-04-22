@@ -18,8 +18,9 @@ pub enum PandocOption {
     IncludeInHeader(PathBuf),
     Template(PathBuf),
 
-    // Custom opts (through the `metadata` flag)
+    // Custom opts (through the `metadata`/`variable` flag)
     Title(String),
+    TitleScript(String),
     Author(String),
     Date(String),
     DocumentClass(String),
@@ -42,6 +43,7 @@ impl Display for PandocOption {
             IncludeInHeader(ref path) => write!(f, "--include-in-header={}", path.display()),
             Template(ref path) => write!(f, "--template={}", path.display()),
             Title(ref title) => write!(f, "--variable=title:{title}"),
+            TitleScript(ref title_script) => write!(f, "--variable=title-script:{title_script}"),
             Author(ref author) => write!(f, "--variable=author:{author}"),
             Date(ref date) => write!(f, "--variable=date:{date}"),
             DocumentClass(ref class) => write!(f, "--variable=documentclass:{class}"),
