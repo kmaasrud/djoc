@@ -113,6 +113,7 @@ impl Default for BibConfig {
 #[serde(default, rename_all = "kebab-case")]
 pub struct BuildConfig {
     pub filename: Option<String>,
+    pub tidy_logs: bool,
     pub output: String,
 }
 
@@ -120,6 +121,7 @@ impl Default for BuildConfig {
     fn default() -> Self {
         Self {
             filename: None,
+            tidy_logs: true,
             output: "pdf".to_owned(),
         }
     }

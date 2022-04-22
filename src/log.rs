@@ -117,7 +117,9 @@ pub fn format_chain(chain: anyhow::Chain) -> String {
     out
 }
 
-pub(crate) struct MdocTectonicStatusBackend;
+pub(crate) struct MdocTectonicStatusBackend {
+    pub tidy_logs: bool,
+}
 
 impl tectonic::status::StatusBackend for MdocTectonicStatusBackend {
     fn report(
@@ -128,22 +130,28 @@ impl tectonic::status::StatusBackend for MdocTectonicStatusBackend {
     ) {
         match kind {
             tectonic::status::MessageKind::Error => {
-                let msg = args.to_string();
+                let mut msg = args.to_string();
 
-                error!("{}{}",
-                    msg
+                if self.tidy_logs {
+                    msg = msg
                         .trim_end_matches("See the LaTeX manual or LaTeX Companion for explanation.\nType  H <return>  for immediate help")
                         .trim_start_matches('!')
-                        .trim(),
+                        .to_owned();
+                }
+
+                error!("{}{}",
+                    msg.trim(),
                     format_chain(err.unwrap_or(&anyhow!("")).chain())
                 );
             }
             tectonic::status::MessageKind::Warning => {
                 let msg = args.to_string();
-                // Remove all underfull/overfull hbox messages. TODO: Make this optional
-                if !(
+                // Remove all underfull/overfull vbox/hbox messages.
+                if !self.tidy_logs || !(
                     msg.contains(r"Underfull \hbox")
                     || msg.contains(r"Overfull \hbox")
+                    || msg.contains(r"Underfull \vbox")
+                    || msg.contains(r"Overfull \vbox")
                     || msg.contains(r"warnings were issued by the TeX engine; use --print and/or --keep-logs for details.")
                 ) {
                     warn!("{}", args);

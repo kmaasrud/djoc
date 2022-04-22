@@ -114,7 +114,9 @@ impl Document {
     pub fn pdf_bytes(&self) -> Result<Vec<u8>> {
         let filename = &self.config.filename();
 
-        let mut status = crate::log::MdocTectonicStatusBackend;
+        let mut status = crate::log::MdocTectonicStatusBackend {
+            tidy_logs: self.config.build.tidy_logs
+        };
 
         let config = tectonic::config::PersistentConfig::open(false)
             .map_err(Error::Tectonic)
