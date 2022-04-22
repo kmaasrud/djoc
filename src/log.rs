@@ -1,4 +1,5 @@
 use anyhow::{anyhow, Error};
+use lazy_static::lazy_static;
 use std::sync::atomic::{AtomicUsize, Ordering};
 
 /// The maximum logging level, stored statically in the memory as an atomic usize.
@@ -23,32 +24,41 @@ pub fn max_level() -> usize {
     MAX_LOG_LEVEL.load(Ordering::Relaxed)
 }
 
-#[macro_export]
-macro_rules! error {
-    ($($arg:tt)*) => ({
-        let text = format!($($arg)*);
-        let mut lines = text.lines();
-        if let Some(line) = lines.next() {
-            eprintln!("\x1B[31mE\x1B[0m {}", line);
-            for line in lines {
-                eprintln!("  {}", line);
-            }
+lazy_static! {
+    pub static ref ICONS: (
+        &'static str,
+        &'static str,
+        &'static str,
+        &'static str,
+        &'static str
+    ) = if std::env::var("NO_COLOR").is_ok() {
+        ("E", "W", "✓", "·", "D")
+    } else {
+        (
+            "\x1B[31mE\x1B[0m",
+            "\x1B[33mW\x1B[0m",
+            "\x1B[32m✓\x1B[0m",
+            "·",
+            "D",
+        )
+    };
+}
+
+pub fn log(icon: &str, text: String) {
+    let mut lines = text.lines();
+    if let Some(line) = lines.next() {
+        eprintln!("{} {}", icon, line);
+        for line in lines {
+            eprintln!("  {}", line);
         }
-    })
+    }
 }
 
 #[macro_export]
-macro_rules! success {
+macro_rules! error {
     ($($arg:tt)*) => ({
         if $crate::log::max_level() >= 1 {
-            let text = format!($($arg)*);
-            let mut lines = text.lines();
-            if let Some(line) = lines.next() {
-                println!("\x1B[32m✓\x1B[0m {}", line);
-                for line in lines {
-                    println!("  {}", line);
-                }
-            }
+            $crate::log::log($crate::log::ICONS.0, format!($($arg)*));
         }
     })
 }
@@ -57,14 +67,16 @@ macro_rules! success {
 macro_rules! warn {
     ($($arg:tt)*) => ({
         if $crate::log::max_level() >= 2 {
-            let text = format!($($arg)*);
-            let mut lines = text.lines();
-            if let Some(line) = lines.next() {
-                eprintln!("\x1B[33mW\x1B[0m {}", line);
-                for line in lines {
-                    eprintln!("  {}", line);
-                }
-            }
+            $crate::log::log($crate::log::ICONS.1, format!($($arg)*));
+        }
+    })
+}
+
+#[macro_export]
+macro_rules! success {
+    ($($arg:tt)*) => ({
+        if $crate::log::max_level() >= 2 {
+            $crate::log::log($crate::log::ICONS.2, format!($($arg)*));
         }
     })
 }
@@ -73,14 +85,7 @@ macro_rules! warn {
 macro_rules! info {
     ($($arg:tt)*) => ({
         if $crate::log::max_level() >= 3 {
-            let text = format!($($arg)*);
-            let mut lines = text.lines();
-            if let Some(line) = lines.next() {
-                println!("  \x1B[90m{}\x1B[0m", line);
-                for line in lines {
-                    println!("  \x1B[90m{}\x1B[0m", line);
-                }
-            }
+            $crate::log::log($crate::log::ICONS.3, format!($($arg)*));
         }
     })
 }
@@ -89,14 +94,7 @@ macro_rules! info {
 macro_rules! debug {
     ($($arg:tt)*) => ({
         if $crate::log::max_level() >= 4 {
-            let text = format!($($arg)*);
-            let mut lines = text.lines();
-            if let Some(line) = lines.next() {
-                println!("D {}", line);
-                for line in lines {
-                    println!("  {}", line);
-                }
-            }
+            $crate::log::log($crate::log::ICONS.4, format!($($arg)*));
         }
     })
 }
@@ -119,7 +117,7 @@ pub fn format_chain(chain: anyhow::Chain) -> String {
     out
 }
 
-pub struct MdocTectonicStatusBackend;
+pub(crate) struct MdocTectonicStatusBackend;
 
 impl tectonic::status::StatusBackend for MdocTectonicStatusBackend {
     fn report(
