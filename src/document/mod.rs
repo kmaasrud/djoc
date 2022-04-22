@@ -86,6 +86,7 @@ impl Document {
     pub fn latex_bytes(&self) -> Result<Vec<u8>> {
         if let Some(content) = self.content() {
             let mut pandoc = self.setup_pandoc()?;
+            pandoc.push_opt(PandocOption::Template(latex_template()?));
             pandoc.push_opt(PandocOption::To(PandocFormat::Latex));
             pandoc.run(content.as_bytes()).context("Pandoc errored.")
         } else {
