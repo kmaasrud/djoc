@@ -77,6 +77,15 @@ filename = "my-document"
 
 Running `mdoc build` with the TOML above would build a file called `my-document.pdf`.
 
+#### The `tidy-logs` field {#build-tidy-logs}
+
+This boolean toggle determines whether you want the log messages of MDoc tidied or not. Tidying involves removing warning messages like `Overfull \hbox` and tries to ensure the printed messages are mostly useful. This option is `true` (turned on) on by default.
+
+```toml
+[build]
+tidy-logs = false
+```
+
 ### The `[bib]` table {#bib}
 
 Under this table, you can set configuration values for MDoc's bibliography handling.
