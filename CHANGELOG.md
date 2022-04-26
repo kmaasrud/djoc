@@ -1,6 +1,48 @@
 # Changelog
 
-## 0.2.0 (Unreleased)
+## 0.3.0 (2022-04-26)
+
+### **Notable changes**
+
+- The `--tex` flag is no longer supported by the CLI. Use `--output tex` instead.
+
+### Features
+
+- Added `output` field to the `[build]` table in `mdoc.toml`. This field currently supports the output formats `html`, `tex` (or `latex`) and `pdf`. The default is `pdf`.
+
+- Added `-o`/`--output` flag. It overrides the `output` field described above (or sets it to something other than `pdf` in the case of single-file builds.)
+
+    `46b375c`
+
+- [#67](https://github.com/kmaasrud/mdoc/issues/67): By default, a title is inserted into TeX/PDF output by using the `\maketitle` macro. If you want to produce a title with a custom macro or LaTeX script, you can set the `title-script` field under the `[latex]`. This string will replace `\maketitle`.
+
+    7266c52
+
+- [#57](https://github.com/kmaasrud/mdoc/issues/57): The new version cleans up more of the messy LaTeX messages by default. If you want to see everything from the TeX engine printed, you can toggle tidying by setting the `tidy-logs` field under the `[build]` table to `false`.
+
+    `a91568e` `5e098a6`
+
+- [#64](https://github.com/kmaasrud/mdoc/issues/64): Setting the `csl` field to a local file (path is relative to `mdoc.toml`) now loads that CSL file and uses it as the style definition.
+
+    `faf487f`
+
+- Preliminary support for HTML output. You can try it out with `mdoc build -o html`, but note that this is still very WIP.
+
+    `c6c78e3` `7f7899c` `22a359c` and more
+
+- Logging now respects the enviroment variable [`NO_COLOR`](https://no-color.org/).
+
+    `93c0af8`
+
+### Fixes
+
+- Erroneous unwrap in `get_csl` is now handled properly. The function assumed it was being run inside a document project (directory with `mdoc.toml` in it), which made MDoc panic when building single files and trying to find a CSL file.
+
+    `8ea1277`
+
+- A few tweaks to the code internals and the `release` profile should hopefully increase performance slightly.
+
+## 0.2.0 (2022-03-11)
 
 ### Features
 
