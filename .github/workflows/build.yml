@@ -17,8 +17,6 @@ jobs:
       uses: actions/cache@v2
       with:
         path: |
-          ~/.cargo
-          ~/.rustup
           target
         key: linux-stable
 
@@ -46,14 +44,11 @@ jobs:
         asset_name="mdoc-$ver-x86_64-unknown-linux-musl.tar.gz"
         ASSET_PATH="$src/$asset_name"
         CHECKSUM_PATH="$ASSET_PATH.sha256"
-
         cp target/release/mdoc $stage/
         cd $stage
-
         tar czf $ASSET_PATH *
         cd $src
         sha256sum $asset_name > $CHECKSUM_PATH
-
         echo "ASSET_PATH=$ASSET_PATH" >> $GITHUB_ENV
         echo "CHECKSUM_PATH=$CHECKSUM_PATH" >> $GITHUB_ENV
 
@@ -90,14 +85,11 @@ jobs:
         asset_name="mdoc-$ver-x86_64-unknown-linux-musl.tar.gz"
         ASSET_PATH="$src/$asset_name"
         CHECKSUM_PATH="$ASSET_PATH.sha256"
-
         cp result/bin/mdoc $stage/
         cd $stage
-
         zip -r $ASSET_PATH *
         cd $src
         shasum -a 256 $asset_name > $CHECKSUM_PATH
-
         echo "ASSET_PATH=$ASSET_PATH" >> $GITHUB_ENV
         echo "CHECKSUM_PATH=$CHECKSUM_PATH" >> $GITHUB_ENV
 
@@ -122,8 +114,6 @@ jobs:
       uses: actions/cache@v2
       with:
         path: |
-          C:\Users\runneradmin\.cargo
-          C:\Users\runneradmin\.rustup
           target
         key: windows-stable
 
