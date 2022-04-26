@@ -7,3 +7,8 @@ MDoc is a document environment and command line tool for producing academic docu
 <!-- > It is time for academic writing to step out of it's archaic ways and into the modern world. LaTeX - for all it's greatness - is simply too complex and unreadable to be the face of academia. We can do better. -->
 
 <p align="center"><a href="https://kmaasrud.com/mdoc/installing">Installing</a> - <a href="https://kmaasrud.com/mdoc">Documentation</a></p>
+
+<p align="center">
+  <a href="https://crates.io/crates/mdoc"><img src="https://img.shields.io/crates/v/mdoc"></a>
+  <a href="https://docs.rs/mdoc/latest/mdoc/"><img src="https://img.shields.io/docsrs/mdoc"></a> 
+</p>
