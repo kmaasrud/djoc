@@ -1,4 +1,7 @@
-use crate::{CONFIG_FILE, error::{Error, Result}};
+use crate::{
+    error::{Error, Result},
+    CONFIG_FILE,
+};
 use std::fs::{self, File};
 use std::io::{Read, Write};
 use std::path::{Path, PathBuf};

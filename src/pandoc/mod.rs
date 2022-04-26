@@ -5,7 +5,10 @@ pub mod opts;
 pub use errors::PandocError;
 pub use opts::{PandocFormat, PandocOption};
 
-use crate::{utils, error::{Error, Result}};
+use crate::{
+    error::{Error, Result},
+    utils,
+};
 use std::io::{BufRead, BufReader, ErrorKind, Write};
 use std::path::PathBuf;
 use std::process::{Command, Stdio};
@@ -104,7 +107,6 @@ impl Pandoc {
         }
     }
 }
-
 
 pub(crate) fn html_template() -> Result<PathBuf> {
     let path = utils::data_dir().join("templates").join("template.html");

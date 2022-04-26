@@ -139,7 +139,8 @@ impl tectonic::status::StatusBackend for MdocTectonicStatusBackend {
                         .to_owned();
                 }
 
-                error!("{}{}",
+                error!(
+                    "{}{}",
                     msg.trim(),
                     format_chain(err.unwrap_or(&anyhow!("")).chain())
                 );

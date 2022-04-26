@@ -7,8 +7,8 @@ pub use chapter::*;
 use crate::{
     bib,
     config::Config,
-    pandoc::{lua, latex_template, html_template, Pandoc, PandocFormat, PandocOption},
     error::Error,
+    pandoc::{html_template, latex_template, lua, Pandoc, PandocFormat, PandocOption},
 };
 use anyhow::{anyhow, Context, Result};
 use std::path::PathBuf;
@@ -115,7 +115,7 @@ impl Document {
         let filename = &self.config.filename();
 
         let mut status = crate::log::MdocTectonicStatusBackend {
-            tidy_logs: self.config.build.tidy_logs
+            tidy_logs: self.config.build.tidy_logs,
         };
 
         let config = tectonic::config::PersistentConfig::open(false)

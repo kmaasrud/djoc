@@ -1,4 +1,4 @@
-use crate::{CONFIG_FILE, config::Config, utils::find_root, Chapter, Document};
+use crate::{config::Config, utils::find_root, Chapter, Document, CONFIG_FILE};
 
 use anyhow::{anyhow, bail, Context, Result};
 use ignore::{types::TypesBuilder, WalkBuilder};

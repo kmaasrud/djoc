@@ -1,7 +1,7 @@
 use anyhow::{Context, Result};
 use mdoc::{
     utils::{get_author_name, write_file},
-    CONFIG_FILE
+    CONFIG_FILE,
 };
 use std::ffi::OsStr;
 use std::path::PathBuf;
