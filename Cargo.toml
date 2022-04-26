@@ -1,6 +1,6 @@
 [package]
 name = "mdoc"
-version = "0.2.0"
+version = "0.3.0"
 authors = ["Knut Magnus Aasrud <km@aasrud.com>"]
 description = "Modern PDF creation through Markdown and LaTeX"
 edition = "2021"
@@ -8,8 +8,10 @@ license-file = "LICENSE"
 homepage = "https://github.com/kmaasrud/mdoc"
 repository = "https://github.com/kmaasrud/mdoc"
 include = [
-    "**/*.rs",
-    "**/*.lua",
+    "src/**/*.html",
+    "src/**/*.lua",
+    "src/**/*.rs",
+    "src/**/*.tex",
 ]
 
 
