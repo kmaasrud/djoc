@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="For the time being, you will have to compile MDoc yourself to install it. It is published on crates.io, so this is done easily by running
+$ cargo install mdoc MDoc depends on Pandoc for parsing the Markdown content. Have a look at Installing Pandoc and make sure it is available in your PATH by running pandoc -v.
+Building from source #  If you want to compile from upstream, clone the repo and install from path with these commands:">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="" />
+<meta property="og:description" content="For the time being, you will have to compile MDoc yourself to install it. It is published on crates.io, so this is done easily by running
+$ cargo install mdoc MDoc depends on Pandoc for parsing the Markdown content. Have a look at Installing Pandoc and make sure it is available in your PATH by running pandoc -v.
+Building from source #  If you want to compile from upstream, clone the repo and install from path with these commands:" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://kmaasrud.com/mdoc/docs/installing/" /><meta property="article:section" content="docs" />
+
+
+
+<title>Installing | MDoc documentation</title>
+<link rel="manifest" href="/mdoc/manifest.json">
+<link rel="icon" href="/mdoc/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/mdoc/book.min.82c5dbd23447cee0b4c2aa3ed08ce0961faa40e1fa370eee4f8c9f02e0d46b5f.css" integrity="sha256-gsXb0jRHzuC0wqo&#43;0Izglh&#43;qQOH6Nw7uT4yfAuDUa18=" crossorigin="anonymous">
+  <script defer src="/mdoc/flexsearch.min.js"></script>
+  <script defer src="/mdoc/en.search.min.d58410005a7678b48ac15a8cba71f8df4a95c01f054176c644e9c037369cd8e2.js" integrity="sha256-1YQQAFp2eLSKwVqMunH430qVwB8FQXbGROnANzac2OI=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/mdoc/"><span>MDoc documentation</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/mdoc/docs/config/" class="">Config</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/mdoc/docs/creating-your-first-document/" class="">Creating Your First Document</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/mdoc/docs/getting-started/" class="">Getting Started</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/mdoc/docs/installing/" class="active">Installing</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/mdoc/docs/terminology/" class="">Terminology</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/mdoc/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Installing</strong>
+
+  <label for="toc-control">
+    
+    <img src="/mdoc/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#building-from-source">Building from source</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown"><p>For the time being, you will have to compile MDoc yourself to install it. It is published on <a href="https://crates.io/crates/mdoc">crates.io</a>, so this is done easily by running</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ cargo install mdoc
+</code></pre></div><p>MDoc depends on <a href="https://pandoc.org/">Pandoc</a> for parsing the Markdown content. Have a look at <a href="https://pandoc.org/installing.html">Installing Pandoc</a> and make sure it is available in your <code>PATH</code> by running <code>pandoc -v</code>.</p>
+<h3 id="building-from-source">
+  Building from source
+  <a class="anchor" href="#building-from-source">#</a>
+</h3>
+<p>If you want to compile from upstream, clone <a href="https://github.com/kmaasrud/mdoc">the repo</a> and install from path with these commands:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ git clone https://github.com/kmaasrud/mdoc.git
+$ cd mdoc
+$ cargo install --path .
+</code></pre></div><p>Tectonic needs a few <a href="https://tectonic-typesetting.github.io/book/latest/howto/build-tectonic/index.html#third-party-dependencies">third party C dependencies</a> when building. Depending on your platform, you might not have them available. You can either install them manually, or you can try one of the methods explained below.</p>
+<h4 id="using-nix">
+  Using Nix
+  <a class="anchor" href="#using-nix">#</a>
+</h4>
+<p>For Unix-based systems (or Windows with WSL,) this method is definitely recommended.</p>
+<ol>
+<li>
+<p>Install Nix by following the instructions for your platform <a href="https://nixos.org/download.html">here</a>.</p>
+</li>
+<li>
+<p>Clone the MDoc repo.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ git clone https://github.com/kmaasrud/mdoc.git
+$ cd mdoc
+</code></pre></div></li>
+<li>
+<p>Run the following command:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ nix --experimental-features <span style="color:#e6db74">&#34;nix-command flakes&#34;</span> develop
+</code></pre></div></li>
+</ol>
+<p>You will now get placed in a shell with all the required dependencies installed. Running <code>cargo build --release</code> should compile MDoc for you, and you can find the binary in <code>target/release</code>.</p>
+<blockquote>
+<p>📖 All dependencies are compiled statically into the binary with the exception of Pandoc. This means you can safely exit the Nix shell and run your compiled MDoc, as long as you have Pandoc installed on your system.</p>
+</blockquote>
+<h4 id="using-vcpkg">
+  Using VCPKG
+  <a class="anchor" href="#using-vcpkg">#</a>
+</h4>
+<p>A fully cross-platform solution is to use VCPKG to handle the dependencies. First install <code>cargo-vcpkg</code> by running</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ cargo install cargo-vcpkg
+</code></pre></div><p>Then obtain the dependencies with</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ cargo vcpkg build
+</code></pre></div><p>Following this, you need to set a couple of environment variables that makes sure you use vcpkg when compiling. These are the following:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ export VCPKG_ROOT<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CARGO_TARGET_DIR<span style="color:#66d9ef">:-$(</span>pwd<span style="color:#66d9ef">)</span>/target<span style="color:#e6db74">}</span><span style="color:#e6db74">/vcpkg&#34;</span>
+$ export TECTONIC_DEP_BACKEND<span style="color:#f92672">=</span>vcpkg
+</code></pre></div><p>If you are building on Windows, you have to run with the following environment variable exported as well:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ export RUSTFLAGS<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;-Ctarget-feature=+crt-static&#39;</span>
+</code></pre></div><p>After all this, you should be ready to compile normally.</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function a(c){const a=window.getSelection(),b=document.createRange();b.selectNodeContents(c),a.removeAllRanges(),a.addRange(b)}document.querySelectorAll("pre code").forEach(b=>{b.addEventListener("click",function(c){a(b.parentElement),navigator.clipboard&&navigator.clipboard.writeText(b.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#building-from-source">Building from source</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

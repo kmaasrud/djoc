@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="There are two kinds of headings: Setext and ATX. They are equivalent, so choose the style you prefer. Both heading types can contain inline formatting or math.
+ATX headers #  An ATX heading consists of one to six # signs and a line of text, optionally followed by any number of # signs. The number of # signs at the beginning of the line is the heading level:
+## A level-two heading  A paragraph or some other content.">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="" />
+<meta property="og:description" content="There are two kinds of headings: Setext and ATX. They are equivalent, so choose the style you prefer. Both heading types can contain inline formatting or math.
+ATX headers #  An ATX heading consists of one to six # signs and a line of text, optionally followed by any number of # signs. The number of # signs at the beginning of the line is the heading level:
+## A level-two heading  A paragraph or some other content." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://kmaasrud.com/mdoc/markdown/headings/" /><meta property="article:section" content="markdown" />
+
+
+
+<title>Headings | MDoc documentation</title>
+<link rel="manifest" href="/mdoc/manifest.json">
+<link rel="icon" href="/mdoc/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/mdoc/book.min.82c5dbd23447cee0b4c2aa3ed08ce0961faa40e1fa370eee4f8c9f02e0d46b5f.css" integrity="sha256-gsXb0jRHzuC0wqo&#43;0Izglh&#43;qQOH6Nw7uT4yfAuDUa18=" crossorigin="anonymous">
+  <script defer src="/mdoc/flexsearch.min.js"></script>
+  <script defer src="/mdoc/en.search.min.d58410005a7678b48ac15a8cba71f8df4a95c01f054176c644e9c037369cd8e2.js" integrity="sha256-1YQQAFp2eLSKwVqMunH430qVwB8FQXbGROnANzac2OI=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/mdoc/"><span>MDoc documentation</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/mdoc/docs/config/" class="">Config</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/mdoc/docs/creating-your-first-document/" class="">Creating Your First Document</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/mdoc/docs/getting-started/" class="">Getting Started</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/mdoc/docs/installing/" class="">Installing</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/mdoc/docs/terminology/" class="">Terminology</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/mdoc/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Headings</strong>
+
+  <label for="toc-control">
+    
+    <img src="/mdoc/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#atx-headers">ATX headers</a></li>
+        <li><a href="#setext-headers">Setext headers</a></li>
+        <li><a href="#identifiers">Identifiers</a></li>
+        <li><a href="#numbering-of-headers">Numbering of headers</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown"><p>There are two kinds of headings: <a href="#setext-headers">Setext</a> and <a href="#atx-headers">ATX</a>. They are equivalent, so choose the style you prefer. Both heading types can contain inline <a href="formatting.md">formatting</a> or <a href="math.md">math</a>.</p>
+<h3 id="atx-headers">
+  ATX headers
+  <a class="anchor" href="#atx-headers">#</a>
+</h3>
+<p>An ATX heading consists of one to six <code>#</code> signs and a line of text, optionally followed by any number of <code>#</code> signs. The number of <code>#</code> signs at the beginning of the line is the heading level:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-markdown" data-lang="markdown"><span style="color:#75715e">## A level-two heading
+</span><span style="color:#75715e"></span>
+A paragraph or some other content.
+
+<span style="color:#75715e">### A level-three heading ###
+</span><span style="color:#75715e"></span>
+More content...
+</code></pre></div><blockquote>
+<p>📖 MDoc requires a blank line before and after a heading (except, of course, at the beginning of the document.) Additionally, a space between the opening <code>#</code> signs of an ATX heading and the heading text is required.</p>
+</blockquote>
+<h3 id="setext-headers">
+  Setext headers
+  <a class="anchor" href="#setext-headers">#</a>
+</h3>
+<p>A setext-style heading is a line of text <em>underlined</em> with a row of <code>=</code> signs (for a level-one heading) or <code>-</code> signs (for a level-two heading):</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-markdown" data-lang="markdown">A level-one heading
+===================
+
+A paragraph or some content.
+
+A level-two heading
+-------------------
+
+More content...
+</code></pre></div><h3 id="identifiers">
+  Identifiers
+  <a class="anchor" href="#identifiers">#</a>
+</h3>
+<p>Headings can be assigned attributes using the following syntax at the end of the line containing the heading text:</p>
+<pre><code>{#identifier .class .class key=value key=value}
+</code></pre>
+<p>Thus, for example, the following headings will all be assigned the identifier <code>foo</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-markdown" data-lang="markdown"># My heading {#foo}
+
+<span style="color:#75715e">## My heading ##    {#foo}
+</span><span style="color:#75715e"></span>
+My other heading   {#foo}
+---------------
+</code></pre></div><blockquote>
+<p>📖 All headers are automatically assigned an identifier corresponding to their <a href="https://en.wikipedia.org/wiki/Letter_case#Kebab_case">kebab cased</a> title (e.g. <code># This is my header!</code> will have the identifier <code>#this-is-my-header</code>.)</p>
+</blockquote>
+<h3 id="numbering-of-headers">
+  Numbering of headers
+  <a class="anchor" href="#numbering-of-headers">#</a>
+</h3>
+<p>You can enable numbering of headers by setting <code>number-sections = true</code> under <code>[style]</code> in <code>mdoc.toml</code>. If you want to avoid numbering on certain headers, simply specify the class <code>unnumbered</code> on them. A single hyphen (<code>{-}</code>) is equivalent to this, so the following headers:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-markdown" data-lang="markdown"># My heading {-}
+
+# My heading {.unnumbered}
+</code></pre></div><p>will never be numbered.</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function a(c){const a=window.getSelection(),b=document.createRange();b.selectNodeContents(c),a.removeAllRanges(),a.addRange(b)}document.querySelectorAll("pre code").forEach(b=>{b.addEventListener("click",function(c){a(b.parentElement),navigator.clipboard&&navigator.clipboard.writeText(b.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#atx-headers">ATX headers</a></li>
+        <li><a href="#setext-headers">Setext headers</a></li>
+        <li><a href="#identifiers">Identifiers</a></li>
+        <li><a href="#numbering-of-headers">Numbering of headers</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

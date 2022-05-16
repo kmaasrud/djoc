@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="In bigger document projects, you will have an mdoc.toml file at the root of your document. This file is meant to configure your document to look and behave the way you want. The available options are:
+ title (required) authors date src [build]  filename   [bib]  csl src   [style]  number-sections date-format document-classe   [latex]  packages head title-script    The title field (required) #  This field specifies the title of your document.">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="" />
+<meta property="og:description" content="In bigger document projects, you will have an mdoc.toml file at the root of your document. This file is meant to configure your document to look and behave the way you want. The available options are:
+ title (required) authors date src [build]  filename   [bib]  csl src   [style]  number-sections date-format document-classe   [latex]  packages head title-script    The title field (required) #  This field specifies the title of your document." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://kmaasrud.com/mdoc/docs/config/" /><meta property="article:section" content="docs" />
+
+
+
+<title>Config | MDoc documentation</title>
+<link rel="manifest" href="/mdoc/manifest.json">
+<link rel="icon" href="/mdoc/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/mdoc/book.min.82c5dbd23447cee0b4c2aa3ed08ce0961faa40e1fa370eee4f8c9f02e0d46b5f.css" integrity="sha256-gsXb0jRHzuC0wqo&#43;0Izglh&#43;qQOH6Nw7uT4yfAuDUa18=" crossorigin="anonymous">
+  <script defer src="/mdoc/flexsearch.min.js"></script>
+  <script defer src="/mdoc/en.search.min.d58410005a7678b48ac15a8cba71f8df4a95c01f054176c644e9c037369cd8e2.js" integrity="sha256-1YQQAFp2eLSKwVqMunH430qVwB8FQXbGROnANzac2OI=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/mdoc/"><span>MDoc documentation</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/mdoc/docs/config/" class="active">Config</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/mdoc/docs/creating-your-first-document/" class="">Creating Your First Document</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/mdoc/docs/getting-started/" class="">Getting Started</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/mdoc/docs/installing/" class="">Installing</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/mdoc/docs/terminology/" class="">Terminology</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/mdoc/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Config</strong>
+
+  <label for="toc-control">
+    
+    <img src="/mdoc/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#title">The <code>title</code> field (required)</a></li>
+        <li><a href="#authors">The <code>authors</code> field</a></li>
+        <li><a href="#date">The <code>date</code> field</a></li>
+        <li><a href="#src">The <code>src</code> field</a></li>
+        <li><a href="#build">The <code>[build]</code> table</a></li>
+        <li><a href="#bib">The <code>[bib]</code> table</a></li>
+        <li><a href="#style">The <code>[style]</code> table</a></li>
+        <li><a href="#latex">The <code>latex</code> table</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown"><p>In bigger document projects, you will have an <code>mdoc.toml</code> file at the root of your document. This file is meant to configure your document to look and behave the way you want. The available options are:</p>
+<ul>
+<li><a href="#title"><code>title</code></a> (required)</li>
+<li><a href="#authors"><code>authors</code></a></li>
+<li><a href="#date"><code>date</code></a></li>
+<li><a href="#src"><code>src</code></a></li>
+<li><a href="#build"><code>[build]</code></a>
+<ul>
+<li><a href="#build-filename"><code>filename</code></a></li>
+</ul>
+</li>
+<li><a href="#bib"><code>[bib]</code></a>
+<ul>
+<li><a href="#bib-csl"><code>csl</code></a></li>
+<li><a href="#bib-src"><code>src</code></a></li>
+</ul>
+</li>
+<li><a href="#style"><code>[style]</code></a>
+<ul>
+<li><a href="#style-number-sections"><code>number-sections</code></a></li>
+<li><a href="#style-date-format"><code>date-format</code></a></li>
+<li><a href="#style-document-class"><code>document-classe</code></a></li>
+</ul>
+</li>
+<li><a href="#latex"><code>[latex]</code></a>
+<ul>
+<li><a href="#latex-packages"><code>packages</code></a></li>
+<li><a href="#latex-head"><code>head</code></a></li>
+<li><a href="#latex-title-script"><code>title-script</code></a></li>
+</ul>
+</li>
+</ul>
+<h3 id="title">
+  The <code>title</code> field (required)
+  <a class="anchor" href="#title">#</a>
+</h3>
+<p>This field specifies the title of your document. It will be used for the title at the top of your generated PDF and to derive the filename of your output (unless another filename is specified.) The title can contain <a href="./markdown/formatting.md">inline Markdown formatting</a>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-toml" data-lang="toml"><span style="color:#a6e22e">title</span> = <span style="color:#e6db74">&#34;My awesome document&#34;</span>
+</code></pre></div><h3 id="authors">
+  The <code>authors</code> field
+  <a class="anchor" href="#authors">#</a>
+</h3>
+<p>This is list of strings containing the authors of this document. At the moment, each author is only described by their name, but in the future you will be able to specify more complex information about each author (see <a href="https://github.com/kmaasrud/mdoc/issues/63">#63</a>).</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-toml" data-lang="toml"><span style="color:#a6e22e">authors</span> = [ <span style="color:#e6db74">&#34;John McClane&#34;</span>, <span style="color:#e6db74">&#34;Hans Gruber&#34;</span> ]
+</code></pre></div><h3 id="date">
+  The <code>date</code> field
+  <a class="anchor" href="#date">#</a>
+</h3>
+<p>Here you can set the date which will be showed in the title of the document. The date can be any string you want, but if it is formatted according to <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO 8601</a>, additional formatting is supported (see <a href="#date-format"><code>date-format</code></a>). If this field is set to the string <code>now</code>, the current date and time will be used.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-toml" data-lang="toml"><span style="color:#a6e22e">date</span> = <span style="color:#e6db74">&#34;now&#34;</span>
+</code></pre></div><h3 id="src">
+  The <code>src</code> field
+  <a class="anchor" href="#src">#</a>
+</h3>
+<p>This is a special field that does not need to be explicitly set. It defines which files will get built into your document. <code>src</code> can either be one of the following:</p>
+<ul>
+<li>
+<p>Nothing. This will deploy the default behavior where MDoc recursively searches for Markdown-files, starting from the document root. All files will get built into the finished document, ordered alphabetically by their path.</p>
+</li>
+<li>
+<p>A path to a directory, relative to the <code>mdoc.toml</code> file. This will tell MDoc to search for Markdown-files recursively inside only this directory. This is useful if you want to include a README or any other Markdown-file inside the document, but avoid building it as part of the document.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-toml" data-lang="toml"><span style="color:#a6e22e">src</span> = <span style="color:#e6db74">&#34;path/to/dir&#34;</span>
+</code></pre></div></li>
+<li>
+<p>A list of paths. Each path is relative to the <code>mdoc.toml</code> file and must point to other valid files. Using this list, you can explicitly define which sections you want included in your document. The order of the list is preserved, which makes this an excellent method to provide a custom (non-alphabetical) order your sections.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-toml" data-lang="toml"><span style="color:#a6e22e">src</span> = [
+  <span style="color:#e6db74">&#34;path/to/first-section.md&#34;</span>,
+  <span style="color:#960050;background-color:#1e0010">&#34;</span><span style="color:#a6e22e">second-section</span>.<span style="color:#a6e22e">md</span>,
+]
+</code></pre></div></li>
+</ul>
+<h3 id="build">
+  The <code>[build]</code> table
+  <a class="anchor" href="#build">#</a>
+</h3>
+<p>This table contains configuration related to the build process of your document.</p>
+<h4 id="build-filename">
+  The <code>filename</code> field
+  <a class="anchor" href="#build-filename">#</a>
+</h4>
+<p>With this field you can set the filename of your built output. You do not need to specify an extension, MDoc will handle that for you based on the output type. By default, MDoc will use the <a href="https://en.wikipedia.org/wiki/Letter_case#Kebab_case">kebab cased</a> <a href="#title"><code>title</code></a> field as the filename</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-toml" data-lang="toml">[<span style="color:#a6e22e">build</span>]
+<span style="color:#a6e22e">filename</span> = <span style="color:#e6db74">&#34;my-document&#34;</span>
+</code></pre></div><p>Running <code>mdoc build</code> with the TOML above would build a file called <code>my-document.pdf</code>.</p>
+<h4 id="build-tidy-logs">
+  The <code>tidy-logs</code> field
+  <a class="anchor" href="#build-tidy-logs">#</a>
+</h4>
+<p>This boolean toggle determines whether you want the log messages of MDoc tidied or not. Tidying involves removing warning messages like <code>Overfull \hbox</code> and tries to ensure the printed messages are mostly useful. This option is <code>true</code> (turned on) on by default.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-toml" data-lang="toml">[<span style="color:#a6e22e">build</span>]
+<span style="color:#a6e22e">tidy-logs</span> = <span style="color:#66d9ef">false</span>
+</code></pre></div><h3 id="bib">
+  The <code>[bib]</code> table
+  <a class="anchor" href="#bib">#</a>
+</h3>
+<p>Under this table, you can set configuration values for MDoc&rsquo;s bibliography handling.</p>
+<h4 id="bib-csl">
+  The <code>csl</code> field
+  <a class="anchor" href="#bib-csl">#</a>
+</h4>
+<p>If this field points to a valid <a href="">CSL</a> source, MDoc will use this a the style for your citations. You can set the field to any of these:</p>
+<ul>
+<li>
+<p>Any identifier listed in <a href="https://github.com/citation-style-language/styles">citation-style-language/styles</a>. MDoc will fetch the source and load the CSL style for you. You do not need to specify the <code>.csl</code> extension. The example below sets your style to <a href="https://github.com/citation-style-language/styles/blob/master/apa.csl">American Psychological Association 7th edition</a>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-toml" data-lang="toml">[<span style="color:#a6e22e">bib</span>]
+<span style="color:#a6e22e">csl</span> = <span style="color:#e6db74">&#34;apa&#34;</span>
+</code></pre></div></li>
+<li>
+<p>A valid URL pointing to a CSL file.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-toml" data-lang="toml">[<span style="color:#a6e22e">bib</span>]
+<span style="color:#a6e22e">csl</span> = <span style="color:#e6db74">&#34;https://domain.com/this/points/to/apa.csl&#34;</span>
+</code></pre></div></li>
+<li>
+<p>The path to a CSL in your filesystem. The path is relative to the <code>mdoc.toml</code> file.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-toml" data-lang="toml">[<span style="color:#a6e22e">bib</span>]
+<span style="color:#a6e22e">csl</span> = <span style="color:#e6db74">&#34;./some/dir/apa.csl&#34;</span>
+</code></pre></div></li>
+</ul>
+<h4 id="src">
+  The <code>src</code> field
+  <a class="anchor" href="#src">#</a>
+</h4>
+<p><strong>NOT YET IMPLEMENTED</strong>. MDoc does not read this field yet (see <a href="https://github.com/kmaasrud/mdoc/issues/54">#54</a>): Here you can set the source of your bibliography. The source can be any of the following:</p>
+<ul>
+<li>
+<p>Nothing. MDoc will search recursively for <code>.bib</code> and <code>.bibtex</code> files from the root directory. Any bibliography file found will be read and added to the document.</p>
+</li>
+<li>
+<p>A path to a directory, relative to the <code>mdoc.toml</code> file. MDoc will search recursively inside this directory and deploy the method explained above.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-toml" data-lang="toml">[<span style="color:#a6e22e">bib</span>]
+<span style="color:#a6e22e">src</span> = <span style="color:#e6db74">&#34;path/to/bib/dir&#34;</span>
+</code></pre></div></li>
+<li>
+<p>A list of paths. Each path is relative to the <code>mdoc.toml</code> file and must point to valid bibliography files. Each file liste will get read and added to the document.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-toml" data-lang="toml">[<span style="color:#a6e22e">bib</span>]
+<span style="color:#a6e22e">src</span> = [
+    <span style="color:#e6db74">&#34;path/to/first.bib&#34;</span>
+    <span style="color:#e6db74">&#34;path/second.bibtex&#34;</span>
+]
+</code></pre></div></li>
+</ul>
+<h3 id="style">
+  The <code>[style]</code> table
+  <a class="anchor" href="#style">#</a>
+</h3>
+<p>This table contains all configuration fields related to styling your document.</p>
+<h4 id="style-number-sections">
+  The <code>number-sections</code> field
+  <a class="anchor" href="#style-number-sections">#</a>
+</h4>
+<p>A boolean, this field determines whether sections are numbered or not. The default is <code>false</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-toml" data-lang="toml">[<span style="color:#a6e22e">style</span>]
+<span style="color:#a6e22e">number-sections</span> = <span style="color:#66d9ef">true</span>
+</code></pre></div><h3 id="latex">
+  The <code>latex</code> table
+  <a class="anchor" href="#latex">#</a>
+</h3>
+<h4 id="latex-packages">
+  The <code>packages</code> field
+  <a class="anchor" href="#latex-packages">#</a>
+</h4>
+<h4 id="latex-head">
+  The <code>head</code> field
+  <a class="anchor" href="#latex-head">#</a>
+</h4>
+<h4 id="latex-title-script">
+  The <code>title-script</code> field
+  <a class="anchor" href="#latex-title-script">#</a>
+</h4>
+<p>For PDF and LaTeX output, a <code>\maketitle</code> is automatically placed at the top of your document that inserts a title with the metadata you&rsquo;ve set for your document. If you want to replace this, e.g. if you want an external package to generate your title, you can use this field to replace <code>\maketitle</code> with something of your choice. The content of this field is expected to be valid LaTeX, and will only get reflected in <code>tex</code> and <code>pdf</code> output.</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function a(c){const a=window.getSelection(),b=document.createRange();b.selectNodeContents(c),a.removeAllRanges(),a.addRange(b)}document.querySelectorAll("pre code").forEach(b=>{b.addEventListener("click",function(c){a(b.parentElement),navigator.clipboard&&navigator.clipboard.writeText(b.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#title">The <code>title</code> field (required)</a></li>
+        <li><a href="#authors">The <code>authors</code> field</a></li>
+        <li><a href="#date">The <code>date</code> field</a></li>
+        <li><a href="#src">The <code>src</code> field</a></li>
+        <li><a href="#build">The <code>[build]</code> table</a></li>
+        <li><a href="#bib">The <code>[bib]</code> table</a></li>
+        <li><a href="#style">The <code>[style]</code> table</a></li>
+        <li><a href="#latex">The <code>latex</code> table</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
