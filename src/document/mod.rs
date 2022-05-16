@@ -91,6 +91,12 @@ impl Document {
                 pandoc.push_opt(PandocOption::TitleScript(title_script.to_owned()))
             }
 
+            if let Some(class_options) = &self.config.style.class_options {
+                for opt in class_options {
+                    pandoc.push_opt(PandocOption::ClassOption(opt.to_owned()))
+                }
+            }
+
             pandoc.push_opt(PandocOption::Template(latex_template()?));
             pandoc.push_opt(PandocOption::To(PandocFormat::Latex));
             pandoc.run(content.as_bytes()).context("Pandoc errored.")

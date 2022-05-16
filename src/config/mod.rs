@@ -133,6 +133,7 @@ pub struct StyleConfig {
     pub number_sections: bool,
     pub date_format: String,
     pub document_class: Option<String>,
+    pub class_options: Option<Vec<String>>,
 }
 
 impl Default for StyleConfig {
@@ -141,6 +142,7 @@ impl Default for StyleConfig {
             number_sections: false,
             date_format: "%e %B %Y".to_owned(),
             document_class: None,
+            class_options: None,
         }
     }
 }
