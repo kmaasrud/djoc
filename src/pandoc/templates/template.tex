@@ -453,9 +453,11 @@ $if(csquotes)$
 $endif$
 
 \begin{document}
-$if(has-frontmatter)$
-\frontmatter
-$endif$
+% User can insert this as inline LaTeX if desired
+% NOTE(01): Consider uncommenting in the future
+% $if(has-frontmatter)$
+% \frontmatter
+% $endif$
 $if(title)$
 $if(title-script)$
 $title-script$
@@ -505,9 +507,11 @@ $endif$
 $if(linestretch)$
 \setstretch{$linestretch$}
 $endif$
-$if(has-frontmatter)$
-\mainmatter
-$endif$
+% User can insert this as inline LaTeX if desired
+% NOTE(01): Consider uncommenting in the future
+% $if(has-frontmatter)$
+% \mainmatter
+% $endif$
 $body$
 
 $if(has-frontmatter)$
