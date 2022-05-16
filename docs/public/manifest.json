@@ -1,0 +1,15 @@
+{
+  "name": "MDoc documentation",
+  "short_name": "MDoc documentation",
+  "start_url": "/mdoc/",
+  "scope": "/mdoc/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "/mdoc/favicon.svg",
+      "sizes": "512x512"
+    }
+  ]
+}

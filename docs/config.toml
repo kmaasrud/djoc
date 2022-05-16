@@ -1,0 +1,8 @@
+title = "MDoc documentation"
+baseURL = "https://kmaasrud.com/mdoc"
+disableKinds = ["taxonomy", "term"]
+
+theme = "hugo-book"
+
+[author]
+name = "Knut Magnus Aasrud"

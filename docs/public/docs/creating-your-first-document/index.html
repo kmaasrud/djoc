@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="To get started with a new document, run the following command
+$ mdoc init &#34;Awesome document&#34; This will create directory named Awesome document, containing a file called mdoc.toml and a directory called src.
+ 📖 If you want to initialize a document in the current working drive, simply run mdzk init without any arguments.
+ Next, open some Markdown files in your favorite editor. These can be located anywhere inside the document directory, but the src folder is the conventional place to put them.">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="" />
+<meta property="og:description" content="To get started with a new document, run the following command
+$ mdoc init &#34;Awesome document&#34; This will create directory named Awesome document, containing a file called mdoc.toml and a directory called src.
+ 📖 If you want to initialize a document in the current working drive, simply run mdzk init without any arguments.
+ Next, open some Markdown files in your favorite editor. These can be located anywhere inside the document directory, but the src folder is the conventional place to put them." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://kmaasrud.com/mdoc/docs/creating-your-first-document/" /><meta property="article:section" content="docs" />
+
+
+
+<title>Creating Your First Document | MDoc documentation</title>
+<link rel="manifest" href="/mdoc/manifest.json">
+<link rel="icon" href="/mdoc/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/mdoc/book.min.82c5dbd23447cee0b4c2aa3ed08ce0961faa40e1fa370eee4f8c9f02e0d46b5f.css" integrity="sha256-gsXb0jRHzuC0wqo&#43;0Izglh&#43;qQOH6Nw7uT4yfAuDUa18=" crossorigin="anonymous">
+  <script defer src="/mdoc/flexsearch.min.js"></script>
+  <script defer src="/mdoc/en.search.min.d58410005a7678b48ac15a8cba71f8df4a95c01f054176c644e9c037369cd8e2.js" integrity="sha256-1YQQAFp2eLSKwVqMunH430qVwB8FQXbGROnANzac2OI=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/mdoc/"><span>MDoc documentation</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/mdoc/docs/config/" class="">Config</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/mdoc/docs/creating-your-first-document/" class="active">Creating Your First Document</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/mdoc/docs/getting-started/" class="">Getting Started</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/mdoc/docs/installing/" class="">Installing</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/mdoc/docs/terminology/" class="">Terminology</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/mdoc/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Creating Your First Document</strong>
+
+  <label for="toc-control">
+    
+    <img src="/mdoc/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents"></nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown"><p>To get started with a new document, run the following command</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ mdoc init <span style="color:#e6db74">&#34;Awesome document&#34;</span>
+</code></pre></div><p>This will create directory named <code>Awesome document</code>, containing a file called <code>mdoc.toml</code> and a directory called <code>src</code>.</p>
+<blockquote>
+<p>📖 If you want to initialize a document in the current working drive, simply run <code>mdzk init</code> without any arguments.</p>
+</blockquote>
+<p>Next, open some Markdown files in your favorite editor. These can be located anywhere inside the document directory, but the <code>src</code> folder is the conventional place to put them. Go ahead and write content! You can write whatever you want, so make it something fun and be sure to add some $\TeX$ math or code listings if you want! To get your document built into a PDF, simply run</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ mdoc build
+</code></pre></div><p>This will produce a PDF called <code>awesome-document.pdf</code> in your root directory. Open it with your preferred PDF viewer and marvel at how simple it was to create this beautiful PDF - no <code>\begin{document}</code> needed!</p>
+<p>Now, you might not be blown away yet&hellip; How do I configure this document to look the way I like? Have a look inside <code>mdoc.toml</code>. This file is where you&rsquo;ll find your document&rsquo;s metadata, build instructions, styling, bibliography details and many more options. Try changing the <code>title</code> field into something else, and run <code>mdoc build</code> again to see the changes get applied.</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function a(c){const a=window.getSelection(),b=document.createRange();b.selectNodeContents(c),a.removeAllRanges(),a.addRange(b)}document.querySelectorAll("pre code").forEach(b=>{b.addEventListener("click",function(c){a(b.parentElement),navigator.clipboard&&navigator.clipboard.writeText(b.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents"></nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

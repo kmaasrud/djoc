@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Ordered lists #  To make an ordered list of items, write a decimal number, followed by a period, a space and the content you want as part of that list item.
+1. one 2. two 3. three This will produce a “compact” list. If you want a “loose” list, in which each item is formatted as a paragraph, put spaces between the items:
+5. one 34. two 8. three Only the first number is parsed, which means the above list will be formatted as the sequence 5.">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="" />
+<meta property="og:description" content="Ordered lists #  To make an ordered list of items, write a decimal number, followed by a period, a space and the content you want as part of that list item.
+1. one 2. two 3. three This will produce a “compact” list. If you want a “loose” list, in which each item is formatted as a paragraph, put spaces between the items:
+5. one 34. two 8. three Only the first number is parsed, which means the above list will be formatted as the sequence 5." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://kmaasrud.com/mdoc/markdown/lists/" /><meta property="article:section" content="markdown" />
+
+
+
+<title>Lists | MDoc documentation</title>
+<link rel="manifest" href="/mdoc/manifest.json">
+<link rel="icon" href="/mdoc/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/mdoc/book.min.82c5dbd23447cee0b4c2aa3ed08ce0961faa40e1fa370eee4f8c9f02e0d46b5f.css" integrity="sha256-gsXb0jRHzuC0wqo&#43;0Izglh&#43;qQOH6Nw7uT4yfAuDUa18=" crossorigin="anonymous">
+  <script defer src="/mdoc/flexsearch.min.js"></script>
+  <script defer src="/mdoc/en.search.min.d58410005a7678b48ac15a8cba71f8df4a95c01f054176c644e9c037369cd8e2.js" integrity="sha256-1YQQAFp2eLSKwVqMunH430qVwB8FQXbGROnANzac2OI=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/mdoc/"><span>MDoc documentation</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/mdoc/docs/config/" class="">Config</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/mdoc/docs/creating-your-first-document/" class="">Creating Your First Document</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/mdoc/docs/getting-started/" class="">Getting Started</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/mdoc/docs/installing/" class="">Installing</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/mdoc/docs/terminology/" class="">Terminology</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/mdoc/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Lists</strong>
+
+  <label for="toc-control">
+    
+    <img src="/mdoc/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#ordered-lists">Ordered lists</a></li>
+        <li><a href="#unordered-lists">Unordered lists</a></li>
+        <li><a href="#block-content-in-lists">Block content in lists</a></li>
+        <li><a href="#extra-list-types">Extra list types</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown"><h3 id="ordered-lists">
+  Ordered lists
+  <a class="anchor" href="#ordered-lists">#</a>
+</h3>
+<p>To make an ordered list of items, write a decimal number, followed by a period, a space and the content you want as part of that list item.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-markdown" data-lang="markdown"><span style="color:#66d9ef">1.</span>  one
+<span style="color:#66d9ef">2.</span>  two
+<span style="color:#66d9ef">3.</span>  three
+</code></pre></div><p>This will produce a “compact” list. If you want a “loose” list, in which each item is formatted as a paragraph, put spaces between the items:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-markdown" data-lang="markdown"><span style="color:#66d9ef">5.</span>  one
+
+<span style="color:#66d9ef">34.</span>  two
+
+<span style="color:#66d9ef">8.</span>  three
+</code></pre></div><p>Only the first number is parsed, which means the above list will be formatted as the sequence <code>5.</code>, <code>6.</code> and <code>7.</code>. You can make use of this by specifying only the starting number, and using a <code>#.</code> in place of the following numbers. However, in the name of legibilty I recommend writing the numbers as you intend them.</p>
+<p>Multiple styles of alphanumeric sequences are allowed. These are uppercase/lowercase letters and roman numerals, in addition to normal Arabic numerals. You can use the regular dot notation (<code>2.</code>), enclose the index in parentheses (<code>(i)</code>) or follow it by a single closing-parentheses (<code>a)</code>). This variation of styles is utilized when one needs a new list directly following another or to make a sublist. The following are all valid lists:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"> 9<span style="color:#f92672">)</span> Ninth
+10<span style="color:#f92672">)</span> Tenth
+11<span style="color:#f92672">)</span> Eleventh
+       i. subone
+      ii. subtwo
+     iii. subthree
+
+<span style="color:#f92672">(</span>2<span style="color:#f92672">)</span> Two
+<span style="color:#f92672">(</span>5<span style="color:#f92672">)</span> Three
+1.  One
+<span style="color:#75715e">#.  Two</span>
+</code></pre></div><p>The above will get rendered as such:</p>
+<p><img src="../../assets/lists_1.png" alt="" /></p>
+<hr>
+<h3 id="unordered-lists">
+  Unordered lists
+  <a class="anchor" href="#unordered-lists">#</a>
+</h3>
+<p>An unordered list is a list of bulleted list items that are not numbered. They work exactly like ordered lists (except the numbering of course,) but use <code>*</code>, <code>+</code> or <code>-</code> as markers.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-markdown" data-lang="markdown"><span style="color:#66d9ef">-</span> one
+<span style="color:#66d9ef">-</span> two
+<span style="color:#66d9ef">-</span> three
+</code></pre></div><p>The markers need not be flush with the left margin; they may be indented one, two, or three spaces. The marker must be followed by whitespace.</p>
+<h4 id="task-lists">
+  Task lists
+  <a class="anchor" href="#task-lists">#</a>
+</h4>
+<p>You can also make unordered lists that have a checkmark, in order to create a task list. The Github-Flavored Markdown syntax is used, which is as follows</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-markdown" data-lang="markdown"><span style="color:#66d9ef">- [ ]</span> an unchecked task list item
+<span style="color:#66d9ef">- [x]</span> checked item
+</code></pre></div><hr>
+<h3 id="block-content-in-lists">
+  Block content in lists
+  <a class="anchor" href="#block-content-in-lists">#</a>
+</h3>
+<p>A list item may contain multiple paragraphs and other block-level content. However, subsequent paragraphs must be preceded by a blank line and indented to line up with the first non-space content after the list marker.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-markdown" data-lang="markdown"><span style="color:#66d9ef">*</span> First paragraph.
+
+  Continued.
+
+<span style="color:#66d9ef">*</span> Second paragraph. With a code block, which must be indented
+  eight spaces:
+
+      { code }
+</code></pre></div><p>List items may include other lists, like in the last ordered list example. In this case the preceding blank line is optional. The nested list must be indented to line up with the first non-space character after the list marker of the containing list item.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-markdown" data-lang="markdown"><span style="color:#66d9ef">*</span> fruits
+  + apples
+    <span style="color:#66d9ef">-</span> macintosh
+    <span style="color:#66d9ef">-</span> red delicious
+  + pears
+  + peaches
+<span style="color:#66d9ef">*</span> vegetables
+  + broccoli
+  + chard
+</code></pre></div><p>Markdown allows you to write list items “lazily,” and reflow your text with a single newline instead of indenting continuation lines. However, if there are multiple paragraphs or other blocks in a list item, the first line of each must be indented.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-markdown" data-lang="markdown">+ A lazy, lazy, list
+item.
+
++ Another one; this looks
+bad but is legal.
+
+    Second paragraph of second
+list item.
+</code></pre></div><p>But what if you want to put an indented code block directly after a list? Consider the following:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-markdown" data-lang="markdown"><span style="color:#66d9ef">-</span>   item one
+<span style="color:#66d9ef">-</span>   item two
+
+    { my code block }
+</code></pre></div><p><code>{ my code block }</code> will here get treated as the second paragraph of the second list item. In order to “cut off” the list after item two, you can insert some non-indented content (an HTML comment would be a great choice,) which won’t produce visible output in any format. An example of this could be:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-markdown" data-lang="markdown"><span style="color:#66d9ef">-</span>   item one
+<span style="color:#66d9ef">-</span>   item two
+
+<span style="color:#75715e">&lt;!-- end of list --&gt;</span>
+
+    { my code block }
+</code></pre></div><hr>
+<h3 id="extra-list-types">
+  Extra list types
+  <a class="anchor" href="#extra-list-types">#</a>
+</h3>
+<h4 id="definition-lists">
+  Definition lists
+  <a class="anchor" href="#definition-lists">#</a>
+</h4>
+<p>Definition lists are made of terms and definitions of these terms, much like in a dictionary. A simple definition list is made of a single-line term followed by a colon and the definition for that term.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-markdown" data-lang="markdown">Apple
+
+:   Pomaceous fruit of plants of the genus Malus in the family Rosaceae.
+
+Orange
+
+:   The fruit of an evergreen tree of the genus Citrus.
+
+        { some code, part of Definition 2 }
+
+    Third paragraph of definition 2.
+</code></pre></div><p>Each term must fit on one line, which may optionally be followed by a blank line, and must be followed by one or more definitions. A definition begins with a <code>:</code> or <code>~</code>, which may be indented one or two spaces. A term may have multiple definitions, and each definition may consist of one or more block elements (paragraph, code block, list, etc.), each indented four spaces or one tab stop. The body of the definition (including the first line, aside from the <code>:</code> or <code>~</code>) should be indented four spaces. However, as with other Markdown lists, you can “lazily” omit indentation except at the beginning of a paragraph or other block element:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-markdown" data-lang="markdown">Term 1
+
+:   Definition
+with lazy continuation.
+
+    Second paragraph of the definition.
+</code></pre></div><p>If you leave space before the definition (as in the example above), the text of the definition will be treated as a paragraph. In some output formats, this will mean greater spacing between term/definition pairs. For a more compact definition list, omit the space before the definition:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-markdown" data-lang="markdown">Term 1
+  ~ Definition 1
+
+Term 2
+  ~ Definition 2a
+  ~ Definition 2b
+</code></pre></div><p>Note that space between items in a definition list is required.</p>
+<h4 id="numbered-example-lists">
+  Numbered example lists
+  <a class="anchor" href="#numbered-example-lists">#</a>
+</h4>
+<p>The special list marker <code>@</code> can be used for sequentially numbered examples. The first list item with a <code>@</code> marker will be numbered 1, the next 2, and so on, throughout the document. The numbered examples need not occur in a single list; each new list using <code>@</code> will take up where the last stopped. So, for example:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-markdown" data-lang="markdown">(@)  My first example will be numbered (1).
+(@)  My second example will be numbered (2).
+
+Explanation of examples.
+
+(@)  My third example will be numbered (3).
+</code></pre></div><p>Numbered examples can be labeled and referred to elsewhere in the document:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-markdown" data-lang="markdown">(@good)  This is a good example.
+
+As (@good) illustrates, ...
+</code></pre></div><p>The label can be any string of alphanumeric characters, underscores, or hyphens.</p>
+<blockquote>
+<p>📖 continuation paragraphs in example lists must always be indented four spaces, regardless of the length of the list marker. This is because example labels tend to be long, and indenting content to the first non-space character after the label would be awkward.</p>
+</blockquote>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function a(c){const a=window.getSelection(),b=document.createRange();b.selectNodeContents(c),a.removeAllRanges(),a.addRange(b)}document.querySelectorAll("pre code").forEach(b=>{b.addEventListener("click",function(c){a(b.parentElement),navigator.clipboard&&navigator.clipboard.writeText(b.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#ordered-lists">Ordered lists</a></li>
+        <li><a href="#unordered-lists">Unordered lists</a></li>
+        <li><a href="#block-content-in-lists">Block content in lists</a></li>
+        <li><a href="#extra-list-types">Extra list types</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

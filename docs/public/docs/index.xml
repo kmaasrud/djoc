@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Docs on MDoc documentation</title>
+    <link>https://kmaasrud.com/mdoc/docs/</link>
+    <description>Recent content in Docs on MDoc documentation</description>
+    <generator>Hugo -- gohugo.io</generator><atom:link href="https://kmaasrud.com/mdoc/docs/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title></title>
+      <link>https://kmaasrud.com/mdoc/docs/config/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://kmaasrud.com/mdoc/docs/config/</guid>
+      <description>In bigger document projects, you will have an mdoc.toml file at the root of your document. This file is meant to configure your document to look and behave the way you want. The available options are:
+ title (required) authors date src [build]  filename   [bib]  csl src   [style]  number-sections date-format document-classe   [latex]  packages head title-script    The title field (required) #  This field specifies the title of your document.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://kmaasrud.com/mdoc/docs/creating-your-first-document/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://kmaasrud.com/mdoc/docs/creating-your-first-document/</guid>
+      <description>To get started with a new document, run the following command
+$ mdoc init &amp;#34;Awesome document&amp;#34; This will create directory named Awesome document, containing a file called mdoc.toml and a directory called src.
+ 📖 If you want to initialize a document in the current working drive, simply run mdzk init without any arguments.
+ Next, open some Markdown files in your favorite editor. These can be located anywhere inside the document directory, but the src folder is the conventional place to put them.</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://kmaasrud.com/mdoc/docs/getting-started/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://kmaasrud.com/mdoc/docs/getting-started/</guid>
+      <description>This section will help you setup and get started with MDoc.
+ Installing Creating your first document The MDoc workflow  </description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://kmaasrud.com/mdoc/docs/installing/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://kmaasrud.com/mdoc/docs/installing/</guid>
+      <description>For the time being, you will have to compile MDoc yourself to install it. It is published on crates.io, so this is done easily by running
+$ cargo install mdoc MDoc depends on Pandoc for parsing the Markdown content. Have a look at Installing Pandoc and make sure it is available in your PATH by running pandoc -v.
+Building from source #  If you want to compile from upstream, clone the repo and install from path with these commands:</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://kmaasrud.com/mdoc/docs/terminology/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://kmaasrud.com/mdoc/docs/terminology/</guid>
+      <description>Throughout the documentation, I will use the following terminology:
+ Document: A collection of files that get built into a PDF (or other forms of output). Chapter: A subdivision of a document, likely represented by a single file.  </description>
+    </item>
+    
+  </channel>
+</rss>

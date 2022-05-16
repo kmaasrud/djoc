@@ -67,6 +67,7 @@
 
             # Handy dev tools
             convco
+            hugo
           ] ++ buildDeps ++ runtimeDeps;
         };
       }
