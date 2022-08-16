@@ -7,6 +7,13 @@ use std::io::{Read, Write};
 use std::path::{Path, PathBuf};
 use std::process::Command;
 
+/// Enum for specifying the type of a source that should be loaded
+pub(crate) enum SourceType {
+    File(PathBuf),
+    Dir(PathBuf),
+    None,
+}
+
 /// Ease-of-use function for loading a file from a path.
 pub(crate) fn read_file<P: AsRef<Path>>(path: P) -> Result<String> {
     let mut buf = String::new();

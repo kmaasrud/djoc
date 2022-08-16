@@ -48,7 +48,7 @@ impl Document {
             pandoc.push_opt(PandocOption::LuaFilter(filter.to_owned()))
         }
 
-        for bib_file in bib::get_bib_files(self.root.as_ref()).iter() {
+        for bib_file in bib::get_bib_files(self.config.bib.src.as_ref())?.iter() {
             pandoc.push_opt(PandocOption::Bibliography(bib_file.to_owned()));
         }
 
