@@ -274,7 +274,7 @@ $if(colorlinks)$
 $else$
   hidelinks,
 $endif$
-  pdfcreator={LaTeX via pandoc}}
+  pdfcreator={LaTeX via MDoc}}
 \urlstyle{same} % disable monospaced font for URLs
 $if(verbatim-in-note)$
 \VerbatimFootnotes % allow verbatim text in footnotes
@@ -453,11 +453,13 @@ $if(csquotes)$
 $endif$
 
 \begin{document}
+
 % User can insert this as inline LaTeX if desired
 % NOTE(01): Consider uncommenting in the future
 % $if(has-frontmatter)$
 % \frontmatter
 % $endif$
+
 $if(title)$
 $if(title-script)$
 $title-script$
