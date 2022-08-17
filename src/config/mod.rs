@@ -1,9 +1,15 @@
 use crate::utils::{kebab, read_file};
 
 use anyhow::Result;
-use chrono::{Local, NaiveDate, NaiveDateTime};
 use serde::{Deserialize, Serialize};
 use std::path::Path;
+use time::{
+    format_description::FormatItem, OffsetDateTime,
+    macros::format_description,
+};
+
+pub const READABLE: &[FormatItem] =
+    format_description!("[day padding:none] [month repr:long case_sensitive:false] [year]");
 
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(default, rename_all = "kebab-case")]
@@ -48,24 +54,13 @@ impl Config {
     pub(crate) fn date(&self) -> String {
         match self.date.as_deref() {
             Some("now") => {
-                let now = Local::now();
-                now.format(&self.style.date_format).to_string()
+                let now = OffsetDateTime::now_local().unwrap_or_else(|_| {
+                    OffsetDateTime::now_utc()
+                });
+                // FIXME: Dangerous unwrap
+                now.format(&READABLE).unwrap()
             }
-            Some(date) => {
-                // NOTE: When formatting with invalid format strings (e.g. time formatters when
-                // time is not available), chrono panics with a really vague message. I am unable
-                // to fix this myself and will just have to hope this does not happen.
-                //
-                // Related issue: https://github.com/chronotope/chrono/issues/575
-                // Related PR: https://github.com/chronotope/chrono/pull/614
-                if let Ok(dt) = date.parse::<NaiveDateTime>() {
-                    return dt.format(&self.style.date_format).to_string();
-                }
-                if let Ok(dt) = date.parse::<NaiveDate>() {
-                    return dt.format(&self.style.date_format).to_string();
-                }
-                date.to_owned()
-            }
+            Some(date) => date.to_owned(),
             None => String::default(),
         }
     }
@@ -131,7 +126,6 @@ impl Default for BuildConfig {
 #[serde(default, rename_all = "kebab-case")]
 pub struct StyleConfig {
     pub number_sections: bool,
-    pub date_format: String,
     pub document_class: Option<String>,
     pub class_options: Option<Vec<String>>,
 }
@@ -140,7 +134,6 @@ impl Default for StyleConfig {
     fn default() -> Self {
         Self {
             number_sections: false,
-            date_format: "%e %B %Y".to_owned(),
             document_class: None,
             class_options: None,
         }

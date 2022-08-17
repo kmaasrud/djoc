@@ -17,10 +17,10 @@ include = [
 
 [dependencies]
 dirs = "4.0.0"
-chrono = "0.4"
 ignore = "0.4.18"
 lazy_static = "1.4.0"
 serde = { version = "1.0.143", features = ["derive"] }
+time = { version = "0.3.13", default-features = false, features = ["formatting", "local-offset", "macros", "parsing"] }
 toml = "0.5.9"
 ureq = "2.5.0"
 url = "2.2.2"
