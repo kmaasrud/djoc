@@ -16,24 +16,24 @@ include = [
 
 
 [dependencies]
-dirs = "4.0"
+dirs = "4.0.0"
 chrono = "0.4"
-ignore = "0.4"
-lazy_static = "1.4"
-serde = { version = "1.0", features = ["derive"] }
-toml = "0.5"
-ureq = "2.4"
-url = "2.2"
+ignore = "0.4.18"
+lazy_static = "1.4.0"
+serde = { version = "1.0.143", features = ["derive"] }
+toml = "0.5.9"
+ureq = "2.5.0"
+url = "2.2.2"
 
 # Error handling
-anyhow = "1.0"
-thiserror = "1.0"
+anyhow = "1.0.61"
+thiserror = "1.0.32"
 
 # CLI
-structopt = "0.3"
+structopt = "0.3.26"
 
 # LaTeX
-tectonic = { version = "0.8", default-features = false, features = ["geturl-reqwest", "native-tls-vendored"] }
+tectonic = { version = "0.9.0", default-features = false, features = ["geturl-reqwest", "native-tls-vendored"] }
 
 
 [profile.release]
