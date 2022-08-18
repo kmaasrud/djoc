@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="/mdoc/normalize.min.6dec53ee20f5bc2905289325994cab42171978d2d264472563bf2e1eab0da1cd.css" />
 
 
-<link rel="stylesheet" href="/mdoc/main.min.5a9d193283bef97433322c279f98fa76e10743d2ba45401fe956e12a1efc9b93.css" />
+<link rel="stylesheet" href="/mdoc/main.min.2783f0724f814acb071aab731d45fd1d237e28c178f4f597d9231937bc78d8b3.css" />
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.css" integrity="sha384-ZPe7yZ91iWxYumsBEOn7ieg8q/o+qh/hQpSaPow8T6BwALcXSCS6C6fSRPIAnTQs" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.js" integrity="sha384-ljao5I1l+8KYFXG7LNEA7DyaFvuvSCmedUf6Y6JI7LJqiu8q5dEivP2nDdFH31V4" crossorigin="anonymous"></script>
@@ -79,7 +79,7 @@
       
         <details >
           <summary class="">
-            Markdown
+            Markup
           </summary>
           <ul class="sub-menu">
             
@@ -131,16 +131,32 @@
         Installing
       </h2>
       <article>
-        <p>For the time being, you will have to compile MDoc yourself to install it. It is published on <a href="https://crates.io/crates/mdoc">crates.io</a>, so this is done easily by running</p>
-<pre tabindex="0"><code>$ cargo install mdoc
-</code></pre><p>MDoc depends on <a href="https://pandoc.org/">Pandoc</a> for parsing the Markdown content. Have a look at <a href="https://pandoc.org/installing.html">Installing Pandoc</a> and make sure it is available in your <code>PATH</code> by running <code>pandoc -v</code>.</p>
-<h3 id="building-from-source">Building from source</h3>
+        <p>MDoc depends on <a href="https://pandoc.org/">Pandoc</a> for parsing the Markdown content, so you have to make sure it is installed first. Have a look at <a href="https://pandoc.org/installing.html">Installing Pandoc</a> and make sure Pandoc is available in your <code>PATH</code> by running <code>pandoc -v</code>.</p>
+<h2 id="pre-built-binaries">Pre-built binaries</h2>
+<p>There are a range of pre-built binaries available on the <a href="https://github.com/kmaasrud/mdoc/releases">GitHub releases page</a>. Simply download the correct archive for your platform, extract it and move the binary to somewhere in your <code>PATH</code>. The binary is self-contained, so you don&rsquo;t have to do anything else.</p>
+<h2 id="package-managers">Package managers</h2>
+<p>MDoc can be installed with the following package managers:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Package manager</th>
+<th style="text-align:left">Install command</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><a href="https://crates.io/crates/mdoc">Cargo</a></td>
+<td style="text-align:left"><code>cargo install mdoc</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="building-from-source">Building from source</h2>
 <p>If you want to compile from upstream, clone <a href="https://github.com/kmaasrud/mdoc">the repo</a> and install from path with these commands:</p>
 <pre tabindex="0"><code>$ git clone https://github.com/kmaasrud/mdoc.git
 $ cd mdoc
 $ cargo install --path .
 </code></pre><p>Tectonic needs a few <a href="https://tectonic-typesetting.github.io/book/latest/howto/build-tectonic/index.html#third-party-dependencies">third party C dependencies</a> when building. Depending on your platform, you might not have them available. You can either install them manually, or you can try one of the methods explained below.</p>
-<h4 id="using-nix">Using Nix</h4>
+<h3 id="using-nix">Using Nix</h3>
 <p>For Unix-based systems (or Windows with WSL,) this method is definitely recommended.</p>
 <ol>
 <li>
@@ -160,7 +176,7 @@ $ cd mdoc
 <blockquote>
 <p>📖 All dependencies are compiled statically into the binary with the exception of Pandoc. This means you can safely exit the Nix shell and run your compiled MDoc, as long as you have Pandoc installed on your system.</p>
 </blockquote>
-<h4 id="using-vcpkg">Using VCPKG</h4>
+<h3 id="using-vcpkg">Using VCPKG</h3>
 <p>A fully cross-platform solution is to use VCPKG to handle the dependencies. First install <code>cargo-vcpkg</code> by running</p>
 <pre tabindex="0"><code>$ cargo install cargo-vcpkg
 </code></pre><p>Then obtain the dependencies with</p>

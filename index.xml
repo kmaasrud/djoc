@@ -106,9 +106,8 @@ An inline ![image](foo.jpg){#id .class width=30 height=20px} and a reference ![i
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://kmaasrud.com/mdoc/installing/</guid>
-      <description>For the time being, you will have to compile MDoc yourself to install it. It is published on crates.io, so this is done easily by running
-$ cargo install mdoc MDoc depends on Pandoc for parsing the Markdown content. Have a look at Installing Pandoc and make sure it is available in your PATH by running pandoc -v.
-Building from source If you want to compile from upstream, clone the repo and install from path with these commands:</description>
+      <description>MDoc depends on Pandoc for parsing the Markdown content, so you have to make sure it is installed first. Have a look at Installing Pandoc and make sure Pandoc is available in your PATH by running pandoc -v.
+Pre-built binaries There are a range of pre-built binaries available on the GitHub releases page. Simply download the correct archive for your platform, extract it and move the binary to somewhere in your PATH.</description>
     </item>
     
     <item>
