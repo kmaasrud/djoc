@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>General formatting - MDoc</title>
+    <title>Why Markdown? - MDoc</title>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
@@ -83,7 +83,7 @@
           </summary>
           <ul class="sub-menu">
             
-              <li class="">
+              <li class="active">
                 <a href="/mdoc/markdown/why-markdown/">Why Markdown?</a>
               </li>
             
@@ -95,7 +95,7 @@
                 <a href="/mdoc/markdown/headings/">Headings</a>
               </li>
             
-              <li class="active">
+              <li class="">
                 <a href="/mdoc/markdown/formatting/">General formatting</a>
               </li>
             
@@ -128,27 +128,16 @@
 
     <main>
       <h2 class="post-title">
-        General formatting
+        Why Markdown?
       </h2>
       <article>
-        <h3 id="bold-and-italic-text">Bold and italic text</h3>
-<p>To make text <em>italic</em>, surround it with single <code>*</code> or <code>_</code> symbols, like this:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-markdown" data-lang="markdown"><span style="display:flex;"><span>This text is <span style="color:#000;font-style:italic">_italicized with underscores_</span>, and this
-</span></span><span style="display:flex;"><span>is <span style="color:#000;font-style:italic">*italicized with asterisks*</span>.
-</span></span></code></pre></div><p>Surrounding with double <code>*</code> or <code>_</code> symbols, produces <strong>bold</strong> text, e.g.</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-markdown" data-lang="markdown"><span style="display:flex;"><span>This is <span style="font-weight:bold">**bold text**</span> and <span style="font-weight:bold">__with underscores__</span>.
-</span></span></code></pre></div><p>A <code>*</code> or <code>_</code> character surrounded by spaces, or backslash-escaped, will not trigger emphasis:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>This is * not emphasized *, and <span style="color:#d14">\*</span>neither is this<span style="color:#d14">\*</span>.
-</span></span></code></pre></div><p>Because <code>_</code> is sometimes used inside words or identifiers, Pandoc will not interpret <code>_</code> as a marker if it&rsquo;s surrounded by characters. For this reason, it is advised to use <code>*</code> to avoid having to shift markers throughout the text.</p>
-<h3 id="strikeout">Strikeout</h3>
-<p>You can <del>strikeout</del> text by surrounding it with <code>~~</code>. For example:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-markdown" data-lang="markdown"><span style="display:flex;"><span>This <span style="color:#000;background-color:#fdd">~~is deleted text.~~</span>
-</span></span></code></pre></div><h3 id="superscript-and-subscript">Superscript and subscript</h3>
-<p><!-- raw HTML omitted -->Super<!-- raw HTML omitted -->scripts may be written by surrounding the superscripted text by <code>^</code> characters (intuitively enough); <!-- raw HTML omitted -->sub<!-- raw HTML omitted -->scripts may be written by surrounding the subscripted text with <code>~</code> characters (not as intuitive.) Thus, for example,</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-markdown" data-lang="markdown"><span style="display:flex;"><span>H~2~O is a liquid.  2^10^ is 1024.
-</span></span></code></pre></div><blockquote>
-<p>📖 The text between <code>^...^</code> or <code>~...~</code> may not contain spaces or newlines. If the superscripted or subscripted text contains spaces, these spaces must be escaped with backslashes. (This is to prevent accidental superscripting and subscripting through the ordinary use of <code>~</code> and <code>^</code>, as well as bad interactions with footnotes.) Thus, if you want the letter P with ‘a cat’ in subscripts, you write <code>P~a\ cat~</code>, not <code>P~a cat~</code>.</p>
+        <p>MDoc uses Pandoc&rsquo;s flavor Markdown (with a few carefully selected additions) as it&rsquo;s markup language. This choice was a simple one; the creator of Markdown, <a href="https://daringfireball.net/projects/markdown/syntax#philosophy">John Gruber</a>, puts it best himself:</p>
+<blockquote>
+<p>Markdown is intended to be as easy-to-read and easy-to-write as is feasible. Readability, however, is emphasized above all else. A Markdown-formatted document should be publishable as-is, as plain text, without looking like it’s been marked up with tags or formatting instructions.</p>
 </blockquote>
+<p>This is at the heart of most of my choices when creating MDoc, as I&rsquo;m sure also was the case for <a href="https://johnmacfarlane.net/">John MacFarlane</a> when he made the canonical additions that make up Pandoc Markdown.</p>
+<p>But why yet another Markdown flavor? Well, the goals of Pandoc, and subsequently of MDoc, is to produce a more complex output than a simple HTML page. To conform with the abovementioned philosophy, writing inline HTML or TeX (although permitted) to achieve this complexity, is simply not good enough. Thus, a few additions are needed, but should come as second nature to those already familiar with Markdown.</p>
+<p>This part of the documentation contains a modified copy of <a href="https://pandoc.org/MANUAL.html#pandocs-markdown">Pandoc&rsquo;s User Guide</a>. I&rsquo;ve done this to explain the syntax at the perspective of MDoc&rsquo;s goals and to specify the changes and conventions MDoc introduces.</p>
 
       </article>
     </main>

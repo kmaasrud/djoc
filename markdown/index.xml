@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Markdowns on MDoc documentation</title>
+    <title>Markdowns on MDoc</title>
     <link>https://kmaasrud.com/mdoc/markdown/</link>
-    <description>Recent content in Markdowns on MDoc documentation</description>
-    <generator>Hugo -- gohugo.io</generator><atom:link href="https://kmaasrud.com/mdoc/markdown/index.xml" rel="self" type="application/rss+xml" />
+    <description>Recent content in Markdowns on MDoc</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language><atom:link href="https://kmaasrud.com/mdoc/markdown/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title></title>
+      <title>Block quotes</title>
       <link>https://kmaasrud.com/mdoc/markdown/block-quotes/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
@@ -16,41 +17,41 @@
     </item>
     
     <item>
-      <title></title>
+      <title>Code</title>
       <link>https://kmaasrud.com/mdoc/markdown/code/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://kmaasrud.com/mdoc/markdown/code/</guid>
-      <description>Indented code blocks #  A block of text indented four spaces (or one tab) is treated as a code block. For example,
+      <description>Indented code blocks A block of text indented four spaces (or one tab) is treated as a code block. For example,
 Paragraph here if (a &amp;gt; 3) { moveShip(5 * gravity, DOWN); } The initial (four space or one tab) indentation is not considered part of the verbatim text, and is removed in the output.
-Fenced code blocks #  In addition to standard indented code blocks, you can write fenced code blocks.</description>
+Fenced code blocks In addition to standard indented code blocks, you can write fenced code blocks.</description>
     </item>
     
     <item>
-      <title></title>
+      <title>General formatting</title>
       <link>https://kmaasrud.com/mdoc/markdown/formatting/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://kmaasrud.com/mdoc/markdown/formatting/</guid>
-      <description>Bold and italic text #  To make text italic, surround it with single * or _ symbols, like this:
+      <description>Bold and italic text To make text italic, surround it with single * or _ symbols, like this:
 This text is _italicized with underscores_, and this is *italicized with asterisks*. Surrounding with double * or _ symbols, produces bold text, e.g.
 This is **bold text** and __with underscores__. A * or _ character surrounded by spaces, or backslash-escaped, will not trigger emphasis:
 This is * not emphasized *, and \*neither is this\*.</description>
     </item>
     
     <item>
-      <title></title>
+      <title>Headings</title>
       <link>https://kmaasrud.com/mdoc/markdown/headings/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://kmaasrud.com/mdoc/markdown/headings/</guid>
       <description>There are two kinds of headings: Setext and ATX. They are equivalent, so choose the style you prefer. Both heading types can contain inline formatting or math.
-ATX headers #  An ATX heading consists of one to six # signs and a line of text, optionally followed by any number of # signs. The number of # signs at the beginning of the line is the heading level:
-## A level-two heading  A paragraph or some other content.</description>
+ATX headers An ATX heading consists of one to six # signs and a line of text, optionally followed by any number of # signs. The number of # signs at the beginning of the line is the heading level:
+## A level-two heading A paragraph or some other content.</description>
     </item>
     
     <item>
-      <title></title>
+      <title>Images and figures</title>
       <link>https://kmaasrud.com/mdoc/markdown/images-and-figures/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
@@ -61,45 +62,45 @@ An inline ![image](foo.jpg){#id .class width=30 height=20px} and a reference ![i
     </item>
     
     <item>
-      <title></title>
+      <title>Lists</title>
       <link>https://kmaasrud.com/mdoc/markdown/lists/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://kmaasrud.com/mdoc/markdown/lists/</guid>
-      <description>Ordered lists #  To make an ordered list of items, write a decimal number, followed by a period, a space and the content you want as part of that list item.
+      <description>Ordered lists To make an ordered list of items, write a decimal number, followed by a period, a space and the content you want as part of that list item.
 1. one 2. two 3. three This will produce a “compact” list. If you want a “loose” list, in which each item is formatted as a paragraph, put spaces between the items:
 5. one 34. two 8. three Only the first number is parsed, which means the above list will be formatted as the sequence 5.</description>
     </item>
     
     <item>
-      <title></title>
-      <link>https://kmaasrud.com/mdoc/markdown/markdown/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://kmaasrud.com/mdoc/markdown/markdown/</guid>
-      <description>MDoc uses Pandoc Markdown (with a few carefully selected additions) as it&amp;rsquo;s markup language. This choice was a simple one; the creator of Markdown, John Gruber, puts it best himself:
- Markdown is intended to be as easy-to-read and easy-to-write as is feasible. Readability, however, is emphasized above all else. A Markdown-formatted document should be publishable as-is, as plain text, without looking like it’s been marked up with tags or formatting instructions.</description>
-    </item>
-    
-    <item>
-      <title></title>
+      <title>Math</title>
       <link>https://kmaasrud.com/mdoc/markdown/math/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://kmaasrud.com/mdoc/markdown/math/</guid>
-      <description>Inline math #  Anything between two $ characters will be treated as TeX math. For an excellent reference on what is possible here, have a look at the TeX reference card.
+      <description>Inline math Anything between two $ characters will be treated as TeX math. For an excellent reference on what is possible here, have a look at the TeX reference card.
 The opening $ must have a non-space character immediately to its right, while the closing $ must have a non-space character immediately to its left, and must not be followed immediately by a digit. Thus, $20,000 and $30,000 won’t parse as math.</description>
     </item>
     
     <item>
-      <title></title>
+      <title>Paragraphs</title>
       <link>https://kmaasrud.com/mdoc/markdown/paragraphs/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://kmaasrud.com/mdoc/markdown/paragraphs/</guid>
       <description>A paragraph is one or more lines of text followed by one or more blank lines. Newlines are treated as spaces, so you can reflow your paragraphs as you like. Pandoc&amp;rsquo;s Markdown is strict, so if you need a hard line break, you have three options:
-  Use two newlines or more (essentially separating each paragraph by a blank line). This is the recommended and most readable way.
-This is the first paragraph This is the second paragraph   Use a backslash directly followed by a single newline.</description>
+Use two newlines or more (essentially separating each paragraph by a blank line). This is the recommended and most readable way.
+This is the first paragraph This is the second paragraph Use a backslash directly followed by a single newline.</description>
+    </item>
+    
+    <item>
+      <title>Why Markdown?</title>
+      <link>https://kmaasrud.com/mdoc/markdown/why-markdown/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://kmaasrud.com/mdoc/markdown/why-markdown/</guid>
+      <description>MDoc uses Pandoc&amp;rsquo;s flavor Markdown (with a few carefully selected additions) as it&amp;rsquo;s markup language. This choice was a simple one; the creator of Markdown, John Gruber, puts it best himself:
+Markdown is intended to be as easy-to-read and easy-to-write as is feasible. Readability, however, is emphasized above all else. A Markdown-formatted document should be publishable as-is, as plain text, without looking like it’s been marked up with tags or formatting instructions.</description>
     </item>
     
   </channel>

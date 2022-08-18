@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Usages on MDoc</title>
+    <link>https://kmaasrud.com/mdoc/usage/</link>
+    <description>Recent content in Usages on MDoc</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language><atom:link href="https://kmaasrud.com/mdoc/usage/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Commands</title>
+      <link>https://kmaasrud.com/mdoc/usage/commands/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://kmaasrud.com/mdoc/usage/commands/</guid>
+      <description>WIP&amp;hellip;</description>
+    </item>
+    
+    <item>
+      <title>Configuring MDoc</title>
+      <link>https://kmaasrud.com/mdoc/usage/config/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://kmaasrud.com/mdoc/usage/config/</guid>
+      <description>In bigger document projects, you will have an mdoc.toml file at the root of your document. This file is meant to configure your document to look and behave the way you want. The available options are:
+title (required) authors date src [build] filename [bib] csl src [style] number-sections date-format document-classe [latex] packages head title-script The title field (required) This field specifies the title of your document. It will be used for the title at the top of your generated PDF and to derive the filename of your output (unless another filename is specified.</description>
+    </item>
+    
+    <item>
+      <title>Getting started</title>
+      <link>https://kmaasrud.com/mdoc/usage/getting-started/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://kmaasrud.com/mdoc/usage/getting-started/</guid>
+      <description>Throughout the documentation, I will use the following terminology:
+Document: A collection of files that get built into a PDF (or other forms of output). Chapter: A subdivision of a document, likely represented by a single file. To get started with a new document, run the following command
+$ mdoc init &amp;#34;Awesome document&amp;#34; This will create directory named Awesome document, containing a file called mdoc.toml and a directory called src.</description>
+    </item>
+    
+    <item>
+      <title>Handling your bibliography</title>
+      <link>https://kmaasrud.com/mdoc/usage/bibliography/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://kmaasrud.com/mdoc/usage/bibliography/</guid>
+      <description>WIP&amp;hellip;</description>
+    </item>
+    
+    <item>
+      <title>The MDoc workflow</title>
+      <link>https://kmaasrud.com/mdoc/usage/workflow/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://kmaasrud.com/mdoc/usage/workflow/</guid>
+      <description>MDoc documents are written in Pandoc&amp;rsquo;s flavor of Markdown, with a few syntactic delights sprinkled in. If at any time you feel this markup language is limiting, you can simply write inline LaTeX or HTML and it will be parsed as expected. However, I challenge you to avoid this as much as you can to get a feel for Markdown&amp;rsquo;s refreshing simplicity, and to reassess how fancy your document really needs to be.</description>
+    </item>
+    
+  </channel>
+</rss>

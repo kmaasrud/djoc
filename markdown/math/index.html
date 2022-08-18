@@ -1,305 +1,164 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
-<head>
-  <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Inline math #  Anything between two $ characters will be treated as TeX math. For an excellent reference on what is possible here, have a look at the TeX reference card.
-The opening $ must have a non-space character immediately to its right, while the closing $ must have a non-space character immediately to its left, and must not be followed immediately by a digit. Thus, $20,000 and $30,000 won’t parse as math.">
-<meta name="theme-color" content="#FFFFFF">
-<meta name="color-scheme" content="light dark"><meta property="og:title" content="" />
-<meta property="og:description" content="Inline math #  Anything between two $ characters will be treated as TeX math. For an excellent reference on what is possible here, have a look at the TeX reference card.
-The opening $ must have a non-space character immediately to its right, while the closing $ must have a non-space character immediately to its left, and must not be followed immediately by a digit. Thus, $20,000 and $30,000 won’t parse as math." />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://kmaasrud.com/mdoc/markdown/math/" /><meta property="article:section" content="markdown" />
+<html lang="en">
+  <head>
+    <title>Math - MDoc</title>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
-
-<title>Math | MDoc documentation</title>
-<link rel="manifest" href="/mdoc/manifest.json">
-<link rel="icon" href="/mdoc/favicon.png" type="image/x-icon">
-<link rel="stylesheet" href="/mdoc/book.min.82c5dbd23447cee0b4c2aa3ed08ce0961faa40e1fa370eee4f8c9f02e0d46b5f.css" integrity="sha256-gsXb0jRHzuC0wqo&#43;0Izglh&#43;qQOH6Nw7uT4yfAuDUa18=" crossorigin="anonymous">
-  <script defer src="/mdoc/flexsearch.min.js"></script>
-  <script defer src="/mdoc/en.search.min.d58410005a7678b48ac15a8cba71f8df4a95c01f054176c644e9c037369cd8e2.js" integrity="sha256-1YQQAFp2eLSKwVqMunH430qVwB8FQXbGROnANzac2OI=" crossorigin="anonymous"></script>
-<!--
-Made with Book Theme
-https://github.com/alex-shpak/hugo-book
--->
-  
-</head>
-<body dir="ltr">
-  <input type="checkbox" class="hidden toggle" id="menu-control" />
-  <input type="checkbox" class="hidden toggle" id="toc-control" />
-  <main class="container flex">
-    <aside class="book-menu">
-      <div class="book-menu-content">
-        
-  <nav>
-<h2 class="book-brand">
-  <a class="flex align-center" href="/mdoc/"><span>MDoc documentation</span>
-  </a>
-</h2>
+<link rel="stylesheet" href="/mdoc/normalize.min.6dec53ee20f5bc2905289325994cab42171978d2d264472563bf2e1eab0da1cd.css" />
 
 
-<div class="book-search">
-  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
-  <div class="book-search-spinner hidden"></div>
-  <ul id="book-search-results"></ul>
-</div>
+<link rel="stylesheet" href="/mdoc/main.min.5a9d193283bef97433322c279f98fa76e10743d2ba45401fe956e12a1efc9b93.css" />
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.css" integrity="sha384-ZPe7yZ91iWxYumsBEOn7ieg8q/o+qh/hQpSaPow8T6BwALcXSCS6C6fSRPIAnTQs" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.js" integrity="sha384-ljao5I1l+8KYFXG7LNEA7DyaFvuvSCmedUf6Y6JI7LJqiu8q5dEivP2nDdFH31V4" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/contrib/auto-render.min.js" integrity="sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR" crossorigin="anonymous"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+          delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false},
+              {left: '\\[', right: '\\]', display: true}
+          ],
+          throwOnError : false,
+        });
+    });
+</script>
 
 
-
-
-
-
-
-
-
-
-
-
-  
-
-
-
-  
+  </head>
+  <body>
+    <nav>
+  <h1><a href="/mdoc">MDoc</a></h1>
   <ul>
     
+    
       
-        <li>
-          
-  
-  
-
-  
-    <a href="/mdoc/docs/config/" class="">Config</a>
-  
-
+        <li class="">
+          <a href="/mdoc/installing/">
+            
+            <span>Installing</span>
+          </a>
         </li>
       
     
       
-        <li>
-          
-  
-  
-
-  
-    <a href="/mdoc/docs/creating-your-first-document/" class="">Creating Your First Document</a>
-  
-
-        </li>
+        <details >
+          <summary class="">
+            Usage
+          </summary>
+          <ul class="sub-menu">
+            
+              <li class="">
+                <a href="/mdoc/usage/getting-started/">Getting started</a>
+              </li>
+            
+              <li class="">
+                <a href="/mdoc/usage/workflow/">The MDoc workflow</a>
+              </li>
+            
+              <li class="">
+                <a href="/mdoc/usage/commands/">Commands</a>
+              </li>
+            
+              <li class="">
+                <a href="/mdoc/usage/config/">Configuring MDoc</a>
+              </li>
+            
+              <li class="">
+                <a href="/mdoc/usage/bibliography/">Handling your bibliography</a>
+              </li>
+            
+          </ul>
+        </details>
       
     
       
-        <li>
-          
-  
-  
-
-  
-    <a href="/mdoc/docs/getting-started/" class="">Getting Started</a>
-  
-
-        </li>
-      
-    
-      
-        <li>
-          
-  
-  
-
-  
-    <a href="/mdoc/docs/installing/" class="">Installing</a>
-  
-
-        </li>
-      
-    
-      
-        <li>
-          
-  
-  
-
-  
-    <a href="/mdoc/docs/terminology/" class="">Terminology</a>
-  
-
-        </li>
+        <details open>
+          <summary class="active">
+            Markdown
+          </summary>
+          <ul class="sub-menu">
+            
+              <li class="">
+                <a href="/mdoc/markdown/why-markdown/">Why Markdown?</a>
+              </li>
+            
+              <li class="">
+                <a href="/mdoc/markdown/paragraphs/">Paragraphs</a>
+              </li>
+            
+              <li class="">
+                <a href="/mdoc/markdown/headings/">Headings</a>
+              </li>
+            
+              <li class="">
+                <a href="/mdoc/markdown/formatting/">General formatting</a>
+              </li>
+            
+              <li class="">
+                <a href="/mdoc/markdown/code/">Code</a>
+              </li>
+            
+              <li class="active">
+                <a href="/mdoc/markdown/math/">Math</a>
+              </li>
+            
+              <li class="">
+                <a href="/mdoc/markdown/lists/">Lists</a>
+              </li>
+            
+              <li class="">
+                <a href="/mdoc/markdown/images-and-figures/">Images and figures</a>
+              </li>
+            
+              <li class="">
+                <a href="/mdoc/markdown/block-quotes/">Block quotes</a>
+              </li>
+            
+          </ul>
+        </details>
       
     
   </ul>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 </nav>
 
-
-
-
-  <script>(function(){var a=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
-
-
- 
-      </div>
-    </aside>
-
-    <div class="book-page">
-      <header class="book-header">
-        
-  <div class="flex align-center justify-between">
-  <label for="menu-control">
-    <img src="/mdoc/svg/menu.svg" class="book-icon" alt="Menu" />
-  </label>
-
-  <strong>Math</strong>
-
-  <label for="toc-control">
-    
-    <img src="/mdoc/svg/toc.svg" class="book-icon" alt="Table of Contents" />
-    
-  </label>
-</div>
-
-
-  
-  <aside class="hidden clearfix">
-    
-  
-<nav id="TableOfContents">
-  <ul>
-    <li>
-      <ul>
-        <li><a href="#inline-math">Inline math</a></li>
-        <li><a href="#display-math">Display math</a></li>
-        <li><a href="#aligned-equations">Aligned equations</a></li>
-      </ul>
-    </li>
-  </ul>
-</nav>
-
-
-
-  </aside>
-  
- 
-      </header>
-
-      
-      
-  <article class="markdown"><h3 id="inline-math">
-  Inline math
-  <a class="anchor" href="#inline-math">#</a>
-</h3>
+    <main>
+      <h2 class="post-title">
+        Math
+      </h2>
+      <article>
+        <h3 id="inline-math">Inline math</h3>
 <p>Anything between two <code>$</code> characters will be treated as TeX math. For an excellent reference on what is possible here, have a look at the <a href="https://www.math.brown.edu/johsilve/ReferenceCards/TeXRefCard.v1.5.pdf">TeX reference card</a>.</p>
-<p>The opening $ must have a non-space character immediately to its right, while the closing $ must have a non-space character immediately to its left, and must not be followed immediately by a digit. Thus, <code>$20,000</code> and <code>$30,000</code> won’t parse as math. If for some reason you need to enclose text in literal <code>$</code> characters, escape them with a blackslash and they won’t be treated as math delimiters.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-markdown" data-lang="markdown">Here is some text and here is some math: $E = mc^2$.
-</code></pre></div><h3 id="display-math">
-  Display math
-  <a class="anchor" href="#display-math">#</a>
-</h3>
+<p>The opening <code>$</code> must have a non-space character immediately to its right, while the closing <code>$</code> must have a non-space character immediately to its left, and must not be followed immediately by a digit. Thus, <code>$20,000</code> and <code>$30,000</code> won’t parse as math. If for some reason you need to enclose text in literal <code>$</code> characters, escape them with a blackslash and they won’t be treated as math delimiters.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-markdown" data-lang="markdown"><span style="display:flex;"><span>Here is some text and here is some math: $E = mc^2$.
+</span></span></code></pre></div><h3 id="display-math">Display math</h3>
 <p>For display math, use <code>$$</code> delimiters. In this case, the delimiters may be separated from the formula by whitespace. However, there can be no blank lines betwen the opening and closing delimiters.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-markdown" data-lang="markdown">$$ 1 + 2 = 3 $$
-</code></pre></div><h3 id="aligned-equations">
-  Aligned equations
-  <a class="anchor" href="#aligned-equations">#</a>
-</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-markdown" data-lang="markdown"><span style="display:flex;"><span>$$ 1 + 2 = 3 $$
+</span></span></code></pre></div><h3 id="aligned-equations">Aligned equations</h3>
 <p>To get aligned equations, you can either write inline LaTeX and use it&rsquo;s provided <code>align</code> environment. This might however make it difficult for MDoc to keep track of equation numbers and cross-referencing, so the recommendation is to use the <code>aligned</code> environment - provided by TeX - inside a <code>$$</code> delimited display math context. Consider the following example:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-markdown" data-lang="markdown">And God said
+<pre tabindex="0"><code>And God said
 
 $$ \begin{aligned}
-    \nabla \cdot \vec D <span style="color:#960050;background-color:#1e0010">&amp;</span>= \rho_\nu, \\
-    \nabla \cdot \vec B <span style="color:#960050;background-color:#1e0010">&amp;</span>= 0, \\
-    \nabla \times \vec E <span style="color:#960050;background-color:#1e0010">&amp;</span>= -\frac{\partial \vec B}{\partial t}, \\
-    \nabla \times \vec H <span style="color:#960050;background-color:#1e0010">&amp;</span>= \vec J_\text{free} + \frac{\partial \vec D}{\partial t},
+    \nabla \cdot \vec D &amp;= \rho_\nu, \\
+    \nabla \cdot \vec B &amp;= 0, \\
+    \nabla \times \vec E &amp;= -\frac{\partial \vec B}{\partial t}, \\
+    \nabla \times \vec H &amp;= \vec J_\text{free} + \frac{\partial \vec D}{\partial t},
 \end{aligned} $$
 
 and then there was light.
-</code></pre></div><p>This will get rendered as:</p>
-<p><img src="../../assets/math_1.png" alt="" /></p>
-</article>
- 
-      
+</code></pre><p>This will get rendered as:</p>
+<p>$$ \begin{aligned}
+\nabla \cdot \vec D &amp;= \rho_\nu, \\
+\nabla \cdot \vec B &amp;= 0, \\
+\nabla \times \vec E &amp;= -\frac{\partial \vec B}{\partial t}, \\
+\nabla \times \vec H &amp;= \vec J_\text{free} + \frac{\partial \vec D}{\partial t},
+\end{aligned} $$</p>
 
-      <footer class="book-footer">
-        
-  <div class="flex flex-wrap justify-between">
-
-
-
-
-
-</div>
-
-
-
-  <script>(function(){function a(c){const a=window.getSelection(),b=document.createRange();b.selectNodeContents(c),a.removeAllRanges(),a.addRange(b)}document.querySelectorAll("pre code").forEach(b=>{b.addEventListener("click",function(c){a(b.parentElement),navigator.clipboard&&navigator.clipboard.writeText(b.parentElement.textContent)})})})()</script>
-
-
- 
-        
-      </footer>
-
-      
-  
-  <div class="book-comments">
-
-</div>
-  
- 
-
-      <label for="menu-control" class="hidden book-menu-overlay"></label>
-    </div>
-
-    
-    <aside class="book-toc">
-      <div class="book-toc-content">
-        
-  
-<nav id="TableOfContents">
-  <ul>
-    <li>
-      <ul>
-        <li><a href="#inline-math">Inline math</a></li>
-        <li><a href="#display-math">Display math</a></li>
-        <li><a href="#aligned-equations">Aligned equations</a></li>
-      </ul>
-    </li>
-  </ul>
-</nav>
-
-
- 
-      </div>
-    </aside>
-    
-  </main>
-
-  
-</body>
+      </article>
+    </main>
+  </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
