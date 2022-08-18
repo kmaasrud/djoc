@@ -1,3 +1,11 @@
++++
+title = "General formatting"
+
+[menu.main]
+parent = "markdown"
+weight = 24
++++
+
 ### Bold and italic text
 
 To make text *italic*, surround it with single `*` or `_` symbols, like this:

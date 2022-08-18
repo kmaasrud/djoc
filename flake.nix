@@ -51,6 +51,23 @@
         };
         defaultPackage = packages.${pname};
 
+        # `nix build .#docs`
+        packages.docs = stdenv.mkDerivation {
+          name = "docs";
+          src = pkgs.lib.cleanSource ./docs;
+
+          buildInputs = with pkgs; [ hugo ];
+
+          buildPhase = ''
+            hugo
+          '';
+
+          installPhase = ''
+            mkdir -p $out
+            cp -r public/* $out/
+          '';
+        };
+
         # `nix run`
         apps.${pname} = utils.lib.mkApp {
           drv = packages.${pname};

@@ -1,3 +1,11 @@
++++
+title = "Headings"
+
+[menu.main]
+parent = "markdown"
+weight = 23
++++
+
 There are two kinds of headings: [Setext](#setext-headers) and [ATX](#atx-headers). They are equivalent, so choose the style you prefer. Both heading types can contain inline [formatting](formatting.md) or [math](math.md).
 
 ### ATX headers {#atx-headers}

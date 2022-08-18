@@ -1,3 +1,11 @@
++++
+title = "Images and figures"
+
+[menu.main]
+parent = "markdown"
+weight = 28
++++
+
 A link immediately preceded by a `!` will be treated as an image.
 
 ```markdown

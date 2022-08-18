@@ -1,3 +1,11 @@
++++
+title = "Paragraphs"
+
+[menu.main]
+parent = "markdown"
+weight = 22
++++
+
 A paragraph is one or more lines of text followed by one or more blank lines. Newlines are treated as spaces, so you can reflow your paragraphs as you like. Pandoc's Markdown is strict, so if you need a hard line break, you have three options:
 
 - Use two newlines or more (essentially separating each paragraph by a blank line). This is the recommended and most readable way.

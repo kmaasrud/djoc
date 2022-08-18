@@ -1,0 +1,10 @@
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+{{ $normalize := resources.Get "normalize.css" | resources.Minify | resources.Fingerprint }}
+<link rel="stylesheet" href="{{ $normalize.RelPermalink }}" />
+
+{{ $style := resources.Get "main.scss" | resources.ToCSS | resources.Minify | resources.Fingerprint }}
+<link rel="stylesheet" href="{{ $style.RelPermalink }}" />
+
+{{ partial "katex.html" }}

@@ -19,3 +19,7 @@ env.sh
 
 # Nix
 result
+
+# Hugo
+docs/resources
+docs/public

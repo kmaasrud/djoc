@@ -1,3 +1,12 @@
++++
+title = "Block quotes"
+
+[menu.main]
+name = "Block quotes"
+weight = 29
+parent = "markdown"
++++
+
 Pandoc Markdown uses email conventions for block quotes. A block quotation is one or more paragraphs or other block elements (such as lists or headings), with each line preceded by a `>` character and an optional space.
 
 ```markdown

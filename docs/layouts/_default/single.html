@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.LanguageCode }}">
+  <head>
+    <title>{{ .Title }} - {{ .Site.Title }}</title>
+    {{ partial "head-common.html" . }}
+  </head>
+  <body>
+    {{ partial "nav.html" . }}
+    <main>
+      <h2 class="post-title">
+        {{.Title}}
+      </h2>
+      <article>
+        {{.Content}}
+      </article>
+    </main>
+  </body>
+</html>

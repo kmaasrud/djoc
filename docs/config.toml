@@ -1,8 +1,24 @@
-title = "MDoc documentation"
+title = "MDoc"
 baseURL = "https://kmaasrud.com/mdoc"
+languageCode = "en"
 disableKinds = ["taxonomy", "term"]
-
-theme = "hugo-book"
 
 [author]
 name = "Knut Magnus Aasrud"
+
+[markup.goldmark.parser.attribute]
+block = true
+
+[markup.highlight]
+guessSyntax = false
+style = "github"
+
+[[menu.main]]
+identifier = "usage"
+name = "Usage"
+weight = 10
+
+[[menu.main]]
+identifier = "markdown"
+name = "Markup"
+weight = 20

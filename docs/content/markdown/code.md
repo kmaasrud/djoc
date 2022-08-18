@@ -1,3 +1,12 @@
++++
+title = "Code"
+
+[menu.main]
+name = "Code"
+weight = 25
+parent = "markdown"
++++
+
 ### Indented code blocks
 
 A block of text indented four spaces (or one tab) is treated as a code block. For example,
@@ -38,7 +47,7 @@ if (a > 3) {
 
 If you want to specify the language of the code block, you can write
 
-``````rust
+``````
 ```rust
 match foo {
     Some(a) => println!("Something: {}", a),
@@ -49,7 +58,7 @@ match foo {
 
 This is just a shorthand for attaching the language as a class, like `{.rust}`. You can attach further attributes to a fenced code block by using this syntax:
 
-```````markdown
+```````
 ```{#mycode .haskell .numberLines startFrom="100"}
 qsort []     = []
 qsort (x:xs) = qsort (filter (< x) xs) ++ [x] ++
