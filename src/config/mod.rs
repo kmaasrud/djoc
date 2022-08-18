@@ -3,10 +3,7 @@ use crate::utils::{kebab, read_file};
 use anyhow::Result;
 use serde::{Deserialize, Serialize};
 use std::path::Path;
-use time::{
-    format_description::FormatItem, OffsetDateTime,
-    macros::format_description,
-};
+use time::{format_description::FormatItem, macros::format_description, OffsetDateTime};
 
 pub const READABLE: &[FormatItem] =
     format_description!("[day padding:none] [month repr:long case_sensitive:false] [year]");
@@ -54,9 +51,7 @@ impl Config {
     pub(crate) fn date(&self) -> String {
         match self.date.as_deref() {
             Some("now") => {
-                let now = OffsetDateTime::now_local().unwrap_or_else(|_| {
-                    OffsetDateTime::now_utc()
-                });
+                let now = OffsetDateTime::now_local().unwrap_or_else(|_| OffsetDateTime::now_utc());
                 // FIXME: Dangerous unwrap
                 now.format(&READABLE).unwrap()
             }
@@ -122,22 +117,12 @@ impl Default for BuildConfig {
     }
 }
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Default, Deserialize, Serialize)]
 #[serde(default, rename_all = "kebab-case")]
 pub struct StyleConfig {
     pub number_sections: bool,
     pub document_class: Option<String>,
     pub class_options: Option<Vec<String>>,
-}
-
-impl Default for StyleConfig {
-    fn default() -> Self {
-        Self {
-            number_sections: false,
-            document_class: None,
-            class_options: None,
-        }
-    }
 }
 
 #[derive(Debug, Default, Deserialize, Serialize)]

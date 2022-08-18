@@ -1,4 +1,4 @@
-use anyhow::{bail, Context, Result};
+use anyhow::{bail, Result};
 use mdoc::{utils::write_file, DocumentBuilder};
 use std::path::{Path, PathBuf};
 
@@ -11,21 +11,27 @@ pub fn build(path: Option<PathBuf>, output_type: Option<String>) -> Result<()> {
         None => builder.build()?,
     };
 
+    // Change output type if another is supplied on the command line
     if let Some(output_type) = output_type {
         doc.config.build.output = output_type;
     }
 
-    let (data, extension) = match doc.config.build.output.as_str() {
-        "html" => (doc.html_bytes()?, "html"),
-        "latex" | "tex" => (doc.latex_bytes()?, "tex"),
-        "pdf" => (doc.pdf_bytes()?, "pdf"),
-        other => bail!("Unknown output type \"{}\"", other),
+    // Find the file extension (`latex` is an alias to `tex`)
+    let extension = doc.config.build.output.replace("latex", "tex");
+
+    // Produce the bytes according to the output type
+    let bytes = match extension.as_str() {
+        "html" => doc.html_bytes()?,
+        "tex" => doc.latex_bytes()?,
+        "pdf" => doc.pdf_bytes()?,
+        _ => bail!("Unknown output type \"{}\"", extension),
     };
 
+    // Create filename
     let filename = Path::new(&doc.config.filename()).with_extension(extension);
 
-    // Write data to file
-    write_file(&filename, &data).context("Could not write to PDF file")?;
+    // Write bytes to file
+    write_file(&filename, &bytes)?;
 
     mdoc::success!("{:?}, built!", filename);
 

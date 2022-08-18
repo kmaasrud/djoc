@@ -6,6 +6,13 @@ use mdoc::{
 use std::ffi::OsStr;
 use std::path::PathBuf;
 
+const CONFIG_PRE: &str = r#"# This is the configuration file of your document.
+# It is used to specify metadata, build instructions, styling and more.
+"#;
+
+const CONFIG_POST: &str = r#"
+# For more options, visit https://kmaasrud.com/mdoc/config"#;
+
 /// Initializes a document in the path provided. Defaults to the current directory if no path is
 /// provided.
 pub fn init(path: Option<PathBuf>) -> Result<()> {
@@ -28,9 +35,7 @@ pub fn init(path: Option<PathBuf>) -> Result<()> {
 
     // Make default config
     let mut config = String::new();
-    config.push_str("# This is the configuration file of your document.\n");
-    config.push_str("# It is used to specify metadata, build instructions, styling and more.\n\n");
-
+    config.push_str(CONFIG_PRE);
     config.push_str(&format!("title = \"{title}\"\n"));
     config.push_str("date = \"now\"\n");
 
@@ -39,7 +44,7 @@ pub fn init(path: Option<PathBuf>) -> Result<()> {
         config.push_str(&format!("authors = [\"{author}\"]\n"))
     }
 
-    config.push_str("\n# For more options, visit https://kmaasrud.com/mdoc/config");
+    config.push_str(CONFIG_POST);
 
     // Write to file
     write_file(&root.join(CONFIG_FILE), config.as_bytes())

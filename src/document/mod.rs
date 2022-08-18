@@ -124,13 +124,9 @@ impl Document {
             tidy_logs: self.config.build.tidy_logs,
         };
 
-        let config = tectonic::config::PersistentConfig::open(false)
-            .map_err(Error::Tectonic)
-            .context("Failed to open the default configuration file.")?;
-
-        let only_cached = false;
+        let config = tectonic::config::PersistentConfig::default();
         let bundle = config
-            .default_bundle(only_cached, &mut status)
+            .default_bundle(false, &mut status)
             .map_err(Error::Tectonic)
             .context("Failed to load the default resource bundle.")?;
 
