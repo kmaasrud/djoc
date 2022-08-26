@@ -23,3 +23,4 @@ result
 # Hugo
 docs/resources
 docs/public
+.hugo_build.lock
