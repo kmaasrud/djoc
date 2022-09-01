@@ -1,128 +1,63 @@
 name: Build release
 
-on:
-  push:
-    tags:
-      - '[0-9]+\.[0-9]+\.[0-9]+'
+on: [ push ]
+  # push:
+  #   tags:
+  #     - '[0-9]+\.[0-9]+\.[0-9]+'
 
 jobs:
-  publish-to-github-linux:
-    name: Publish release Linux
-    runs-on: ubuntu-latest
+  build-release:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Linux
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-musl
+            archive: tar.gz
+            archive-cmd: tar czf
+            sha-cmd: sha256sum
+          - os: ubuntu-latest
+            target: aarch64-unknown-linux-musl
+            archive: tar.gz
+            archive-cmd: tar czf
+            sha-cmd: sha256sum
+          - os: ubuntu-latest
+            target: arm-unknown-linux-musleabihf
+            archive: tar.gz
+            archive-cmd: tar czf
+            sha-cmd: sha256sum
+
+          # Darwin
+          - os: macos-latest
+            target: x86_64-apple-darwin
+            archive: zip
+            archive-cmd: zip -r
+            sha-cmd: shasum -a 256
+          - os: macos-latest
+            target: aarch64-apple-darwin
+            archive: zip
+            archive-cmd: zip -r
+            sha-cmd: shasum -a 256
+
+          # Windows
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+            archive: zip
+            archive-cmd: 7z a
+            sha-cmd: sha256sum
     steps:
     - name: Checkout repo
       uses: actions/checkout@v2
-
-    - name: Cache
-      uses: actions/cache@v2
-      with:
-        path: |
-          target
-        key: linux-stable
 
     - name: Setup Rust toolchain
       uses: actions-rs/toolchain@v1
       with:
+        profile: minimal
         toolchain: stable
         override: true
-        target: x86_64-unknown-linux-musl
-
-    - name: Install dependencies
-      run: sudo apt-get install -y libfontconfig1-dev libgraphite2-dev libharfbuzz-dev libicu-dev libssl-dev zlib1g-dev
-
-    - name: Build
-      uses: actions-rs/cargo@v1
-      with:
-        command: build
-        args: --release
-
-    - name: Package Artifacts
-      run: |
-        src=$(pwd)
-        stage=$(mktemp -d)
-        ver=${GITHUB_REF#refs/tags/}
-        asset_name="mdoc-$ver-x86_64-unknown-linux-musl.tar.gz"
-        ASSET_PATH="$src/$asset_name"
-        CHECKSUM_PATH="$ASSET_PATH.sha256"
-        cp target/release/mdoc $stage/
-        cd $stage
-        tar czf $ASSET_PATH *
-        cd $src
-        sha256sum $asset_name > $CHECKSUM_PATH
-        echo "ASSET_PATH=$ASSET_PATH" >> $GITHUB_ENV
-        echo "CHECKSUM_PATH=$CHECKSUM_PATH" >> $GITHUB_ENV
-
-    - name: Release
-      uses: softprops/action-gh-release@v1
-      if: startsWith(github.ref, 'refs/tags/')
-      with:
-        files: |
-          ${{ env.ASSET_PATH }}
-          ${{ env.CHECKSUM_PATH }}
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  publish-to-github-macos:
-    name: Publish release MacOS
-    runs-on: macos-10.15
-    steps:
-    - name: Checkout repo
-      uses: actions/checkout@v2
-
-    - name: Install Nix
-      uses: nixbuild/nix-quick-install-action@v12
-      with:
-        nix_conf: experimental-features = nix-command flakes
-
-    - name: Build with Nix
-      run: nix build
-
-    - name: Package Artifacts
-      run: |
-        src=$(pwd)
-        stage=$(mktemp -d -t tmp)
-        ver=${GITHUB_REF#refs/tags/}
-        asset_name="mdoc-$ver-x86_64-unknown-linux-musl.tar.gz"
-        ASSET_PATH="$src/$asset_name"
-        CHECKSUM_PATH="$ASSET_PATH.sha256"
-        cp result/bin/mdoc $stage/
-        cd $stage
-        zip -r $ASSET_PATH *
-        cd $src
-        shasum -a 256 $asset_name > $CHECKSUM_PATH
-        echo "ASSET_PATH=$ASSET_PATH" >> $GITHUB_ENV
-        echo "CHECKSUM_PATH=$CHECKSUM_PATH" >> $GITHUB_ENV
-
-    - name: Release
-      uses: softprops/action-gh-release@v1
-      if: startsWith(github.ref, 'refs/tags/')
-      with:
-        files: |
-          ${{ env.ASSET_PATH }}
-          ${{ env.CHECKSUM_PATH }}
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  publish-to-github-windows:
-    name: Publish release Windows
-    runs-on: windows-latest
-    steps:
-    - name: Checkout repo
-      uses: actions/checkout@v2
-
-    - name: Cache
-      uses: actions/cache@v2
-      with:
-        path: |
-          target
-        key: windows-stable
-
-    - name: Setup Rust toolchain
-      uses: actions-rs/toolchain@v1
-      with:
-        toolchain: stable
-        override: true
-        target: x86_64-pc-windows-msvc
+        target: ${{ matrix.target }}
 
     - name: Install cargo-vcpkg
       uses: actions-rs/install@v0.1
@@ -134,21 +69,42 @@ jobs:
       run: cargo vcpkg build
 
     - name: Set environment variables
+      shell: bash
       run: |
-        echo "VCPKG_ROOT=${pwd}\target\vcpkg" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
-        echo "TECTONIC_DEP_BACKEND=vcpkg" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
-        echo "RUSTFLAGS=-Ctarget-feature=+crt-static" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
+        echo "VCPKG_ROOT=$(pwd)/target/vcpkg" >> $GITHUB_ENV
+        echo "TECTONIC_DEP_BACKEND=vcpkg" >> $GITHUB_ENV
+        echo "RUSTFLAGS=-Ctarget-feature=+crt-static" >> $GITHUB_ENV
 
     - name: Build
       uses: actions-rs/cargo@v1
       with:
+        use-cross: true
         command: build
-        args: --release
+        args: --release --target ${{ matrix.target }}
+
+    - name: Package Artifacts
+      shell: bash
+      run: |
+        src=$(pwd)
+        stage=$(mktemp -d)
+        ver=${GITHUB_REF#refs/tags/}
+        asset_name="jql-$ver-${{ matrix.target }}.${{ matrix.archive }}"
+        ASSET_PATH="$src/$asset_name"
+        CHECKSUM_PATH="$ASSET_PATH.sha256"
+        cp target/${{ matrix.target }}/release/jql $stage/
+        cd $stage
+        ${{ matrix.archive-cmd }} $ASSET_PATH *
+        cd $src
+        ${{ matrix.sha-cmd }} $asset_name > $CHECKSUM_PATH
+        echo "ASSET_PATH=$ASSET_PATH" >> $GITHUB_ENV
+        echo "CHECKSUM_PATH=$CHECKSUM_PATH" >> $GITHUB_ENV
 
     - name: Release
       uses: softprops/action-gh-release@v1
       if: startsWith(github.ref, 'refs/tags/')
       with:
-        files: target/release/mdoc.exe
+        files: |
+          ${{ env.ASSET_PATH }}
+          ${{ env.CHECKSUM_PATH }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
