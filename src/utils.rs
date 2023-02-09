@@ -39,7 +39,7 @@ pub fn write_file(path: &Path, bytes: &[u8]) -> Result<()> {
     Ok(())
 }
 
-/// Finds the root of a MDoc document by looking for a `mdoc.toml` file.
+/// Finds the root of a djoc document by looking for a `djoc.toml` file.
 pub fn find_root() -> Result<PathBuf> {
     let mut path: PathBuf = std::env::current_dir().unwrap();
     let look_for = Path::new(CONFIG_FILE);
@@ -52,7 +52,7 @@ pub fn find_root() -> Result<PathBuf> {
         if !(path.pop() && path.pop()) {
             return Err(Error::Io(std::io::Error::new(
                 std::io::ErrorKind::NotFound,
-                "Unable to find an \"mdoc.toml\" file.",
+                "Unable to find an \"djoc.toml\" file.",
             )));
         }
     }
@@ -73,11 +73,11 @@ pub fn get_author_name() -> Option<String> {
     }
 }
 
-/// Finds the MDoc data directory
+/// Finds the djoc data directory
 pub fn data_dir() -> PathBuf {
     dirs::data_dir()
         .expect("Unable to get the data directory.")
-        .join("mdoc")
+        .join("djoc")
 }
 
 /// Make kebab-cased string

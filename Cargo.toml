@@ -1,39 +1,43 @@
 [package]
-name = "mdoc"
-version = "0.3.2"
+name = "djoc"
+version = "0.1.0"
 authors = ["Knut Magnus Aasrud <km@aasrud.com>"]
-description = "Modern PDF creation through Markdown and LaTeX"
+description = "Modern document writing with Djot"
 edition = "2021"
 license-file = "LICENSE"
-homepage = "https://github.com/kmaasrud/mdoc"
-repository = "https://github.com/kmaasrud/mdoc"
-include = [
-    "src/**/*.html",
-    "src/**/*.lua",
-    "src/**/*.rs",
-    "src/**/*.tex",
-]
+homepage = "https://git.sr.ht/~kmaasrud/djoc"
+repository = "https://git.sr.ht/~kmaasrud/djoc"
+include = ["src/**/*.html", "src/**/*.lua", "src/**/*.rs", "src/**/*.tex"]
 
 
 [dependencies]
 dirs = "4.0.0"
-ignore = "0.4.18"
+ignore = "0.4.20"
+jotdown = "0.1.0"
 lazy_static = "1.4.0"
-serde = { version = "1.0.143", features = ["derive"] }
-time = { version = "0.3.13", default-features = false, features = ["formatting", "local-offset", "macros", "parsing"] }
-toml = "0.5.9"
-ureq = "2.5.0"
-url = "2.2.2"
+serde = { version = "1.0.152", features = ["derive"] }
+time = { version = "0.3.17", default-features = false, features = [
+    "formatting",
+    "local-offset",
+    "macros",
+    "parsing",
+] }
+toml = "0.7.2"
+ureq = "2.6.2"
+url = "2.3.1"
 
 # Error handling
-anyhow = "1.0.61"
-thiserror = "1.0.32"
+anyhow = "1.0.69"
+thiserror = "1.0.38"
 
 # CLI
 structopt = "0.3.26"
 
 # LaTeX
-tectonic = { version = "0.9.0", default-features = false, features = ["geturl-reqwest", "native-tls-vendored"] }
+tectonic = { version = "0.12.0", default-features = false, features = [
+    "geturl-reqwest",
+    "native-tls-vendored",
+] }
 
 
 [profile.release]
@@ -47,7 +51,18 @@ strip = true
 git = "https://github.com/microsoft/vcpkg"
 rev = "master"
 [package.metadata.vcpkg.target]
-x86_64-apple-darwin = { install = ["freetype","harfbuzz[icu,graphite2]"] }
-aarch64-apple-darwin = { triplet = "arm64-osx", install = ["freetype","harfbuzz[icu,graphite2]"] }
-x86_64-unknown-linux-gnu = { install = ["fontconfig","freetype","harfbuzz[icu,graphite2]"] }
-x86_64-pc-windows-msvc = { triplet = "x64-windows-static", install = ["fontconfig","freetype","harfbuzz[icu,graphite2]"] }
+x86_64-apple-darwin = { install = ["freetype", "harfbuzz[icu,graphite2]"] }
+aarch64-apple-darwin = { triplet = "arm64-osx", install = [
+    "freetype",
+    "harfbuzz[icu,graphite2]",
+] }
+x86_64-unknown-linux-gnu = { install = [
+    "fontconfig",
+    "freetype",
+    "harfbuzz[icu,graphite2]",
+] }
+x86_64-pc-windows-msvc = { triplet = "x64-windows-static", install = [
+    "fontconfig",
+    "freetype",
+    "harfbuzz[icu,graphite2]",
+] }

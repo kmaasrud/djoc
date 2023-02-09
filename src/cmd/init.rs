@@ -1,5 +1,5 @@
 use anyhow::{Context, Result};
-use mdoc::{
+use djoc::{
     utils::{get_author_name, write_file},
     CONFIG_FILE,
 };
@@ -11,7 +11,7 @@ const CONFIG_PRE: &str = r#"# This is the configuration file of your document.
 "#;
 
 const CONFIG_POST: &str = r#"
-# For more options, visit https://kmaasrud.com/mdoc/config"#;
+# For more options, visit https://kmaasrud.com/djoc/config"#;
 
 /// Initializes a document in the path provided. Defaults to the current directory if no path is
 /// provided.
@@ -50,7 +50,7 @@ pub fn init(path: Option<PathBuf>) -> Result<()> {
     write_file(&root.join(CONFIG_FILE), config.as_bytes())
         .context("Could not write configuration to file.")?;
 
-    mdoc::success!("Created a new document in {:?}.", root);
+    djoc::success!("Created a new document in {:?}.", root);
 
     Ok(())
 }

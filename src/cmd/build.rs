@@ -1,5 +1,5 @@
 use anyhow::{bail, Result};
-use mdoc::{utils::write_file, DocumentBuilder};
+use djoc::{utils::write_file, DocumentBuilder};
 use std::path::{Path, PathBuf};
 
 /// Builds a document. If no path is provided, searches up the filetree for a document to build.
@@ -33,7 +33,7 @@ pub fn build(path: Option<PathBuf>, output_type: Option<String>) -> Result<()> {
     // Write bytes to file
     write_file(&filename, &bytes)?;
 
-    mdoc::success!("{:?}, built!", filename);
+    djoc::success!("{:?}, built!", filename);
 
     Ok(())
 }

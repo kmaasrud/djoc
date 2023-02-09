@@ -9,7 +9,7 @@
   outputs = { self, nixpkgs, utils, rust }:
     utils.lib.eachDefaultSystem (system:
       let
-        pname = "mdoc";
+        pname = "djoc";
         version =
           (builtins.fromTOML (builtins.readFile ./Cargo.toml)).package.version;
 
@@ -68,10 +68,6 @@
             [
               # Rust toolchain
               rust-bin.nightly.latest.default
-
-              # Handy dev tools
-              convco
-              hugo
             ] ++ buildDeps ++ runtimeDeps;
         };
       });

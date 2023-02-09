@@ -13,4 +13,4 @@ pub use document::DocumentBuilder;
 #[doc(inline)]
 pub use document::{Chapter, Document};
 
-pub const CONFIG_FILE: &str = "mdoc.toml";
+pub const CONFIG_FILE: &str = "djoc.toml";

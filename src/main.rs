@@ -5,18 +5,18 @@ use structopt::{clap, StructOpt};
 mod cmd;
 
 #[derive(StructOpt)]
-#[structopt(name = "MDoc", author = "Knut Magnus Aasrud")]
+#[structopt(name = "djoc", author = "Knut Magnus Aasrud")]
 /// LaTeX for the modern world.
 struct App {
     #[structopt(subcommand)]
     command: Command,
 
     #[structopt(short = "q", long = "quiet")]
-    /// Make MDoc quiet. Only errors will get reported.
+    /// Make djoc quiet. Only errors will get reported.
     quiet: bool,
 
     #[structopt(short = "d", long = "debug")]
-    /// Make MDoc's output verbose. Used for debugging.
+    /// Make djoc's output verbose. Used for debugging.
     debug: bool,
 }
 
@@ -55,9 +55,9 @@ fn run() -> Result<()> {
     let app = App::from_args_safe()?;
 
     match (app.debug, app.quiet) {
-        (false, false) => mdoc::log::set_max_level(3),
-        (true, _) => mdoc::log::set_max_level(4),
-        (false, true) => mdoc::log::set_max_level(1),
+        (false, false) => djoc::log::set_max_level(3),
+        (true, _) => djoc::log::set_max_level(4),
+        (false, true) => djoc::log::set_max_level(1),
     }
 
     match app.command {
@@ -67,7 +67,7 @@ fn run() -> Result<()> {
 
         Command::Init { path } => cmd::init(path)?,
 
-        Command::List => mdoc::info!("Listing"),
+        Command::List => djoc::info!("Listing"),
     }
 
     Ok(())
@@ -80,7 +80,7 @@ fn main() {
                 println!("{}", e)
             }
             Some(e) => {
-                mdoc::error!(
+                djoc::error!(
                     "{}",
                     e.to_string()
                         .trim_start_matches("\u{1b}[1;31merror:\u{1b}[0m ")
@@ -88,7 +88,7 @@ fn main() {
                 std::process::exit(1);
             }
             _ => {
-                mdoc::error!("{}{}", e, mdoc::log::format_chain(e.chain()));
+                djoc::error!("{}{}", e, djoc::log::format_chain(e.chain()));
                 std::process::exit(1);
             }
         }

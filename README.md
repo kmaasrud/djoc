@@ -1,14 +1,16 @@
-# MDoc
+# djoc
 
-**The power of LaTeX and simplicity of Markdown**
+**The power of LaTeX and simplicity of Djot**
 
-MDoc is a document environment and command line tool for producing academic documents. It's main focus is on user-friendliness; you write your content in Markdown (which, frankly, is a whole lot more enjoyable than writing LaTeX), and MDoc handles the rest. MDoc also comes with a bunch of tools and additions that make your writing experience smoother and A LOT faster.
+[Installing](https://kmaasrud.com/djoc/installing) - [Documentation](https://kmaasrud.com/djoc/)
 
-<!-- > It is time for academic writing to step out of it's archaic ways and into the modern world. LaTeX - for all it's greatness - is simply too complex and unreadable to be the face of academia. We can do better. -->
-
-<p align="center"><a href="https://kmaasrud.com/mdoc/installing">Installing</a> - <a href="https://kmaasrud.com/mdoc">Documentation</a></p>
+djoc is a document environment and command line tool for producing academic
+documents. It's main focus is on user-friendliness; you write your content in
+Djot (which, frankly, is a whole lot more enjoyable than writing LaTeX), and
+djoc handles the rest. MDoc also comes with a bunch of tools and additions that
+make your writing experience smoother and A LOT faster.
 
 <p align="center">
   <a href="https://crates.io/crates/mdoc"><img src="https://img.shields.io/crates/v/mdoc"></a>
-  <a href="https://docs.rs/mdoc/latest/mdoc/"><img src="https://img.shields.io/docsrs/mdoc"></a> 
+  <a href="https://docs.rs/mdoc/latest/mdoc/"><img src="https://img.shields.io/docsrs/mdoc"></a>
 </p>
