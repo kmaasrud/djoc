@@ -9,9 +9,6 @@ pub enum Error {
 
     #[error(transparent)]
     Tectonic(#[from] tectonic::Error),
-
-    #[error(transparent)]
-    Pandoc(#[from] crate::pandoc::PandocError),
 }
 
 unsafe impl Sync for Error {}

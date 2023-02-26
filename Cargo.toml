@@ -11,11 +11,25 @@ include = ["src/**/*.html", "src/**/*.lua", "src/**/*.rs", "src/**/*.tex"]
 
 
 [dependencies]
+anyhow = "1.0.69"
+clap = { version = "4.1.4", default-features = false, features = [
+    "cargo",
+    "derive",
+    "error-context",
+    "help",
+    "usage",
+    "std",
+] }
 dirs = "4.0.0"
-ignore = "0.4.20"
 jotdown = "0.1.0"
-lazy_static = "1.4.0"
+log = "0.4.17"
+rayon = "1.6.1"
 serde = { version = "1.0.152", features = ["derive"] }
+tectonic = { version = "0.12.0", default-features = false, features = [
+    "geturl-reqwest",
+    "native-tls-vendored",
+] }
+thiserror = "1.0.38"
 time = { version = "0.3.17", default-features = false, features = [
     "formatting",
     "local-offset",
@@ -25,20 +39,6 @@ time = { version = "0.3.17", default-features = false, features = [
 toml = "0.7.2"
 ureq = "2.6.2"
 url = "2.3.1"
-
-# Error handling
-anyhow = "1.0.69"
-thiserror = "1.0.38"
-
-# CLI
-structopt = "0.3.26"
-
-# LaTeX
-tectonic = { version = "0.12.0", default-features = false, features = [
-    "geturl-reqwest",
-    "native-tls-vendored",
-] }
-
 
 [profile.release]
 codegen-units = 1

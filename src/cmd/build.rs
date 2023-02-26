@@ -1,39 +1,36 @@
 use anyhow::{bail, Result};
-use djoc::{utils::write_file, DocumentBuilder};
-use std::path::{Path, PathBuf};
+use djoc::Document;
+use log::{debug, info};
+use std::{
+    fs,
+    path::{Path, PathBuf},
+};
 
 /// Builds a document. If no path is provided, searches up the filetree for a document to build.
-pub fn build(path: Option<PathBuf>, output_type: Option<String>) -> Result<()> {
+pub fn build(path: PathBuf, output: String) -> Result<()> {
     // Initialize Document
-    let builder = DocumentBuilder::new();
-    let mut doc = match path {
-        Some(path) => builder.source(path).build()?,
-        None => builder.build()?,
-    };
-
-    // Change output type if another is supplied on the command line
-    if let Some(output_type) = output_type {
-        doc.config.build.output = output_type;
-    }
+    let doc = Document::from_path(path)?;
 
     // Find the file extension (`latex` is an alias to `tex`)
-    let extension = doc.config.build.output.replace("latex", "tex");
+    let output = output.replace("latex", "tex");
 
     // Produce the bytes according to the output type
-    let bytes = match extension.as_str() {
-        "html" => doc.html_bytes()?,
-        "tex" => doc.latex_bytes()?,
-        "pdf" => doc.pdf_bytes()?,
-        _ => bail!("Unknown output type \"{}\"", extension),
+    let bytes = match output.as_str() {
+        "html" => doc.to_html_bytes(),
+        "tex" => doc.to_latex_bytes(),
+        "pdf" => doc.to_pdf_bytes()?,
+        _ => bail!("Unknown output type \"{}\"", output),
     };
 
     // Create filename
-    let filename = Path::new(&doc.config.filename()).with_extension(extension);
+    let filename = Path::new(&doc.filename()).with_extension(output);
+
+    debug!("Writing to {filename:?}");
 
     // Write bytes to file
-    write_file(&filename, &bytes)?;
+    fs::write(&filename, bytes)?;
 
-    djoc::success!("{:?}, built!", filename);
+    info!("{:?}, built!", filename);
 
     Ok(())
 }

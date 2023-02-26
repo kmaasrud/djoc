@@ -1,9 +1,8 @@
 use anyhow::{Context, Result};
-use djoc::{
-    utils::{get_author_name, write_file},
-    CONFIG_FILE,
-};
+use djoc::{utils::get_author_name, CONFIG_FILE};
+use log::info;
 use std::ffi::OsStr;
+use std::fs;
 use std::path::PathBuf;
 
 const CONFIG_PRE: &str = r#"# This is the configuration file of your document.
@@ -30,8 +29,7 @@ pub fn init(path: Option<PathBuf>) -> Result<()> {
     };
 
     // Recursively create all directories
-    std::fs::create_dir_all(&root.join("src"))
-        .context("Failed at creating the directory structure.")?;
+    fs::create_dir_all(root.join("src")).context("Failed at creating the directory structure.")?;
 
     // Make default config
     let mut config = String::new();
@@ -47,10 +45,10 @@ pub fn init(path: Option<PathBuf>) -> Result<()> {
     config.push_str(CONFIG_POST);
 
     // Write to file
-    write_file(&root.join(CONFIG_FILE), config.as_bytes())
+    fs::write(root.join(CONFIG_FILE), config.as_bytes())
         .context("Could not write configuration to file.")?;
 
-    djoc::success!("Created a new document in {:?}.", root);
+    info!("Created a new document in {:?}.", root);
 
     Ok(())
 }

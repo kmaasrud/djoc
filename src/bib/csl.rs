@@ -1,5 +1,6 @@
-use crate::utils::{data_dir, find_root, write_file};
+use crate::utils::{data_dir, find_root};
 use anyhow::{anyhow, Result};
+use log::info;
 use std::io::Read;
 use std::path::PathBuf;
 use url::Url;
@@ -44,7 +45,7 @@ pub fn get_csl(id: &str) -> Result<PathBuf> {
             .take(10_000_000)
             .read_to_end(&mut bytes)?;
 
-        write_file(&path, &bytes)?;
+        std::fs::write(&path, bytes)?;
     }
 
     Ok(path)

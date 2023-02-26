@@ -2,42 +2,8 @@ use crate::{
     error::{Error, Result},
     CONFIG_FILE,
 };
-use std::fs::{self, File};
-use std::io::{Read, Write};
 use std::path::{Path, PathBuf};
 use std::process::Command;
-
-/// Enum for specifying the type of a source that should be loaded
-pub(crate) enum SourceType {
-    File(PathBuf),
-    Dir(PathBuf),
-    None,
-}
-
-/// Ease-of-use function for loading a file from a path.
-pub(crate) fn read_file<P: AsRef<Path>>(path: P) -> Result<String> {
-    let mut buf = String::new();
-
-    File::open(&path)?.read_to_string(&mut buf)?;
-
-    Ok(buf)
-}
-
-/// Ease-of-use function for creating a file and writing bytes to it
-pub fn write_file(path: &Path, bytes: &[u8]) -> Result<()> {
-    // Ensure parent directory (if present)
-    if let Some(p) = path.parent() {
-        fs::create_dir_all(p)?;
-    }
-
-    // Create file
-    let mut f = File::create(path)?;
-
-    // Write bytes
-    f.write_all(bytes)?;
-
-    Ok(())
-}
 
 /// Finds the root of a djoc document by looking for a `djoc.toml` file.
 pub fn find_root() -> Result<PathBuf> {
@@ -62,7 +28,7 @@ pub fn find_root() -> Result<PathBuf> {
 /// Obtains author name from git config file by running the `git config` command.
 pub fn get_author_name() -> Option<String> {
     let output = Command::new("git")
-        .args(&["config", "--get", "user.name"])
+        .args(["config", "--get", "user.name"])
         .output()
         .ok()?;
 
@@ -81,9 +47,8 @@ pub fn data_dir() -> PathBuf {
 }
 
 /// Make kebab-cased string
-pub fn kebab(s: impl AsRef<str>) -> String {
-    s.as_ref()
-        .chars()
+pub fn kebab(s: &str) -> String {
+    s.chars()
         .filter_map(|ch| {
             if ch.is_alphanumeric() || ch == '_' || ch == '-' {
                 Some(ch.to_ascii_lowercase())
