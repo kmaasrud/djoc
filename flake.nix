@@ -1,74 +1,73 @@
 {
-  description = "A command line tool for writing scientific documents ";
+  description = "Modern document writing with Djot";
 
   inputs = {
-    utils.url = "github:numtide/flake-utils";
-    rust.url = "github:oxalica/rust-overlay";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+
+    crane = {
+      url = "github:ipetkov/crane";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    flake-utils.url = "github:numtide/flake-utils";
+
+    rust-overlay = {
+      url = "github:oxalica/rust-overlay";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-utils.follows = "flake-utils";
+      };
+    };
   };
 
-  outputs = { self, nixpkgs, utils, rust }:
-    utils.lib.eachDefaultSystem (system:
-      let
-        pname = "djoc";
-        version =
-          (builtins.fromTOML (builtins.readFile ./Cargo.toml)).package.version;
+  outputs = {
+    nixpkgs,
+    crane,
+    flake-utils,
+    rust-overlay,
+    ...
+  }:
+    flake-utils.lib.eachDefaultSystem (system: let
+      pkgs = import nixpkgs {
+        inherit system;
+        overlays = [(import rust-overlay)];
+      };
 
-        pkgs = import nixpkgs {
-          inherit system;
-          overlays = [ (import rust) ];
-        };
+      rust = pkgs.rust-bin.selectLatestNightlyWith (toolchain: toolchain.default);
+      craneLib = (crane.mkLib pkgs).overrideToolchain rust;
 
-        inherit (pkgs) rustPlatform mkShell stdenv lib;
-        inherit (pkgs.darwin.apple_sdk.frameworks) ApplicationServices Cocoa;
+      buildInputs = with pkgs;
+        [
+          fontconfig
+          graphite2
+          harfbuzz
+          icu
+          libpng
+          perl
+          pkg-config
+          openssl
+          zlib
+        ]
+        ++ lib.optionals stdenv.isDarwin [
+          darwin.apple_sdk.frameworks.ApplicationServices
+          darwin.apple_sdk.frameworks.Cocoa
+          libiconv
+        ];
 
-        nativeBuildInputs = with pkgs; [ pkg-config ];
+      djoc = craneLib.buildPackage {
+        inherit buildInputs;
+        src = craneLib.cleanCargoSource ./.;
+      };
+    in rec {
+      packages.default = djoc;
 
-        buildDeps = with pkgs;
-          [ fontconfig graphite2 harfbuzz icu libpng perl openssl zlib ]
-          ++ lib.optionals stdenv.isDarwin [ ApplicationServices Cocoa ];
+      apps.default = flake-utils.lib.mkApp {
+        drv = packages.default;
+      };
 
-        runtimeDeps = with pkgs; [ pandoc ];
-      in rec {
-        # `nix build`
-        packages.${pname} = rustPlatform.buildRustPackage {
-          inherit nativeBuildInputs pname version;
-          buildInputs = buildDeps;
-          propagatedBuildInputs = runtimeDeps;
-          src = ./.;
-          cargoSha256 = "sha256-hN23O/7T/kcAPjMg+PJNMJr7MGrdTewFpVqtnl509mQ=";
-        };
-        defaultPackage = packages.${pname};
-
-        # `nix build .#docs`
-        packages.docs = stdenv.mkDerivation {
-          name = "docs";
-          src = pkgs.lib.cleanSource ./docs;
-
-          buildInputs = with pkgs; [ hugo ];
-
-          buildPhase = ''
-            hugo
-          '';
-
-          installPhase = ''
-            mkdir -p $out
-            cp -r public/* $out/
-          '';
-        };
-
-        # `nix run`
-        apps.${pname} = utils.lib.mkApp { drv = packages.${pname}; };
-        defaultApp = apps.${pname};
-
-        # `nix develop`
-        devShell = mkShell {
-          inherit nativeBuildInputs;
-
-          buildInputs = with pkgs;
-            [
-              # Rust toolchain
-              rust-bin.nightly.latest.default
-            ] ++ buildDeps ++ runtimeDeps;
-        };
-      });
+      devShells.default = pkgs.mkShell {
+        inherit buildInputs;
+        nativeBuildInputs = with pkgs; [rust];
+      };
+    });
 }

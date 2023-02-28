@@ -1,16 +1,12 @@
 # djoc
 
-**The power of LaTeX and simplicity of Djot**
+djoc is a tool for producing documents with [Djot](https://djot.net). With it,
+you can write scientific documents, essays, blogs or anything in between.
 
-[Installing](https://kmaasrud.com/djoc/installing) - [Documentation](https://kmaasrud.com/djoc/)
+With djoc, you can export your documents to different formats with ease. You can
+choose from PDF, HTML, EPUB and many other formats. You can also customize the
+appearance of your documents with templates.
 
-djoc is a document environment and command line tool for producing academic
-documents. It's main focus is on user-friendliness; you write your content in
-Djot (which, frankly, is a whole lot more enjoyable than writing LaTeX), and
-djoc handles the rest. MDoc also comes with a bunch of tools and additions that
-make your writing experience smoother and A LOT faster.
-
-<p align="center">
-  <a href="https://crates.io/crates/mdoc"><img src="https://img.shields.io/crates/v/mdoc"></a>
-  <a href="https://docs.rs/mdoc/latest/mdoc/"><img src="https://img.shields.io/docsrs/mdoc"></a>
-</p>
+djoc also helps you manage your citations and references. You can easily add
+citations to your text, choose a suitable citation style and generate a
+bibliography.

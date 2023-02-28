@@ -1,14 +1,5 @@
-# Sandbox directory
-/sandbox
-
-# Ignore produced binaries
-/bin
-
 # Rust
 /target
-
-# Env script
-env.sh
 
 # MacOS
 .DS_Store
@@ -19,8 +10,3 @@ env.sh
 
 # Nix
 result
-
-# Hugo
-docs/resources
-docs/public
-.hugo_build.lock
