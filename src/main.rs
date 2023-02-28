@@ -42,11 +42,11 @@ enum Command {
 fn run() -> Result<()> {
     let app = Djoc::parse();
 
-    match (app.debug, app.quiet) {
-        (false, false) => {},
-        (true, _) => {},
-        (false, true) => {},
-    }
+    stderrlog::new()
+        .module(module_path!())
+        .quiet(app.quiet)
+        .verbosity(4)
+        .init()?;
 
     match app.command {
         Command::Build { path, output } => cmd::build(path, output)?,

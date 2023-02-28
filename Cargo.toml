@@ -25,6 +25,7 @@ jotdown = "0.1.0"
 log = "0.4.17"
 rayon = "1.6.1"
 serde = { version = "1.0.152", features = ["derive"] }
+stderrlog = "0.5.4"
 tectonic = { version = "0.12.0", default-features = false, features = [
     "geturl-reqwest",
     "native-tls-vendored",
