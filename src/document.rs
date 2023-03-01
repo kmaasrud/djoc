@@ -1,15 +1,12 @@
-use crate::{error::Error, utils::kebab, walk::Walker, Chapter};
+use crate::{error::Error, structure::DocumentDef, utils::kebab, walk::Walker, Author, Chapter};
 use anyhow::{Context, Result};
 use log::debug;
 use rayon::prelude::*;
 use std::{
-    fs::{canonicalize, read_to_string},
-    io,
+    fs, io,
     path::{Path, PathBuf},
     time::SystemTime,
 };
-
-type Author = String;
 
 #[derive(Default)]
 pub struct Document {
@@ -21,23 +18,22 @@ pub struct Document {
 
 impl Document {
     pub fn from_path(path: impl AsRef<Path>) -> io::Result<Self> {
-        let path = canonicalize(path)?;
-        let mut chapters = Vec::new();
+        let path = fs::canonicalize(path)?;
+        if path.join("djoc.toml").exists() {
+            let def: DocumentDef =
+                toml::from_str(&fs::read_to_string(path.join("djoc.toml"))?).unwrap();
+            Ok(def.try_into()?)
+        } else {
+            let mut chapters = Vec::new();
+            extend_chapters(&path, &mut chapters)?;
 
-        let walker = Walker::new(path.clone())?.filter_extensions(&["dj"]);
-
-        for path in walker {
-            debug!("Loading chapter from {path:?}...");
-            let content = read_to_string(&path)?;
-            chapters.push(Chapter::new("title", content));
+            Ok(Self {
+                chapters,
+                title: path.file_stem().unwrap().to_string_lossy().into(),
+                _root: Some(path),
+                ..Default::default()
+            })
         }
-
-        Ok(Self {
-            chapters,
-            title: path.file_stem().unwrap().to_string_lossy().into(),
-            _root: Some(path),
-            ..Default::default()
-        })
     }
 
     pub fn from(content: impl ToString) -> Self {
@@ -129,4 +125,44 @@ impl Document {
             .into()),
         }
     }
+}
+
+impl TryFrom<DocumentDef> for Document {
+    type Error = io::Error;
+
+    fn try_from(def: DocumentDef) -> Result<Self, Self::Error> {
+        let mut chapters = Vec::new();
+        for def in def.chapters {
+            if def.path.is_dir() {
+                extend_chapters(def.path, &mut chapters)?;
+            } else {
+                chapters.push(def.try_into()?);
+            }
+        }
+
+        if chapters.is_empty() {
+            extend_chapters(".", &mut chapters)?;
+        }
+
+        let mut authors = Vec::new();
+        for def in def.authors {
+            authors.push(def.into());
+        }
+
+        Ok(Self {
+            chapters,
+            title: def.title,
+            _authors: authors,
+            ..Default::default()
+        })
+    }
+}
+
+fn extend_chapters(path: impl AsRef<Path>, chapters: &mut Vec<Chapter>) -> io::Result<()> {
+    for path in Walker::new(path)?.filter_extensions(&["dj"]) {
+        debug!("Loading chapter from {path:?}...");
+        chapters.push(Chapter::from_path(path)?);
+    }
+
+    Ok(())
 }
