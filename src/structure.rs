@@ -39,9 +39,10 @@ impl<'de> Deserialize<'de> for AuthorDef {
             where
                 E: de::Error,
             {
-                let mut def = AuthorDef::default();
-                def.name = value.into();
-                Ok(def)
+                Ok(AuthorDef {
+                    name: value.into(),
+                    ..Default::default()
+                })
             }
 
             fn visit_map<M>(self, map: M) -> Result<Self::Value, M::Error>

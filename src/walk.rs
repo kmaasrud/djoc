@@ -72,8 +72,7 @@ impl Iterator for FilteredWalker {
     fn next(&mut self) -> Option<Self::Item> {
         self.inner.find(|path| {
             path.extension()
-                .map(|ext| ext.to_str().map(|ext| self.extensions.contains(&ext)))
-                .flatten()
+                .and_then(|ext| ext.to_str().map(|ext| self.extensions.contains(&ext)))
                 .unwrap_or_default()
         })
     }
