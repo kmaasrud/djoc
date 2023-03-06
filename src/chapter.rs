@@ -1,4 +1,4 @@
-use jotdown::{html, Parser};
+use jotdown::{html, Parser, Render};
 use std::{
     fs::{self, canonicalize},
     io,
@@ -34,7 +34,8 @@ impl Chapter {
     }
 
     pub fn write_html<W: io::Write>(&self, w: W) -> io::Result<()> {
-        html::write(Parser::new(&self.content), w)?;
+        let renderer = html::Renderer;
+        renderer.write(Parser::new(&self.content), w)?;
         Ok(())
     }
 

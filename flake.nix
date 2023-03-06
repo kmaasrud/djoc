@@ -33,7 +33,7 @@
         overlays = [(import rust-overlay)];
       };
 
-      rust = pkgs.rust-bin.selectLatestNightlyWith (toolchain: toolchain.default);
+      rust = pkgs.rust-bin.stable.latest.default;
       craneLib = (crane.mkLib pkgs).overrideToolchain rust;
 
       buildInputs = with pkgs;
