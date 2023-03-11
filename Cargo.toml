@@ -13,7 +13,6 @@ include = ["src/**/*.html", "src/**/*.lua", "src/**/*.rs", "src/**/*.tex"]
 [dependencies]
 anyhow = "1.0.69"
 citeproc = { git = "https://github.com/zotero/citeproc-rs.git", branch = "rustc-1.67" }
-citeproc-io = { git = "https://github.com/zotero/citeproc-rs.git", branch = "rustc-1.67" }
 clap = { version = "4.1.4", default-features = false, features = [
     "cargo",
     "derive",

@@ -29,13 +29,21 @@ enum Command {
 
         #[arg(short, long, default_value = "pdf")]
         /// The type of output you want to build to.
-        output: String,
+        format: String,
+
+        #[arg(short, long)]
+        /// The file to write to
+        output: Option<String>,
     },
 
     /// Initializes a new document.
     Init {
         /// Directory to initialize the document in.
         path: Option<PathBuf>,
+    },
+
+    Reference {
+        path: PathBuf,
     },
 }
 
@@ -49,8 +57,13 @@ fn run() -> Result<()> {
         .init()?;
 
     match app.command {
-        Command::Build { path, output } => cmd::build(path, output)?,
+        Command::Build {
+            path,
+            format,
+            output,
+        } => cmd::build(path, format, output)?,
         Command::Init { path } => cmd::init(path)?,
+        Command::Reference { path } => cmd::reference(path)?,
     }
 
     Ok(())

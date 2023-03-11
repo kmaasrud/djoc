@@ -726,7 +726,6 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "citeproc",
- "citeproc-io",
  "clap 4.1.7",
  "dirs",
  "jotdown",
