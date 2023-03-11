@@ -1,4 +1,7 @@
-use crate::{error::Error, structure::DocumentDef, utils::kebab, walk::Walker, Author, Chapter};
+use crate::{
+    error::Error, manifest::DocumentManifest, utils::kebab, walk::Walker, Author, Chapter,
+    DOC_DEF_FILE,
+};
 use anyhow::{Context, Result};
 use log::debug;
 use rayon::prelude::*;
@@ -7,6 +10,38 @@ use std::{
     path::{Path, PathBuf},
     time::SystemTime,
 };
+
+const PREAMBLE: &str = r#"\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{unicode-math}
+\defaultfontfeatures{Scale=MatchLowercase}
+\defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\usepackage{amsmath}
+\usepackage{upquote}
+\usepackage[]{microtype}
+\usepackage{bookmark}
+\usepackage{hyperref}
+\usepackage{xurl}
+\usepackage{parskip}
+\usepackage{xcolor}
+\usepackage{soul}
+
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  hidelinks,
+  pdfcreator={djoc}}
+
+\begin{document}
+"#;
+const POSTAMBLE: &str = r#"
+\end{document}"#;
 
 #[derive(Default)]
 pub struct Document {
@@ -19,9 +54,9 @@ pub struct Document {
 impl Document {
     pub fn from_path(path: impl AsRef<Path>) -> io::Result<Self> {
         let path = fs::canonicalize(path)?;
-        if path.join("djoc.toml").exists() {
-            let def: DocumentDef =
-                toml::from_str(&fs::read_to_string(path.join("djoc.toml"))?).unwrap();
+        if path.join(DOC_DEF_FILE).exists() {
+            let def: DocumentManifest =
+                toml::from_str(&fs::read_to_string(path.join(DOC_DEF_FILE))?).unwrap();
             Ok(def.try_into()?)
         } else {
             let mut chapters = Vec::new();
@@ -50,7 +85,9 @@ impl Document {
     }
 
     pub fn to_latex_bytes(&self) -> Vec<u8> {
-        self.chapters
+        let mut doc = PREAMBLE.as_bytes().to_vec();
+        let content: Vec<u8> = self
+            .chapters
             .par_iter()
             .map(|ch| {
                 let mut buf = Vec::new();
@@ -58,7 +95,10 @@ impl Document {
                 buf
             })
             .flatten()
-            .collect()
+            .collect();
+        doc.extend(content);
+        doc.extend(POSTAMBLE.bytes());
+        doc
     }
 
     pub fn to_html_bytes(&self) -> Vec<u8> {
@@ -97,6 +137,7 @@ impl Document {
             let mut sb = tectonic::driver::ProcessingSessionBuilder::default();
             sb.bundle(bundle)
                 .primary_input_buffer(&self.to_latex_bytes())
+                .keep_intermediates(true)
                 .tex_input_name(&format!("{filename}.tex"))
                 .format_name("latex")
                 .format_cache_path(format_cache_path)
@@ -127,10 +168,10 @@ impl Document {
     }
 }
 
-impl TryFrom<DocumentDef> for Document {
+impl TryFrom<DocumentManifest> for Document {
     type Error = io::Error;
 
-    fn try_from(def: DocumentDef) -> Result<Self, Self::Error> {
+    fn try_from(def: DocumentManifest) -> Result<Self, Self::Error> {
         let mut chapters = Vec::new();
         for def in def.chapters {
             if def.path.is_dir() {

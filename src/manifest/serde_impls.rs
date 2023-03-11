@@ -1,22 +1,10 @@
+use super::{AuthorManifest, ChapterManifest};
 use serde::de::{self, MapAccess, Visitor};
 use serde::{Deserialize, Deserializer};
 use std::fmt;
 use std::{fs, io, path::PathBuf, str::FromStr};
 
-#[derive(Deserialize)]
-pub struct DocumentDef {
-    pub title: String,
-    pub authors: Vec<AuthorDef>,
-    pub chapters: Vec<ChapterDef>,
-}
-
-#[derive(Default)]
-pub struct AuthorDef {
-    pub name: String,
-    pub organization: Option<String>,
-}
-
-impl<'de> Deserialize<'de> for AuthorDef {
+impl<'de> Deserialize<'de> for AuthorManifest {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
         D: Deserializer<'de>,
@@ -29,7 +17,7 @@ impl<'de> Deserialize<'de> for AuthorDef {
         struct AuthorDefVisitor;
 
         impl<'de> Visitor<'de> for AuthorDefVisitor {
-            type Value = AuthorDef;
+            type Value = AuthorManifest;
 
             fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
                 formatter.write_str("string or map")
@@ -39,9 +27,9 @@ impl<'de> Deserialize<'de> for AuthorDef {
             where
                 E: de::Error,
             {
-                Ok(AuthorDef {
+                Ok(AuthorManifest {
                     name: value.into(),
-                    ..Default::default()
+                    organization: None,
                 })
             }
 
@@ -51,7 +39,7 @@ impl<'de> Deserialize<'de> for AuthorDef {
             {
                 let aux: Aux =
                     Deserialize::deserialize(de::value::MapAccessDeserializer::new(map))?;
-                Ok(AuthorDef {
+                Ok(AuthorManifest {
                     name: aux.name,
                     organization: aux.organization,
                 })
@@ -62,12 +50,7 @@ impl<'de> Deserialize<'de> for AuthorDef {
     }
 }
 
-pub struct ChapterDef {
-    pub title: String,
-    pub path: PathBuf,
-}
-
-impl FromStr for ChapterDef {
+impl FromStr for ChapterManifest {
     type Err = io::Error;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
@@ -79,7 +62,7 @@ impl FromStr for ChapterDef {
     }
 }
 
-impl<'de> Deserialize<'de> for ChapterDef {
+impl<'de> Deserialize<'de> for ChapterManifest {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
         D: Deserializer<'de>,
@@ -92,7 +75,7 @@ impl<'de> Deserialize<'de> for ChapterDef {
         struct ChapterDefVisitor;
 
         impl<'de> Visitor<'de> for ChapterDefVisitor {
-            type Value = ChapterDef;
+            type Value = ChapterManifest;
 
             fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
                 formatter.write_str("string or map")
@@ -111,7 +94,7 @@ impl<'de> Deserialize<'de> for ChapterDef {
             {
                 let aux: Aux =
                     Deserialize::deserialize(de::value::MapAccessDeserializer::new(map))?;
-                Ok(ChapterDef {
+                Ok(ChapterManifest {
                     title: aux.title,
                     path: aux.path,
                 })

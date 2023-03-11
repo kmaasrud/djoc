@@ -5,7 +5,7 @@ use std::{
     path::{Path, PathBuf},
 };
 
-use crate::structure::ChapterDef;
+use crate::{manifest::ChapterManifest, latex};
 
 pub struct Chapter {
     pub title: String,
@@ -39,15 +39,17 @@ impl Chapter {
         Ok(())
     }
 
-    pub fn write_latex<W: io::Write>(&self, _w: W) -> io::Result<()> {
+    pub fn write_latex<W: io::Write>(&self, w: W) -> io::Result<()> {
+        let renderer = latex::Renderer::default();
+        renderer.write(Parser::new(&self.content), w)?;
         Ok(())
     }
 }
 
-impl TryFrom<ChapterDef> for Chapter {
+impl TryFrom<ChapterManifest> for Chapter {
     type Error = io::Error;
 
-    fn try_from(def: ChapterDef) -> Result<Self, Self::Error> {
+    fn try_from(def: ChapterManifest) -> Result<Self, Self::Error> {
         Ok(Self {
             title: def.title,
             content: fs::read_to_string(&def.path)?,

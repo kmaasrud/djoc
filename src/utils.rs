@@ -1,6 +1,6 @@
 use crate::{
     error::{Error, Result},
-    CONFIG_FILE,
+    DOC_DEF_FILE,
 };
 use std::path::{Path, PathBuf};
 use std::process::Command;
@@ -8,7 +8,7 @@ use std::process::Command;
 /// Finds the root of a djoc document by looking for a `djoc.toml` file.
 pub fn find_root() -> Result<PathBuf> {
     let mut path: PathBuf = std::env::current_dir().unwrap();
-    let look_for = Path::new(CONFIG_FILE);
+    let look_for = Path::new(DOC_DEF_FILE);
     loop {
         path.push(look_for);
         if path.is_file() {
