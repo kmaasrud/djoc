@@ -10,6 +10,7 @@ impl FromStr for AuthorManifest {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         Ok(Self {
             name: s.into(),
+            email: None,
             organization: None,
         })
     }
@@ -23,6 +24,7 @@ impl<'de> Deserialize<'de> for AuthorManifest {
         #[derive(Deserialize)]
         struct Aux {
             pub name: String,
+            pub email: Option<String>,
             pub organization: Option<String>,
         }
         struct AuthorDefVisitor;
@@ -49,6 +51,7 @@ impl<'de> Deserialize<'de> for AuthorManifest {
                     Deserialize::deserialize(de::value::MapAccessDeserializer::new(map))?;
                 Ok(AuthorManifest {
                     name: aux.name,
+                    email: aux.email,
                     organization: aux.organization,
                 })
             }

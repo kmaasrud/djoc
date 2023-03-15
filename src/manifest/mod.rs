@@ -42,6 +42,7 @@ pub struct DocumentManifest {
 
 pub struct AuthorManifest {
     pub name: String,
+    pub email: Option<String>,
     pub organization: Option<String>,
 }
 
