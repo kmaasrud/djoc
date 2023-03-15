@@ -4,6 +4,17 @@ use serde::{Deserialize, Deserializer};
 use std::fmt;
 use std::{fs, io, path::PathBuf, str::FromStr};
 
+impl FromStr for AuthorManifest {
+    type Err = io::Error;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(Self {
+            name: s.into(),
+            organization: None,
+        })
+    }
+}
+
 impl<'de> Deserialize<'de> for AuthorManifest {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
@@ -27,10 +38,7 @@ impl<'de> Deserialize<'de> for AuthorManifest {
             where
                 E: de::Error,
             {
-                Ok(AuthorManifest {
-                    name: value.into(),
-                    organization: None,
-                })
+                FromStr::from_str(value).map_err(|e| de::Error::custom(e))
             }
 
             fn visit_map<M>(self, map: M) -> Result<Self::Value, M::Error>
@@ -85,7 +93,7 @@ impl<'de> Deserialize<'de> for ChapterManifest {
             where
                 E: de::Error,
             {
-                Ok(FromStr::from_str(value).unwrap())
+                FromStr::from_str(value).map_err(|e| de::Error::custom(e))
             }
 
             fn visit_map<M>(self, map: M) -> Result<Self::Value, M::Error>

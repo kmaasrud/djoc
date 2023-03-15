@@ -1,11 +1,13 @@
 use serde::Deserialize;
+use toml::value::Datetime;
 use std::path::PathBuf;
 
 mod serde_impls;
 
-#[derive(Default, Deserialize)]
+#[derive(Deserialize)]
 pub struct DocumentManifest {
     pub title: String,
+    pub date: Option<Datetime>,
     pub authors: Vec<AuthorManifest>,
     pub chapters: Vec<ChapterManifest>,
 }

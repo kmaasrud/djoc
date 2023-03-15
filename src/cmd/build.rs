@@ -16,7 +16,7 @@ pub fn build(path: PathBuf, format: String, output: Option<String>) -> Result<()
     // Produce the bytes according to the output type
     let bytes = match format.as_str() {
         "html" => doc.to_html_bytes(),
-        "tex" => doc.to_latex_bytes(),
+        "tex" => doc.to_latex_bytes()?,
         "pdf" => doc.to_pdf_bytes()?,
         _ => bail!("Unknown format `{}`", format),
     };

@@ -6,10 +6,12 @@ use anyhow::{Context, Result};
 use log::debug;
 use rayon::prelude::*;
 use std::{
-    fs, io,
+    fs,
+    io::{self, Write},
     path::{Path, PathBuf},
     time::SystemTime,
 };
+use toml::value::Datetime;
 
 const PREAMBLE: &str = r#"\PassOptionsToPackage{unicode}{hyperref}
 \PassOptionsToPackage{hyphens}{url}
@@ -19,6 +21,7 @@ const PREAMBLE: &str = r#"\PassOptionsToPackage{unicode}{hyperref}
 \defaultfontfeatures{Scale=MatchLowercase}
 \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
 \usepackage{amsmath}
+\usepackage{authblk}
 \usepackage{upquote}
 \usepackage[]{microtype}
 \usepackage{bookmark}
@@ -37,17 +40,15 @@ const PREAMBLE: &str = r#"\PassOptionsToPackage{unicode}{hyperref}
 \hypersetup{
   hidelinks,
   pdfcreator={djoc}}
-
-\begin{document}
 "#;
-const POSTAMBLE: &str = r#"
-\end{document}"#;
 
 #[derive(Default)]
 pub struct Document {
     pub title: String,
     chapters: Vec<Chapter>,
-    _authors: Vec<Author>,
+    authors: Vec<Author>,
+    // TODO: Exchange with time module
+    date: Option<Datetime>,
     _root: Option<PathBuf>,
 }
 
@@ -81,11 +82,27 @@ impl Document {
     }
 
     pub fn to_latex(&self) -> Result<String> {
-        Ok(String::from_utf8(self.to_latex_bytes())?)
+        Ok(String::from_utf8(self.to_latex_bytes()?)?)
     }
 
-    pub fn to_latex_bytes(&self) -> Vec<u8> {
-        let mut doc = PREAMBLE.as_bytes().to_vec();
+    pub fn to_latex_bytes(&self) -> io::Result<Vec<u8>> {
+        let mut buf = Vec::new();
+        buf.write(PREAMBLE.as_bytes())?;
+
+        if let Some(date) = self.date {
+            buf.write(br"\date{")?;
+            buf.write(date.to_string().as_bytes())?;
+            buf.write(b"}\n")?;
+        }
+
+        for author in &self.authors {
+            buf.write(br"\author{")?;
+            buf.write(author.name.as_bytes())?;
+            buf.write(b"}\n")?;
+        }
+
+        buf.write(b"\\begin{document}\n")?;
+        buf.write(b"\\maketitle\n")?;
         let content: Vec<u8> = self
             .chapters
             .par_iter()
@@ -96,9 +113,9 @@ impl Document {
             })
             .flatten()
             .collect();
-        doc.extend(content);
-        doc.extend(POSTAMBLE.bytes());
-        doc
+        buf.write(&content)?;
+        buf.write(b"\n\\end{document}")?;
+        Ok(buf)
     }
 
     pub fn to_html_bytes(&self) -> Vec<u8> {
@@ -136,14 +153,17 @@ impl Document {
         let mut files = {
             let mut sb = tectonic::driver::ProcessingSessionBuilder::default();
             sb.bundle(bundle)
-                .primary_input_buffer(&self.to_latex_bytes())
+                .primary_input_buffer(&self.to_latex_bytes()?)
+                .filesystem_root(".djoc")
                 .keep_intermediates(true)
+                .keep_logs(true)
                 .tex_input_name(&format!("{filename}.tex"))
                 .format_name("latex")
                 .format_cache_path(format_cache_path)
                 .output_format(tectonic::driver::OutputFormat::Pdf)
-                .build_date(SystemTime::now())
-                .do_not_write_output_files();
+                .output_dir(".djoc")
+                .build_date(SystemTime::now());
+            // .do_not_write_output_files();
 
             let mut sess = sb
                 .create(&mut status)
@@ -193,7 +213,8 @@ impl TryFrom<DocumentManifest> for Document {
         Ok(Self {
             chapters,
             title: def.title,
-            _authors: authors,
+            date: def.date,
+            authors,
             ..Default::default()
         })
     }
