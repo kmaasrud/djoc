@@ -1,11 +1,10 @@
 use jotdown::{html, Parser, Render};
 use std::{
-    fs::{self, canonicalize},
-    io,
+    fs, io,
     path::{Path, PathBuf},
 };
 
-use crate::{manifest::ChapterManifest, latex};
+use crate::{latex, manifest::ChapterManifest};
 
 pub struct Chapter {
     pub title: String,
@@ -23,7 +22,7 @@ impl Chapter {
     }
 
     pub fn from_path(path: impl AsRef<Path>) -> io::Result<Self> {
-        let path = canonicalize(path)?;
+        let path = fs::canonicalize(path)?;
         let content = fs::read_to_string(&path)?;
 
         Ok(Self {
@@ -34,15 +33,11 @@ impl Chapter {
     }
 
     pub fn write_html<W: io::Write>(&self, w: W) -> io::Result<()> {
-        let renderer = html::Renderer;
-        renderer.write(Parser::new(&self.content), w)?;
-        Ok(())
+        html::Renderer.write(Parser::new(&self.content), w)
     }
 
     pub fn write_latex<W: io::Write>(&self, w: W) -> io::Result<()> {
-        let renderer = latex::Renderer::default();
-        renderer.write(Parser::new(&self.content), w)?;
-        Ok(())
+        latex::Renderer::default().write(Parser::new(&self.content), w)
     }
 }
 

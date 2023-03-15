@@ -1,14 +1,14 @@
-use crate::{
-    error::{Error, Result},
-    DOC_DEF_FILE,
+use crate::MANIFEST_FILE;
+use std::{
+    io,
+    path::{Path, PathBuf},
+    process::Command,
 };
-use std::path::{Path, PathBuf};
-use std::process::Command;
 
 /// Finds the root of a djoc document by looking for a `djoc.toml` file.
-pub fn find_root() -> Result<PathBuf> {
-    let mut path: PathBuf = std::env::current_dir().unwrap();
-    let look_for = Path::new(DOC_DEF_FILE);
+pub fn find_root<P: AsRef<Path>>(path: P) -> io::Result<PathBuf> {
+    let mut path: PathBuf = path.as_ref().into();
+    let look_for = Path::new(MANIFEST_FILE);
     loop {
         path.push(look_for);
         if path.is_file() {
@@ -16,10 +16,10 @@ pub fn find_root() -> Result<PathBuf> {
             return Ok(path);
         }
         if !(path.pop() && path.pop()) {
-            return Err(Error::Io(std::io::Error::new(
+            return Err(io::Error::new(
                 std::io::ErrorKind::NotFound,
                 "Unable to find an \"djoc.toml\" file.",
-            )));
+            ));
         }
     }
 }
@@ -50,9 +50,9 @@ pub fn data_dir() -> PathBuf {
 pub fn kebab(s: &str) -> String {
     s.chars()
         .filter_map(|ch| {
-            if ch.is_alphanumeric() || ch == '_' || ch == '-' {
+            if ch.is_alphanumeric() {
                 Some(ch.to_ascii_lowercase())
-            } else if ch.is_whitespace() {
+            } else if ch.is_whitespace() || ch == '-' {
                 Some('-')
             } else {
                 None

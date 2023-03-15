@@ -10,7 +10,7 @@ pub fn get_bib_files<P: AsRef<Path>>(path: Option<P>) -> io::Result<Vec<PathBuf>
     match path {
         Some(path) if path.as_ref().is_dir() => load_bib_files_from_dir(path),
         Some(path) if path.as_ref().is_file() => Ok(vec![path.as_ref().to_owned()]),
-        _ => load_bib_files_from_dir(find_root().unwrap_or(".".into())),
+        _ => load_bib_files_from_dir(find_root(".").unwrap_or(".".into())),
     }
 }
 

@@ -2,7 +2,7 @@
 //!
 //! The output should mostly match that of Pandoc, though there may be slight differences.
 
-use jotdown::{Container, Event, Render};
+use jotdown::{Container, Event, ListKind, Render};
 use std::fmt;
 
 #[derive(Default)]
@@ -78,7 +78,7 @@ impl Writer {
                         out.write_char('\n')?;
                     }
                     match c {
-                        Container::Paragraph => {}
+                        Container::Paragraph | Container::Section { .. } => {}
                         Container::Blockquote => out.write_str(r"\begin{quote}")?,
                         Container::Strong => out.write_str(r"\textbf{")?,
                         Container::Emphasis => out.write_str(r"\textit{")?,
@@ -91,7 +91,12 @@ impl Writer {
                         Container::Footnote { number, .. } => {
                             write!(out, r"\footnotetext[{}]{{", number)?
                         }
-                        Container::Section { .. } => {}
+                        Container::Image(dest, _) => {
+                            out.write_str("\\begin{figure}\n")?;
+                            out.write_str("\\centering\n")?;
+                            write!(out, r"\includegraphics[width=\textwidth]{{{dest}}}")?;
+                            out.write_str(r"\caption{")?;
+                        }
                         Container::Heading { level, id, .. } => {
                             out.write_str(r"\hypertarget{")?;
                             write_escaped(&mut out, &id)?;
@@ -122,20 +127,50 @@ impl Writer {
                                 false => out.write_str(r"\(")?,
                             }
                         }
+                        Container::List { kind, tight } => {
+                            out.write_str(r"\begin{")?;
+                            match kind {
+                                ListKind::Unordered => out.write_str("itemize")?,
+                                ListKind::Ordered {
+                                    numbering: _,
+                                    style: _,
+                                    start: _,
+                                } => out.write_str("enumerate")?,
+                                ListKind::Task => out.write_str("tasklist")?,
+                            }
+                            out.write_str("}")?;
+                            if tight {
+                                out.write_str("\n\\tightlist")?;
+                            }
+                        }
+                        Container::ListItem => out.write_str(r"\item")?,
+                        Container::TaskListItem { checked } => {
+                            out.write_str(r"\item")?;
+                            if checked {
+                                out.write_str(r"[\done]")?;
+                            }
+                        }
                         _ => {}
                     }
                 }
                 Event::End(c) => match c {
+                    Container::Section { .. } | Container::ListItem => {}
                     Container::Paragraph => out.write_str("\n")?,
-                    Container::Section { .. } => {}
                     Container::Heading { id, .. } => {
-                        out.write_str("}")?;
-                        out.write_str(r"\label{")?;
-                        write_escaped(&mut out, &id)?;
-                        out.write_str(r"}}")?;
+                        write!(out, r"}}\label{{{id}}}}}")?;
                         out.write_char('\n')?
                     }
                     Container::Blockquote => out.write_str("\\end{quote}\n")?,
+                    Container::Image(_, _) => out.write_str("}\n\\end{figure}\n")?,
+                    Container::List { kind, .. } => {
+                        out.write_str(r"\end{")?;
+                        match kind {
+                            ListKind::Unordered => out.write_str("itemize")?,
+                            ListKind::Ordered { .. } => out.write_str("enumerate")?,
+                            ListKind::Task => out.write_str("tasklist")?,
+                        }
+                        out.write_str("}")?;
+                    }
                     Container::Strong
                     | Container::Emphasis
                     | Container::Superscript

@@ -1,5 +1,5 @@
 use anyhow::{Context, Result};
-use djoc::{utils::get_author_name, DOC_DEF_FILE};
+use djoc::{utils::get_author_name, MANIFEST_FILE};
 use log::info;
 use std::ffi::OsStr;
 use std::fs;
@@ -45,7 +45,7 @@ pub fn init(path: Option<PathBuf>) -> Result<()> {
     config.push_str(CONFIG_POST);
 
     // Write to file
-    fs::write(root.join(DOC_DEF_FILE), config.as_bytes())
+    fs::write(root.join(MANIFEST_FILE), config.as_bytes())
         .context("Could not write configuration to file.")?;
 
     info!("Created a new document in {:?}.", root);

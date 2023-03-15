@@ -6,7 +6,7 @@ use std::path::PathBuf;
 use url::Url;
 
 pub fn get_csl(id: &str) -> Result<PathBuf> {
-    if let Ok(root) = find_root() {
+    if let Ok(root) = find_root(".") {
         // First check if id is relative path
         let path = root.join(id);
 

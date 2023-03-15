@@ -41,10 +41,6 @@ enum Command {
         /// Directory to initialize the document in.
         path: Option<PathBuf>,
     },
-
-    Reference {
-        path: PathBuf,
-    },
 }
 
 fn run() -> Result<()> {
@@ -63,7 +59,6 @@ fn run() -> Result<()> {
             output,
         } => cmd::build(path, format, output)?,
         Command::Init { path } => cmd::init(path)?,
-        Command::Reference { path } => cmd::reference(path)?,
     }
 
     Ok(())

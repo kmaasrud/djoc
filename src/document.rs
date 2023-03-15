@@ -1,8 +1,8 @@
 use crate::{
-    error::Error, manifest::DocumentManifest, utils::kebab, walk::Walker, Author, Chapter,
-    DOC_DEF_FILE,
+    error::Error, latex, manifest::DocumentManifest, utils::kebab, walk::Walker, Author, Chapter,
 };
 use anyhow::{Context, Result};
+use jotdown::{Parser, Render};
 use log::debug;
 use rayon::prelude::*;
 use std::{
@@ -14,7 +14,6 @@ use std::{
 use toml::value::Datetime;
 
 const PREAMBLE: &str = r#"\PassOptionsToPackage{unicode}{hyperref}
-\PassOptionsToPackage{hyphens}{url}
 \documentclass[]{article}
 \usepackage{lmodern}
 \usepackage{unicode-math}
@@ -30,6 +29,8 @@ const PREAMBLE: &str = r#"\PassOptionsToPackage{unicode}{hyperref}
 \usepackage{parskip}
 \usepackage{xcolor}
 \usepackage{soul}
+\usepackage{graphicx}
+\usepackage{titling}
 
 \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
 \setlength{\emergencystretch}{3em} % prevent overfull lines
@@ -40,6 +41,14 @@ const PREAMBLE: &str = r#"\PassOptionsToPackage{unicode}{hyperref}
 \hypersetup{
   hidelinks,
   pdfcreator={djoc}}
+
+% Task lists
+\usepackage{pifont}
+\newcommand{\checkbox}{\text{\fboxsep=-.15pt\fbox{\rule{0pt}{1.5ex}\rule{1.5ex}{0pt}}}}
+\newcommand{\done}{\rlap{\checkbox}{\raisebox{2pt}{\large\hspace{1pt}\ding{51}}}\hspace{-2.5pt}}
+\usepackage{enumitem}
+\newlist{tasklist}{itemize}{2}
+\setlist[tasklist]{label=\checkbox}
 "#;
 
 #[derive(Default)]
@@ -47,7 +56,6 @@ pub struct Document {
     pub title: String,
     chapters: Vec<Chapter>,
     authors: Vec<Author>,
-    // TODO: Exchange with time module
     date: Option<Datetime>,
     _root: Option<PathBuf>,
 }
@@ -55,21 +63,15 @@ pub struct Document {
 impl Document {
     pub fn from_path(path: impl AsRef<Path>) -> io::Result<Self> {
         let path = fs::canonicalize(path)?;
-        if path.join(DOC_DEF_FILE).exists() {
-            let def: DocumentManifest =
-                toml::from_str(&fs::read_to_string(path.join(DOC_DEF_FILE))?).unwrap();
-            Ok(def.try_into()?)
-        } else {
-            let mut chapters = Vec::new();
-            extend_chapters(&path, &mut chapters)?;
+        let mut chapters = Vec::new();
+        extend_chapters(&path, &mut chapters)?;
 
-            Ok(Self {
-                chapters,
-                title: path.file_stem().unwrap().to_string_lossy().into(),
-                _root: Some(path),
-                ..Default::default()
-            })
-        }
+        Ok(Self {
+            chapters,
+            title: path.file_stem().unwrap().to_string_lossy().into(),
+            _root: Some(path),
+            ..Default::default()
+        })
     }
 
     pub fn from(content: impl ToString) -> Self {
@@ -87,35 +89,42 @@ impl Document {
 
     pub fn to_latex_bytes(&self) -> io::Result<Vec<u8>> {
         let mut buf = Vec::new();
-        buf.write(PREAMBLE.as_bytes())?;
+        buf.write_all(PREAMBLE.as_bytes())?;
+
+        buf.write_all(br"\title{")?;
+        latex::Renderer::default().write(Parser::new(&self.title), &mut buf)?;
+        writeln!(buf, "}}")?;
 
         if let Some(date) = self.date {
-            buf.write(br"\date{")?;
-            buf.write(date.to_string().as_bytes())?;
-            buf.write(b"}\n")?;
+            writeln!(buf, "\\date{{{}}}", date)?;
+        } else {
+            writeln!(buf, "\\predate{{}}\n\\date{{}}\n\\postdate{{}}")?;
         }
 
+        if self.authors.is_empty() {
+            writeln!(buf, "\\preauthor{{}}\n\\postauthor{{}}\n")?;
+        }
         for author in &self.authors {
-            buf.write(br"\author{")?;
-            buf.write(author.name.as_bytes())?;
-            buf.write(b"}\n")?;
+            writeln!(buf, "\\author{{{}}}", author.name)?;
         }
 
-        buf.write(b"\\begin{document}\n")?;
-        buf.write(b"\\maketitle\n")?;
-        let content: Vec<u8> = self
-            .chapters
+        buf.write_all(b"\\begin{document}\n")?;
+        buf.write_all(b"\\maketitle\n")?;
+        buf.write_all(&self.content_to_latex())?;
+        buf.write_all(b"\n\\end{document}")?;
+        Ok(buf)
+    }
+
+    fn content_to_latex(&self) -> Vec<u8> {
+        self.chapters
             .par_iter()
-            .map(|ch| {
+            .filter_map(|ch| {
                 let mut buf = Vec::new();
-                ch.write_latex(&mut buf).ok();
-                buf
+                ch.write_latex(&mut buf).ok()?;
+                Some(buf)
             })
             .flatten()
-            .collect();
-        buf.write(&content)?;
-        buf.write(b"\n\\end{document}")?;
-        Ok(buf)
+            .collect()
     }
 
     pub fn to_html_bytes(&self) -> Vec<u8> {
@@ -136,6 +145,8 @@ impl Document {
 
     pub fn to_pdf_bytes(&self) -> Result<Vec<u8>> {
         let filename = self.filename();
+        let build_root = Path::new(".djoc").join(&filename);
+        fs::create_dir_all(&build_root)?;
 
         let mut status = crate::log::DjocTectonicStatusBackend { tidy_logs: true };
 
@@ -154,16 +165,15 @@ impl Document {
             let mut sb = tectonic::driver::ProcessingSessionBuilder::default();
             sb.bundle(bundle)
                 .primary_input_buffer(&self.to_latex_bytes()?)
-                .filesystem_root(".djoc")
+                .filesystem_root(&build_root)
                 .keep_intermediates(true)
                 .keep_logs(true)
                 .tex_input_name(&format!("{filename}.tex"))
                 .format_name("latex")
                 .format_cache_path(format_cache_path)
                 .output_format(tectonic::driver::OutputFormat::Pdf)
-                .output_dir(".djoc")
+                .output_dir(&build_root)
                 .build_date(SystemTime::now());
-            // .do_not_write_output_files();
 
             let mut sess = sb
                 .create(&mut status)
@@ -199,10 +209,6 @@ impl TryFrom<DocumentManifest> for Document {
             } else {
                 chapters.push(def.try_into()?);
             }
-        }
-
-        if chapters.is_empty() {
-            extend_chapters(".", &mut chapters)?;
         }
 
         let mut authors = Vec::new();

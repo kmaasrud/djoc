@@ -1,15 +1,43 @@
 use serde::Deserialize;
-use toml::value::Datetime;
 use std::path::PathBuf;
+use toml::value::Datetime;
 
 mod serde_impls;
+
+#[derive(Deserialize)]
+#[serde(default)]
+pub struct Common {
+    format: String,
+}
+
+impl Default for Common {
+    fn default() -> Self {
+        Self {
+            format: "pdf".into(),
+        }
+    }
+}
+
+#[derive(Deserialize)]
+pub struct GlobalManifest {
+    #[serde(alias = "document")]
+    pub documents: Vec<DocumentManifest>,
+    #[serde(flatten)]
+    common: Common,
+}
 
 #[derive(Deserialize)]
 pub struct DocumentManifest {
     pub title: String,
     pub date: Option<Datetime>,
+    #[serde(alias = "author")]
     pub authors: Vec<AuthorManifest>,
+    #[serde(alias = "chapter")]
     pub chapters: Vec<ChapterManifest>,
+    #[serde(default)]
+    pub number_sections: bool,
+    #[serde(flatten)]
+    common: Common,
 }
 
 pub struct AuthorManifest {
