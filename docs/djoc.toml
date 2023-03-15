@@ -1,0 +1,7 @@
+[[document]]
+title = "Djoc documentation"
+author = ["Knut Magnus Aasrud"]
+chapters = [
+    "src/introduction.dj",
+    "src/getting-started.dj",
+]
