@@ -7,14 +7,12 @@ mod serde_impls;
 #[derive(Deserialize)]
 #[serde(default)]
 pub struct Common {
-    format: String,
+    pub locale: String,
 }
 
 impl Default for Common {
     fn default() -> Self {
-        Self {
-            format: "pdf".into(),
-        }
+        Self { locale: "en_US".into() }
     }
 }
 
@@ -22,6 +20,7 @@ impl Default for Common {
 pub struct GlobalManifest {
     #[serde(alias = "document")]
     pub documents: Vec<DocumentManifest>,
+    #[allow(dead_code)]
     #[serde(flatten)]
     common: Common,
 }
@@ -37,7 +36,7 @@ pub struct DocumentManifest {
     #[serde(default)]
     pub number_sections: bool,
     #[serde(flatten)]
-    common: Common,
+    pub common: Common,
 }
 
 pub struct AuthorManifest {

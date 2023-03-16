@@ -2,19 +2,21 @@ use crate::{
     error::Error, latex, manifest::DocumentManifest, utils::kebab, walk::Walker, Author, Chapter,
 };
 use anyhow::{Context, Result};
+use chrono::{NaiveDate, NaiveTime};
 use jotdown::{Parser, Render};
 use log::debug;
 use rayon::prelude::*;
 use sailfish::{runtime::Buffer, TemplateOnce};
 use std::{fs, io, path::Path, time::SystemTime};
-use toml::value::Datetime;
 
 #[derive(Default)]
 pub struct Document {
     title: String,
     chapters: Vec<Chapter>,
     authors: Vec<Author>,
-    date: Option<Datetime>,
+    date: Option<NaiveDate>,
+    time: Option<NaiveTime>,
+    locale: String,
 }
 
 impl Document {
@@ -45,12 +47,26 @@ impl Document {
             .push(Parser::new(&self.title), &mut title)
             .unwrap();
 
+        let date = match self.locale.as_str().try_into() {
+            Ok(locale) => match (self.date, self.time) {
+                (Some(date), Some(time)) => Some(format!(
+                    "{} {}",
+                    date.format_localized("%e %B %Y", locale),
+                    time.format("%H:%M")
+                )),
+                (Some(date), None) => Some(date.format_localized("%e %B %Y", locale).to_string()),
+                _ => None,
+            },
+            _ => None,
+        };
+
         let mut buf = Buffer::new();
         let tmpl = LatexTemplate {
             title: title.trim(),
             authors: &self.authors,
-            date: self.date.map(|dt| dt.to_string()),
+            date,
             content: self.content_to_latex(),
+            locale: &self.locale,
         };
         tmpl.render_once_to(&mut buf).unwrap();
 
@@ -156,7 +172,7 @@ impl TryFrom<DocumentManifest> for Document {
         let mut chapters = Vec::new();
         for def in def.chapters {
             if def.path.is_dir() {
-                extend_chapters(def.path, &mut chapters)?;
+                extend_chapters(&def.path, &mut chapters)?;
             } else {
                 chapters.push(def.try_into()?);
             }
@@ -167,11 +183,25 @@ impl TryFrom<DocumentManifest> for Document {
             authors.push(def.into());
         }
 
+        let date = def.date.and_then(|dt| {
+            dt.date.and_then(|date| {
+                NaiveDate::from_ymd_opt(date.year.into(), date.month.into(), date.day.into())
+            })
+        });
+
+        let time = def.date.and_then(|dt| {
+            dt.time.and_then(|date| {
+                NaiveTime::from_hms_opt(date.hour.into(), date.minute.into(), date.second.into())
+            })
+        });
+
         Ok(Self {
             chapters,
-            title: def.title,
-            date: def.date,
+            date,
+            time,
+            title: def.title.to_owned(),
             authors,
+            locale: def.common.locale
         })
     }
 }
@@ -192,6 +222,7 @@ struct LatexTemplate<'a> {
     authors: &'a [Author],
     date: Option<String>,
     content: String,
+    locale: &'a str,
 }
 
 #[derive(TemplateOnce)]

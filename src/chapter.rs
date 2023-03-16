@@ -24,9 +24,14 @@ impl Chapter {
     pub fn from_path(path: impl AsRef<Path>) -> io::Result<Self> {
         let path = fs::canonicalize(path)?;
         let content = fs::read_to_string(&path)?;
+        let title = path
+            .file_stem()
+            .unwrap()
+            .to_string_lossy()
+            .to_string();
 
         Ok(Self {
-            title: path.file_stem().unwrap().to_string_lossy().into(),
+            title,
             content,
             path: Some(path),
         })

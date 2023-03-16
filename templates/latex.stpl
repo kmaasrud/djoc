@@ -17,6 +17,10 @@
 \usepackage{graphicx}
 \usepackage{titling}
 
+% Locale
+\usepackage{polyglossia}
+\setdefaultlanguage{<%= locale.split_once('_').map(|(s, _)| s).unwrap_or(locale) %>}
+
 \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
 \setlength{\emergencystretch}{3em} % prevent overfull lines
 \providecommand{\tightlist}{%

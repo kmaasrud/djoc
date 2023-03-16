@@ -2,7 +2,8 @@ use super::{AuthorManifest, ChapterManifest};
 use serde::de::{self, MapAccess, Visitor};
 use serde::{Deserialize, Deserializer};
 use std::fmt;
-use std::{fs, io, path::PathBuf, str::FromStr};
+use std::path::PathBuf;
+use std::{fs, io, str::FromStr};
 
 impl FromStr for AuthorManifest {
     type Err = io::Error;
@@ -40,7 +41,11 @@ impl<'de> Deserialize<'de> for AuthorManifest {
             where
                 E: de::Error,
             {
-                FromStr::from_str(value).map_err(|e| de::Error::custom(e))
+                Ok(AuthorManifest {
+                    name: value.into(),
+                    email: None,
+                    organization: None,
+                })
             }
 
             fn visit_map<M>(self, map: M) -> Result<Self::Value, M::Error>
