@@ -25,7 +25,7 @@ pub fn build(path: PathBuf, format: String, output: Option<String>) -> Result<()
     let format = format.replace("latex", "tex");
     for doc in docs {
         let bytes = match format.as_str() {
-            "html" => doc.to_html_bytes(),
+            "html" => doc.to_html_bytes()?,
             "tex" => doc.to_latex_bytes()?,
             "pdf" => doc.to_pdf_bytes()?,
             _ => bail!("Unknown format `{}`", format),

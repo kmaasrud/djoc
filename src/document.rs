@@ -13,44 +13,6 @@ use std::{
 };
 use toml::value::Datetime;
 
-const PREAMBLE: &str = r#"\PassOptionsToPackage{unicode}{hyperref}
-\documentclass[]{article}
-\usepackage{lmodern}
-\usepackage{unicode-math}
-\defaultfontfeatures{Scale=MatchLowercase}
-\defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
-\usepackage{amsmath}
-\usepackage{authblk}
-\usepackage{upquote}
-\usepackage[]{microtype}
-\usepackage{bookmark}
-\usepackage{hyperref}
-\usepackage{xurl}
-\usepackage{parskip}
-\usepackage{xcolor}
-\usepackage{soul}
-\usepackage{graphicx}
-\usepackage{titling}
-
-\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
-\setlength{\emergencystretch}{3em} % prevent overfull lines
-\providecommand{\tightlist}{%
-  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
-\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
-\urlstyle{same} % disable monospaced font for URLs
-\hypersetup{
-  hidelinks,
-  pdfcreator={djoc}}
-
-% Task lists
-\usepackage{pifont}
-\newcommand{\checkbox}{\text{\fboxsep=-.15pt\fbox{\rule{0pt}{1.5ex}\rule{1.5ex}{0pt}}}}
-\newcommand{\done}{\rlap{\checkbox}{\raisebox{2pt}{\large\hspace{1pt}\ding{51}}}\hspace{-2.5pt}}
-\usepackage{enumitem}
-\newlist{tasklist}{itemize}{2}
-\setlist[tasklist]{label=\checkbox}
-"#;
-
 #[derive(Default)]
 pub struct Document {
     pub title: String,
@@ -89,7 +51,7 @@ impl Document {
 
     pub fn to_latex_bytes(&self) -> io::Result<Vec<u8>> {
         let mut buf = Vec::new();
-        buf.write_all(PREAMBLE.as_bytes())?;
+        buf.write_all(PREAMBLE_LATEX)?;
 
         buf.write_all(br"\title{")?;
         latex::Renderer::default().write(Parser::new(&self.title), &mut buf)?;
@@ -127,12 +89,22 @@ impl Document {
             .collect()
     }
 
-    pub fn to_html_bytes(&self) -> Vec<u8> {
+    pub fn to_html_bytes(&self) -> io::Result<Vec<u8>> {
+        let mut buf = Vec::new();
+        buf.write_all(PREAMBLE_HTML)?;
+        writeln!(buf, "<title>{}</title>", self.title)?;
+        writeln!(buf, "</head>\n<body>")?;
+        buf.write_all(&self.content_to_html())?;
+        buf.write_all(b"\n</body>\n</html>")?;
+        Ok(buf)
+    }
+
+    fn content_to_html(&self) -> Vec<u8> {
         self.chapters
             .par_iter()
             .map(|ch| {
                 let mut buf = Vec::new();
-                ch.write_html(&mut buf).unwrap();
+                ch.write_html(&mut buf).ok();
                 buf
             })
             .flatten()
@@ -234,3 +206,161 @@ fn extend_chapters(path: impl AsRef<Path>, chapters: &mut Vec<Chapter>) -> io::R
 
     Ok(())
 }
+
+const PREAMBLE_LATEX: &[u8] = br#"\PassOptionsToPackage{unicode}{hyperref}
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{unicode-math}
+\defaultfontfeatures{Scale=MatchLowercase}
+\defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\usepackage{amsmath}
+\usepackage{authblk}
+\usepackage{upquote}
+\usepackage[]{microtype}
+\usepackage{bookmark}
+\usepackage{hyperref}
+\usepackage{xurl}
+\usepackage{parskip}
+\usepackage{xcolor}
+\usepackage{soul}
+\usepackage{graphicx}
+\usepackage{titling}
+
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  hidelinks,
+  pdfcreator={djoc}}
+
+% Task lists
+\usepackage{pifont}
+\newcommand{\checkbox}{\text{\fboxsep=-.15pt\fbox{\rule{0pt}{1.5ex}\rule{1.5ex}{0pt}}}}
+\newcommand{\done}{\rlap{\checkbox}{\raisebox{2pt}{\large\hspace{1pt}\ding{51}}}\hspace{-2.5pt}}
+\usepackage{enumitem}
+\newlist{tasklist}{itemize}{2}
+\setlist[tasklist]{label=\checkbox}
+"#;
+
+const PREAMBLE_HTML: &[u8] = br#"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<style>
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+body { margin: 0; }
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+html {
+  max-width: 80ch;
+  overflow-x: hidden;
+  padding: 3em 1em;
+  margin: auto;
+  line-height: 1.5;
+  font-size: 1.2em;
+  color: #1a1a1a;
+  text-rendering: optimizeLegibility;
+  hyphens: auto;
+  overflow-wrap: break-word;
+  font-kerning: normal;
+}
+article > * + * {
+  margin-top: 1em;
+}
+h1 {
+  font-size: 2rem;
+  line-height: 3.25rem;
+  margin-bottom: 1rem;
+}
+
+h2 {
+  font-size: 1.7rem;
+  line-height: 2rem;
+  margin-top: 3rem;
+}
+
+h3 {
+  font-size: 1.4rem;
+  margin-top: 2.5rem;
+}
+
+h4 {
+  font-size: 1.2rem;
+  margin-top: 2rem;
+}
+
+h5 {
+  font-size: 1rem;
+  margin-top: 1.8rem;
+}
+
+h6 {
+  font-size: 1rem;
+  font-style: italic;
+  font-weight: normal;
+  margin-top: 2.5rem;
+}
+
+h3,
+h4,
+h5,
+h6 {
+  line-height: 1.625rem;
+}
+
+h1 + h2 {
+  margin-top: 1.625rem;
+}
+
+h2 + h3,
+h3 + h4,
+h4 + h5 {
+  margin-top: 0.8rem;
+}
+
+h5 + h6 {
+  margin-top: -0.8rem;
+}
+
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-bottom: 0.8rem;
+}
+p,ul,ol {
+  font-family: sans-serif;
+}
+a { color: #1a1a1a; }
+a:visited { color: #414141; }
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: auto;
+}
+code {
+  font-family: monospace;
+  font-size: .9em;
+}
+pre {
+  padding: 1rem 1.4rem;
+  max-width: 100%;
+  overflow: auto;
+  border-radius: 4px;
+  background: #eee;
+}
+pre code { position: relative; }
+</style>
+"#;
