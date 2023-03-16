@@ -138,7 +138,7 @@ impl Document {
         let build_root = Path::new(".djoc").join(&filename);
         fs::create_dir_all(&build_root)?;
 
-        let mut status = crate::log::DjocTectonicStatusBackend { tidy_logs: true };
+        let mut status = crate::log::LoggingStatusBackend;
 
         let config = tectonic::config::PersistentConfig::default();
         let bundle = config
