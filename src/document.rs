@@ -5,21 +5,16 @@ use anyhow::{Context, Result};
 use jotdown::{Parser, Render};
 use log::debug;
 use rayon::prelude::*;
-use std::{
-    fs,
-    io::{self, Write},
-    path::{Path, PathBuf},
-    time::SystemTime,
-};
+use sailfish::{runtime::Buffer, TemplateOnce};
+use std::{fs, io, path::Path, time::SystemTime};
 use toml::value::Datetime;
 
 #[derive(Default)]
 pub struct Document {
-    pub title: String,
+    title: String,
     chapters: Vec<Chapter>,
     authors: Vec<Author>,
     date: Option<Datetime>,
-    _root: Option<PathBuf>,
 }
 
 impl Document {
@@ -31,7 +26,6 @@ impl Document {
         Ok(Self {
             chapters,
             title: path.file_stem().unwrap().to_string_lossy().into(),
-            _root: Some(path),
             ..Default::default()
         })
     }
@@ -45,69 +39,54 @@ impl Document {
         }
     }
 
-    pub fn to_latex(&self) -> Result<String> {
-        Ok(String::from_utf8(self.to_latex_bytes()?)?)
+    pub fn to_latex(&self) -> String {
+        let mut title = String::new();
+        latex::Renderer::default()
+            .push(Parser::new(&self.title), &mut title)
+            .unwrap();
+
+        let mut buf = Buffer::new();
+        let tmpl = LatexTemplate {
+            title: title.trim(),
+            authors: &self.authors,
+            date: self.date.map(|dt| dt.to_string()),
+            content: self.content_to_latex(),
+        };
+        tmpl.render_once_to(&mut buf).unwrap();
+
+        buf.into_string()
     }
 
-    pub fn to_latex_bytes(&self) -> io::Result<Vec<u8>> {
-        let mut buf = Vec::new();
-        buf.write_all(PREAMBLE_LATEX)?;
-
-        buf.write_all(br"\title{")?;
-        latex::Renderer::default().write(Parser::new(&self.title), &mut buf)?;
-        writeln!(buf, "}}")?;
-
-        if let Some(date) = self.date {
-            writeln!(buf, "\\date{{{}}}", date)?;
-        } else {
-            writeln!(buf, "\\predate{{}}\n\\date{{}}\n\\postdate{{}}")?;
-        }
-
-        if self.authors.is_empty() {
-            writeln!(buf, "\\preauthor{{}}\n\\postauthor{{}}\n")?;
-        }
-        for author in &self.authors {
-            writeln!(buf, "\\author{{{}}}", author.name)?;
-        }
-
-        buf.write_all(b"\\begin{document}\n")?;
-        buf.write_all(b"\\maketitle\n")?;
-        buf.write_all(&self.content_to_latex())?;
-        buf.write_all(b"\n\\end{document}")?;
-        Ok(buf)
-    }
-
-    fn content_to_latex(&self) -> Vec<u8> {
+    fn content_to_latex(&self) -> String {
         self.chapters
             .par_iter()
             .filter_map(|ch| {
-                let mut buf = Vec::new();
+                let mut buf = String::new();
                 ch.write_latex(&mut buf).ok()?;
                 Some(buf)
             })
-            .flatten()
             .collect()
     }
 
-    pub fn to_html_bytes(&self) -> io::Result<Vec<u8>> {
-        let mut buf = Vec::new();
-        buf.write_all(PREAMBLE_HTML)?;
-        writeln!(buf, "<title>{}</title>", self.title)?;
-        writeln!(buf, "</head>\n<body>")?;
-        buf.write_all(&self.content_to_html())?;
-        buf.write_all(b"\n</body>\n</html>")?;
-        Ok(buf)
+    pub fn to_html(&self) -> String {
+        let mut buf = Buffer::new();
+        let tmpl = HtmlTemplate {
+            title: &self.title,
+            content: self.content_to_html(),
+        };
+        tmpl.render_once_to(&mut buf).unwrap();
+
+        buf.into_string()
     }
 
-    fn content_to_html(&self) -> Vec<u8> {
+    fn content_to_html(&self) -> String {
         self.chapters
             .par_iter()
             .map(|ch| {
-                let mut buf = Vec::new();
+                let mut buf = String::new();
                 ch.write_html(&mut buf).ok();
                 buf
             })
-            .flatten()
             .collect()
     }
 
@@ -136,7 +115,7 @@ impl Document {
         let mut files = {
             let mut sb = tectonic::driver::ProcessingSessionBuilder::default();
             sb.bundle(bundle)
-                .primary_input_buffer(&self.to_latex_bytes()?)
+                .primary_input_buffer(self.to_latex().as_bytes())
                 .filesystem_root(&build_root)
                 .keep_intermediates(true)
                 .keep_logs(true)
@@ -193,7 +172,6 @@ impl TryFrom<DocumentManifest> for Document {
             title: def.title,
             date: def.date,
             authors,
-            ..Default::default()
         })
     }
 }
@@ -207,160 +185,18 @@ fn extend_chapters(path: impl AsRef<Path>, chapters: &mut Vec<Chapter>) -> io::R
     Ok(())
 }
 
-const PREAMBLE_LATEX: &[u8] = br#"\PassOptionsToPackage{unicode}{hyperref}
-\documentclass[]{article}
-\usepackage{lmodern}
-\usepackage{unicode-math}
-\defaultfontfeatures{Scale=MatchLowercase}
-\defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
-\usepackage{amsmath}
-\usepackage{authblk}
-\usepackage{upquote}
-\usepackage[]{microtype}
-\usepackage{bookmark}
-\usepackage{hyperref}
-\usepackage{xurl}
-\usepackage{parskip}
-\usepackage{xcolor}
-\usepackage{soul}
-\usepackage{graphicx}
-\usepackage{titling}
-
-\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
-\setlength{\emergencystretch}{3em} % prevent overfull lines
-\providecommand{\tightlist}{%
-  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
-\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
-\urlstyle{same} % disable monospaced font for URLs
-\hypersetup{
-  hidelinks,
-  pdfcreator={djoc}}
-
-% Task lists
-\usepackage{pifont}
-\newcommand{\checkbox}{\text{\fboxsep=-.15pt\fbox{\rule{0pt}{1.5ex}\rule{1.5ex}{0pt}}}}
-\newcommand{\done}{\rlap{\checkbox}{\raisebox{2pt}{\large\hspace{1pt}\ding{51}}}\hspace{-2.5pt}}
-\usepackage{enumitem}
-\newlist{tasklist}{itemize}{2}
-\setlist[tasklist]{label=\checkbox}
-"#;
-
-const PREAMBLE_HTML: &[u8] = br#"<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<style>
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-body { margin: 0; }
-@media (prefers-reduced-motion: no-preference) {
-  html {
-    scroll-behavior: smooth;
-  }
-}
-html {
-  max-width: 80ch;
-  overflow-x: hidden;
-  padding: 3em 1em;
-  margin: auto;
-  line-height: 1.5;
-  font-size: 1.2em;
-  color: #1a1a1a;
-  text-rendering: optimizeLegibility;
-  hyphens: auto;
-  overflow-wrap: break-word;
-  font-kerning: normal;
-}
-article > * + * {
-  margin-top: 1em;
-}
-h1 {
-  font-size: 2rem;
-  line-height: 3.25rem;
-  margin-bottom: 1rem;
+#[derive(TemplateOnce)]
+#[template(path = "latex.stpl")]
+struct LatexTemplate<'a> {
+    title: &'a str,
+    authors: &'a [Author],
+    date: Option<String>,
+    content: String,
 }
 
-h2 {
-  font-size: 1.7rem;
-  line-height: 2rem;
-  margin-top: 3rem;
+#[derive(TemplateOnce)]
+#[template(path = "html.stpl")]
+struct HtmlTemplate<'a> {
+    title: &'a str,
+    content: String,
 }
-
-h3 {
-  font-size: 1.4rem;
-  margin-top: 2.5rem;
-}
-
-h4 {
-  font-size: 1.2rem;
-  margin-top: 2rem;
-}
-
-h5 {
-  font-size: 1rem;
-  margin-top: 1.8rem;
-}
-
-h6 {
-  font-size: 1rem;
-  font-style: italic;
-  font-weight: normal;
-  margin-top: 2.5rem;
-}
-
-h3,
-h4,
-h5,
-h6 {
-  line-height: 1.625rem;
-}
-
-h1 + h2 {
-  margin-top: 1.625rem;
-}
-
-h2 + h3,
-h3 + h4,
-h4 + h5 {
-  margin-top: 0.8rem;
-}
-
-h5 + h6 {
-  margin-top: -0.8rem;
-}
-
-h2,
-h3,
-h4,
-h5,
-h6 {
-  margin-bottom: 0.8rem;
-}
-p,ul,ol {
-  font-family: sans-serif;
-}
-a { color: #1a1a1a; }
-a:visited { color: #414141; }
-img {
-  max-width: 100%;
-  height: auto;
-  display: block;
-  margin: auto;
-}
-code {
-  font-family: monospace;
-  font-size: .9em;
-}
-pre {
-  padding: 1rem 1.4rem;
-  max-width: 100%;
-  overflow: auto;
-  border-radius: 4px;
-  background: #eee;
-}
-pre code { position: relative; }
-</style>
-"#;

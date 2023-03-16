@@ -1,6 +1,6 @@
 use jotdown::{html, Parser, Render};
 use std::{
-    fs, io,
+    fmt, fs, io,
     path::{Path, PathBuf},
 };
 
@@ -32,12 +32,12 @@ impl Chapter {
         })
     }
 
-    pub fn write_html<W: io::Write>(&self, w: W) -> io::Result<()> {
-        html::Renderer.write(Parser::new(&self.content), w)
+    pub fn write_html<W: fmt::Write>(&self, w: W) -> fmt::Result {
+        html::Renderer.push(Parser::new(&self.content), w)
     }
 
-    pub fn write_latex<W: io::Write>(&self, w: W) -> io::Result<()> {
-        latex::Renderer::default().write(Parser::new(&self.content), w)
+    pub fn write_latex<W: fmt::Write>(&self, w: W) -> fmt::Result {
+        latex::Renderer::default().push(Parser::new(&self.content), w)
     }
 }
 

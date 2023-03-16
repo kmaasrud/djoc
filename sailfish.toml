@@ -1,0 +1,2 @@
+template_dirs = ["templates"]
+escape = false

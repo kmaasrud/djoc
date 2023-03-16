@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title><%= title %></title>
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      html {
+        scroll-behavior: smooth;
+      }
+    }
+
+    html {
+      max-width: 80ch;
+      overflow-x: hidden;
+      padding: 3em 1em;
+      margin: auto;
+      line-height: 1.5;
+      font-size: 1.2em;
+      color: #1a1a1a;
+      text-rendering: optimizeLegibility;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      font-kerning: normal;
+    }
+
+    article>*+* {
+      margin-top: 1em;
+    }
+
+    h1 {
+      font-size: 2rem;
+      line-height: 3.25rem;
+      margin-bottom: 1rem;
+    }
+
+    h2 {
+      font-size: 1.7rem;
+      line-height: 2rem;
+      margin-top: 3rem;
+    }
+
+    h3 {
+      font-size: 1.4rem;
+      margin-top: 2.5rem;
+    }
+
+    h4 {
+      font-size: 1.2rem;
+      margin-top: 2rem;
+    }
+
+    h5 {
+      font-size: 1rem;
+      margin-top: 1.8rem;
+    }
+
+    h6 {
+      font-size: 1rem;
+      font-style: italic;
+      font-weight: normal;
+      margin-top: 2.5rem;
+    }
+
+    h3,
+    h4,
+    h5,
+    h6 {
+      line-height: 1.625rem;
+    }
+
+    h1+h2 {
+      margin-top: 1.625rem;
+    }
+
+    h2+h3,
+    h3+h4,
+    h4+h5 {
+      margin-top: 0.8rem;
+    }
+
+    h5+h6 {
+      margin-top: -0.8rem;
+    }
+
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      margin-bottom: 0.8rem;
+    }
+
+    p,
+    ul,
+    ol {
+      font-family: sans-serif;
+    }
+
+    a {
+      color: #1a1a1a;
+    }
+
+    a:visited {
+      color: #414141;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: auto;
+    }
+
+    code {
+      font-family: monospace;
+      font-size: .9em;
+    }
+
+    pre {
+      padding: 1rem 1.4rem;
+      max-width: 100%;
+      overflow: auto;
+      border-radius: 4px;
+      background: #eee;
+    }
+
+    pre code {
+      position: relative;
+    }
+  </style>
+<body>
+<%= content %>
+</body>
+</html>

@@ -1,0 +1,61 @@
+\PassOptionsToPackage{unicode}{hyperref}
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{unicode-math}
+\defaultfontfeatures{Scale=MatchLowercase}
+\defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\usepackage{amsmath}
+\usepackage{authblk}
+\usepackage{upquote}
+\usepackage[]{microtype}
+\usepackage{bookmark}
+\usepackage{hyperref}
+\usepackage{xurl}
+\usepackage{parskip}
+\usepackage{xcolor}
+\usepackage{soul}
+\usepackage{graphicx}
+\usepackage{titling}
+
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  hidelinks,
+  pdfcreator={djoc}}
+
+% Task lists
+\usepackage{pifont}
+\newcommand{\checkbox}{\text{\fboxsep=-.15pt\fbox{\rule{0pt}{1.5ex}\rule{1.5ex}{0pt}}}}
+\newcommand{\done}{\rlap{\checkbox}{\raisebox{2pt}{\large\hspace{1pt}\ding{51}}}\hspace{-2.5pt}}
+\usepackage{enumitem}
+\newlist{tasklist}{itemize}{2}
+\setlist[tasklist]{label=\checkbox}
+
+\title{<%= title %>}
+
+<% if let Some(date) = date { %>
+\date{<%= date %>}
+<% } else { %>
+\predate{}
+\date{}
+\postdate{}
+<% } %>
+
+<% if authors.is_empty() { %>
+\preauthor{}
+\postauthor{}
+<% } %>
+<% for author in authors { %>
+\author{<%= author.name %>}
+<% } %>
+
+\begin{document}
+
+\maketitle
+<%= content %>
+
+\end{document}

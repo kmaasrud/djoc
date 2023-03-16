@@ -30,9 +30,9 @@ pub struct GlobalManifest {
 pub struct DocumentManifest {
     pub title: String,
     pub date: Option<Datetime>,
-    #[serde(alias = "author")]
+    #[serde(default, alias = "author")]
     pub authors: Vec<AuthorManifest>,
-    #[serde(alias = "chapter")]
+    #[serde(default, alias = "chapter")]
     pub chapters: Vec<ChapterManifest>,
     #[serde(default)]
     pub number_sections: bool,
