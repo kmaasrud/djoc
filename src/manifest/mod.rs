@@ -1,3 +1,4 @@
+use crate::document::DocumentType;
 use serde::Deserialize;
 use std::path::PathBuf;
 use toml::value::Datetime;
@@ -12,7 +13,9 @@ pub struct Common {
 
 impl Default for Common {
     fn default() -> Self {
-        Self { locale: "en_US".into() }
+        Self {
+            locale: "en_US".into(),
+        }
     }
 }
 
@@ -37,6 +40,8 @@ pub struct DocumentManifest {
     pub number_sections: bool,
     #[serde(flatten)]
     pub common: Common,
+    #[serde(default, alias = "type")]
+    pub document_type: DocumentType,
 }
 
 pub struct AuthorManifest {

@@ -7,7 +7,16 @@ use jotdown::{Parser, Render};
 use log::debug;
 use rayon::prelude::*;
 use sailfish::{runtime::Buffer, TemplateOnce};
-use std::{fs, io, path::Path, time::SystemTime};
+use serde::Deserialize;
+use std::{fmt::Write, fs, io, path::Path, time::SystemTime};
+
+#[derive(Debug, Default, Deserialize)]
+pub enum DocumentType {
+    #[default]
+    Article,
+    Report,
+    Book,
+}
 
 #[derive(Default)]
 pub struct Document {
@@ -17,6 +26,7 @@ pub struct Document {
     date: Option<NaiveDate>,
     time: Option<NaiveTime>,
     locale: String,
+    document_type: DocumentType,
 }
 
 impl Document {
@@ -41,14 +51,11 @@ impl Document {
         }
     }
 
-    pub fn to_latex(&self) -> String {
-        let mut title = String::new();
-        latex::Renderer::default()
-            .push(Parser::new(&self.title), &mut title)
-            .unwrap();
-
-        let date = match self.locale.as_str().try_into() {
-            Ok(locale) => match (self.date, self.time) {
+    fn formatted_date(&self) -> Option<String> {
+        self.locale
+            .as_str()
+            .try_into()
+            .map(|locale| match (self.date, self.time) {
                 (Some(date), Some(time)) => Some(format!(
                     "{} {}",
                     date.format_localized("%e %B %Y", locale),
@@ -56,17 +63,25 @@ impl Document {
                 )),
                 (Some(date), None) => Some(date.format_localized("%e %B %Y", locale).to_string()),
                 _ => None,
-            },
-            _ => None,
-        };
+            })
+            .ok()
+            .flatten()
+    }
+
+    pub fn to_latex(&self) -> String {
+        let mut title = String::new();
+        latex::Renderer::default()
+            .push(Parser::new(&self.title), &mut title)
+            .unwrap();
 
         let mut buf = Buffer::new();
         let tmpl = LatexTemplate {
             title: title.trim(),
             authors: &self.authors,
-            date,
+            date: self.formatted_date(),
             content: self.content_to_latex(),
             locale: &self.locale,
+            document_type: format!("{:?}", self.document_type).to_lowercase(),
         };
         tmpl.render_once_to(&mut buf).unwrap();
 
@@ -76,8 +91,16 @@ impl Document {
     fn content_to_latex(&self) -> String {
         self.chapters
             .par_iter()
+            // NOTE: Any formatting errors results in skipping the chapter alltogether. The
+            // formatting should rarely (if ever) error, though.
             .filter_map(|ch| {
                 let mut buf = String::new();
+
+                use DocumentType::*;
+                if self.chapters.len() > 1 && matches!(self.document_type, Book | Report) {
+                    writeln!(buf, r"\chapter{{{}}}", ch.title).ok()?;
+                }
+
                 ch.write_latex(&mut buf).ok()?;
                 Some(buf)
             })
@@ -178,30 +201,18 @@ impl TryFrom<DocumentManifest> for Document {
             }
         }
 
-        let mut authors = Vec::new();
-        for def in def.authors {
-            authors.push(def.into());
-        }
-
-        let date = def.date.and_then(|dt| {
-            dt.date.and_then(|date| {
-                NaiveDate::from_ymd_opt(date.year.into(), date.month.into(), date.day.into())
-            })
-        });
-
-        let time = def.date.and_then(|dt| {
-            dt.time.and_then(|date| {
-                NaiveTime::from_hms_opt(date.hour.into(), date.minute.into(), date.second.into())
-            })
-        });
-
         Ok(Self {
             chapters,
-            date,
-            time,
+            date: def.date.map(|dt| dt.date).flatten().and_then(|date| {
+                NaiveDate::from_ymd_opt(date.year.into(), date.month.into(), date.day.into())
+            }),
+            time: def.date.map(|dt| dt.time).flatten().and_then(|time| {
+                NaiveTime::from_hms_opt(time.hour.into(), time.minute.into(), time.second.into())
+            }),
             title: def.title.to_owned(),
-            authors,
-            locale: def.common.locale
+            authors: def.authors.into_iter().map(Into::into).collect(),
+            locale: def.common.locale,
+            document_type: def.document_type,
         })
     }
 }
@@ -223,6 +234,7 @@ struct LatexTemplate<'a> {
     date: Option<String>,
     content: String,
     locale: &'a str,
+    document_type: String,
 }
 
 #[derive(TemplateOnce)]

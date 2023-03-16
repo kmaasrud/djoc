@@ -1,5 +1,5 @@
 \PassOptionsToPackage{unicode}{hyperref}
-\documentclass[]{article}
+\documentclass{<%= document_type %>}
 \usepackage{lmodern}
 \usepackage{unicode-math}
 \defaultfontfeatures{Scale=MatchLowercase}

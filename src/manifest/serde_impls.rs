@@ -72,8 +72,11 @@ impl FromStr for ChapterManifest {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let path = fs::canonicalize(s)?;
         Ok(Self {
+            title: path
+                .file_stem()
+                .map(|s| s.to_string_lossy().into())
+                .unwrap_or(s.into()),
             path,
-            title: s.into(),
         })
     }
 }
