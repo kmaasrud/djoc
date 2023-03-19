@@ -1,26 +1,38 @@
 \PassOptionsToPackage{unicode}{hyperref}
 \documentclass{<%= document_type %>}
+\usepackage{amsmath}
+\usepackage{authblk}
+\usepackage{bookmark}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{microtype}
+\usepackage{listings}
+\usepackage{parskip}
+\usepackage{soul}
+\usepackage{titling}
+\usepackage{upquote}
+\usepackage{xurl}
+\usepackage{xcolor}
+
+% Text
 \usepackage{lmodern}
 \usepackage{unicode-math}
 \defaultfontfeatures{Scale=MatchLowercase}
 \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
-\usepackage{amsmath}
-\usepackage{authblk}
-\usepackage{upquote}
-\usepackage[]{microtype}
-\usepackage{bookmark}
-\usepackage{hyperref}
-\usepackage{xurl}
-\usepackage{parskip}
-\usepackage{xcolor}
-\usepackage{soul}
-\usepackage{graphicx}
-\usepackage{titling}
 
 % Locale
 \usepackage{polyglossia}
 \setdefaultlanguage{<%= locale.split_once('_').map(|(s, _)| s).unwrap_or(locale) %>}
 
+% Task lists
+\usepackage{pifont}
+\newcommand{\checkbox}{\text{\fboxsep=-.15pt\fbox{\rule{0pt}{1.5ex}\rule{1.5ex}{0pt}}}}
+\newcommand{\done}{\rlap{\checkbox}{\raisebox{2pt}{\large\hspace{1pt}\ding{51}}}\hspace{-2.5pt}}
+\usepackage{enumitem}
+\newlist{tasklist}{itemize}{2}
+\setlist[tasklist]{label=\checkbox}
+
+% Other settings
 \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
 \setlength{\emergencystretch}{3em} % prevent overfull lines
 \providecommand{\tightlist}{%
@@ -31,16 +43,9 @@
   hidelinks,
   pdfcreator={djoc}}
 
-% Task lists
-\usepackage{pifont}
-\newcommand{\checkbox}{\text{\fboxsep=-.15pt\fbox{\rule{0pt}{1.5ex}\rule{1.5ex}{0pt}}}}
-\newcommand{\done}{\rlap{\checkbox}{\raisebox{2pt}{\large\hspace{1pt}\ding{51}}}\hspace{-2.5pt}}
-\usepackage{enumitem}
-\newlist{tasklist}{itemize}{2}
-\setlist[tasklist]{label=\checkbox}
 
+% Metadata
 \title{<%= title %>}
-
 <% if let Some(date) = date { %>
 \date{<%= date %>}
 <% } else { %>
@@ -48,7 +53,6 @@
 \date{}
 \postdate{}
 <% } %>
-
 <% if authors.is_empty() { %>
 \preauthor{}
 \postauthor{}

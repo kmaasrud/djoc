@@ -2,7 +2,7 @@
 //!
 //! The output should mostly match that of Pandoc, though there may be slight differences.
 
-use jotdown::{Container, Event, ListKind, Render};
+use jotdown::{Container, Event, ListKind, OrderedListNumbering, OrderedListStyle, Render};
 use std::fmt;
 
 #[derive(Default)]
@@ -24,21 +24,21 @@ impl From<&Renderer> for Writer {
     fn from(r: &Renderer) -> Self {
         Self {
             number_sections: r.number_sections,
-            raw: Raw::None,
+            emit: Emit::Escaped,
             first_line: true,
         }
     }
 }
 
-enum Raw {
+enum Emit {
+    Escaped,
+    Raw,
     None,
-    Latex,
-    Other,
 }
 
 struct Writer {
     number_sections: bool,
-    raw: Raw,
+    emit: Emit,
     first_line: bool,
 }
 
@@ -50,10 +50,10 @@ impl Writer {
     ) -> fmt::Result {
         for e in events {
             match e {
-                Event::Str(s) => match self.raw {
-                    Raw::None => write_escaped(&mut out, &s)?,
-                    Raw::Latex => out.write_str(&s)?,
-                    Raw::Other => {}
+                Event::Str(s) => match self.emit {
+                    Emit::Escaped => write_escaped(&mut out, &s)?,
+                    Emit::Raw => out.write_str(&s)?,
+                    Emit::None => {}
                 },
                 Event::Symbol(sym) => write!(out, ":{}:", sym)?,
                 Event::LeftSingleQuote => out.write_str("`")?,
@@ -64,8 +64,8 @@ impl Writer {
                 Event::EnDash => out.write_str(r"\textendash")?,
                 Event::EmDash => out.write_str(r"\textemdash")?,
                 Event::NonBreakingSpace => out.write_char('~')?,
-                Event::Softbreak => out.write_str("\n")?,
-                Event::Hardbreak => out.write_str("\\\\\n")?,
+                Event::Softbreak => writeln!(out)?,
+                Event::Hardbreak => writeln!(out, r"\\")?,
                 Event::Escape | Event::Blankline => {}
                 Event::ThematicBreak(_attrs) => {
                     out.write_str("\n\\begin{center}\\rule{0.5\\linewidth}{0.5pt}\\end{center}")?
@@ -78,8 +78,13 @@ impl Writer {
                         out.write_char('\n')?;
                     }
                     match c {
-                        Container::Paragraph | Container::Section { .. } => {}
+                        Container::Paragraph
+                        | Container::Section { .. }
+                        | Container::DescriptionDetails
+                        | Container::Div { .. } => {}
                         Container::Blockquote => out.write_str(r"\begin{quote}")?,
+                        Container::DescriptionList => writeln!(out, r"\begin{{description}}")?,
+                        Container::Span => out.write_char('{')?,
                         Container::Strong => out.write_str(r"\textbf{")?,
                         Container::Emphasis => out.write_str(r"\textit{")?,
                         Container::Superscript => out.write_str(r"\textsuperscript{")?,
@@ -88,12 +93,13 @@ impl Writer {
                         Container::Delete => out.write_str(r"\st{")?,
                         Container::Mark => out.write_str(r"\hl{")?,
                         Container::Link(dest, _) => write!(out, r"\href{{{}}}{{", dest)?,
+                        Container::DescriptionTerm => write!(out, r"\item[")?,
                         Container::Footnote { number, .. } => {
                             write!(out, r"\footnotetext[{}]{{", number)?
                         }
                         Container::Image(dest, _) => {
-                            out.write_str("\\begin{figure}\n")?;
-                            out.write_str("\\centering\n")?;
+                            writeln!(out, r"\begin{{figure}}")?;
+                            writeln!(out, r"\centering")?;
                             write!(out, r"\includegraphics[width=\textwidth]{{{dest}}}")?;
                             out.write_str(r"\caption{")?;
                         }
@@ -115,35 +121,64 @@ impl Writer {
                             out.write_char('{')?;
                         }
                         Container::RawBlock { format } | Container::RawInline { format } => {
-                            self.raw = match format {
-                                "latex" => Raw::Latex,
-                                _ => Raw::Other,
+                            self.emit = match format {
+                                "latex" | "tex" => Emit::Raw,
+                                _ => Emit::None,
                             }
                         }
                         Container::Math { display } => {
-                            self.raw = Raw::Latex;
+                            self.emit = Emit::Raw;
                             match display {
                                 true => out.write_str(r"\[")?,
                                 false => out.write_str(r"\(")?,
                             }
                         }
                         Container::List { kind, tight } => {
-                            out.write_str(r"\begin{")?;
+                            out.write_str(r"\begin")?;
                             match kind {
-                                ListKind::Unordered => out.write_str("itemize")?,
+                                ListKind::Unordered => writeln!(out, "{{itemize}}")?,
                                 ListKind::Ordered {
-                                    numbering: _,
-                                    style: _,
-                                    start: _,
-                                } => out.write_str("enumerate")?,
-                                ListKind::Task => out.write_str("tasklist")?,
+                                    numbering,
+                                    style,
+                                    start,
+                                } => {
+                                    out.write_str("{enumerate}[label=")?;
+                                    if let OrderedListStyle::ParenParen = style {
+                                        out.write_char('(')?;
+                                    }
+                                    match numbering {
+                                        OrderedListNumbering::Decimal => write!(out, r"\arabic*")?,
+                                        OrderedListNumbering::AlphaLower => write!(out, r"\alph*")?,
+                                        OrderedListNumbering::AlphaUpper => write!(out, r"\Alph*")?,
+                                        OrderedListNumbering::RomanLower => {
+                                            write!(out, r"\roman*")?
+                                        }
+                                        OrderedListNumbering::RomanUpper => {
+                                            write!(out, r"\Roman*")?
+                                        }
+                                    }
+                                    match style {
+                                        OrderedListStyle::Period => out.write_char('.')?,
+                                        _ => out.write_char(')')?,
+                                    }
+                                    writeln!(out, ", start={}]", start)?;
+                                }
+                                ListKind::Task => writeln!(out, "{{tasklist}}")?,
                             }
-                            out.write_str("}")?;
                             if tight {
-                                out.write_str("\n\\tightlist")?;
+                                out.write_str(r"\tightlist")?;
                             }
                         }
                         Container::ListItem => out.write_str(r"\item")?,
+                        Container::Verbatim => {
+                            self.emit = Emit::Raw;
+                            write!(out, r"\verb|")?;
+                        }
+                        Container::CodeBlock { lang: _ } => {
+                            self.emit = Emit::Raw;
+                            write!(out, r"\begin{{verbatim}}")?;
+                            writeln!(out)?;
+                        }
                         Container::TaskListItem { checked } => {
                             out.write_str(r"\item")?;
                             if checked {
@@ -154,14 +189,19 @@ impl Writer {
                     }
                 }
                 Event::End(c) => match c {
-                    Container::Section { .. } | Container::ListItem => {}
+                    Container::Section { .. }
+                    | Container::ListItem
+                    | Container::DescriptionDetails
+                    | Container::Div { .. } => {}
                     Container::Paragraph => out.write_str("\n")?,
                     Container::Heading { id, .. } => {
                         write!(out, r"}}\label{{{id}}}}}")?;
                         out.write_char('\n')?
                     }
-                    Container::Blockquote => out.write_str("\\end{quote}\n")?,
+                    Container::Blockquote => writeln!(out, r"\end{{quote}}")?,
                     Container::Image(_, _) => out.write_str("}\n\\end{figure}\n")?,
+                    Container::DescriptionList => writeln!(out, r"\end{{description}}")?,
+                    Container::DescriptionTerm => writeln!(out, r"]")?,
                     Container::List { kind, .. } => {
                         out.write_str(r"\end{")?;
                         match kind {
@@ -178,17 +218,26 @@ impl Writer {
                     | Container::Insert
                     | Container::Delete
                     | Container::Mark
+                    | Container::Span
                     | Container::Link(_, _)
-                    | Container::Footnote { .. } => out.write_str("}")?,
+                    | Container::Footnote { .. } => out.write_char('}')?,
                     Container::RawBlock { .. } | Container::RawInline { .. } => {
-                        self.raw = Raw::None
+                        self.emit = Emit::Escaped
                     }
                     Container::Math { display } => {
-                        self.raw = Raw::None;
+                        self.emit = Emit::Escaped;
                         match display {
                             true => out.write_str(r"\]")?,
                             false => out.write_str(r"\)")?,
                         }
+                    }
+                    Container::Verbatim => {
+                        self.emit = Emit::Escaped;
+                        out.write_char('|')?;
+                    }
+                    Container::CodeBlock { .. } => {
+                        self.emit = Emit::Escaped;
+                        writeln!(out, r"\end{{verbatim}}")?;
                     }
                     _ => {}
                 },
