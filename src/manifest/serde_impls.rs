@@ -1,23 +1,24 @@
-use super::{AuthorManifest, ChapterManifest};
+use super::ChapterManifest;
+use crate::Author;
 use serde::de::{self, MapAccess, Visitor};
 use serde::{Deserialize, Deserializer};
 use std::fmt;
 use std::path::PathBuf;
 use std::{fs, io, str::FromStr};
 
-impl FromStr for AuthorManifest {
+impl FromStr for Author {
     type Err = io::Error;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         Ok(Self {
             name: s.into(),
             email: None,
-            organization: None,
+            affiliation: None,
         })
     }
 }
 
-impl<'de> Deserialize<'de> for AuthorManifest {
+impl<'de> Deserialize<'de> for Author {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
         D: Deserializer<'de>,
@@ -26,12 +27,12 @@ impl<'de> Deserialize<'de> for AuthorManifest {
         struct Aux {
             pub name: String,
             pub email: Option<String>,
-            pub organization: Option<String>,
+            pub affiliation: Option<String>,
         }
         struct AuthorDefVisitor;
 
         impl<'de> Visitor<'de> for AuthorDefVisitor {
-            type Value = AuthorManifest;
+            type Value = Author;
 
             fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
                 formatter.write_str("string or map")
@@ -41,10 +42,10 @@ impl<'de> Deserialize<'de> for AuthorManifest {
             where
                 E: de::Error,
             {
-                Ok(AuthorManifest {
+                Ok(Author {
                     name: value.into(),
                     email: None,
-                    organization: None,
+                    affiliation: None,
                 })
             }
 
@@ -54,10 +55,10 @@ impl<'de> Deserialize<'de> for AuthorManifest {
             {
                 let aux: Aux =
                     Deserialize::deserialize(de::value::MapAccessDeserializer::new(map))?;
-                Ok(AuthorManifest {
+                Ok(Author {
                     name: aux.name,
                     email: aux.email,
-                    organization: aux.organization,
+                    affiliation: aux.affiliation,
                 })
             }
         }

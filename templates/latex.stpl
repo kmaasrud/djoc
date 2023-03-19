@@ -43,22 +43,13 @@
   hidelinks,
   pdfcreator={djoc}}
 
-
 % Metadata
 \title{<%= title %>}
-<% if let Some(date) = date { %>
-\date{<%= date %>}
-<% } else { %>
-\predate{}
-\date{}
-\postdate{}
-<% } %>
-<% if authors.is_empty() { %>
-\preauthor{}
-\postauthor{}
-<% } %>
+<% if let Some(date) = date { %>\date{<%= date %>}<% } else { %>\predate{}\date{}\postdate{}<% } %>
+<% if authors.is_empty() { %>\preauthor{}\postauthor{}<% } %>
 <% for author in authors { %>
-\author{<%= author.name %>}
+\author{
+<%= author.name %><%= author.email.as_ref().map(|e| format!(r" \thanks{{\href{{mailto{e}}}{{{e}}}}}")).unwrap_or("".into()) %>}
 <% } %>
 
 \begin{document}
