@@ -7,7 +7,7 @@ edition = "2021"
 license-file = "LICENSE"
 homepage = "https://git.sr.ht/~kmaasrud/djoc"
 repository = "https://git.sr.ht/~kmaasrud/djoc"
-include = ["src/**/*.html", "src/**/*.lua", "src/**/*.rs", "src/**/*.tex"]
+include = ["src/**/*.stpl", "src/**/*.rs"]
 
 
 [dependencies]

@@ -11,12 +11,9 @@
 
     flake-utils.url = "github:numtide/flake-utils";
 
-    rust-overlay = {
-      url = "github:oxalica/rust-overlay";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        flake-utils.follows = "flake-utils";
-      };
+    fenix = {
+      url = "github:nix-community/fenix";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
@@ -24,17 +21,22 @@
     nixpkgs,
     crane,
     flake-utils,
-    rust-overlay,
+    fenix,
     ...
   }:
     flake-utils.lib.eachDefaultSystem (system: let
       pkgs = import nixpkgs {
         inherit system;
-        overlays = [(import rust-overlay)];
       };
 
-      rust = pkgs.rust-bin.stable.latest.default;
-      craneLib = (crane.mkLib pkgs).overrideToolchain rust;
+      toolchain = with fenix.packages.${system};
+        combine [
+          stable.rustc
+          stable.cargo
+          stable.rustfmt
+        ];
+
+      craneLib = (crane.mkLib pkgs).overrideToolchain toolchain;
 
       buildInputs = with pkgs;
         [
@@ -54,9 +56,16 @@
           libiconv
         ];
 
+      stplFilter = path: _type: builtins.match ".*stpl$" path != null;
+      filter = path: type:
+        (stplFilter path type) || (craneLib.filterCargoSources path type);
+
       djoc = craneLib.buildPackage {
         inherit buildInputs;
-        src = craneLib.cleanCargoSource ./.;
+        src = pkgs.lib.cleanSourceWith {
+          inherit filter;
+          src = ./.;
+        };
       };
     in rec {
       packages.default = djoc;
@@ -67,7 +76,7 @@
 
       devShells.default = pkgs.mkShell {
         inherit buildInputs;
-        nativeBuildInputs = with pkgs; [rust];
+        nativeBuildInputs = [toolchain];
       };
     });
 }
