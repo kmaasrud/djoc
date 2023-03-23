@@ -7,7 +7,7 @@ use std::fmt;
 
 #[derive(Default)]
 pub struct Renderer {
-    number_sections: bool,
+    pub number_sections: bool,
 }
 
 impl Render for Renderer {

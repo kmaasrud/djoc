@@ -6,17 +6,18 @@ use toml::value::Datetime;
 mod serde_impls;
 
 #[derive(Deserialize)]
-#[serde(default)]
 pub struct Common {
-    pub locale: String,
-    pub number_sections: bool,
+    pub output_format: Option<String>,
+    pub locale: Option<String>,
+    pub number_sections: Option<bool>,
 }
 
-impl Default for Common {
-    fn default() -> Self {
+impl Common {
+    fn merge(self, other: Self) -> Self {
         Self {
-            locale: "en_US".into(),
-            number_sections: false,
+            output_format: self.output_format.or(other.output_format),
+            locale: self.locale.or(other.locale),
+            number_sections: self.number_sections.or(other.number_sections),
         }
     }
 }
@@ -25,9 +26,8 @@ impl Default for Common {
 pub struct GlobalManifest {
     #[serde(alias = "document")]
     pub documents: Vec<DocumentManifest>,
-    #[allow(dead_code)]
     #[serde(flatten)]
-    common: Common,
+    pub common: Common,
 }
 
 #[derive(Deserialize)]
@@ -45,6 +45,6 @@ pub struct DocumentManifest {
 }
 
 pub struct ChapterManifest {
-    pub title: String,
+    pub title: Option<String>,
     pub path: PathBuf,
 }

@@ -12,8 +12,10 @@ include = ["src/**/*.stpl", "src/**/*.rs"]
 
 [dependencies]
 anyhow = "1.0.69"
-chrono = { version = "0.4.24", default-features = false, features = ["std", "unstable-locales"] }
-citeproc = { git = "https://github.com/zotero/citeproc-rs.git", branch = "rustc-1.67" }
+chrono = { version = "0.4.24", default-features = false, features = [
+    "std",
+    "unstable-locales",
+] }
 clap = { version = "4.1.4", default-features = false, features = [
     "cargo",
     "derive",
@@ -23,6 +25,7 @@ clap = { version = "4.1.4", default-features = false, features = [
     "std",
 ] }
 dirs = "4.0.0"
+hayagriva = "0.1.1"
 jotdown = { git = "https://github.com/hellux/jotdown" }
 log = "0.4.17"
 rayon = "1.6.1"

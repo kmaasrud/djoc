@@ -40,21 +40,20 @@
 \setcounter{secnumdepth}{-\maxdimen} % remove section numbering
 \urlstyle{same} % disable monospaced font for URLs
 \hypersetup{
-  hidelinks,
+  colorlinks=true,
+  allcolors=.,
+  urlcolor=blue,
+  linktocpage,
   pdfcreator={djoc}}
 
 % Metadata
 \title{<%= title %>}
 <% if let Some(date) = date { %>\date{<%= date %>}<% } else { %>\predate{}\date{}\postdate{}<% } %>
-<% if authors.is_empty() { %>\preauthor{}\postauthor{}<% } %>
+<% if authors.is_empty() { %>\preauthor{}\author{}\postauthor{}<% } %>
 <% for author in authors { %>
-\author{
-<%= author.name %><%= author.email.as_ref().map(|e| format!(r" \thanks{{\href{{mailto{e}}}{{{e}}}}}")).unwrap_or("".into()) %>}
+\author{<%= author.name %><%= author.email.as_ref().map(|e| format!(r" \thanks{{\href{{mailto{e}}}{{{e}}}}}")).unwrap_or("".into()) %>}
 <% } %>
 
 \begin{document}
-
-\maketitle
 <%= content %>
-
 \end{document}

@@ -18,7 +18,7 @@ pub fn find_root<P: AsRef<Path>>(path: P) -> io::Result<PathBuf> {
         if !(path.pop() && path.pop()) {
             return Err(io::Error::new(
                 std::io::ErrorKind::NotFound,
-                "Unable to find an \"djoc.toml\" file.",
+                "Unable to find a \"djoc.toml\" file.",
             ));
         }
     }

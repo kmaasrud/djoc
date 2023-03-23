@@ -18,7 +18,6 @@ pub enum DocumentType {
     Book,
 }
 
-#[derive(Default)]
 pub struct Document {
     title: String,
     chapters: Vec<Chapter>,
@@ -27,6 +26,22 @@ pub struct Document {
     time: Option<NaiveTime>,
     locale: String,
     document_type: DocumentType,
+    number_sections: bool,
+}
+
+impl Default for Document {
+    fn default() -> Self {
+        Self {
+            title: "Document".into(),
+            chapters: Vec::new(),
+            authors: Vec::new(),
+            date: None,
+            time: None,
+            locale: "en_US".into(),
+            document_type: Default::default(),
+            number_sections: false,
+        }
+    }
 }
 
 impl Document {
@@ -37,15 +52,13 @@ impl Document {
 
         Ok(Self {
             chapters,
-            title: path.file_stem().unwrap().to_string_lossy().into(),
             ..Default::default()
         })
     }
 
-    pub fn from(content: impl ToString) -> Self {
-        let chapter = Chapter::new("title", content);
+    pub fn from(content: String) -> Self {
+        let chapter = Chapter::new(content);
         Self {
-            title: chapter.title.clone(),
             chapters: vec![chapter],
             ..Default::default()
         }
@@ -70,13 +83,15 @@ impl Document {
 
     pub fn to_latex(&self) -> String {
         let mut title = String::new();
-        latex::Renderer::default()
-            .push(Parser::new(&self.title), &mut title)
-            .unwrap();
+        latex::Renderer {
+            number_sections: self.number_sections,
+        }
+        .push(Parser::new(&self.title), &mut title)
+        .unwrap();
 
         let mut buf = Buffer::new();
         let tmpl = LatexTemplate {
-            title: title.trim(),
+            title: &title,
             authors: &self.authors,
             date: self.formatted_date(),
             content: self.content_to_latex(),
@@ -98,7 +113,9 @@ impl Document {
 
                 use DocumentType::*;
                 if self.chapters.len() > 1 && matches!(self.document_type, Book | Report) {
-                    writeln!(buf, r"\chapter{{{}}}", ch.title).ok()?;
+                    if let Some(ref title) = ch.title {
+                        writeln!(buf, r"\chapter{{{title}}}").ok()?;
+                    }
                 }
 
                 ch.write_latex(&mut buf).ok()?;
@@ -211,8 +228,9 @@ impl TryFrom<DocumentManifest> for Document {
             }),
             title: def.title.to_owned(),
             authors: def.authors.into_iter().map(Into::into).collect(),
-            locale: def.common.locale,
+            locale: def.common.locale.unwrap_or_else(|| Self::default().locale),
             document_type: def.document_type,
+            number_sections: def.common.number_sections.unwrap_or_default(),
         })
     }
 }

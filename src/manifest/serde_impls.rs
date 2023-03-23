@@ -72,13 +72,7 @@ impl FromStr for ChapterManifest {
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let path = fs::canonicalize(s)?;
-        Ok(Self {
-            title: path
-                .file_stem()
-                .map(|s| s.to_string_lossy().into())
-                .unwrap_or(s.into()),
-            path,
-        })
+        Ok(Self { title: None, path })
     }
 }
 
@@ -89,7 +83,7 @@ impl<'de> Deserialize<'de> for ChapterManifest {
     {
         #[derive(Deserialize)]
         struct Aux {
-            title: String,
+            title: Option<String>,
             path: PathBuf,
         }
         struct ChapterDefVisitor;
