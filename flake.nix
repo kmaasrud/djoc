@@ -32,7 +32,9 @@
       toolchain = with fenix.packages.${system};
         combine [
           stable.rustc
+          stable.rust-src
           stable.cargo
+          stable.clippy
           stable.rustfmt
         ];
 
