@@ -13,11 +13,22 @@ use std::{fmt::Write, fs, io, path::Path, time::SystemTime};
 const DEFAULT_LOCALE: &str = "en_US";
 
 #[derive(Debug, Default, Deserialize)]
+#[serde(rename_all = "kebab-case")]
 pub enum DocumentType {
     #[default]
     Article,
     Report,
     Book,
+}
+
+impl AsRef<str> for DocumentType {
+    fn as_ref(&self) -> &str {
+        match self {
+            DocumentType::Article => "article",
+            DocumentType::Report => "report",
+            DocumentType::Book => "book",
+        }
+    }
 }
 
 pub struct Document {
@@ -98,7 +109,7 @@ impl Document {
             date: self.formatted_date(),
             content: self.content_to_latex(),
             locale: &self.locale,
-            document_type: format!("{:?}", self.document_type).to_lowercase(),
+            document_type: self.document_type.as_ref().into(),
         };
         tmpl.render_once_to(&mut buf).unwrap();
 
