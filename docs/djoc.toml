@@ -1,7 +1,9 @@
+output_format = "html"
+
 [[document]]
 title = "Djoc documentation"
-author = ["Knut Magnus Aasrud"]
+author = [{name = "Knut Magnus Aasrud", email = "km@aasrud.com"}]
 chapters = [
-    "src/introduction.dj",
+    { path = "src/introduction.dj" },
     "src/getting-started.dj",
 ]

@@ -1,1 +1,13 @@
 # Getting started
+
+djoc is under heavy development, and as such you'll need to build it from
+scratch. This is easily done by installing the [Tectonic dependencies][] and
+installing like below
+
+```
+$ git clone https://github.com/kmaasrud/djoc.git
+$ cd djoc
+$ cargo install --path .
+```
+
+[Tectonic dependencies]: https://tectonic-typesetting.github.io/book/latest/howto/build-tectonic/index.html#third-party-dependencies
