@@ -54,7 +54,7 @@ impl Chapter {
                     Event::Str(r"\maketitle".into()),
                     Event::End(Container::RawBlock { format: "latex" }),
                 ],
-                _ => vec![event.clone()],
+                _ => vec![event],
             })
             .flatten()
     }
