@@ -10,7 +10,7 @@ use std::{
 /// Builds a document. If no path is provided, searches up the filetree for a document to build.
 pub fn compile(path: Option<PathBuf>, format: String, output: Option<String>) -> Result<()> {
     let doc = match path {
-        Some(path) => Document::from_path(&path)?,
+        Some(path) => Document::from_path(path)?,
         None => {
             let mut s = String::new();
             std::io::stdin().read_to_string(&mut s)?;

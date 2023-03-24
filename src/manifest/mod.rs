@@ -5,19 +5,22 @@ use toml::value::Datetime;
 
 mod serde_impls;
 
-#[derive(Deserialize)]
-pub struct Common {
-    pub output_format: Option<String>,
-    pub locale: Option<String>,
-    pub number_sections: Option<bool>,
+#[derive(Clone, Default, Deserialize)]
+#[serde(rename_all = "kebab-case")]
+pub enum OutputFormat {
+    #[default]
+    Pdf,
+    Html,
+    #[serde(alias = "tex")]
+    Latex,
 }
 
-impl Common {
-    fn merge(self, other: Self) -> Self {
-        Self {
-            output_format: self.output_format.or(other.output_format),
-            locale: self.locale.or(other.locale),
-            number_sections: self.number_sections.or(other.number_sections),
+impl AsRef<str> for OutputFormat {
+    fn as_ref(&self) -> &str {
+        match self {
+            OutputFormat::Pdf => "pdf",
+            OutputFormat::Html => "html",
+            OutputFormat::Latex => "tex",
         }
     }
 }
@@ -26,11 +29,10 @@ impl Common {
 pub struct GlobalManifest {
     #[serde(alias = "document")]
     pub documents: Vec<DocumentManifest>,
-    #[serde(flatten)]
-    pub common: Common,
 }
 
 #[derive(Deserialize)]
+#[serde(rename_all = "kebab-case")]
 pub struct DocumentManifest {
     pub title: String,
     pub date: Option<Datetime>,
@@ -40,8 +42,9 @@ pub struct DocumentManifest {
     pub chapters: Vec<ChapterManifest>,
     #[serde(default, alias = "type")]
     pub document_type: DocumentType,
-    #[serde(flatten)]
-    pub common: Common,
+    pub output_format: Option<OutputFormat>,
+    pub locale: Option<String>,
+    pub number_sections: Option<bool>,
 }
 
 pub struct ChapterManifest {

@@ -10,6 +10,8 @@ use sailfish::{runtime::Buffer, TemplateOnce};
 use serde::Deserialize;
 use std::{fmt::Write, fs, io, path::Path, time::SystemTime};
 
+const DEFAULT_LOCALE: &str = "en_US";
+
 #[derive(Debug, Default, Deserialize)]
 pub enum DocumentType {
     #[default]
@@ -37,7 +39,7 @@ impl Default for Document {
             authors: Vec::new(),
             date: None,
             time: None,
-            locale: "en_US".into(),
+            locale: DEFAULT_LOCALE.into(),
             document_type: Default::default(),
             number_sections: false,
         }
@@ -220,17 +222,17 @@ impl TryFrom<DocumentManifest> for Document {
 
         Ok(Self {
             chapters,
-            date: def.date.map(|dt| dt.date).flatten().and_then(|date| {
+            date: def.date.and_then(|dt| dt.date).and_then(|date| {
                 NaiveDate::from_ymd_opt(date.year.into(), date.month.into(), date.day.into())
             }),
-            time: def.date.map(|dt| dt.time).flatten().and_then(|time| {
+            time: def.date.and_then(|dt| dt.time).and_then(|time| {
                 NaiveTime::from_hms_opt(time.hour.into(), time.minute.into(), time.second.into())
             }),
             title: def.title.to_owned(),
             authors: def.authors.into_iter().map(Into::into).collect(),
-            locale: def.common.locale.unwrap_or_else(|| Self::default().locale),
+            locale: def.locale.unwrap_or(DEFAULT_LOCALE.into()),
             document_type: def.document_type,
-            number_sections: def.common.number_sections.unwrap_or_default(),
+            number_sections: def.number_sections.unwrap_or_default(),
         })
     }
 }

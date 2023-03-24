@@ -1,5 +1,9 @@
-use anyhow::{bail, Result};
-use djoc::{manifest::GlobalManifest, utils::find_root, Document, MANIFEST_FILE};
+use anyhow::Result;
+use djoc::{
+    manifest::{GlobalManifest, OutputFormat},
+    utils::find_root,
+    Document, MANIFEST_FILE,
+};
 use log::{debug, info};
 use std::{fs, path::Path};
 
@@ -8,21 +12,17 @@ pub fn build() -> Result<()> {
     let path = find_root(std::env::current_dir()?)?;
     let manifest: GlobalManifest = toml::from_str(&fs::read_to_string(path.join(MANIFEST_FILE))?)?;
 
-    let mut docs: Vec<Document> = Vec::new();
     for doc_manifest in manifest.documents {
-        docs.push(doc_manifest.try_into()?);
-    }
+        let format = doc_manifest.output_format.clone().unwrap_or_default();
+        let doc: Document = doc_manifest.try_into()?;
 
-    let format = manifest.common.output_format.unwrap_or("pdf".into());
-    for doc in docs {
-        let bytes = match format.as_str() {
-            "html" => doc.to_html().into_bytes(),
-            "tex" => doc.to_latex().into_bytes(),
-            "pdf" => doc.to_pdf_bytes()?,
-            _ => bail!("Unknown format `{}`", format),
+        let bytes = match format {
+            OutputFormat::Html => doc.to_html().into_bytes(),
+            OutputFormat::Latex => doc.to_latex().into_bytes(),
+            OutputFormat::Pdf => doc.to_pdf_bytes()?,
         };
 
-        let filename = Path::new(&doc.filename()).with_extension(&format);
+        let filename = Path::new(&doc.filename()).with_extension(format.as_ref());
 
         debug!("Writing to {filename:?}");
 

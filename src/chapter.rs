@@ -43,7 +43,7 @@ impl Chapter {
         // TODO: This is not ideal, as the mapping allocates quite a lot. When we can clone Events,
         // this will be a lot simpler, as we can just modify the events vector.
         Parser::new(&self.content)
-            .map(|event| match event {
+            .flat_map(|event| match event {
                 Event::Start(
                     Container::Div {
                         class: Some("title"),
@@ -56,7 +56,6 @@ impl Chapter {
                 ],
                 _ => vec![event],
             })
-            .flatten()
     }
 
     pub fn write_html<W: fmt::Write>(&self, w: W) -> fmt::Result {
