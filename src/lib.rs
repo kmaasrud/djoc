@@ -1,11 +1,10 @@
-mod log;
-
 mod author;
 pub mod bib;
 mod chapter;
 mod document;
 pub mod error;
 pub(crate) mod latex;
+pub mod log;
 pub mod manifest;
 pub mod utils;
 pub(crate) mod walk;

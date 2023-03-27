@@ -5,6 +5,7 @@ mod init;
 
 use anyhow::Result;
 use clap::{Parser, Subcommand};
+use log::LevelFilter;
 use std::path::PathBuf;
 
 #[derive(Parser)]
@@ -50,11 +51,14 @@ enum Command {
 pub fn run() -> Result<()> {
     let app = Djoc::parse();
 
-    stderrlog::new()
-        .module(module_path!())
-        .quiet(app.quiet)
-        .verbosity(4)
-        .init()?;
+    let logger = match (app.quiet, app.debug) {
+        (true, _) => djoc::log::Logger::new(LevelFilter::Error),
+        (_, true) => djoc::log::Logger::new(LevelFilter::Off),
+        _ => djoc::log::Logger::new(LevelFilter::Info),
+    };
+
+    log::set_max_level(logger.filter);
+    log::set_boxed_logger(Box::new(logger))?;
 
     match app.command {
         Command::Build => build::build()?,
