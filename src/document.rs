@@ -163,7 +163,7 @@ impl Document {
 
     pub fn to_pdf_bytes(&self) -> Result<Vec<u8>> {
         let filename = self.filename();
-        let build_root = Path::new(".djoc").join(&filename);
+        let build_root = Path::new("build").join(&filename);
         fs::create_dir_all(&build_root)?;
 
         let mut status = crate::log::LoggingStatusBackend;

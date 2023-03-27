@@ -5,6 +5,12 @@ use toml::value::Datetime;
 
 mod serde_impls;
 
+#[derive(Clone, Deserialize)]
+pub struct Output {
+    pub name: Option<String>,
+    pub format: OutputFormat,
+}
+
 #[derive(Clone, Default, Deserialize)]
 #[serde(rename_all = "kebab-case")]
 pub enum OutputFormat {
@@ -42,7 +48,8 @@ pub struct DocumentManifest {
     pub chapters: Vec<ChapterManifest>,
     #[serde(default, alias = "type")]
     pub document_type: DocumentType,
-    pub output_format: Option<OutputFormat>,
+    #[serde(alias = "output")]
+    pub outputs: Vec<Output>,
     pub locale: Option<String>,
     pub number_sections: Option<bool>,
 }

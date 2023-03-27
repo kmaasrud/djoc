@@ -1,4 +1,5 @@
 mod build;
+mod clean;
 mod compile;
 mod init;
 
@@ -25,6 +26,8 @@ struct Djoc {
 enum Command {
     /// Builds a file or document.
     Build,
+
+    Clean,
 
     Compile {
         /// The target source file (omit for stdin)
@@ -54,13 +57,14 @@ pub fn run() -> Result<()> {
         .init()?;
 
     match app.command {
+        Command::Build => build::build()?,
+        Command::Clean => clean::clean()?,
         Command::Compile {
             path,
             format,
             output,
         } => compile::compile(path, format, output)?,
         Command::Init { path } => init::init(path)?,
-        Command::Build => build::build()?,
     }
 
     Ok(())
