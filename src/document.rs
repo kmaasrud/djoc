@@ -96,11 +96,9 @@ impl Document {
 
     pub fn to_latex(&self) -> String {
         let mut title = String::new();
-        latex::Renderer {
-            number_sections: self.number_sections,
-        }
-        .push(Parser::new(&self.title), &mut title)
-        .unwrap();
+        latex::Renderer::default()
+            .push(Parser::new(&self.title), &mut title)
+            .unwrap();
 
         let mut buf = Buffer::new();
         let tmpl = LatexTemplate {
