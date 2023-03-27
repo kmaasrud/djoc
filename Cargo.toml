@@ -27,6 +27,7 @@ clap = { version = "4.1.4", default-features = false, features = [
 dirs = "4.0.0"
 hayagriva = "0.1.1"
 jotdown = { git = "https://github.com/hellux/jotdown" }
+katex = { version = "0.4.6", default-features = false, features = ["duktape"] }
 log = "0.4.17"
 rayon = "1.6.1"
 sailfish = "0.6.0"
