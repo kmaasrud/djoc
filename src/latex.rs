@@ -21,14 +21,14 @@ enum Emit {
 }
 
 impl Render for Renderer {
-    fn render_event<'s, W>(&mut self, e: &Event<'s>, mut out: W) -> fmt::Result
+    fn render_event<W>(&mut self, e: &Event, mut out: W) -> fmt::Result
     where
         W: fmt::Write,
     {
         match e {
             Event::Str(s) => match self.emit {
-                Emit::Escaped => write_escaped(&mut out, &s)?,
-                Emit::Raw => out.write_str(&s)?,
+                Emit::Escaped => write_escaped(&mut out, s)?,
+                Emit::Raw => out.write_str(s)?,
                 Emit::None => {}
             },
             Event::Symbol(sym) => write!(out, ":{}:", sym)?,
@@ -81,7 +81,7 @@ impl Render for Renderer {
                     }
                     Container::Heading { level, id, .. } => {
                         out.write_str(r"\hypertarget{")?;
-                        write_escaped(&mut out, &id)?;
+                        write_escaped(&mut out, id)?;
                         out.write_str("}{%\n")?;
                         match level {
                             1 => out.write_str(r"\section")?,

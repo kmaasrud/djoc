@@ -40,21 +40,7 @@ impl Chapter {
     }
 
     fn get_parser(&self) -> impl Iterator<Item = Event> {
-        // TODO: This is not ideal, as the mapping allocates quite a lot. When we can clone Events,
-        // this will be a lot simpler, as we can just modify the events vector.
-        Parser::new(&self.content).flat_map(|event| match event {
-            Event::Start(
-                Container::Div {
-                    class: Some("title"),
-                },
-                attrs,
-            ) => vec![
-                Event::Start(Container::RawBlock { format: "latex" }, attrs),
-                Event::Str(r"\maketitle".into()),
-                Event::End(Container::RawBlock { format: "latex" }),
-            ],
-            _ => vec![event],
-        })
+        Parser::new(&self.content)
     }
 
     pub fn write_html<W: fmt::Write>(&self, w: W) -> fmt::Result {
@@ -75,11 +61,27 @@ impl Chapter {
             }
             _ => event,
         });
+
         html::Renderer::default().push(parser, w)
     }
 
     pub fn write_latex<W: fmt::Write>(&self, w: W) -> fmt::Result {
-        latex::Renderer::default().push(self.get_parser(), w)
+        // TODO: This is not ideal, as the mapping allocates quite a lot.
+        let parser = self.get_parser().flat_map(|event| match event {
+            Event::Start(
+                Container::Div {
+                    class: Some("title"),
+                },
+                attrs,
+            ) => vec![
+                Event::Start(Container::RawBlock { format: "latex" }, attrs),
+                Event::Str(r"\maketitle".into()),
+                Event::End(Container::RawBlock { format: "latex" }),
+            ],
+            _ => vec![event],
+        });
+
+        latex::Renderer::default().push(parser, w)
     }
 }
 
