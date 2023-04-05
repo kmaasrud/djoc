@@ -6,7 +6,6 @@
 \usepackage{graphicx}
 \usepackage{hyperref}
 \usepackage{microtype}
-\usepackage{listings}
 \usepackage{parskip}
 \usepackage{soul}
 \usepackage{titling}
