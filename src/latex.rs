@@ -79,7 +79,7 @@ impl Render for Renderer {
                         write!(out, r"\includegraphics[width=\textwidth]{{{dest}}}")?;
                         out.write_str(r"\caption{")?;
                     }
-                    Container::Heading { level, id, .. } => {
+                    Container::Heading { level, id, .. } if *level < 6 => {
                         out.write_str(r"\hypertarget{")?;
                         write_escaped(&mut out, id)?;
                         out.write_str("}{%\n")?;
@@ -166,7 +166,7 @@ impl Render for Renderer {
                 | Container::DescriptionDetails
                 | Container::Div { .. } => {}
                 Container::Paragraph => out.write_str("\n")?,
-                Container::Heading { id, .. } => {
+                Container::Heading { level, id, .. } if *level < 6 => {
                     write!(out, r"}}\label{{{id}}}}}")?;
                     out.write_char('\n')?
                 }
