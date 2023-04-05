@@ -12,7 +12,7 @@ include = ["src/**/*.stpl", "src/**/*.rs"]
 [dependencies]
 anyhow = "1.0.69"
 dirs = "4.0.0"
-hayagriva = "0.1.1"
+hayagriva = "0.3.0"
 jotdown = { git = "https://github.com/hellux/jotdown" }
 katex = { version = "0.4.6", default-features = false, features = ["duktape"] }
 log = { version = "0.4.17", features = ["std"] }
