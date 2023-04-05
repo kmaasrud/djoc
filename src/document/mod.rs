@@ -1,7 +1,10 @@
-use crate::{
-    error::Error, latex, manifest::DocumentManifest, utils::kebab, walk::Walker, Author, Chapter,
-};
-use anyhow::{Context, Result};
+mod author;
+mod chapter;
+
+pub use author::Author;
+pub use chapter::Chapter;
+
+use crate::{error::Result, latex, manifest::DocumentManifest, utils::kebab, walk::Walker};
 use chrono::{NaiveDate, NaiveTime};
 use jotdown::{Parser, Render};
 use log::debug;
@@ -167,17 +170,10 @@ impl Document {
         fs::create_dir_all(&build_root)?;
 
         let mut status = crate::log::LoggingStatusBackend;
-
         let config = tectonic::config::PersistentConfig::default();
-        let bundle = config
-            .default_bundle(false, &mut status)
-            .map_err(Error::Tectonic)
-            .context("Failed to load the default resource bundle.")?;
+        let bundle = config.default_bundle(false, &mut status)?;
 
-        let format_cache_path = config
-            .format_cache_path()
-            .map_err(Error::Tectonic)
-            .context("Failed to set up the format cache.")?;
+        let format_cache_path = config.format_cache_path()?;
 
         let mut files = {
             let mut sb = tectonic::driver::ProcessingSessionBuilder::default();
@@ -193,14 +189,9 @@ impl Document {
                 .output_dir(&build_root)
                 .build_date(SystemTime::now());
 
-            let mut sess = sb
-                .create(&mut status)
-                .map_err(Error::Tectonic)
-                .context("Failed to initialize the LaTeX processing session.")?;
+            let mut sess = sb.create(&mut status)?;
 
-            sess.run(&mut status)
-                .map_err(Error::Tectonic)
-                .context("The LaTeX engine failed.")?;
+            sess.run(&mut status)?;
 
             sess.into_file_data()
         };

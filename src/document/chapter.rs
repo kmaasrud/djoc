@@ -8,16 +8,16 @@ use crate::{latex, manifest::ChapterManifest};
 
 pub struct Chapter {
     pub title: Option<String>,
-    content: String,
     pub path: Option<PathBuf>,
+    content: String,
 }
 
 impl Chapter {
     pub fn new(content: String) -> Self {
         Self {
-            content,
             title: None,
             path: None,
+            content,
         }
     }
 
@@ -46,7 +46,7 @@ impl Chapter {
     pub fn write_html<W: fmt::Write>(&self, w: W) -> fmt::Result {
         let mut in_math = false;
         let mut opts = katex::Opts::default();
-        let parser = self.get_parser().map(|event| match event {
+        let events = self.get_parser().map(|event| match event {
             Event::Start(Container::Math { display }, attrs) => {
                 opts.set_display_mode(display);
                 in_math = true;
@@ -62,12 +62,12 @@ impl Chapter {
             _ => event,
         });
 
-        html::Renderer::default().push(parser, w)
+        html::Renderer::default().push(events, w)
     }
 
     pub fn write_latex<W: fmt::Write>(&self, w: W) -> fmt::Result {
         // TODO: This is not ideal, as the mapping allocates quite a lot.
-        let parser = self.get_parser().flat_map(|event| match event {
+        let events = self.get_parser().flat_map(|event| match event {
             Event::Start(
                 Container::Div {
                     class: Some("title"),
@@ -81,7 +81,7 @@ impl Chapter {
             _ => vec![event],
         });
 
-        latex::Renderer::default().push(parser, w)
+        latex::Renderer::default().push(events, w)
     }
 }
 
