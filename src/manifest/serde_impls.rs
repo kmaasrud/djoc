@@ -1,3 +1,5 @@
+use super::Output;
+use crate::manifest::OutputFormat;
 use crate::Author;
 use serde::de::{self, MapAccess, Visitor};
 use serde::{Deserialize, Deserializer};
@@ -62,5 +64,51 @@ impl<'de> Deserialize<'de> for Author {
         }
 
         deserializer.deserialize_any(AuthorDefVisitor)
+    }
+}
+
+impl<'de> Deserialize<'de> for Output {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        #[derive(Deserialize)]
+        struct Aux {
+            name: Option<String>,
+            format: OutputFormat,
+        }
+        struct OutputVisitor;
+
+        impl<'de> Visitor<'de> for OutputVisitor {
+            type Value = Output;
+
+            fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+                formatter.write_str("string or map")
+            }
+
+            fn visit_str<E>(self, value: &str) -> Result<Self::Value, E>
+            where
+                E: de::Error,
+            {
+                Ok(Output {
+                    name: None,
+                    format: Deserialize::deserialize(de::value::StrDeserializer::new(value))?,
+                })
+            }
+
+            fn visit_map<M>(self, map: M) -> Result<Self::Value, M::Error>
+            where
+                M: MapAccess<'de>,
+            {
+                let aux: Aux =
+                    Deserialize::deserialize(de::value::MapAccessDeserializer::new(map))?;
+                Ok(Output {
+                    name: aux.name,
+                    format: aux.format,
+                })
+            }
+        }
+
+        deserializer.deserialize_any(OutputVisitor)
     }
 }

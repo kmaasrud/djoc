@@ -3,7 +3,6 @@ use crate::Document;
 use crate::{document::DocumentType, Author};
 use rayon::prelude::*;
 use serde::Deserialize;
-use std::error::Error;
 use std::fs::File;
 use std::path::{Path, PathBuf};
 use toml::value::Datetime;
@@ -17,33 +16,31 @@ pub struct Manifest {
 }
 
 impl Manifest {
-    pub fn execute(self) -> Result<(), Box<dyn Error>> {
+    pub fn execute(self) -> Result<(), std::io::Error> {
         let builder = Builder::default();
-        self.documents.into_par_iter().for_each(|manifest| {
-            let mut builder = builder.clone();
-            if let Some(number_sections) = manifest.builder.number_sections {
-                builder.number_sections = number_sections;
-            }
-
-            let outputs = manifest.builder.outputs.clone();
-
-            let document: Document = manifest.try_into().unwrap();
-
-            for output in outputs {
-                let file = File::create(
-                    Path::new(&output.name.unwrap_or(document.filename()))
-                        .with_extension(output.format.as_ref()),
-                )
-                .unwrap();
-                match output.format {
-                    OutputFormat::Pdf => builder.write_pdf(&document, file),
-                    OutputFormat::Latex => builder.write_latex(&document, file),
-                    OutputFormat::Html => builder.write_html(&document, file),
+        self.documents
+            .into_par_iter()
+            .try_for_each_with(builder, |builder, manifest| {
+                if let Some(number_sections) = manifest.builder.number_sections {
+                    builder.number_sections = number_sections;
                 }
-                .unwrap();
-            }
-        });
-        Ok(())
+
+                let outputs = manifest.builder.outputs.clone();
+                let document: Document = manifest.try_into()?;
+
+                for output in outputs {
+                    let path = Path::new(&output.name.unwrap_or(document.filename()))
+                        .with_extension(output.format.as_ref());
+                    let file = File::create(path)?;
+                    match output.format {
+                        OutputFormat::Pdf => builder.write_pdf(&document, file),
+                        OutputFormat::Latex => builder.write_latex(&document, file),
+                        OutputFormat::Html => builder.write_html(&document, file),
+                    }?;
+                }
+
+                Ok(())
+            })
     }
 }
 
@@ -70,7 +67,7 @@ pub struct DocumentManifest {
     builder: BuilderManifest,
 }
 
-#[derive(Clone, Deserialize)]
+#[derive(Clone)]
 pub struct Output {
     pub name: Option<String>,
     pub format: OutputFormat,

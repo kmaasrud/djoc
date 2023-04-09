@@ -9,6 +9,7 @@ pub fn build() -> Result<(), Box<dyn Error>> {
         .filter_extensions(&["toml"])
         .try_for_each(|path| {
             let manifest: Manifest = toml::from_str(&fs::read_to_string(path)?)?;
-            manifest.execute()
+            manifest.execute()?;
+            Ok(())
         })
 }
