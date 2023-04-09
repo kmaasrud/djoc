@@ -8,7 +8,11 @@ pub const MAIN_CSS: &[u8] = include_bytes!("./main.css");
 pub const KATEX_CSS: &[u8] = include_bytes!("./katex.css");
 
 impl Builder {
-    pub fn write_html<W: Write + Send>(&self, document: &Document, mut w: W) -> std::io::Result<()> {
+    pub fn write_html<W: Write + Send>(
+        &self,
+        document: &Document,
+        mut w: W,
+    ) -> std::io::Result<()> {
         writeln!(w, "<!DOCTYPE html>\n<html lang=\"en\">\n<head>")?;
         writeln!(w, "<style>")?;
         w.write_all(MAIN_CSS)?;
@@ -19,8 +23,7 @@ impl Builder {
         let content: String = document
             .texts
             .par_iter()
-            .map(|text| {
-                let mut buf = String::new();
+            .fold_with(String::new(), |mut buf, text| {
                 let mut opts = katex::Opts::default();
                 let mut in_math = false;
                 let events = Parser::new(text).map(|event| match event {
