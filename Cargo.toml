@@ -13,7 +13,7 @@ include = ["src/**/*.stpl", "src/**/*.rs"]
 anyhow = "1.0.69"
 dirs = "4.0.0"
 hayagriva = "0.3.0"
-jotdown = { git = "https://github.com/hellux/jotdown" }
+jotdown = "0.2.0"
 katex = { version = "0.4.6", default-features = false, features = ["duktape"] }
 log = { version = "0.4.17", features = ["std"] }
 rayon = "1.6.1"

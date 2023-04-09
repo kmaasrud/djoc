@@ -9,6 +9,18 @@ enum WalkNode {
 
 pub struct Walker {
     stack: Vec<WalkNode>,
+    nesting: usize,
+    max_nesting: usize,
+}
+
+impl Default for Walker {
+    fn default() -> Self {
+        Self {
+            stack: Vec::new(),
+            nesting: 0,
+            max_nesting: 10,
+        }
+    }
 }
 
 impl Walker {
@@ -25,7 +37,17 @@ impl Walker {
             stack.push(WalkNode::File(path.into()));
         }
 
-        Ok(Self { stack })
+        Ok(Self {
+            stack,
+            ..Default::default()
+        })
+    }
+
+    pub fn max_nesting(self, max_nesting: usize) -> Self {
+        Self {
+            max_nesting,
+            ..self
+        }
     }
 
     pub fn filter_extensions(self, extensions: &'static [&'static str]) -> FilteredWalker {
@@ -43,9 +65,10 @@ impl Iterator for Walker {
         loop {
             match self.stack.pop() {
                 Some(WalkNode::Dir(iter)) => {
+                    self.nesting += 1;
                     iter.filter_map(|e| e.ok()).for_each(|e| {
                         let path = e.path();
-                        if path.is_dir() {
+                        if path.is_dir() && self.nesting < self.max_nesting {
                             if let Ok(read_dir) = path.read_dir() {
                                 self.stack.push(WalkNode::Dir(read_dir));
                             }

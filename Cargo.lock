@@ -1307,8 +1307,9 @@ checksum = "8eaf4bc02d17cbdd7ff4c7438cafcdf7fb9a4613313ad11b4f8fefe7d3fa0130"
 
 [[package]]
 name = "jotdown"
-version = "0.1.0"
-source = "git+https://github.com/hellux/jotdown#0884be27ec5a40c3525b291fb98103041ddfd753"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "784bf7de67dfc6d515d3914d634fa00717e78449c0db9c6595c8658ce7868798"
 
 [[package]]
 name = "js-sys"
