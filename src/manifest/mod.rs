@@ -1,13 +1,16 @@
+mod builder;
+mod document;
+mod serde_impls;
+
+pub use builder::{BuilderManifest, Output, OutputFormat};
+pub use document::DocumentManifest;
+
 use crate::builder::Builder;
 use crate::Document;
-use crate::{document::DocumentType, Author};
 use rayon::prelude::*;
 use serde::Deserialize;
 use std::fs::File;
-use std::path::{Path, PathBuf};
-use toml::value::Datetime;
-
-mod serde_impls;
+use std::path::Path;
 
 #[derive(Deserialize)]
 pub struct Manifest {
@@ -41,53 +44,5 @@ impl Manifest {
 
                 Ok(())
             })
-    }
-}
-
-#[derive(Deserialize)]
-pub struct BuilderManifest {
-    #[serde(alias = "output")]
-    pub outputs: Vec<Output>,
-    pub number_sections: Option<bool>,
-}
-
-#[derive(Deserialize)]
-#[serde(rename_all = "kebab-case")]
-pub struct DocumentManifest {
-    pub title: String,
-    pub date: Option<Datetime>,
-    #[serde(default, alias = "author")]
-    pub authors: Vec<Author>,
-    #[serde(default, alias = "text")]
-    pub texts: Vec<PathBuf>,
-    #[serde(default, alias = "type")]
-    pub document_type: DocumentType,
-    pub locale: Option<String>,
-    #[serde(flatten)]
-    builder: BuilderManifest,
-}
-
-#[derive(Clone)]
-pub struct Output {
-    pub name: Option<String>,
-    pub format: OutputFormat,
-}
-
-#[derive(Clone, Deserialize)]
-#[serde(rename_all = "kebab-case")]
-pub enum OutputFormat {
-    Pdf,
-    Html,
-    #[serde(alias = "tex")]
-    Latex,
-}
-
-impl AsRef<str> for OutputFormat {
-    fn as_ref(&self) -> &str {
-        match self {
-            OutputFormat::Pdf => "pdf",
-            OutputFormat::Html => "html",
-            OutputFormat::Latex => "tex",
-        }
     }
 }

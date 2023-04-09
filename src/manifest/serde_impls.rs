@@ -1,5 +1,4 @@
-use super::Output;
-use crate::manifest::OutputFormat;
+use super::{Output, OutputFormat};
 use crate::Author;
 use serde::de::{self, MapAccess, Visitor};
 use serde::{Deserialize, Deserializer};
