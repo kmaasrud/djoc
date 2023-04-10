@@ -11,3 +11,7 @@ $ cargo install --path .
 ```
 
 [Tectonic dependencies]: https://tectonic-typesetting.github.io/book/latest/howto/build-tectonic/index.html#third-party-dependencies
+
+Here is math: $`f(z) = \oint_\Omega \frac{1}{1 + z^2}dz`.
+
+$$`f(z) = \oint_\Omega \frac{1}{1 + z^2}dz`.

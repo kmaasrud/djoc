@@ -1,0 +1,12 @@
+outputs = ["pdf"]
+
+[[document]]
+title = "First document"
+authors = ["Knut Magnus Aasrud"]
+texts = ["src/introduction.dj", "src/getting-started.dj"]
+number-sections = true
+
+[[document]]
+title = "Second document"
+authors = []
+texts = ["src/introduction.dj"]
