@@ -40,12 +40,10 @@ impl Manifest {
                         .with_extension(output.format.as_ref());
                     let file = File::create(path)?;
                     match output.format {
-                        OutputFormat::Pdf => builder.write_pdf(&document, file),
-                        OutputFormat::Latex => builder.write_latex(&document, file),
-                        OutputFormat::Html => {
-                            builder.write_html(&document, file).map_err(Into::into)
-                        }
-                    }?;
+                        OutputFormat::Pdf => builder.write_pdf(&document, file)?,
+                        OutputFormat::Latex => builder.write_latex(&document, file)?,
+                        OutputFormat::Html => builder.write_html(&document, file)?,
+                    };
                 }
 
                 Ok(())
@@ -56,12 +54,19 @@ impl Manifest {
 #[derive(Debug)]
 pub enum ExecutionError {
     Pdf(crate::builder::pdf::PdfError),
+    Html(crate::builder::html::HtmlError),
     Io(std::io::Error),
 }
 
 impl From<crate::builder::pdf::PdfError> for ExecutionError {
     fn from(e: crate::builder::pdf::PdfError) -> Self {
         Self::Pdf(e)
+    }
+}
+
+impl From<crate::builder::html::HtmlError> for ExecutionError {
+    fn from(e: crate::builder::html::HtmlError) -> Self {
+        Self::Html(e)
     }
 }
 
@@ -74,8 +79,9 @@ impl From<std::io::Error> for ExecutionError {
 impl Display for ExecutionError {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         match self {
-            Self::Pdf(e) => write!(f, "failed during pdf build: {}", e),
-            Self::Io(e) => e.fmt(f),
+            Self::Pdf(e) => write!(f, "failed during pdf build: {e}"),
+            Self::Io(e) => write!(f, "io error: {e}"),
+            Self::Html(e) => write!(f, "failed during html build: {e}"),
         }
     }
 }
@@ -85,6 +91,7 @@ impl Error for ExecutionError {
         match self {
             Self::Pdf(e) => Some(e),
             Self::Io(e) => Some(e),
+            Self::Html(e) => Some(e),
         }
     }
 }

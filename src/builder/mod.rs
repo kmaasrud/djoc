@@ -1,4 +1,4 @@
-mod html;
+pub mod html;
 pub mod pdf;
 
 use crate::manifest::BuilderManifest;

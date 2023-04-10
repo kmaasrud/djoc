@@ -128,6 +128,7 @@ impl Builder {
     }
 }
 
+#[non_exhaustive]
 #[derive(Debug)]
 pub struct PdfError {
     pub document_name: Option<String>,

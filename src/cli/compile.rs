@@ -32,11 +32,11 @@ pub fn compile(path: Option<PathBuf>, format: String, output: Option<String>) ->
 
     let format = format.replace("latex", "tex");
     match format.as_str() {
-        "html" => builder.write_html(&doc, file).map_err(Into::into),
-        "tex" => builder.write_latex(&doc, file),
-        "pdf" => builder.write_pdf(&doc, file),
+        "html" => builder.write_html(&doc, file)?,
+        "tex" => builder.write_latex(&doc, file)?,
+        "pdf" => builder.write_pdf(&doc, file)?,
         _ => bail!("Unknown format `{}`", format),
-    }?;
+    };
 
     info!("{:?}, built!", filename);
 
