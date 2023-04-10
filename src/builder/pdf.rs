@@ -233,7 +233,6 @@ const DEFAULT_PREAMBLE: &[u8] = br#"
 \setlength{\emergencystretch}{3em} % prevent overfull lines
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
-\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
 \urlstyle{same} % disable monospaced font for URLs
 \hypersetup{
   colorlinks=true,

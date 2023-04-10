@@ -5,7 +5,7 @@ use djoc::{manifest::Manifest, utils::find_root, walk::Walker};
 
 /// Builds a document.
 pub fn build() -> Result<()> {
-    Walker::new(find_root(std::env::current_dir()?)?)?
+    Walker::new(find_root(std::env::current_dir()?))?
         .max_nesting(1)
         .filter_extensions(&["toml"])
         .try_for_each(|path| {

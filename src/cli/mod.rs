@@ -3,8 +3,9 @@ mod clean;
 mod compile;
 mod init;
 
-use std::{error::Error, path::PathBuf};
+use std::path::PathBuf;
 
+use anyhow::Result;
 use clap::{Parser, Subcommand};
 use log::LevelFilter;
 
@@ -48,7 +49,7 @@ enum Command {
     },
 }
 
-pub fn run() -> Result<(), Box<dyn Error>> {
+pub fn run() -> Result<()> {
     let app = Djoc::parse();
 
     let logger = match (app.quiet, app.debug) {

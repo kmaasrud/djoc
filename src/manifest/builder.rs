@@ -1,16 +1,19 @@
 use serde::Deserialize;
 
 #[derive(Clone, Deserialize)]
+#[serde(rename_all = "kebab-case")]
 pub struct BuilderManifest {
-    #[serde(alias = "output")]
+    #[serde(default, alias = "output")]
     pub outputs: Vec<Output>,
     pub number_sections: Option<bool>,
 }
 
 impl BuilderManifest {
-    pub fn merge(&mut self, other: &Self) {
-        self.outputs.extend_from_slice(&other.outputs);
-        self.number_sections = other.number_sections.or(self.number_sections);
+    pub fn merge(self, other: &Self) -> Self {
+        Self {
+            outputs: [self.outputs, other.outputs.clone()].concat(),
+            number_sections: other.number_sections.or(self.number_sections),
+        }
     }
 }
 

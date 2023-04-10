@@ -12,5 +12,3 @@ pub mod walk;
 pub use author::Author;
 pub use builder::Builder;
 pub use document::Document;
-
-pub const MANIFEST_FILE: &str = "djoc.toml";

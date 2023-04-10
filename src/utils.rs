@@ -1,26 +1,22 @@
 use std::{
-    io,
     path::{Path, PathBuf},
     process::Command,
 };
 
-use crate::MANIFEST_FILE;
-
-/// Finds the root of a djoc document by looking for a `djoc.toml` file.
-pub fn find_root<P: AsRef<Path>>(path: P) -> io::Result<PathBuf> {
-    let mut path: PathBuf = path.as_ref().into();
-    let look_for = Path::new(MANIFEST_FILE);
+/// Finds the root by looking for a `djoc.toml` file. If a `djoc.toml` file is
+/// not found, the current directory is returned.
+pub fn find_root<P: AsRef<Path>>(start_path: P) -> PathBuf {
+    let start_path = start_path.as_ref().to_path_buf();
+    let mut path: PathBuf = start_path.clone();
+    let look_for = Path::new("djoc.toml");
     loop {
         path.push(look_for);
-        if path.is_file() {
+        if path.is_dir() {
             path.pop();
-            return Ok(path);
+            return path;
         }
         if !(path.pop() && path.pop()) {
-            return Err(io::Error::new(
-                std::io::ErrorKind::NotFound,
-                "Unable to find a \"djoc.toml\" file.",
-            ));
+            return start_path;
         }
     }
 }
@@ -41,7 +37,7 @@ pub fn get_author_name() -> Option<String> {
     }
 }
 
-/// Finds the djoc data directory
+/// Returns the djoc data directory
 pub fn data_dir() -> PathBuf {
     dirs::data_dir()
         .expect("Unable to get the data directory.")

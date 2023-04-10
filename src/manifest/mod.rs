@@ -27,16 +27,15 @@ pub struct Manifest {
 impl Manifest {
     pub fn execute(self) -> Result<(), ExecutionError> {
         let builder_manifest = self.builder;
-        self.documents.into_par_iter().try_for_each_with(
-            builder_manifest,
-            |builder_manifest, manifest| -> Result<(), ExecutionError> {
-                builder_manifest.merge(&manifest.builder);
-                let builder = Builder::from_manifest(builder_manifest);
+        self.documents
+            .into_par_iter()
+            .try_for_each(|manifest| -> Result<(), ExecutionError> {
+                let builder_manifest = builder_manifest.clone().merge(&manifest.builder);
+                let builder = Builder::from_manifest(&builder_manifest);
 
-                let outputs = manifest.builder.outputs.clone();
                 let document: Document = manifest.try_into()?;
 
-                for output in outputs {
+                for output in builder_manifest.outputs {
                     let path = Path::new(&output.name.unwrap_or(document.filename()))
                         .with_extension(output.format.as_ref());
                     let file = File::create(path)?;
@@ -50,8 +49,7 @@ impl Manifest {
                 }
 
                 Ok(())
-            },
-        )
+            })
     }
 }
 
@@ -76,7 +74,7 @@ impl From<std::io::Error> for ExecutionError {
 impl Display for ExecutionError {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         match self {
-            Self::Pdf(e) => e.fmt(f),
+            Self::Pdf(e) => write!(f, "failed during pdf build: {}", e),
             Self::Io(e) => e.fmt(f),
         }
     }

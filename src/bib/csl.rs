@@ -7,13 +7,9 @@ use url::Url;
 use crate::utils::{data_dir, find_root};
 
 pub fn get_csl(id: &str) -> Result<PathBuf> {
-    if let Ok(root) = find_root(".") {
-        // First check if id is relative path
-        let path = root.join(id);
-
-        if path.exists() {
-            return Ok(path);
-        }
+    let path = find_root(".").join(id);
+    if path.exists() {
+        return Ok(path);
     }
 
     let url = if let Ok(url) = Url::parse(id) {

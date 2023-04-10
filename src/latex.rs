@@ -103,7 +103,7 @@ impl Render for Renderer {
                             5 => out.write_str(r"\subparagraph")?,
                             _ => {}
                         }
-                        if self.number_sections {
+                        if !self.number_sections {
                             out.write_char('*')?;
                         }
                         out.write_char('{')?;
