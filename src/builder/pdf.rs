@@ -1,23 +1,36 @@
-use super::Builder;
-use crate::{latex, Document};
+use std::{
+    error::Error,
+    fmt::{self, Display, Formatter},
+    fs,
+    io::{self, Write},
+    path::Path,
+    time::SystemTime,
+};
+
 use jotdown::{Parser, Render};
 use rayon::prelude::*;
-use std::fs;
-use std::io::{self, Write};
-use std::path::Path;
-use std::time::SystemTime;
+
+use super::Builder;
+use crate::{latex, Document};
 
 impl Builder {
-    pub fn write_pdf<W: Write>(&self, document: &Document, mut w: W) -> std::io::Result<()> {
+    pub fn write_pdf<W: Write>(&self, document: &Document, mut w: W) -> Result<(), PdfError> {
         let filename = document.filename();
         let build_root = Path::new("build").join(&filename);
-        fs::create_dir_all(&build_root)?;
+        fs::create_dir_all(&build_root).map_err(|e| PdfError {
+            document_name: Some(document.title.clone()),
+            kind: PdfErrorKind::CreateDir(e),
+        })?;
 
         let mut status = crate::log::LoggingStatusBackend;
         let config = tectonic::config::PersistentConfig::default();
-        let bundle = config.default_bundle(false, &mut status)?;
+        let bundle = config
+            .default_bundle(false, &mut status)
+            .map_err(|e| PdfError::from(e).document_name(&document.title))?;
 
-        let format_cache_path = config.format_cache_path()?;
+        let format_cache_path = config
+            .format_cache_path()
+            .map_err(|e| PdfError::from(e).document_name(&document.title))?;
 
         let mut bytes = Vec::new();
         self.write_latex(document, &mut bytes)?;
@@ -36,9 +49,12 @@ impl Builder {
                 .output_dir(&build_root)
                 .build_date(SystemTime::now());
 
-            let mut sess = sb.create(&mut status)?;
+            let mut sess = sb
+                .create(&mut status)
+                .map_err(|e| PdfError::from(e).document_name(&document.title))?;
 
-            sess.run(&mut status)?;
+            sess.run(&mut status)
+                .map_err(|e| PdfError::from(e).document_name(&document.title))?;
 
             sess.into_file_data()
         };
@@ -46,16 +62,16 @@ impl Builder {
         match files.remove(&format!("{filename}.pdf")) {
             Some(file) => w.write_all(&file.data)?,
             None => {
-                return Err(io::Error::new(
-                    io::ErrorKind::Other,
-                    "LaTeX didn't report failure, but no PDF was created.",
-                ))
+                return Err(PdfError {
+                    document_name: Some(document.title.clone()),
+                    kind: PdfErrorKind::NoPdfCreated,
+                })
             }
         }
         Ok(())
     }
 
-    pub fn write_latex<W: Write>(&self, document: &Document, mut w: W) -> std::io::Result<()> {
+    pub fn write_latex<W: Write>(&self, document: &Document, mut w: W) -> Result<(), PdfError> {
         writeln!(w, r"\documentclass{{{}}}", document.document_type.as_ref())?;
         for package in DEFAULT_PACKAGES {
             writeln!(w, r"\usepackage{{{package}}}")?;
@@ -99,14 +115,87 @@ impl Builder {
             .par_iter()
             .fold_with(String::new(), |mut buf, text| {
                 latex::Renderer::default()
+                    .number_sections(self.number_sections)
                     .push(Parser::new(text), &mut buf)
                     .unwrap();
                 buf
             })
             .collect();
 
-        writeln!(w, "\\begin{{document}}\n{content}\n\\end{{document}}")
+        writeln!(w, "\\begin{{document}}\n{content}\n\\end{{document}}")?;
+
+        Ok(())
     }
+}
+
+#[derive(Debug)]
+pub struct PdfError {
+    pub document_name: Option<String>,
+    pub kind: PdfErrorKind,
+}
+
+impl PdfError {
+    pub fn document_name(self, document_name: &str) -> Self {
+        Self {
+            document_name: Some(document_name.to_string()),
+            ..self
+        }
+    }
+}
+
+impl From<io::Error> for PdfError {
+    fn from(e: io::Error) -> Self {
+        Self {
+            document_name: None,
+            kind: PdfErrorKind::Io(e),
+        }
+    }
+}
+
+impl From<tectonic::Error> for PdfError {
+    fn from(e: tectonic::Error) -> Self {
+        Self {
+            document_name: None,
+            kind: PdfErrorKind::Tectonic(e),
+        }
+    }
+}
+
+impl Display for PdfError {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+        if let Some(name) = &self.document_name {
+            write!(f, "{name} - ")?;
+        }
+
+        match &self.kind {
+            PdfErrorKind::Tectonic(e) => write!(f, "tectonic error: {}", e),
+            PdfErrorKind::Io(e) => write!(f, "io error: {}", e),
+            PdfErrorKind::CreateDir(e) => write!(f, "failed to create directory: {}", e),
+            PdfErrorKind::NoPdfCreated => write!(f, "engine finished, but no pdf was created"),
+        }
+    }
+}
+
+impl Error for PdfError {
+    fn source(&self) -> Option<&(dyn Error + 'static)> {
+        match &self.kind {
+            PdfErrorKind::Tectonic(e) => Some(e),
+            PdfErrorKind::Io(e) => Some(e),
+            PdfErrorKind::CreateDir(e) => Some(e),
+            PdfErrorKind::NoPdfCreated => None,
+        }
+    }
+}
+
+unsafe impl Sync for PdfError {}
+
+#[non_exhaustive]
+#[derive(Debug)]
+pub enum PdfErrorKind {
+    Tectonic(tectonic::Error),
+    Io(io::Error),
+    CreateDir(io::Error),
+    NoPdfCreated,
 }
 
 const DEFAULT_PACKAGES: [&str; 17] = [

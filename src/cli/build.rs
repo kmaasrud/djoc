@@ -1,9 +1,10 @@
-use djoc::{manifest::Manifest, utils::find_root, walk::Walker};
-use std::error::Error;
 use std::fs;
 
+use anyhow::Result;
+use djoc::{manifest::Manifest, utils::find_root, walk::Walker};
+
 /// Builds a document.
-pub fn build() -> Result<(), Box<dyn Error>> {
+pub fn build() -> Result<()> {
     Walker::new(find_root(std::env::current_dir()?)?)?
         .max_nesting(1)
         .filter_extensions(&["toml"])

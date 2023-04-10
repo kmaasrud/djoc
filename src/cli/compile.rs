@@ -1,13 +1,15 @@
-use anyhow::{bail, Result};
-use djoc::{Builder, Document};
-use log::{debug, info};
 use std::{
     fs::File,
     io::Read,
     path::{Path, PathBuf},
 };
 
-/// Builds a document. If no path is provided, searches up the filetree for a document to build.
+use anyhow::{bail, Result};
+use djoc::{Builder, Document};
+use log::{debug, info};
+
+/// Builds a document. If no path is provided, searches up the filetree for a
+/// document to build.
 pub fn compile(path: Option<PathBuf>, format: String, output: Option<String>) -> Result<()> {
     let builder = Builder::default();
     let doc = match path {
@@ -30,7 +32,7 @@ pub fn compile(path: Option<PathBuf>, format: String, output: Option<String>) ->
 
     let format = format.replace("latex", "tex");
     match format.as_str() {
-        "html" => builder.write_html(&doc, file),
+        "html" => builder.write_html(&doc, file).map_err(Into::into),
         "tex" => builder.write_latex(&doc, file),
         "pdf" => builder.write_pdf(&doc, file),
         _ => bail!("Unknown format `{}`", format),
