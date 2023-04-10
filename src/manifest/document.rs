@@ -1,8 +1,10 @@
+use std::path::PathBuf;
+
+use serde::Deserialize;
+use toml::value::Datetime;
+
 use super::BuilderManifest;
 use crate::{document::DocumentType, Author};
-use serde::Deserialize;
-use std::path::PathBuf;
-use toml::value::Datetime;
 
 #[derive(Deserialize)]
 #[serde(rename_all = "kebab-case")]

@@ -31,11 +31,10 @@
 
       toolchain = with fenix.packages.${system};
         combine [
-          stable.rustc
-          stable.rust-src
-          stable.cargo
-          stable.clippy
-          stable.rustfmt
+          default.rustc
+          default.cargo
+          default.clippy
+          default.rustfmt
         ];
 
       craneLib = (crane.mkLib pkgs).overrideToolchain toolchain;

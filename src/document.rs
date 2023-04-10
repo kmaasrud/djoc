@@ -1,8 +1,10 @@
-use crate::{error::Result, manifest::DocumentManifest, utils::kebab, walk::Walker, Author};
+use std::{fs, io, path::Path};
+
 use chrono::{NaiveDate, NaiveTime};
 use log::debug;
 use serde::Deserialize;
-use std::{fs, io, path::Path};
+
+use crate::{error::Result, manifest::DocumentManifest, utils::kebab, walk::Walker, Author};
 
 const DEFAULT_LOCALE: &str = "en_US";
 

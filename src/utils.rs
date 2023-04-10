@@ -1,9 +1,10 @@
-use crate::MANIFEST_FILE;
 use std::{
     io,
     path::{Path, PathBuf},
     process::Command,
 };
+
+use crate::MANIFEST_FILE;
 
 /// Finds the root of a djoc document by looking for a `djoc.toml` file.
 pub fn find_root<P: AsRef<Path>>(path: P) -> io::Result<PathBuf> {
@@ -25,7 +26,8 @@ pub fn find_root<P: AsRef<Path>>(path: P) -> io::Result<PathBuf> {
 }
 
 // Function fetched from https://github.com/rust-lang/mdBook/blob/master/src/cmd/init.rs
-/// Obtains author name from git config file by running the `git config` command.
+/// Obtains author name from git config file by running the `git config`
+/// command.
 pub fn get_author_name() -> Option<String> {
     let output = Command::new("git")
         .args(["config", "--get", "user.name"])

@@ -1,8 +1,10 @@
-use super::Builder;
-use crate::Document;
+use std::io::Write;
+
 use jotdown::{html, Container, Event, Parser, Render};
 use rayon::prelude::*;
-use std::io::Write;
+
+use super::Builder;
+use crate::Document;
 
 pub const MAIN_CSS: &[u8] = include_bytes!("./main.css");
 pub const KATEX_CSS: &[u8] = include_bytes!("./katex.css");

@@ -1,6 +1,8 @@
-use std::fs::ReadDir;
-use std::io;
-use std::path::{Path, PathBuf};
+use std::{
+    fs::ReadDir,
+    io,
+    path::{Path, PathBuf},
+};
 
 enum WalkNode {
     Dir(ReadDir),

@@ -1,9 +1,12 @@
+use std::{fmt, io, str::FromStr};
+
+use serde::{
+    de::{self, MapAccess, Visitor},
+    Deserialize, Deserializer,
+};
+
 use super::{Output, OutputFormat};
 use crate::Author;
-use serde::de::{self, MapAccess, Visitor};
-use serde::{Deserialize, Deserializer};
-use std::fmt;
-use std::{io, str::FromStr};
 
 impl FromStr for Author {
     type Err = io::Error;

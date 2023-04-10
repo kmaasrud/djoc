@@ -3,10 +3,10 @@ mod clean;
 mod compile;
 mod init;
 
+use std::{error::Error, path::PathBuf};
+
 use clap::{Parser, Subcommand};
 use log::LevelFilter;
-use std::error::Error;
-use std::path::PathBuf;
 
 #[derive(Parser)]
 #[command(author, version, about)]

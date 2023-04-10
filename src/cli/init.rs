@@ -1,9 +1,8 @@
+use std::{ffi::OsStr, fs, path::PathBuf};
+
 use anyhow::{Context, Result};
 use djoc::{utils::get_author_name, MANIFEST_FILE};
 use log::info;
-use std::ffi::OsStr;
-use std::fs;
-use std::path::PathBuf;
 
 const CONFIG_PRE: &str = r#"# This is the configuration file of your document.
 # It is used to specify metadata, build instructions, styling and more.
@@ -12,8 +11,8 @@ const CONFIG_PRE: &str = r#"# This is the configuration file of your document.
 const CONFIG_POST: &str = r#"
 # For more options, visit https://kmaasrud.com/djoc/config"#;
 
-/// Initializes a document in the path provided. Defaults to the current directory if no path is
-/// provided.
+/// Initializes a document in the path provided. Defaults to the current
+/// directory if no path is provided.
 pub fn init(path: Option<PathBuf>) -> Result<()> {
     // Define root and title of document from optional path argument
     let (root, title) = if let Some(path) = path {

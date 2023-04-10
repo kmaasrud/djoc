@@ -1,9 +1,10 @@
-use crate::utils::{data_dir, find_root};
+use std::{io::Read, path::PathBuf};
+
 use anyhow::{anyhow, Result};
 use log::info;
-use std::io::Read;
-use std::path::PathBuf;
 use url::Url;
+
+use crate::utils::{data_dir, find_root};
 
 pub fn get_csl(id: &str) -> Result<PathBuf> {
     if let Ok(root) = find_root(".") {
@@ -19,7 +20,8 @@ pub fn get_csl(id: &str) -> Result<PathBuf> {
         // id is parsable URL, so use that URL
         url
     } else {
-        // id is the filestem of a CSL file contained in the citation-style-language/styles repo
+        // id is the filestem of a CSL file contained in the
+        // citation-style-language/styles repo
         Url::parse("https://raw.githubusercontent.com/citation-style-language/styles/master/")?
             .join(&format!("{id}.csl"))?
     };

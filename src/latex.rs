@@ -1,9 +1,19 @@
 //! LaTeX renderer for jotdown.
 //!
-//! The output should mostly match that of Pandoc, though there may be slight differences.
+//! The output should mostly match that of Pandoc, though there may be slight
+//! differences.
+
+use std::fmt;
 
 use jotdown::{Container, Event, ListKind, OrderedListNumbering, OrderedListStyle, Render};
-use std::fmt;
+
+#[derive(Default)]
+enum Emit {
+    #[default]
+    Escaped,
+    Raw,
+    None,
+}
 
 #[derive(Default)]
 pub struct Renderer {
@@ -12,12 +22,14 @@ pub struct Renderer {
     first_line: bool,
 }
 
-#[derive(Default)]
-enum Emit {
-    #[default]
-    Escaped,
-    Raw,
-    None,
+impl Renderer {
+    #[must_use]
+    pub fn number_sections(self, number_sections: bool) -> Self {
+        Self {
+            number_sections,
+            ..self
+        }
+    }
 }
 
 impl Render for Renderer {

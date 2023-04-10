@@ -35,7 +35,8 @@ impl std::error::Error for Error {
     }
 }
 
-// TODO: This is required by anyhow, but I ideally want to remove that dependency
+// TODO: This is required by anyhow, but I ideally want to remove that
+// dependency
 unsafe impl Sync for Error {}
 
 impl From<std::io::Error> for Error {

@@ -1,7 +1,8 @@
+use std::{io, path::Path};
+
 use hayagriva::Entry;
 
 use crate::{utils::find_root, walk::Walker};
-use std::{io, path::Path};
 
 pub fn get_bib_entries<P: AsRef<Path>>(path: Option<P>) -> io::Result<Vec<Entry>> {
     let bibtex_content = match path {
