@@ -1,3 +1,8 @@
+//! HTML output functionality for djoc.
+//!
+//! This module only contains the error types for HTML output and provides the
+//! [`Builder::write_html`] method.
+
 use std::{
     error::Error,
     fmt::{self, Display, Formatter},
@@ -10,10 +15,21 @@ use rayon::prelude::*;
 use super::Builder;
 use crate::Document;
 
-pub const MAIN_CSS: &[u8] = include_bytes!("./main.css");
-pub const KATEX_CSS: &[u8] = include_bytes!("./katex.css");
+const MAIN_CSS: &[u8] = include_bytes!("./main.css");
+const KATEX_CSS: &[u8] = include_bytes!("./katex.css");
 
 impl Builder {
+    /// Build the document as HTML and write it to the given writer.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use djoc::{Builder, Document};
+    ///
+    /// let mut builder = Builder::default();
+    /// let document = Document::from("Hello, world!".to_string());
+    /// builder.write_html(&document, &mut std::io::stdout()).unwrap();
+    /// ```
     pub fn write_html<W: Write + Send>(
         &self,
         document: &Document,

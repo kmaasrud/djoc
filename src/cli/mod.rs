@@ -9,6 +9,8 @@ use anyhow::Result;
 use clap::{Parser, Subcommand};
 use log::LevelFilter;
 
+use crate::log::Logger;
+
 #[derive(Parser)]
 #[command(author, version, about)]
 struct Djoc {
@@ -53,9 +55,9 @@ pub fn run() -> Result<()> {
     let app = Djoc::parse();
 
     let logger = match (app.quiet, app.debug) {
-        (true, _) => djoc::log::Logger::new(LevelFilter::Error),
-        (_, true) => djoc::log::Logger::new(LevelFilter::Off),
-        _ => djoc::log::Logger::new(LevelFilter::Info),
+        (true, _) => Logger::new(LevelFilter::Error),
+        (_, true) => Logger::new(LevelFilter::Off),
+        _ => Logger::new(LevelFilter::Info),
     };
 
     log::set_max_level(logger.filter);

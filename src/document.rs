@@ -4,10 +4,13 @@ use chrono::{NaiveDate, NaiveTime};
 use log::debug;
 use serde::Deserialize;
 
-use crate::{error::Result, manifest::DocumentManifest, utils::kebab, walk::Walker, Author};
+use crate::{manifest::DocumentManifest, utils::kebab, walk::Walker, Author};
 
 const DEFAULT_LOCALE: &str = "en_US";
 
+/// Enumerates the tyeps of documents that can be generated.
+///
+/// The type dictates the template that will be used to generate the document.
 #[derive(Clone, Debug, Default, Deserialize)]
 #[serde(rename_all = "kebab-case")]
 pub enum DocumentType {
@@ -27,6 +30,7 @@ impl AsRef<str> for DocumentType {
     }
 }
 
+/// In-memory representation of a document.
 pub struct Document {
     pub title: String,
     pub texts: Vec<String>,
@@ -52,6 +56,15 @@ impl Default for Document {
 }
 
 impl Document {
+    /// Creates a new document from a path. If the path points to a Djot file,
+    /// the document will be loaded from the file. If the path points to a
+    /// directory, the directory will be recursively walked and all Djot files
+    /// will be loaded.
+    ///
+    /// # Errors
+    ///
+    /// This function will return an error if the path does not exist or if any
+    /// of the files cannot be read.
     pub fn from_path(path: impl AsRef<Path>) -> io::Result<Self> {
         let path = fs::canonicalize(path)?;
         let mut texts = Vec::new();
@@ -63,6 +76,7 @@ impl Document {
         })
     }
 
+    /// Creates a new document from a string.
     pub fn from(content: String) -> Self {
         Self {
             texts: vec![content],
@@ -87,6 +101,7 @@ impl Document {
             .flatten()
     }
 
+    /// Produces a filename for naming the output file(s).
     pub fn filename(&self) -> String {
         kebab(&self.title)
     }

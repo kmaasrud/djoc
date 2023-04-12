@@ -1,13 +1,16 @@
-use std::{io::Read, path::PathBuf};
+use std::{
+    io::Read,
+    path::{Path, PathBuf},
+};
 
 use anyhow::{anyhow, Result};
 use log::info;
 use url::Url;
 
-use crate::utils::{data_dir, find_root};
+use crate::utils::data_dir;
 
 pub fn get_csl(id: &str) -> Result<PathBuf> {
-    let path = find_root(".").join(id);
+    let path = Path::new(".").join(id);
     if path.exists() {
         return Ok(path);
     }

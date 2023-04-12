@@ -1,4 +1,6 @@
 mod cli;
+mod log;
+mod utils;
 
 use anyhow::Result;
 

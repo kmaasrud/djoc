@@ -5,8 +5,9 @@ use std::{
 };
 
 use anyhow::{Context, Result};
-use djoc::utils::get_author_name;
 use log::info;
+
+use crate::utils::get_author_name;
 
 const CONFIG_PRE: &str = r#"# This is the configuration file of your document."#;
 

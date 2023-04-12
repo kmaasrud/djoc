@@ -1,3 +1,5 @@
+//! Contains the types and functions for parsing and executing a manifest file.
+
 mod builder;
 mod document;
 mod serde_impls;
@@ -9,22 +11,39 @@ use std::{
     path::Path,
 };
 
-pub use builder::{BuilderManifest, Output, OutputFormat};
-pub use document::DocumentManifest;
+pub(crate) use builder::{BuilderManifest, Output, OutputFormat};
+pub(crate) use document::DocumentManifest;
 use rayon::prelude::*;
 use serde::Deserialize;
 
 use crate::{builder::Builder, Document};
 
+/// Represents a complete manifest file.
+///
+/// # Examples
+///
+/// ```
+/// use djoc::Manifest;
+///
+/// let toml = r#"
+/// [[document]]
+/// title = "My Document"
+/// authors = ["John Doe"]
+/// output = ["pdf"]
+/// "#;
+/// let manifest: Manifest = toml::from_str(toml).unwrap();
+/// ```
 #[derive(Deserialize)]
 pub struct Manifest {
     #[serde(alias = "document")]
-    pub documents: Vec<DocumentManifest>,
+    documents: Vec<DocumentManifest>,
     #[serde(flatten)]
-    pub(crate) builder: BuilderManifest,
+    builder: BuilderManifest,
 }
 
 impl Manifest {
+    /// Executes the build process as specified for all documents defined in the
+    /// manifest.
     pub fn execute(self) -> Result<(), ExecutionError> {
         let builder_manifest = self.builder;
         self.documents
@@ -51,21 +70,22 @@ impl Manifest {
     }
 }
 
+/// Represents an error that occurred during the execution of a manifest.
 #[derive(Debug)]
 pub enum ExecutionError {
-    Pdf(crate::builder::pdf::PdfError),
-    Html(crate::builder::html::HtmlError),
+    Pdf(crate::pdf::PdfError),
+    Html(crate::html::HtmlError),
     Io(std::io::Error),
 }
 
-impl From<crate::builder::pdf::PdfError> for ExecutionError {
-    fn from(e: crate::builder::pdf::PdfError) -> Self {
+impl From<crate::pdf::PdfError> for ExecutionError {
+    fn from(e: crate::pdf::PdfError) -> Self {
         Self::Pdf(e)
     }
 }
 
-impl From<crate::builder::html::HtmlError> for ExecutionError {
-    fn from(e: crate::builder::html::HtmlError) -> Self {
+impl From<crate::html::HtmlError> for ExecutionError {
+    fn from(e: crate::html::HtmlError) -> Self {
         Self::Html(e)
     }
 }

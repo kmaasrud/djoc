@@ -1,7 +1,9 @@
 use std::fs;
 
 use anyhow::Result;
-use djoc::{manifest::Manifest, utils::find_root, walk::Walker};
+use djoc::{manifest::Manifest, walk::Walker};
+
+use crate::utils::find_root;
 
 /// Builds a document.
 pub fn build() -> Result<()> {

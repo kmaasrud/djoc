@@ -1,14 +1,19 @@
 mod author;
-pub mod bib;
-pub mod builder;
+mod builder;
 mod document;
-pub mod error;
-pub(crate) mod latex;
-pub mod log;
+
+pub mod html;
 pub mod manifest;
-pub mod utils;
+pub mod pdf;
 pub mod walk;
 
 pub use author::Author;
 pub use builder::Builder;
+#[doc(inline)]
 pub use document::Document;
+#[doc(inline)]
+pub use manifest::Manifest;
+
+pub(crate) mod latex;
+pub(crate) mod log;
+pub(crate) mod utils;

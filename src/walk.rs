@@ -1,3 +1,5 @@
+//! Crate-local module for walking the directory tree.
+
 use std::{
     fs::ReadDir,
     io,
@@ -9,6 +11,7 @@ enum WalkNode {
     File(PathBuf),
 }
 
+/// An iterator that walks a directory recursively.
 pub struct Walker {
     stack: Vec<WalkNode>,
     nesting: usize,
@@ -26,9 +29,33 @@ impl Default for Walker {
 }
 
 impl Walker {
+    /// Creates a new `Walker` from a path.
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// use djoc::walk::Walker;
+    ///
+    /// let walker = Walker::new(".").unwrap();
+    /// for path in walker {
+    ///    // do something with path...
+    /// }
+    /// ```
+    ///
+    /// # Errors
+    ///
+    /// This function will return an error if the path does not exist or if the
+    /// process does not have permission to read the path.
     pub fn new<P: AsRef<Path>>(path: P) -> io::Result<Self> {
         let mut stack = Vec::new();
         let path = path.as_ref();
+
+        if !path.exists() {
+            return Err(io::Error::new(
+                io::ErrorKind::NotFound,
+                "path does not exist",
+            ));
+        }
 
         if path.is_dir() {
             match path.read_dir() {
@@ -45,6 +72,7 @@ impl Walker {
         })
     }
 
+    /// Sets the maximum directory nesting level of the walker.
     pub fn max_nesting(self, max_nesting: usize) -> Self {
         Self {
             max_nesting,
@@ -52,6 +80,7 @@ impl Walker {
         }
     }
 
+    /// Returns a new iterator that only yields paths with the given extensions.
     pub fn filter_extensions(self, extensions: &'static [&'static str]) -> FilteredWalker {
         FilteredWalker {
             inner: self,
@@ -86,6 +115,12 @@ impl Iterator for Walker {
     }
 }
 
+/// An iterator that walks a directory recursively and only yields paths with
+/// the given extensions.
+///
+/// This struct is created by the [`Walker::filter_extensions`] method.
+///
+/// [`filter_extensions`]: struct.Walker.html#method.filter_extensions
 pub struct FilteredWalker {
     inner: Walker,
     extensions: &'static [&'static str],

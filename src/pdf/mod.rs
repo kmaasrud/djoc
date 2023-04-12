@@ -1,3 +1,8 @@
+//! PDF output functionality for djoc.
+//!
+//! This module only contains the error types for PDF output and provides the
+//! [`Builder::write_pdf`] and [`Builder::write_latex`] methods.
+
 use std::{
     error::Error,
     fmt::{self, Display, Formatter},

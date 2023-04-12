@@ -1,7 +1,8 @@
 use std::io;
 
-use djoc::utils::find_root;
 use log::info;
+
+use crate::utils::find_root;
 
 pub fn clean() -> io::Result<()> {
     info!("Cleaning up the working directory...");
