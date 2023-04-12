@@ -6,7 +6,6 @@ description = "Modern document writing with Djot"
 edition = "2021"
 license-file = "LICENSE"
 repository = "https://github.com/kmaasrud/djoc"
-include = ["src/**/*.stpl", "src/**/*.rs"]
 
 
 [dependencies]
