@@ -35,57 +35,63 @@ impl Builder {
         document: &Document,
         mut w: W,
     ) -> Result<(), HtmlError> {
-        writeln!(w, "<!DOCTYPE html>\n<html lang=\"en\">\n<head>")?;
-        writeln!(w, "<style>")?;
-        w.write_all(MAIN_CSS)?;
-        writeln!(w, "</style>")?;
-        w.write_all(KATEX_CSS)?;
-        writeln!(w, "<body>")?;
+        let mut inner = || -> Result<(), HtmlError> {
+            writeln!(w, "<!DOCTYPE html>\n<html lang=\"en\">\n<head>")?;
+            writeln!(w, "<style>")?;
+            w.write_all(MAIN_CSS)?;
+            writeln!(w, "</style>")?;
+            w.write_all(KATEX_CSS)?;
+            writeln!(w, "<body>")?;
 
-        document
-            .texts
-            .par_iter()
-            .try_fold_with(String::new(), |mut buf, text| {
-                let mut opts = katex::Opts::default();
-                let mut in_math = false;
-                let events = Parser::new(text).map(|event| match event {
-                    Event::Start(Container::Math { display }, attrs) => {
-                        opts.set_display_mode(display);
-                        in_math = true;
-                        Event::Start(Container::RawBlock { format: "html" }, attrs)
-                    }
-                    Event::End(Container::Math { .. }) => {
-                        in_math = false;
-                        Event::End(Container::RawBlock { format: "html" })
-                    }
-                    Event::Str(s) if in_math => {
-                        Event::Str(katex::render_with_opts(&s, &opts).unwrap().into())
-                    }
-                    _ => event,
-                });
+            document
+                .texts
+                .par_iter()
+                .try_fold_with(Vec::new(), |mut buf, text| {
+                    let mut opts = katex::Opts::default();
+                    let mut in_math = false;
+                    let events = Parser::new(text).map(|event| match event {
+                        Event::Start(Container::Math { display }, attrs) => {
+                            opts.set_display_mode(display);
+                            in_math = true;
+                            Event::Start(Container::RawBlock { format: "html" }, attrs)
+                        }
+                        Event::End(Container::Math { .. }) => {
+                            in_math = false;
+                            Event::End(Container::RawBlock { format: "html" })
+                        }
+                        Event::Str(s) if in_math => {
+                            Event::Str(katex::render_with_opts(&s, &opts).unwrap().into())
+                        }
+                        _ => event,
+                    });
 
-                html::Renderer::default()
-                    .push(events, &mut buf)
-                    .map_err(|e| HtmlError::from(e).document_name(&document.title))?;
-                Ok(buf)
-            })
-            .collect::<Result<Vec<String>, HtmlError>>()?
-            .into_iter()
-            .try_for_each(|s: String| w.write_all(s.as_bytes()))?;
+                    html::Renderer::default().write(events, &mut buf)?;
+                    Ok(buf)
+                })
+                .collect::<Result<Vec<Vec<u8>>, HtmlError>>()?
+                .into_iter()
+                .try_for_each(|s| w.write_all(&s))?;
 
-        writeln!(w, "</body>\n</html>")?;
-        Ok(())
+            writeln!(w, "</body>\n</html>")?;
+            Ok(())
+        };
+
+        inner().map_err(|e| e.document_name(&document.title))
     }
 }
 
+/// An error that can occur when rendering HTML.
 #[non_exhaustive]
 #[derive(Debug)]
 pub struct HtmlError {
+    /// The title of the document that caused this error.
     pub document_name: Option<String>,
+    /// The kind of error that occurred.
     pub kind: HtmlErrorKind,
 }
 
 impl HtmlError {
+    /// Set the name of the document that caused this error.
     pub fn document_name(self, document_name: &str) -> Self {
         Self {
             document_name: Some(document_name.to_string()),
@@ -112,15 +118,6 @@ impl From<katex::Error> for HtmlError {
     }
 }
 
-impl From<fmt::Error> for HtmlError {
-    fn from(_: fmt::Error) -> Self {
-        Self {
-            document_name: None,
-            kind: HtmlErrorKind::Render,
-        }
-    }
-}
-
 impl Display for HtmlError {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         if let Some(name) = &self.document_name {
@@ -128,8 +125,7 @@ impl Display for HtmlError {
         }
         match &self.kind {
             HtmlErrorKind::Io(e) => write!(f, "io error: {e}"),
-            HtmlErrorKind::Katex(e) => write!(f, "failed to render math with katex: {e}"),
-            HtmlErrorKind::Render => write!(f, "failed to render html"),
+            HtmlErrorKind::Katex(_) => write!(f, "failed to render math with katex"),
         }
     }
 }
@@ -137,17 +133,18 @@ impl Display for HtmlError {
 impl Error for HtmlError {
     fn source(&self) -> Option<&(dyn Error + 'static)> {
         match &self.kind {
-            HtmlErrorKind::Io(e) => Some(e),
-            HtmlErrorKind::Katex(e) => Some(e),
-            HtmlErrorKind::Render => None,
+            HtmlErrorKind::Io(source) => Some(source),
+            HtmlErrorKind::Katex(source) => Some(source),
         }
     }
 }
 
+/// The kind of error that can occur when rendering HTML.
 #[non_exhaustive]
 #[derive(Debug)]
 pub enum HtmlErrorKind {
+    /// An error that occurred while writing to the writer.
     Io(io::Error),
+    /// An error that occurred while rendering math with [`katex`].
     Katex(katex::Error),
-    Render,
 }

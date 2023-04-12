@@ -8,7 +8,7 @@ use std::{
     fmt::{self, Display, Formatter},
     fs,
     io::{self, Write},
-    path::Path,
+    path::{Path, PathBuf},
     time::SystemTime,
 };
 
@@ -19,23 +19,36 @@ use super::Builder;
 use crate::{latex, Document};
 
 impl Builder {
+    /// Build the document as PDF and write it to the given writer.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use djoc::{Builder, Document};
+    ///
+    /// let mut builder = Builder::default();
+    /// let document = Document::from("Hello, world!".to_string());
+    /// builder.write_pdf(&document, &mut std::io::stdout()).unwrap();
+    /// ```
     pub fn write_pdf<W: Write>(&self, document: &Document, mut w: W) -> Result<(), PdfError> {
+        let with_name = |e| PdfError::from(e).document_name(&document.title);
         let filename = document.filename();
         let build_root = Path::new("build").join(&filename);
         fs::create_dir_all(&build_root).map_err(|e| PdfError {
             document_name: Some(document.title.clone()),
-            kind: PdfErrorKind::CreateDir(e),
+            kind: PdfErrorKind::CreateDir {
+                path: build_root.to_path_buf(),
+                source: e,
+            },
         })?;
 
         let mut status = crate::log::LoggingStatusBackend;
         let config = tectonic::config::PersistentConfig::default();
         let bundle = config
             .default_bundle(false, &mut status)
-            .map_err(|e| PdfError::from(e).document_name(&document.title))?;
+            .map_err(with_name)?;
 
-        let format_cache_path = config
-            .format_cache_path()
-            .map_err(|e| PdfError::from(e).document_name(&document.title))?;
+        let format_cache_path = config.format_cache_path().map_err(with_name)?;
 
         let mut bytes = Vec::new();
         self.write_latex(document, &mut bytes)?;
@@ -54,12 +67,9 @@ impl Builder {
                 .output_dir(&build_root)
                 .build_date(SystemTime::now());
 
-            let mut sess = sb
-                .create(&mut status)
-                .map_err(|e| PdfError::from(e).document_name(&document.title))?;
+            let mut sess = sb.create(&mut status).map_err(with_name)?;
 
-            sess.run(&mut status)
-                .map_err(|e| PdfError::from(e).document_name(&document.title))?;
+            sess.run(&mut status).map_err(with_name)?;
 
             sess.into_file_data()
         };
@@ -76,71 +86,88 @@ impl Builder {
         Ok(())
     }
 
+    /// Build the document as LaTeX and write it to the given writer.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use djoc::{Builder, Document};
+    ///
+    /// let mut builder = Builder::default();
+    /// let document = Document::from("Hello, world!".to_string());
+    /// builder.write_latex(&document, &mut std::io::stdout()).unwrap();
+    /// ```
     pub fn write_latex<W: Write>(&self, document: &Document, mut w: W) -> Result<(), PdfError> {
-        writeln!(w, r"\documentclass{{{}}}", document.document_type.as_ref())?;
-        for package in DEFAULT_PACKAGES {
-            writeln!(w, r"\usepackage{{{package}}}")?;
-        }
+        let mut inner = || -> Result<(), PdfError> {
+            writeln!(w, r"\documentclass{{{}}}", document.document_type.as_ref())?;
 
-        w.write_all(DEFAULT_PREAMBLE)?;
+            DEFAULT_PACKAGES
+                .iter()
+                .try_for_each(|package| writeln!(w, r"\usepackage{{{package}}}"))?;
+            w.write_all(DEFAULT_PREAMBLE)?;
 
-        let locale = document
-            .locale
-            .split_once('_')
-            .map(|(s, _)| s)
-            .unwrap_or(&document.locale);
-        writeln!(w, r"\setdefaultlanguage{{{locale}}}",)?;
+            let locale = document
+                .locale
+                .split_once('_')
+                .map(|(s, _)| s)
+                .unwrap_or(&document.locale);
+            writeln!(w, r"\setdefaultlanguage{{{locale}}}")?;
 
-        write!(w, r"\title{{")?;
-        latex::Renderer::default()
-            .write(Parser::new(&document.title), &mut w)
-            .unwrap();
-        writeln!(w, "}}")?;
-
-        if let Some(date) = document.formatted_date() {
-            writeln!(w, r"\date{{{date}}}")?;
-        } else {
-            writeln!(w, r"\predate{{}}\date{{}}\postdate{{}}")?;
-        }
-
-        if document.authors.is_empty() {
-            writeln!(w, r"\preauthor{{}}\author{{}}\postauthor{{}}")?;
-        }
-
-        for author in &document.authors {
-            write!(w, r"\author{{{}", author.name)?;
-            if let Some(ref email) = author.email {
-                write!(w, r" \thanks{{\href{{mailto:{email}}}{{{email}}}}}")?;
-            }
+            write!(w, r"\title{{")?;
+            latex::Renderer::default().write(Parser::new(&document.title), &mut w)?;
             writeln!(w, "}}")?;
-        }
 
-        let content: String = document
-            .texts
-            .par_iter()
-            .fold_with(String::new(), |mut buf, text| {
-                latex::Renderer::default()
-                    .number_sections(self.number_sections)
-                    .push(Parser::new(text), &mut buf)
-                    .unwrap();
-                buf
-            })
-            .collect();
+            match document.formatted_date() {
+                Some(date) => writeln!(w, r"\date{{{date}}}")?,
+                None => writeln!(w, r"\predate{{}}\date{{}}\postdate{{}}")?,
+            }
 
-        writeln!(w, "\\begin{{document}}\n{content}\n\\end{{document}}")?;
+            if document.authors.is_empty() {
+                writeln!(w, r"\preauthor{{}}\author{{}}\postauthor{{}}")?;
+            }
 
-        Ok(())
+            for author in &document.authors {
+                write!(w, r"\author{{{}", author.name)?;
+                if let Some(ref email) = author.email {
+                    write!(w, r" \thanks{{\href{{mailto:{email}}}{{{email}}}}}")?;
+                }
+                writeln!(w, "}}")?;
+            }
+
+            writeln!(w, r"\begin{{document}}")?;
+            document
+                .texts
+                .par_iter()
+                .try_fold_with(Vec::new(), |mut buf, text| {
+                    latex::Renderer::default()
+                        .number_sections(self.number_sections)
+                        .write(Parser::new(text), &mut buf)?;
+                    Ok(buf)
+                })
+                .collect::<Result<Vec<Vec<u8>>, PdfError>>()?
+                .into_iter()
+                .try_for_each(|s| w.write_all(&s))?;
+            writeln!(w, r"\end{{document}}")?;
+
+            Ok(())
+        };
+
+        inner().map_err(|e| e.document_name(&document.title))
     }
 }
 
+/// An error that can occur when building a PDF.
 #[non_exhaustive]
 #[derive(Debug)]
 pub struct PdfError {
+    /// The title of the document that caused the error.
     pub document_name: Option<String>,
+    /// The kind of error that occurred.
     pub kind: PdfErrorKind,
 }
 
 impl PdfError {
+    /// Set the name of the document that caused the error.
     pub fn document_name(self, document_name: &str) -> Self {
         Self {
             document_name: Some(document_name.to_string()),
@@ -174,9 +201,11 @@ impl Display for PdfError {
         }
 
         match &self.kind {
-            PdfErrorKind::Tectonic(e) => write!(f, "tectonic error: {}", e),
+            PdfErrorKind::Tectonic(_) => write!(f, "tectonic errored during pdf build"),
             PdfErrorKind::Io(e) => write!(f, "io error: {}", e),
-            PdfErrorKind::CreateDir(e) => write!(f, "failed to create directory: {}", e),
+            PdfErrorKind::CreateDir { path, .. } => {
+                write!(f, "failed to create directory {:?}", path)
+            }
             PdfErrorKind::NoPdfCreated => write!(f, "engine finished, but no pdf was created"),
         }
     }
@@ -185,9 +214,9 @@ impl Display for PdfError {
 impl Error for PdfError {
     fn source(&self) -> Option<&(dyn Error + 'static)> {
         match &self.kind {
-            PdfErrorKind::Tectonic(e) => Some(e),
-            PdfErrorKind::Io(e) => Some(e),
-            PdfErrorKind::CreateDir(e) => Some(e),
+            PdfErrorKind::Tectonic(source) => Some(source),
+            PdfErrorKind::Io(source) => Some(source),
+            PdfErrorKind::CreateDir { source, .. } => Some(source),
             PdfErrorKind::NoPdfCreated => None,
         }
     }
@@ -195,12 +224,13 @@ impl Error for PdfError {
 
 unsafe impl Sync for PdfError {}
 
+/// The kind of error that can occur when building a PDF.
 #[non_exhaustive]
 #[derive(Debug)]
 pub enum PdfErrorKind {
     Tectonic(tectonic::Error),
     Io(io::Error),
-    CreateDir(io::Error),
+    CreateDir { path: PathBuf, source: io::Error },
     NoPdfCreated,
 }
 
