@@ -1,6 +1,5 @@
 use std::{fs, io, path::Path};
 
-use log::debug;
 use serde::Deserialize;
 
 use crate::{kebab, manifest::DocumentManifest, walk::Walker, Author, Date};
@@ -10,7 +9,7 @@ const DEFAULT_LOCALE: &str = "en_US";
 /// Enumerates the types of documents that can be generated.
 ///
 /// The type dictates the template that will be used to generate the document.
-#[derive(Clone, Debug, Default, Deserialize, PartialEq, Eq)]
+#[derive(Copy, Clone, Debug, Default, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "kebab-case")]
 pub enum DocumentType {
     #[default]
@@ -29,24 +28,35 @@ impl AsRef<str> for DocumentType {
     }
 }
 
+impl From<&str> for DocumentType {
+    fn from(s: &str) -> Self {
+        match s {
+            "article" => DocumentType::Article,
+            "report" => DocumentType::Report,
+            "book" => DocumentType::Book,
+            _ => DocumentType::default(),
+        }
+    }
+}
+
 /// In-memory representation of a document.
 ///
 /// # Examples
 ///
 /// ```
-/// use djoc::{Document, DocumentType};
+/// use djoc::{Author, Document, DocumentType};
 ///
 /// let mut document = Document::default();
 /// document
 ///     .title("My Document")
-///     .document_type(DocumentType::Report)
-///     .author("John Doe".into())
-///     .author("Jane Doe".into())
+///     .document_type("report")
+///     .author("John Doe")
+///     .authors(["Jane Doe", "John Smith"])
 ///     .text("This is the first paragraph.");
 ///
 /// assert_eq!(document.title, "My Document");
 /// assert_eq!(document.document_type, DocumentType::Report);
-/// assert_eq!(document.authors.len(), 2);
+/// assert_eq!(document.authors.len(), 3);
 /// ```
 pub struct Document {
     pub title: String,
@@ -71,14 +81,39 @@ impl Default for Document {
 }
 
 impl Document {
+    pub(crate) fn from_manifest(manifest: &DocumentManifest) -> io::Result<Self> {
+        let mut texts = Vec::new();
+        for path in &manifest.texts {
+            if path.is_dir() {
+                extend_texts(path, &mut texts)?;
+            } else {
+                texts.push(fs::read_to_string(path)?);
+            }
+        }
+
+        Ok(Self {
+            texts,
+            date: manifest.date.map(|d| d.into()).unwrap_or_default(),
+            title: manifest.title.to_owned(),
+            authors: manifest
+                .authors
+                .clone()
+                .into_iter()
+                .map(Into::into)
+                .collect(),
+            locale: manifest.locale.clone().unwrap_or(DEFAULT_LOCALE.into()),
+            document_type: manifest.document_type,
+        })
+    }
+
     /// Sets the document title.
-    pub fn title(&mut self, title: impl Into<String>) -> &mut Self {
+    pub fn title<T: Into<String>>(&mut self, title: T) -> &mut Self {
         self.title = title.into();
         self
     }
 
     /// Adds a text to the document.
-    pub fn text(&mut self, text: impl Into<String>) -> &mut Self {
+    pub fn text<T: Into<String>>(&mut self, text: T) -> &mut Self {
         self.texts.push(text.into());
         self
     }
@@ -92,26 +127,28 @@ impl Document {
     }
 
     /// Adds an author to the document.
-    pub fn author(&mut self, author: Author) -> &mut Self {
-        self.authors.push(author);
+    pub fn author<A: Into<Author>>(&mut self, author: A) -> &mut Self {
+        self.authors.push(author.into());
         self
     }
 
     /// Adds multiple authors to the document.
-    pub fn authors(&mut self, authors: impl IntoIterator<Item = Author>) -> &mut Self {
-        self.authors.extend(authors);
+    pub fn authors<A: Into<Author>>(&mut self, authors: impl IntoIterator<Item = A>) -> &mut Self {
+        authors.into_iter().for_each(|author| {
+            self.author(author);
+        });
         self
     }
 
     /// Sets the document type.
-    pub fn document_type(&mut self, document_type: DocumentType) -> &mut Self {
-        self.document_type = document_type;
+    pub fn document_type<D: Into<DocumentType>>(&mut self, document_type: D) -> &mut Self {
+        self.document_type = document_type.into();
         self
     }
 
     /// Sets the date of the document.
-    pub fn date(&mut self, date: Date) -> &mut Self {
-        self.date = date;
+    pub fn date<D: Into<Date>>(&mut self, date: D) -> &mut Self {
+        self.date = date.into();
         self
     }
 
@@ -162,35 +199,20 @@ impl<S: Into<String>> From<S> for Document {
     }
 }
 
-impl TryFrom<DocumentManifest> for Document {
-    type Error = io::Error;
-
-    fn try_from(def: DocumentManifest) -> Result<Self, Self::Error> {
-        let mut texts = Vec::new();
-        for path in def.texts {
-            if path.is_dir() {
-                extend_texts(&path, &mut texts)?;
-            } else {
-                texts.push(fs::read_to_string(path)?);
-            }
+impl<S: Into<String>> FromIterator<S> for Document {
+    fn from_iter<I: IntoIterator<Item = S>>(iter: I) -> Self {
+        Self {
+            texts: iter.into_iter().map(Into::into).collect(),
+            ..Default::default()
         }
-
-        Ok(Self {
-            texts,
-            date: def.date.map(|d| d.into()).unwrap_or_default(),
-            title: def.title.to_owned(),
-            authors: def.authors.clone().into_iter().map(Into::into).collect(),
-            locale: def.locale.clone().unwrap_or(DEFAULT_LOCALE.into()),
-            document_type: def.document_type,
-        })
     }
 }
 
 fn extend_texts(path: impl AsRef<Path>, texts: &mut Vec<String>) -> io::Result<()> {
-    for path in Walker::new(path)?.filter_extensions(&["dj"]) {
-        debug!("Loading chapter from {path:?}...");
-        texts.push(fs::read_to_string(path)?);
-    }
-
-    Ok(())
+    Walker::new(path)?
+        .filter_extensions(&["dj"])
+        .try_for_each(|path| {
+            texts.push(fs::read_to_string(path)?);
+            Ok(())
+        })
 }

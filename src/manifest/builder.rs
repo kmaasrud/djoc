@@ -12,11 +12,11 @@ pub struct BuilderManifest {
 }
 
 impl BuilderManifest {
-    pub fn merge(self, other: &Self) -> Self {
+    pub fn merge(&self, other: Self) -> Self {
         Self {
-            outputs: [self.outputs, other.outputs.clone()].concat(),
+            outputs: [self.outputs.clone(), other.outputs].concat(),
             number_sections: other.number_sections.or(self.number_sections),
-            build_dir: other.build_dir.clone().or(self.build_dir),
+            build_dir: other.build_dir.or_else(|| self.build_dir.clone()),
         }
     }
 }

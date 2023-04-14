@@ -72,6 +72,8 @@ impl Builder {
                         source: e,
                     },
                 })?;
+            } else {
+                sb.do_not_write_output_files();
             }
 
             let mut sess = sb.create(&mut status).map_err(with_name)?;

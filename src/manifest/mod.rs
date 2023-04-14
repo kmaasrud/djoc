@@ -49,10 +49,10 @@ impl Manifest {
         self.documents
             .into_par_iter()
             .try_for_each(|manifest| -> Result<(), ExecutionError> {
-                let builder_manifest = builder_manifest.clone().merge(&manifest.builder);
+                let builder_manifest = builder_manifest.merge(manifest.builder.to_owned());
                 let builder = Builder::from_manifest(&builder_manifest);
 
-                let document: Document = manifest.try_into()?;
+                let document = Document::from_manifest(&manifest)?;
 
                 for output in builder_manifest.outputs {
                     let path = Path::new(&output.name.unwrap_or(document.filename()))

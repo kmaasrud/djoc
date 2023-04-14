@@ -16,7 +16,7 @@
 //! document
 //!    .title("My Document")
 //!    .document_type(DocumentType::Report)
-//!    .author("John Doe".into());
+//!    .author("John Doe");
 //!
 //! let mut builder = Builder::default();
 //! let mut bytes = Vec::new();
