@@ -1,0 +1,11 @@
+output = [{format = "html", name = "index"}]
+
+[[document]]
+title = "djoc documentation"
+author = [
+    { name = "Knut Magnus Aasrud", email = "km@aasrud.com", affiliation = "University of Oslo" },
+]
+texts = [
+    "src/introduction.dj",
+    "src/configuration.dj",
+]

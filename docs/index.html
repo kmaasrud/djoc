@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<style>
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+html {
+  max-width: 80ch;
+  overflow-x: hidden;
+  padding: 3em 1em;
+  margin: auto;
+  line-height: 1.5;
+  font-size: 1.2em;
+  color: #1a1a1a;
+  text-rendering: optimizeLegibility;
+  hyphens: auto;
+  overflow-wrap: break-word;
+  font-kerning: normal;
+}
+
+article>*+* {
+  margin-top: 1em;
+}
+
+h1 {
+  font-size: 2rem;
+  line-height: 3.25rem;
+  margin-bottom: 1rem;
+}
+
+h2 {
+  font-size: 1.7rem;
+  line-height: 2rem;
+  margin-top: 3rem;
+}
+
+h3 {
+  font-size: 1.4rem;
+  margin-top: 2.5rem;
+}
+
+h4 {
+  font-size: 1.2rem;
+  margin-top: 2rem;
+}
+
+h5 {
+  font-size: 1rem;
+  margin-top: 1.8rem;
+}
+
+h6 {
+  font-size: 1rem;
+  font-style: italic;
+  font-weight: normal;
+  margin-top: 2.5rem;
+}
+
+h3,
+h4,
+h5,
+h6 {
+  line-height: 1.625rem;
+}
+
+h1+h2 {
+  margin-top: 1.625rem;
+}
+
+h2+h3,
+h3+h4,
+h4+h5 {
+  margin-top: 0.8rem;
+}
+
+h5+h6 {
+  margin-top: -0.8rem;
+}
+
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-bottom: 0.8rem;
+}
+
+p,
+ul,
+ol {
+  font-family: sans-serif;
+}
+
+a {
+  color: #1a1a1a;
+}
+
+a:visited {
+  color: #414141;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: auto;
+}
+
+code {
+  font-family: monospace;
+  font-size: .9em;
+}
+
+pre {
+  padding: 1rem 1.4rem;
+  max-width: 100%;
+  overflow: auto;
+  border-radius: 4px;
+  background: #eee;
+}
+
+pre code {
+  position: relative;
+}
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css" integrity="sha384-vKruj+a13U8yHIkAyGgK1J3ArTLzrFGBbBc0tDp4ad/EyewESeXE/Iv67Aj8gKZ0" crossorigin="anonymous">
+<body>
+
+<section id="Configuration">
+<h1>Configuration</h1>
+<p>To configure djoc for your project, you will create a manifest file in the TOML
+format. djoc will look for any TOML files in the root directory and treat them
+as manifests.</p>
+<p>A manifest consists of a build configuration and a list of documents. The build
+configuration is a set of global options that apply to all documents in the
+project. The list of documents is a list of TOML tables, each of which
+describes a single document with metadata fields. Each document can additionally
+have its own build options that override the global options.</p>
+<section id="Build-configuration">
+<h2>Build configuration</h2>
+<section id="output-or-outputs">
+<h3><code>output</code> or <code>outputs</code></h3>
+<p>This field specifies the output(s) that djoc should build for each document. It
+is a list of either strings or tables. A single string is interpreted as an
+output format, with these options:</p>
+<ul>
+<li>
+<code>pdf</code>: builds a PDF document.
+</li>
+<li>
+<code>html</code>: builds a standalone HTML document.
+</li>
+<li>
+<code>tex</code> or <code>latex</code>: builds a LaTeX file.
+</li>
+</ul>
+<p>The filename of the output is determined by the document&rsquo;s <code>title</code> field in
+kebab-case.</p>
+<p>If you want to specify another filename for the particular output, you can use a
+table with the <code>format</code> field and the <code>name</code> field. The <code>format</code> field is the
+same as the string options above, and the <code>name</code> field is the base name of the
+output file. The extension will be added automatically based on the output
+format.</p>
+<p>For example, the following configuration will build a PDF document, a standalone
+HTML document, and a PDF document with the name <code>another.pdf</code>:</p>
+<pre><code class="language-toml">outputs = [
+    "pdf",
+    { format = "html", name = "my-document" },
+    { format = "pdf", name = "another" },
+]
+</code></pre>
+</section>
+</section>
+<section id="Document-configuration">
+<h2>Document configuration</h2>
+<section id="title">
+<h3><code>title</code></h3>
+<p>The title of the document. This is used for giving the output files a name, and
+will also be used in the document itself. This field is required.</p>
+<pre><code class="language-toml">title = "My document"
+</code></pre>
+</section>
+<section id="author-or-authors">
+<h3><code>author</code> or <code>authors</code></h3>
+<p>The author(s) of the document. It is a list of strings or tables. A single
+string is interpreted as the name of the author. A table can have the following
+fields:</p>
+<ul>
+<li>
+<code>name</code>: the name of the author.
+</li>
+<li>
+<code>email</code>: the email address of the author.
+</li>
+<li>
+<code>affiliation</code>: the affiliation of the author.
+</li>
+</ul>
+<pre><code class="language-toml">author = ["John Doe"]
+</code></pre>
+<pre><code class="language-toml">authors = [
+    "John Doe",
+    { name = "Jane Doe", email = "jane@domain.com", affiliation = "University of Somewhere" },
+]
+</code></pre>
+</section>
+<section id="date">
+<h3><code>date</code></h3>
+<p>The date of the document. It is any valid TOML datetime, allowing both the
+inclusion and omission of time and timezone information. The value is used in
+the title of the document.</p>
+<pre><code class="language-toml">date = 2023-04-14
+</code></pre>
+<pre><code class="language-toml">date = 1998-02-17T06:20:00Z
+</code></pre>
+</section>
+</section>
+</section>
+</body>
+</html>

@@ -1,0 +1,89 @@
+# Configuration
+
+To configure djoc for your project, you will create a manifest file in the TOML
+format. djoc will look for any TOML files in the root directory and treat them
+as manifests.
+
+A manifest consists of a build configuration and a list of documents. The build
+configuration is a set of global options that apply to all documents in the
+project. The list of documents is a list of TOML tables, each of which
+describes a single document with metadata fields. Each document can additionally
+have its own build options that override the global options.
+
+## Build configuration
+
+### `output` or `outputs`
+
+This field specifies the output(s) that djoc should build for each document. It
+is a list of either strings or tables. A single string is interpreted as an
+output format, with these options:
+
+- `pdf`: builds a PDF document.
+- `html`: builds a standalone HTML document.
+- `tex` or `latex`: builds a LaTeX file.
+
+The filename of the output is determined by the document's `title` field in
+kebab-case.
+
+If you want to specify another filename for the particular output, you can use a
+table with the `format` field and the `name` field. The `format` field is the
+same as the string options above, and the `name` field is the base name of the
+output file. The extension will be added automatically based on the output
+format.
+
+For example, the following configuration will build a PDF document, a standalone
+HTML document, and a PDF document with the name `another.pdf`:
+
+```toml
+outputs = [
+    "pdf",
+    { format = "html", name = "my-document" },
+    { format = "pdf", name = "another" },
+]
+```
+
+## Document configuration
+
+### `title`
+
+The title of the document. This is used for giving the output files a name, and
+will also be used in the document itself. This field is required.
+
+```toml
+title = "My document"
+```
+
+### `author` or `authors`
+
+The author(s) of the document. It is a list of strings or tables. A single
+string is interpreted as the name of the author. A table can have the following
+fields:
+
+- `name`: the name of the author.
+- `email`: the email address of the author.
+- `affiliation`: the affiliation of the author.
+
+```toml
+author = ["John Doe"]
+```
+
+```toml
+authors = [
+    "John Doe",
+    { name = "Jane Doe", email = "jane@domain.com", affiliation = "University of Somewhere" },
+]
+```
+
+### `date`
+
+The date of the document. It is any valid TOML datetime, allowing both the
+inclusion and omission of time and timezone information. The value is used in
+the title of the document.
+
+```toml
+date = 2023-04-14
+```
+
+```toml
+date = 1998-02-17T06:20:00Z
+```
