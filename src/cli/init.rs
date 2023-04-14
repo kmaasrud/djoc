@@ -29,11 +29,11 @@ pub fn init(path: Option<PathBuf>) -> Result<()> {
     };
 
     fs::create_dir_all(root.join("src")).context("Failed at creating the directory structure.")?;
+    fs::write(root.join("src").join("main.dj"), b"")?;
 
     let mut config = File::create(root.join("document.toml"))?;
 
     writeln!(config, "{CONFIG_PRE}")?;
-    writeln!(config)?;
 
     writeln!(config, "outputs = [\"pdf\"]")?;
     writeln!(config)?;
@@ -47,6 +47,8 @@ pub fn init(path: Option<PathBuf>) -> Result<()> {
 
     let today = chrono::Local::now().date_naive().format("%Y-%m-%d");
     writeln!(config, "date = {today}")?;
+
+    writeln!(config, "texts = [\"src/main.dj\"]")?;
 
     writeln!(config, "{CONFIG_POST}")?;
 
