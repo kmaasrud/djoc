@@ -72,14 +72,6 @@ impl Walker {
         })
     }
 
-    /// Sets the maximum directory nesting level of the walker.
-    pub fn max_nesting(self, max_nesting: usize) -> Self {
-        Self {
-            max_nesting,
-            ..self
-        }
-    }
-
     /// Returns a new iterator that only yields paths with the given extensions.
     pub fn filter_extensions(self, extensions: &'static [&'static str]) -> FilteredWalker {
         FilteredWalker {

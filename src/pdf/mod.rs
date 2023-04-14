@@ -3,6 +3,8 @@
 //! This module only contains the error types for PDF output and provides the
 //! [`Builder::write_pdf`] and [`Builder::write_latex`] methods.
 
+mod status;
+
 use std::{
     error::Error,
     fmt::{self, Display, Formatter},
@@ -42,7 +44,7 @@ impl Builder {
             },
         })?;
 
-        let mut status = crate::log::LoggingStatusBackend;
+        let mut status = status::LoggingStatusBackend;
         let config = tectonic::config::PersistentConfig::default();
         let bundle = config
             .default_bundle(false, &mut status)
@@ -53,7 +55,7 @@ impl Builder {
         let mut bytes = Vec::new();
         self.write_latex(document, &mut bytes)?;
 
-        let mut files = {
+        let files = {
             let mut sb = tectonic::driver::ProcessingSessionBuilder::default();
             sb.bundle(bundle)
                 .primary_input_buffer(&bytes)
@@ -74,7 +76,7 @@ impl Builder {
             sess.into_file_data()
         };
 
-        match files.remove(&format!("{filename}.pdf")) {
+        match files.get(&format!("{filename}.pdf")) {
             Some(file) => w.write_all(&file.data)?,
             None => {
                 return Err(PdfError {

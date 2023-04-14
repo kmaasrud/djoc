@@ -154,10 +154,7 @@ impl Render for Renderer {
                         }
                     }
                     Container::ListItem => out.write_str(r"\item")?,
-                    Container::Verbatim => {
-                        self.emit = Emit::Raw;
-                        write!(out, r"\verb|")?;
-                    }
+                    Container::Verbatim => write!(out, r"\texttt{{")?,
                     Container::CodeBlock { lang: _ } => {
                         self.emit = Emit::Raw;
                         write!(out, r"\begin{{verbatim}}")?;
@@ -215,10 +212,7 @@ impl Render for Renderer {
                         false => out.write_str(r"\)")?,
                     }
                 }
-                Container::Verbatim => {
-                    self.emit = Emit::Escaped;
-                    out.write_char('|')?;
-                }
+                Container::Verbatim => out.write_char('}')?,
                 Container::CodeBlock { .. } => {
                     self.emit = Emit::Escaped;
                     writeln!(out, r"\end{{verbatim}}")?;

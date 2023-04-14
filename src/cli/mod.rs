@@ -9,7 +9,7 @@ use anyhow::Result;
 use clap::{Parser, Subcommand};
 use log::LevelFilter;
 
-use crate::log::Logger;
+use crate::Logger;
 
 #[derive(Parser)]
 #[command(author, version, about)]

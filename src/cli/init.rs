@@ -2,12 +2,11 @@ use std::{
     fs::{self, File},
     io::Write,
     path::PathBuf,
+    process::Command,
 };
 
 use anyhow::{Context, Result};
 use log::info;
-
-use crate::utils::get_author_name;
 
 const CONFIG_PRE: &str = r#"# This is the configuration file of your document."#;
 
@@ -43,4 +42,20 @@ pub fn init(path: Option<PathBuf>) -> Result<()> {
     info!("Created a new document in {:?}.", root);
 
     Ok(())
+}
+
+// Function fetched from https://github.com/rust-lang/mdBook/blob/master/src/cmd/init.rs
+/// Obtains author name from git config file by running the `git config`
+/// command.
+pub fn get_author_name() -> Option<String> {
+    let output = Command::new("git")
+        .args(["config", "--get", "user.name"])
+        .output()
+        .ok()?;
+
+    if output.status.success() {
+        Some(String::from_utf8_lossy(&output.stdout).trim().to_owned())
+    } else {
+        None
+    }
 }
