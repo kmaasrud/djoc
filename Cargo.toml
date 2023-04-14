@@ -2,7 +2,7 @@
 name = "djoc"
 version = "0.1.0"
 authors = ["Knut Magnus Aasrud <km@aasrud.com>"]
-description = "Modern document writing with Djot"
+description = "The Djot document compiler"
 edition = "2021"
 license-file = "LICENSE"
 repository = "https://github.com/kmaasrud/djoc"
