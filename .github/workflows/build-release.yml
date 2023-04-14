@@ -1,0 +1,133 @@
+name: Create release
+
+on:
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-musl
+            archive: tar.gz
+            archive-cmd: tar czf
+            sha-cmd: sha256sum
+          - os: macos-latest
+            target: x86_64-apple-darwin
+            archive: zip
+            archive-cmd: zip -r
+            sha-cmd: shasum -a 256
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Install Nix
+      uses: cachix/install-nix-action@v20
+
+    - name: Authenticate with Cachix
+      uses: cachix/cachix-action@v12
+      with:
+        name: djoc
+        authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+
+    - name: Build executable
+      run: nix build
+
+    - name: Package Artifacts
+      shell: bash
+      run: |
+        src=$(pwd)
+        stage=$(mktemp -d)
+        ver=${GITHUB_REF#refs/tags/}
+        asset_name="djoc-$ver-${{ matrix.target }}.${{ matrix.archive }}"
+        ASSET_PATH="$src/$asset_name"
+        CHECKSUM_PATH="$ASSET_PATH.sha256"
+        cp result/bin/djoc $stage/
+        cd $stage
+        ${{ matrix.archive-cmd }} $ASSET_PATH *
+        cd $src
+        ${{ matrix.sha-cmd }} $asset_name > $CHECKSUM_PATH
+        echo "ASSET_PATH=$ASSET_PATH" >> $GITHUB_ENV
+        echo "CHECKSUM_PATH=$CHECKSUM_PATH" >> $GITHUB_ENV
+
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        draft: true
+        generate_release_notes: true
+        files: |
+          ${{ env.ASSET_PATH }}
+          ${{ env.CHECKSUM_PATH }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-windows:
+    runs-on: windows-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Setup Rust toolchain
+      uses: actions-rs/toolchain@v1
+      with:
+        profile: minimal
+        toolchain: stable
+        override: true
+        target: x86_64-pc-windows-msvc
+
+    - name: Install cargo-vcpkg
+      uses: actions-rs/install@v0.1
+      with:
+        crate: cargo-vcpkg
+        use-tool-cache: true
+
+    - name: Build VCPKG dependencies
+      shell: bash
+      run: |
+        cargo vcpkg build
+        echo "VCPKG_ROOT=$(pwd)/target/vcpkg" >> $GITHUB_ENV
+        echo "TECTONIC_DEP_BACKEND=vcpkg" >> $GITHUB_ENV
+        echo "RUSTFLAGS=-Ctarget-feature=+crt-static" >> $GITHUB_ENV
+
+    - name: Build
+      uses: actions-rs/cargo@v1
+      with:
+        use-cross: true
+        command: build
+        args: --release --target x86_64-pc-windows-msvc
+
+    - name: Package Artifacts
+      shell: bash
+      run: |
+        src=$(pwd)
+        stage=$(mktemp -d)
+        ver=${GITHUB_REF#refs/tags/}
+        asset_name="djoc-$ver-x86_64-pc-windows-msvc.zip"
+        ASSET_PATH="$src/$asset_name"
+        CHECKSUM_PATH="$ASSET_PATH.sha256"
+        cp target/x86_64-pc-windows-msvc/release/djoc $stage/
+        cd $stage
+        7z a $ASSET_PATH *
+        cd $src
+        sha256sum $asset_name > $CHECKSUM_PATH
+        echo "ASSET_PATH=$ASSET_PATH" >> $GITHUB_ENV
+        echo "CHECKSUM_PATH=$CHECKSUM_PATH" >> $GITHUB_ENV
+
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        draft: true
+        generate_release_notes: true
+        files: |
+          ${{ env.ASSET_PATH }}
+          ${{ env.CHECKSUM_PATH }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
