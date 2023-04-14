@@ -57,15 +57,14 @@
           libiconv
         ];
 
-      stplFilter = path: _type: builtins.match ".*stpl$" path != null;
       filter = path: type:
-        (stplFilter path type) || (craneLib.filterCargoSources path type);
+        (builtins.match ".*css$" path != null) || (craneLib.filterCargoSources path type);
 
       djoc = craneLib.buildPackage {
         inherit buildInputs;
         src = pkgs.lib.cleanSourceWith {
           inherit filter;
-          src = ./.;
+          src = craneLib.path ./.;
         };
       };
     in rec {
