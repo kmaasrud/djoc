@@ -26,11 +26,10 @@ impl Builder {
     /// ```
     /// use djoc::{Builder, Document};
     ///
-    /// let mut builder = Builder::default();
+    /// let builder = Builder::default();
     /// let document = Document::from("Hello, world!".to_string());
-    /// builder
-    ///     .write_html(&document, &mut std::io::stdout())
-    ///     .unwrap();
+    /// let mut bytes = Vec::new();
+    /// builder.write_html(&document, &mut bytes).unwrap();
     /// ```
     pub fn write_html<W: Write + Send>(
         &self,

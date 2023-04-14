@@ -28,11 +28,10 @@ impl Builder {
     /// ```
     /// use djoc::{Builder, Document};
     ///
-    /// let mut builder = Builder::default();
+    /// let builder = Builder::default();
     /// let document = Document::from("Hello, world!".to_string());
-    /// builder
-    ///     .write_pdf(&document, &mut std::io::stdout())
-    ///     .unwrap();
+    /// let mut bytes = Vec::new();
+    /// builder.write_pdf(&document, &mut bytes).unwrap();
     /// ```
     pub fn write_pdf<W: Write>(&self, document: &Document, mut w: W) -> Result<(), PdfError> {
         let with_name = |e| PdfError::from(e).document_name(&document.title);

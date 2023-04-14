@@ -18,9 +18,9 @@
 //!    .document_type(DocumentType::Report)
 //!    .author("John Doe");
 //!
-//! let mut builder = Builder::default();
+//! let builder = Builder::default();
 //! let mut bytes = Vec::new();
-//! builder.write_latex(&mut document, &mut bytes).unwrap();
+//! builder.write_latex(&document, &mut bytes).unwrap();
 //!
 //! let latex = String::from_utf8(bytes).unwrap();
 //!
