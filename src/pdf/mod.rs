@@ -10,7 +10,7 @@ use std::{
     fmt::{self, Display, Formatter},
     fs,
     io::{self, Write},
-    path::{Path, PathBuf},
+    path::PathBuf,
     time::SystemTime,
 };
 
@@ -37,14 +37,6 @@ impl Builder {
     pub fn write_pdf<W: Write>(&self, document: &Document, mut w: W) -> Result<(), PdfError> {
         let with_name = |e| PdfError::from(e).document_name(&document.title);
         let filename = document.filename();
-        let build_root = Path::new("build").join(&filename);
-        fs::create_dir_all(&build_root).map_err(|e| PdfError {
-            document_name: Some(document.title.clone()),
-            kind: PdfErrorKind::CreateDir {
-                path: build_root.clone(),
-                source: e,
-            },
-        })?;
 
         let mut status = status::LoggingStatusBackend;
         let config = tectonic::config::PersistentConfig::default();
@@ -59,17 +51,28 @@ impl Builder {
 
         let files = {
             let mut sb = tectonic::driver::ProcessingSessionBuilder::default();
+
             sb.bundle(bundle)
                 .primary_input_buffer(&bytes)
-                .filesystem_root(&build_root)
                 .keep_intermediates(true)
                 .keep_logs(true)
                 .tex_input_name(&format!("{filename}.tex"))
                 .format_name("latex")
                 .format_cache_path(format_cache_path)
                 .output_format(tectonic::driver::OutputFormat::Pdf)
-                .output_dir(&build_root)
                 .build_date(SystemTime::now());
+
+            if let Some(ref build_dir) = self.build_dir {
+                let build_dir = build_dir.join(&filename);
+                sb.filesystem_root(&build_dir).output_dir(&build_dir);
+                fs::create_dir_all(&build_dir).map_err(|e| PdfError {
+                    document_name: Some(document.title.clone()),
+                    kind: PdfErrorKind::CreateDir {
+                        path: build_dir,
+                        source: e,
+                    },
+                })?;
+            }
 
             let mut sess = sb.create(&mut status).map_err(with_name)?;
 

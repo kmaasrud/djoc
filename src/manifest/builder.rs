@@ -1,3 +1,5 @@
+use std::path::PathBuf;
+
 use serde::Deserialize;
 
 #[derive(Clone, Deserialize)]
@@ -6,6 +8,7 @@ pub struct BuilderManifest {
     #[serde(default, alias = "output")]
     pub outputs: Vec<Output>,
     pub number_sections: Option<bool>,
+    pub build_dir: Option<PathBuf>,
 }
 
 impl BuilderManifest {
@@ -13,6 +16,7 @@ impl BuilderManifest {
         Self {
             outputs: [self.outputs, other.outputs.clone()].concat(),
             number_sections: other.number_sections.or(self.number_sections),
+            build_dir: other.build_dir.clone().or(self.build_dir),
         }
     }
 }
