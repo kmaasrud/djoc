@@ -15,8 +15,8 @@ use rayon::prelude::*;
 use super::Builder;
 use crate::Document;
 
-const MAIN_CSS: &[u8] = include_bytes!("./main.css");
-const KATEX_CSS: &[u8] = include_bytes!("./katex.css");
+const MAIN_CSS: &[u8] = include_bytes!("main.css");
+const KATEX_CSS: &[u8] = include_bytes!("katex.css");
 
 impl Builder {
     /// Build the document as HTML and write it to the given writer.

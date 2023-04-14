@@ -6,6 +6,7 @@ description = "The Djot document compiler"
 edition = "2021"
 license-file = "LICENSE"
 repository = "https://github.com/kmaasrud/djoc"
+include = ["src/html/katex.css", "src/html/main.css"]
 
 
 [dependencies]
