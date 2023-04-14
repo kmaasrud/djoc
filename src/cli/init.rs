@@ -8,9 +8,11 @@ use std::{
 use anyhow::{Context, Result};
 use log::info;
 
-const CONFIG_PRE: &str = r#"# This is the configuration file of your document."#;
-
-const CONFIG_POST: &str = r#"# For more options, visit https://kmaasrud.com/djoc/config"#;
+const CONFIG_PRE: &str = r#"
+# This is your project's manifest file. It is where you will configure your
+# document(s) and how they should be built.
+"#;
+const CONFIG_POST: &str = r#""#;
 
 /// Initializes a document in the path provided. Defaults to the current
 /// directory if no path is provided.
@@ -31,12 +33,21 @@ pub fn init(path: Option<PathBuf>) -> Result<()> {
     let mut config = File::create(root.join("document.toml"))?;
 
     writeln!(config, "{CONFIG_PRE}")?;
+    writeln!(config)?;
+
+    writeln!(config, "outputs = [\"pdf\"]")?;
+    writeln!(config)?;
+
     writeln!(config, "[[document]]")?;
     writeln!(config, "title = \"{title}\"")?;
+
     if let Some(author) = get_author_name() {
         writeln!(config, "authors = [\"{author}\"]")?;
     }
-    writeln!(config, "outputs = [\"pdf\"]")?;
+
+    let today = chrono::Local::now().date_naive().format("%Y-%m-%d");
+    writeln!(config, "date = {today}")?;
+
     writeln!(config, "{CONFIG_POST}")?;
 
     info!("Created a new document in {:?}.", root);
