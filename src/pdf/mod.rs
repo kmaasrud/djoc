@@ -25,14 +25,8 @@ impl Builder {
     ///
     /// # Examples
     ///
-    /// ```
-    /// use djoc::{Builder, Document};
-    ///
-    /// let builder = Builder::default();
-    /// let document = Document::from("Hello, world!".to_string());
-    /// let mut bytes = Vec::new();
-    /// builder.write_pdf(&document, &mut bytes).unwrap();
-    /// ```
+    /// *Example removed because it is not possible to test it on CI.
+    /// Works the same as [`Builder::write_latex`].*
     pub fn write_pdf<W: Write>(&self, document: &Document, mut w: W) -> Result<(), PdfError> {
         let with_name = |e| PdfError::from(e).document_name(&document.title);
         let filename = document.filename();
