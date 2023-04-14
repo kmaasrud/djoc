@@ -31,6 +31,7 @@ enum Command {
     /// Builds a file or document.
     Build,
 
+    /// Removes the build directory.
     Clean,
 
     Compile {
@@ -42,6 +43,9 @@ enum Command {
         /// The file to write to
         #[arg(short, long)]
         output: Option<String>,
+        /// If set, sections will be numbered.
+        #[arg(long, default_value = "false")]
+        number_sections: bool,
     },
 
     /// Initializes a new document.
@@ -70,7 +74,8 @@ pub fn run() -> Result<()> {
             path,
             format,
             output,
-        } => compile::compile(path, format, output)?,
+            number_sections,
+        } => compile::compile(path, format, output, number_sections)?,
         Command::Init { path } => init::init(path)?,
     }
 

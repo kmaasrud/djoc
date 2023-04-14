@@ -10,8 +10,14 @@ use log::{debug, info};
 
 /// Builds a document. If no path is provided, searches up the filetree for a
 /// document to build.
-pub fn compile(path: Option<PathBuf>, format: String, output: Option<String>) -> Result<()> {
-    let builder = Builder::default();
+pub fn compile(
+    path: Option<PathBuf>,
+    format: String,
+    output: Option<String>,
+    number_sections: bool,
+) -> Result<()> {
+    let mut builder = Builder::default();
+    builder.number_sections(number_sections);
     let doc = match path {
         Some(path) => Document::from_path(path)?,
         None => {
