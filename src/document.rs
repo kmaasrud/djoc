@@ -4,11 +4,11 @@ use chrono::{NaiveDate, NaiveTime};
 use log::debug;
 use serde::Deserialize;
 
-use crate::{manifest::DocumentManifest, utils::kebab, walk::Walker, Author};
+use crate::{kebab, manifest::DocumentManifest, walk::Walker, Author};
 
 const DEFAULT_LOCALE: &str = "en_US";
 
-/// Enumerates the tyeps of documents that can be generated.
+/// Enumerates the types of documents that can be generated.
 ///
 /// The type dictates the template that will be used to generate the document.
 #[derive(Clone, Debug, Default, Deserialize)]
@@ -56,6 +56,41 @@ impl Default for Document {
 }
 
 impl Document {
+    /// Sets the document title.
+    pub fn title(&mut self, title: impl Into<String>) -> &mut Self {
+        self.title = title.into();
+        self
+    }
+
+    /// Adds an author to the document.
+    pub fn author(&mut self, author: Author) -> &mut Self {
+        self.authors.push(author);
+        self
+    }
+
+    /// Adds multiple authors to the document.
+    pub fn authors(&mut self, authors: impl IntoIterator<Item = Author>) -> &mut Self {
+        self.authors.extend(authors);
+        self
+    }
+
+    /// Sets the document type.
+    pub fn document_type(&mut self, document_type: DocumentType) -> &mut Self {
+        self.document_type = document_type;
+        self
+    }
+
+    /// Sets the locale for the document.
+    ///
+    /// The locale format is `language_country`, where `language` is
+    /// [ISO-639-1 alpha-2](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)
+    /// and `country` is
+    /// [ISO-3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+    pub fn locale(&mut self, locale: impl Into<String>) -> &mut Self {
+        self.locale = locale.into();
+        self
+    }
+
     /// Creates a new document from a path. If the path points to a Djot file,
     /// the document will be loaded from the file. If the path points to a
     /// directory, the directory will be recursively walked and all Djot files
@@ -74,14 +109,6 @@ impl Document {
             texts,
             ..Default::default()
         })
-    }
-
-    /// Creates a new document from a string.
-    pub fn from(content: String) -> Self {
-        Self {
-            texts: vec![content],
-            ..Default::default()
-        }
     }
 
     pub fn formatted_date(&self) -> Option<String> {
@@ -104,6 +131,15 @@ impl Document {
     /// Produces a filename for naming the output file(s).
     pub fn filename(&self) -> String {
         kebab(&self.title)
+    }
+}
+
+impl From<String> for Document {
+    fn from(content: String) -> Self {
+        Self {
+            texts: vec![content],
+            ..Default::default()
+        }
     }
 }
 
