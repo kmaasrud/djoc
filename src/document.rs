@@ -10,7 +10,7 @@ const DEFAULT_LOCALE: &str = "en_US";
 /// Enumerates the types of documents that can be generated.
 ///
 /// The type dictates the template that will be used to generate the document.
-#[derive(Clone, Debug, Default, Deserialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "kebab-case")]
 pub enum DocumentType {
     #[default]
@@ -30,6 +30,24 @@ impl AsRef<str> for DocumentType {
 }
 
 /// In-memory representation of a document.
+///
+/// # Examples
+///
+/// ```
+/// use djoc::{Document, DocumentType};
+///
+/// let mut document = Document::default();
+/// document
+///     .title("My Document")
+///     .document_type(DocumentType::Report)
+///     .author("John Doe".into())
+///     .author("Jane Doe".into())
+///     .text("This is the first paragraph.");
+///
+/// assert_eq!(document.title, "My Document");
+/// assert_eq!(document.document_type, DocumentType::Report);
+/// assert_eq!(document.authors.len(), 2);
+/// ```
 pub struct Document {
     pub title: String,
     pub authors: Vec<Author>,
@@ -56,6 +74,20 @@ impl Document {
     /// Sets the document title.
     pub fn title(&mut self, title: impl Into<String>) -> &mut Self {
         self.title = title.into();
+        self
+    }
+
+    /// Adds a text to the document.
+    pub fn text(&mut self, text: impl Into<String>) -> &mut Self {
+        self.texts.push(text.into());
+        self
+    }
+
+    /// Adds multiple texts to the document.
+    pub fn texts<S: Into<String>>(&mut self, texts: impl IntoIterator<Item = S>) -> &mut Self {
+        texts.into_iter().for_each(|text| {
+            self.text(text);
+        });
         self
     }
 

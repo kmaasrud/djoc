@@ -31,17 +31,6 @@ impl Default for Walker {
 impl Walker {
     /// Creates a new `Walker` from a path.
     ///
-    /// # Examples
-    ///
-    /// ```no_run
-    /// use djoc::walk::Walker;
-    ///
-    /// let walker = Walker::new(".").unwrap();
-    /// for path in walker {
-    ///    // do something with path...
-    /// }
-    /// ```
-    ///
     /// # Errors
     ///
     /// This function will return an error if the path does not exist or if the
@@ -109,10 +98,6 @@ impl Iterator for Walker {
 
 /// An iterator that walks a directory recursively and only yields paths with
 /// the given extensions.
-///
-/// This struct is created by the [`Walker::filter_extensions`] method.
-///
-/// [`filter_extensions`]: struct.Walker.html#method.filter_extensions
 pub struct FilteredWalker {
     inner: Walker,
     extensions: &'static [&'static str],

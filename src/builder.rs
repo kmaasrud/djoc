@@ -1,6 +1,8 @@
 use crate::manifest::BuilderManifest;
 
 /// Struct responsible for building a document.
+///
+/// It is usually constructed by using the [`Builder::default`] method.
 #[derive(Clone, Default)]
 pub struct Builder {
     pub(crate) number_sections: bool,

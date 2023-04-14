@@ -23,3 +23,13 @@ impl Display for Author {
         Ok(())
     }
 }
+
+impl<S: Into<String>> From<S> for Author {
+    fn from(name: S) -> Self {
+        Self {
+            name: name.into(),
+            email: None,
+            affiliation: None,
+        }
+    }
+}

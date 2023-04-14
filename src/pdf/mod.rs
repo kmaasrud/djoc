@@ -173,6 +173,7 @@ pub struct PdfError {
 
 impl PdfError {
     /// Set the name of the document that caused the error.
+    #[must_use]
     pub fn document_name(self, document_name: &str) -> Self {
         Self {
             document_name: Some(document_name.to_string()),
@@ -207,9 +208,9 @@ impl Display for PdfError {
 
         match &self.kind {
             PdfErrorKind::Tectonic(_) => write!(f, "tectonic errored during pdf build"),
-            PdfErrorKind::Io(e) => write!(f, "io error: {}", e),
+            PdfErrorKind::Io(e) => write!(f, "io error: {e}"),
             PdfErrorKind::CreateDir { path, .. } => {
-                write!(f, "failed to create directory {:?}", path)
+                write!(f, "failed to create directory {path:?}")
             }
             PdfErrorKind::NoPdfCreated => write!(f, "engine finished, but no pdf was created"),
         }

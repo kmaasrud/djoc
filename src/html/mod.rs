@@ -28,7 +28,9 @@ impl Builder {
     ///
     /// let mut builder = Builder::default();
     /// let document = Document::from("Hello, world!".to_string());
-    /// builder.write_html(&document, &mut std::io::stdout()).unwrap();
+    /// builder
+    ///     .write_html(&document, &mut std::io::stdout())
+    ///     .unwrap();
     /// ```
     pub fn write_html<W: Write + Send>(
         &self,
@@ -92,6 +94,7 @@ pub struct HtmlError {
 
 impl HtmlError {
     /// Set the name of the document that caused this error.
+    #[must_use]
     pub fn document_name(self, document_name: &str) -> Self {
         Self {
             document_name: Some(document_name.to_string()),

@@ -22,3 +22,18 @@ pub fn kebab(s: &str) -> String {
         })
         .collect()
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_kebab() {
+        assert_eq!(kebab("Hello, world!"), "hello-world");
+        assert_eq!(kebab("こんにちは"), "こんにちは");
+        assert_eq!(kebab("Hello\tworld"), "hello-world");
+        assert_eq!(kebab("Hello\rworld"), "hello-world");
+        assert_eq!(kebab("Hello\nworld"), "hello-world");
+        assert_eq!(kebab("!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"), "-");
+    }
+}
