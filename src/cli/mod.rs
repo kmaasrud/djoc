@@ -28,12 +28,13 @@ struct Djoc {
 
 #[derive(Debug, Subcommand)]
 enum Command {
-    /// Builds a file or document.
+    /// Builds the document(s) in the current directory.
     Build,
 
     /// Removes the build directory.
     Clean,
 
+    /// Compiles a single-file document.
     Compile {
         /// The target source file (omit for stdin)
         path: Option<PathBuf>,
@@ -42,13 +43,13 @@ enum Command {
         format: String,
         /// The file to write to
         #[arg(short, long)]
-        output: Option<String>,
+        output: Option<PathBuf>,
         /// If set, sections will be numbered.
         #[arg(long, default_value = "false")]
         number_sections: bool,
     },
 
-    /// Initializes a new document.
+    /// Initializes a new document project.
     Init {
         /// Directory to initialize the document in.
         path: Option<PathBuf>,
