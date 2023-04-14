@@ -1,10 +1,9 @@
 use std::{fs, io, path::Path};
 
-use chrono::{NaiveDate, NaiveTime};
 use log::debug;
 use serde::Deserialize;
 
-use crate::{kebab, manifest::DocumentManifest, walk::Walker, Author};
+use crate::{kebab, manifest::DocumentManifest, walk::Walker, Author, Date};
 
 const DEFAULT_LOCALE: &str = "en_US";
 
@@ -33,23 +32,21 @@ impl AsRef<str> for DocumentType {
 /// In-memory representation of a document.
 pub struct Document {
     pub title: String,
-    pub texts: Vec<String>,
     pub authors: Vec<Author>,
-    date: Option<NaiveDate>,
-    time: Option<NaiveTime>,
+    pub date: Date,
     pub locale: String,
     pub document_type: DocumentType,
+    pub(crate) texts: Vec<String>,
 }
 
 impl Default for Document {
     fn default() -> Self {
         Self {
             title: "Document".into(),
-            texts: Vec::new(),
-            authors: Vec::new(),
-            date: None,
-            time: None,
             locale: DEFAULT_LOCALE.into(),
+            texts: Default::default(),
+            authors: Default::default(),
+            date: Default::default(),
             document_type: Default::default(),
         }
     }
@@ -80,12 +77,19 @@ impl Document {
         self
     }
 
+    /// Sets the date of the document.
+    pub fn date(&mut self, date: Date) -> &mut Self {
+        self.date = date;
+        self
+    }
+
     /// Sets the locale for the document.
     ///
-    /// The locale format is `language_country`, where `language` is
-    /// [ISO-639-1 alpha-2](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)
-    /// and `country` is
-    /// [ISO-3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+    /// All locales present in the [`pure-rust-locales`] crate are supported. In
+    /// general, most [BCP 47] language tags are supported.
+    ///
+    /// [`pure-rust-locales`]: https://docs.rs/pure-rust-locales
+    /// [BCP 47]: https://tools.ietf.org/html/bcp47
     pub fn locale(&mut self, locale: impl Into<String>) -> &mut Self {
         self.locale = locale.into();
         self
@@ -111,33 +115,16 @@ impl Document {
         })
     }
 
-    pub fn formatted_date(&self) -> Option<String> {
-        self.locale
-            .as_str()
-            .try_into()
-            .map(|locale| match (self.date, self.time) {
-                (Some(date), Some(time)) => Some(format!(
-                    "{} {}",
-                    date.format_localized("%e %B %Y", locale),
-                    time.format("%H:%M")
-                )),
-                (Some(date), None) => Some(date.format_localized("%e %B %Y", locale).to_string()),
-                _ => None,
-            })
-            .ok()
-            .flatten()
-    }
-
     /// Produces a filename for naming the output file(s).
     pub fn filename(&self) -> String {
         kebab(&self.title)
     }
 }
 
-impl From<String> for Document {
-    fn from(content: String) -> Self {
+impl<S: Into<String>> From<S> for Document {
+    fn from(content: S) -> Self {
         Self {
-            texts: vec![content],
+            texts: vec![content.into()],
             ..Default::default()
         }
     }
@@ -158,12 +145,7 @@ impl TryFrom<DocumentManifest> for Document {
 
         Ok(Self {
             texts,
-            date: def.date.and_then(|dt| dt.date).and_then(|date| {
-                NaiveDate::from_ymd_opt(date.year.into(), date.month.into(), date.day.into())
-            }),
-            time: def.date.and_then(|dt| dt.time).and_then(|time| {
-                NaiveTime::from_hms_opt(time.hour.into(), time.minute.into(), time.second.into())
-            }),
+            date: def.date.map(|d| d.into()).unwrap_or_default(),
             title: def.title.to_owned(),
             authors: def.authors.clone().into_iter().map(Into::into).collect(),
             locale: def.locale.clone().unwrap_or(DEFAULT_LOCALE.into()),

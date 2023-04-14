@@ -30,7 +30,9 @@ impl Builder {
     ///
     /// let mut builder = Builder::default();
     /// let document = Document::from("Hello, world!".to_string());
-    /// builder.write_pdf(&document, &mut std::io::stdout()).unwrap();
+    /// builder
+    ///     .write_pdf(&document, &mut std::io::stdout())
+    ///     .unwrap();
     /// ```
     pub fn write_pdf<W: Write>(&self, document: &Document, mut w: W) -> Result<(), PdfError> {
         let with_name = |e| PdfError::from(e).document_name(&document.title);
@@ -39,7 +41,7 @@ impl Builder {
         fs::create_dir_all(&build_root).map_err(|e| PdfError {
             document_name: Some(document.title.clone()),
             kind: PdfErrorKind::CreateDir {
-                path: build_root.to_path_buf(),
+                path: build_root.clone(),
                 source: e,
             },
         })?;
@@ -97,7 +99,9 @@ impl Builder {
     ///
     /// let mut builder = Builder::default();
     /// let document = Document::from("Hello, world!".to_string());
-    /// builder.write_latex(&document, &mut std::io::stdout()).unwrap();
+    /// builder
+    ///     .write_latex(&document, &mut std::io::stdout())
+    ///     .unwrap();
     /// ```
     pub fn write_latex<W: Write>(&self, document: &Document, mut w: W) -> Result<(), PdfError> {
         let mut inner = || -> Result<(), PdfError> {
@@ -111,15 +115,14 @@ impl Builder {
             let locale = document
                 .locale
                 .split_once('_')
-                .map(|(s, _)| s)
-                .unwrap_or(&document.locale);
+                .map_or(document.locale.as_str(), |(s, _)| s);
             writeln!(w, r"\setdefaultlanguage{{{locale}}}")?;
 
             write!(w, r"\title{{")?;
             latex::Renderer::default().write(Parser::new(&document.title), &mut w)?;
             writeln!(w, "}}")?;
 
-            match document.formatted_date() {
+            match document.date.format_with_locale(&document.locale) {
                 Some(date) => writeln!(w, r"\date{{{date}}}")?,
                 None => writeln!(w, r"\predate{{}}\date{{}}\postdate{{}}")?,
             }

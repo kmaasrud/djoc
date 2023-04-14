@@ -1,5 +1,6 @@
 mod author;
 mod builder;
+mod date;
 mod document;
 mod utils;
 
@@ -12,6 +13,7 @@ pub mod pdf;
 
 pub use author::Author;
 pub use builder::Builder;
+pub use date::Date;
 #[doc(inline)]
 pub use document::Document;
 #[doc(inline)]
