@@ -110,17 +110,17 @@ impl Builder {
                 .try_for_each(|package| writeln!(w, r"\usepackage{{{package}}}"))?;
             w.write_all(DEFAULT_PREAMBLE)?;
 
-            let locale = document
+            let lang = self
                 .locale
                 .split_once('_')
-                .map_or(document.locale.as_str(), |(s, _)| s);
-            writeln!(w, r"\setdefaultlanguage{{{locale}}}")?;
+                .map_or(self.locale.as_str(), |(s, _)| s);
+            writeln!(w, r"\setdefaultlanguage{{{lang}}}")?;
 
             write!(w, r"\title{{")?;
             latex::Renderer::default().write(Parser::new(&document.title), &mut w)?;
             writeln!(w, "}}")?;
 
-            match document.date.format_with_locale(&document.locale) {
+            match document.date.format_with_locale(&self.locale) {
                 Some(date) => writeln!(w, r"\date{{{date}}}")?,
                 None => writeln!(w, r"\predate{{}}\date{{}}\postdate{{}}")?,
             }

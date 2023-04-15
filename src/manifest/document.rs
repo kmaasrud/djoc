@@ -17,7 +17,6 @@ pub struct DocumentManifest {
     pub texts: Vec<PathBuf>,
     #[serde(default, alias = "type")]
     pub document_type: DocumentType,
-    pub locale: Option<String>,
     #[serde(flatten)]
     pub(crate) builder: BuilderManifest,
 }

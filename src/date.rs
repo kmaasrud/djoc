@@ -157,21 +157,66 @@ mod tests {
     fn test_date() {
         let date = Date::from_ymd(2020, 1, 1);
         assert_eq!(date.to_string(), "2020-01-01");
-        assert_eq!(date.format_with_locale("en_US"), Some(" 1 January 2020".to_string()));
-        assert_eq!(date.format_with_locale("en_GB"), Some(" 1 January 2020".to_string()));
-        assert_eq!(date.format_with_locale("de_DE"), Some(" 1 Januar 2020".to_string()));
-        assert_eq!(date.format_with_locale("fr_FR"), Some(" 1 janvier 2020".to_string()));
-        assert_eq!(date.format_with_locale("es_ES"), Some(" 1 enero 2020".to_string()));
-        assert_eq!(date.format_with_locale("zh_CN"), Some(" 1 一月 2020".to_string()));
-        assert_eq!(date.format_with_locale("ja_JP"), Some(" 1 1月 2020".to_string()));
-        assert_eq!(date.format_with_locale("ko_KR"), Some(" 1 1월 2020".to_string()));
-        assert_eq!(date.format_with_locale("ru_RU"), Some(" 1 января 2020".to_string()));
-        assert_eq!(date.format_with_locale("ar_SA"), Some(" 1 يناير 2020".to_string()));
-        assert_eq!(date.format_with_locale("fa_IR"), Some(" 1 ژانویه 2020".to_string()));
-        assert_eq!(date.format_with_locale("he_IL"), Some(" 1 ינואר 2020".to_string()));
-        assert_eq!(date.format_with_locale("th_TH"), Some(" 1 มกราคม 2020".to_string()));
-        assert_eq!(date.format_with_locale("vi_VN"), Some(" 1 Tháng 1 2020".to_string()));
-        assert_eq!(date.format_with_locale("hi_IN"), Some(" 1 जनवरी 2020".to_string()));
+        assert_eq!(
+            date.format_with_locale("en_US"),
+            Some(" 1 January 2020".to_string())
+        );
+        assert_eq!(
+            date.format_with_locale("en_GB"),
+            Some(" 1 January 2020".to_string())
+        );
+        assert_eq!(
+            date.format_with_locale("de_DE"),
+            Some(" 1 Januar 2020".to_string())
+        );
+        assert_eq!(
+            date.format_with_locale("fr_FR"),
+            Some(" 1 janvier 2020".to_string())
+        );
+        assert_eq!(
+            date.format_with_locale("es_ES"),
+            Some(" 1 enero 2020".to_string())
+        );
+        assert_eq!(
+            date.format_with_locale("zh_CN"),
+            Some(" 1 一月 2020".to_string())
+        );
+        assert_eq!(
+            date.format_with_locale("ja_JP"),
+            Some(" 1 1月 2020".to_string())
+        );
+        assert_eq!(
+            date.format_with_locale("ko_KR"),
+            Some(" 1 1월 2020".to_string())
+        );
+        assert_eq!(
+            date.format_with_locale("ru_RU"),
+            Some(" 1 января 2020".to_string())
+        );
+        assert_eq!(
+            date.format_with_locale("ar_SA"),
+            Some(" 1 يناير 2020".to_string())
+        );
+        assert_eq!(
+            date.format_with_locale("fa_IR"),
+            Some(" 1 ژانویه 2020".to_string())
+        );
+        assert_eq!(
+            date.format_with_locale("he_IL"),
+            Some(" 1 ינואר 2020".to_string())
+        );
+        assert_eq!(
+            date.format_with_locale("th_TH"),
+            Some(" 1 มกราคม 2020".to_string())
+        );
+        assert_eq!(
+            date.format_with_locale("vi_VN"),
+            Some(" 1 Tháng 1 2020".to_string())
+        );
+        assert_eq!(
+            date.format_with_locale("hi_IN"),
+            Some(" 1 जनवरी 2020".to_string())
+        );
     }
 
     #[test]

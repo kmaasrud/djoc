@@ -2,19 +2,33 @@ use std::path::PathBuf;
 
 use crate::manifest::BuilderManifest;
 
+const DEFAULT_LOCALE: &str = "en_US";
+
 /// Struct responsible for building a document.
 ///
 /// It is usually constructed by using the [`Builder::default`] method.
-#[derive(Clone, Default)]
+#[derive(Clone)]
 pub struct Builder {
     pub(crate) number_sections: bool,
     pub(crate) build_dir: Option<PathBuf>,
+    pub(crate) locale: String,
+}
+
+impl Default for Builder {
+    fn default() -> Self {
+        Self {
+            number_sections: false,
+            build_dir: Some(PathBuf::from("build")),
+            locale: DEFAULT_LOCALE.to_string(),
+        }
+    }
 }
 
 impl Builder {
     pub(crate) fn from_manifest(manifest: &BuilderManifest) -> Self {
         Self {
             number_sections: manifest.number_sections.unwrap_or(false),
+            locale: manifest.locale.clone().unwrap_or(DEFAULT_LOCALE.into()),
             build_dir: manifest
                 .build_dir
                 .clone()
@@ -42,6 +56,18 @@ impl Builder {
     /// If not set, only the output will be written to disk.
     pub fn build_dir(&mut self, build_dir: PathBuf) -> &mut Self {
         self.build_dir = Some(build_dir);
+        self
+    }
+
+    /// Sets the locale for the document.
+    ///
+    /// All locales present in the [`pure-rust-locales`] crate are supported. In
+    /// general, most [BCP 47] language tags are supported.
+    ///
+    /// [`pure-rust-locales`]: https://docs.rs/pure-rust-locales
+    /// [BCP 47]: https://tools.ietf.org/html/bcp47
+    pub fn locale(&mut self, locale: impl Into<String>) -> &mut Self {
+        self.locale = locale.into();
         self
     }
 }

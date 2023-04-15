@@ -14,9 +14,9 @@
 //!
 //! let mut document = Document::from("This is some text");
 //! document
-//!    .title("My Document")
-//!    .document_type(DocumentType::Report)
-//!    .author("John Doe");
+//!     .title("My Document")
+//!     .document_type(DocumentType::Report)
+//!     .author("John Doe");
 //!
 //! let builder = Builder::default();
 //! let mut bytes = Vec::new();

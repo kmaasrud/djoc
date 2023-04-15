@@ -4,8 +4,6 @@ use serde::Deserialize;
 
 use crate::{kebab, manifest::DocumentManifest, walk::Walker, Author, Date};
 
-const DEFAULT_LOCALE: &str = "en_US";
-
 /// Enumerates the types of documents that can be generated.
 ///
 /// The type dictates the template that will be used to generate the document.
@@ -58,26 +56,13 @@ impl From<&str> for DocumentType {
 /// assert_eq!(document.document_type, DocumentType::Report);
 /// assert_eq!(document.authors.len(), 3);
 /// ```
+#[derive(Default)]
 pub struct Document {
     pub title: String,
     pub authors: Vec<Author>,
     pub date: Date,
-    pub locale: String,
     pub document_type: DocumentType,
     pub(crate) texts: Vec<String>,
-}
-
-impl Default for Document {
-    fn default() -> Self {
-        Self {
-            title: "Document".into(),
-            locale: DEFAULT_LOCALE.into(),
-            texts: Default::default(),
-            authors: Default::default(),
-            date: Default::default(),
-            document_type: Default::default(),
-        }
-    }
 }
 
 impl Document {
@@ -101,7 +86,6 @@ impl Document {
                 .into_iter()
                 .map(Into::into)
                 .collect(),
-            locale: manifest.locale.clone().unwrap_or(DEFAULT_LOCALE.into()),
             document_type: manifest.document_type,
         })
     }
@@ -149,18 +133,6 @@ impl Document {
     /// Sets the date of the document.
     pub fn date<D: Into<Date>>(&mut self, date: D) -> &mut Self {
         self.date = date.into();
-        self
-    }
-
-    /// Sets the locale for the document.
-    ///
-    /// All locales present in the [`pure-rust-locales`] crate are supported. In
-    /// general, most [BCP 47] language tags are supported.
-    ///
-    /// [`pure-rust-locales`]: https://docs.rs/pure-rust-locales
-    /// [BCP 47]: https://tools.ietf.org/html/bcp47
-    pub fn locale(&mut self, locale: impl Into<String>) -> &mut Self {
-        self.locale = locale.into();
         self
     }
 
