@@ -11,10 +11,12 @@ use std::{
     fs,
     io::{self, Write},
     path::PathBuf,
+    sync::{Arc, Mutex},
     time::SystemTime,
 };
 
-use jotdown::{Parser, Render};
+use hayagriva::style::{Citation, Database, Ieee, Numerical};
+use jotdown::{Container, Event, Parser, Render};
 use rayon::prelude::*;
 
 use super::Builder;
@@ -101,7 +103,11 @@ impl Builder {
     ///     .write_latex(&document, &mut std::io::stdout())
     ///     .unwrap();
     /// ```
-    pub fn write_latex<W: Write>(&self, document: &Document, mut w: W) -> Result<(), PdfError> {
+    pub fn write_latex<'s, W: Write>(
+        &self,
+        document: &'s Document,
+        mut w: W,
+    ) -> Result<(), PdfError> {
         let mut inner = || -> Result<(), PdfError> {
             writeln!(w, r"\documentclass{{{}}}", document.document_type.as_ref())?;
 
@@ -137,6 +143,8 @@ impl Builder {
                 writeln!(w, "}}")?;
             }
 
+            let db = Arc::new(Mutex::new(Database::from_entries(self.bib.iter())));
+            let bib_style = Arc::new(Mutex::new(Numerical::new()));
             writeln!(w, r"\begin{{document}}")?;
 
             if self.add_title {
@@ -147,14 +155,43 @@ impl Builder {
                 .texts
                 .par_iter()
                 .try_fold_with(Vec::new(), |mut buf, text| {
+                    let mut cite = None;
+                    let citations = |event: Event<'s>| -> Event<'s> {
+                        match event {
+                            Event::Start(Container::Span, ref attrs) => {
+                                if let Some(key) = attrs.get("cite") {
+                                    let mut db = db.lock().unwrap();
+                                    // TODO: Should avoid this clone
+                                    if let Some(record) =
+                                        db.records.clone().get(key.to_string().as_str())
+                                    {
+                                        let citation = db.citation(
+                                            &mut *bib_style.lock().unwrap(),
+                                            &[Citation::new(record.entry, None)],
+                                        );
+                                        cite = Some(citation.display.value);
+                                    }
+                                }
+                            }
+                            Event::Str(ref s) if cite.is_some() && s == "@" => {
+                                return Event::Str(cite.take().unwrap().into())
+                            }
+                            _ => {}
+                        }
+                        event
+                    };
                     latex::Renderer::default()
                         .number_sections(self.number_sections)
-                        .write(Parser::new(text), &mut buf)?;
+                        .write(Parser::new(text).map(citations), &mut buf)?;
                     Ok(buf)
                 })
                 .collect::<Result<Vec<Vec<u8>>, PdfError>>()?
                 .into_iter()
                 .try_for_each(|s| w.write_all(&s))?;
+
+            for reference in db.lock().unwrap().bibliography(&Ieee::new(), None) {
+                writeln!(w, "{}", reference.display.value)?;
+            }
 
             writeln!(w, r"\end{{document}}")?;
 

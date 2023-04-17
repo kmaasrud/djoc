@@ -61,6 +61,12 @@ impl Walker {
         })
     }
 
+    /// Sets the maximum nesting level.
+    pub fn max_nesting(mut self, max_nesting: usize) -> Self {
+        self.max_nesting = max_nesting;
+        self
+    }
+
     /// Returns a new iterator that only yields paths with the given extensions.
     pub fn filter_extensions(self, extensions: &'static [&'static str]) -> FilteredWalker {
         FilteredWalker {
