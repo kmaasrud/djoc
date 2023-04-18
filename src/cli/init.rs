@@ -36,6 +36,7 @@ pub fn init(path: Option<PathBuf>) -> Result<()> {
 
     writeln!(config, "outputs = [\"pdf\"]")?;
     writeln!(config, "add-title = true")?;
+    writeln!(config, "build-dir = \"build\"")?;
     writeln!(config)?;
 
     writeln!(config, "[[document]]")?;

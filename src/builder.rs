@@ -19,7 +19,7 @@ impl Default for Builder {
     fn default() -> Self {
         Self {
             number_sections: false,
-            build_dir: Some(PathBuf::from("build")),
+            build_dir: None,
             locale: DEFAULT_LOCALE.to_string(),
             add_title: false,
         }
@@ -31,10 +31,7 @@ impl Builder {
         Self {
             number_sections: manifest.number_sections.unwrap_or(false),
             locale: manifest.locale.clone().unwrap_or(DEFAULT_LOCALE.into()),
-            build_dir: manifest
-                .build_dir
-                .clone()
-                .or_else(|| Some(PathBuf::from("build"))),
+            build_dir: manifest.build_dir.clone(),
             add_title: manifest.add_title.unwrap_or(false),
         }
     }
