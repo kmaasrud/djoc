@@ -138,6 +138,11 @@ impl Builder {
             }
 
             writeln!(w, r"\begin{{document}}")?;
+
+            if self.add_title {
+                writeln!(w, r"\maketitle")?;
+            }
+
             document
                 .texts
                 .par_iter()
@@ -150,6 +155,7 @@ impl Builder {
                 .collect::<Result<Vec<Vec<u8>>, PdfError>>()?
                 .into_iter()
                 .try_for_each(|s| w.write_all(&s))?;
+
             writeln!(w, r"\end{{document}}")?;
 
             Ok(())

@@ -8,8 +8,7 @@ use std::{
 use anyhow::{Context, Result};
 use log::info;
 
-const CONFIG_PRE: &str = r#"
-# This is your project's manifest file. It is where you will configure your
+const CONFIG_PRE: &str = r#"# This is your project's manifest file. It is where you will configure your
 # document(s) and how they should be built.
 "#;
 const CONFIG_POST: &str = r#""#;
@@ -36,6 +35,7 @@ pub fn init(path: Option<PathBuf>) -> Result<()> {
     writeln!(config, "{CONFIG_PRE}")?;
 
     writeln!(config, "outputs = [\"pdf\"]")?;
+    writeln!(config, "add-title = true")?;
     writeln!(config)?;
 
     writeln!(config, "[[document]]")?;

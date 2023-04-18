@@ -10,6 +10,7 @@ pub struct BuilderManifest {
     pub number_sections: Option<bool>,
     pub build_dir: Option<PathBuf>,
     pub locale: Option<String>,
+    pub add_title: Option<bool>,
 }
 
 impl BuilderManifest {
@@ -19,6 +20,7 @@ impl BuilderManifest {
             number_sections: other.number_sections.or(self.number_sections),
             build_dir: other.build_dir.or_else(|| self.build_dir.clone()),
             locale: other.locale.or_else(|| self.locale.clone()),
+            add_title: other.add_title.or(self.add_title),
         }
     }
 }

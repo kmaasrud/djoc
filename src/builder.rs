@@ -12,6 +12,7 @@ pub struct Builder {
     pub(crate) number_sections: bool,
     pub(crate) build_dir: Option<PathBuf>,
     pub(crate) locale: String,
+    pub(crate) add_title: bool,
 }
 
 impl Default for Builder {
@@ -20,6 +21,7 @@ impl Default for Builder {
             number_sections: false,
             build_dir: Some(PathBuf::from("build")),
             locale: DEFAULT_LOCALE.to_string(),
+            add_title: false,
         }
     }
 }
@@ -33,6 +35,7 @@ impl Builder {
                 .build_dir
                 .clone()
                 .or_else(|| Some(PathBuf::from("build"))),
+            add_title: manifest.add_title.unwrap_or(false),
         }
     }
 
