@@ -1,10 +1,4 @@
-<div align="center">
-
-# djoc
-
-the djot document compiler
-
-</div>
+# djoc - the djot document compiler
 
 djoc is a command-line tool that allows you to write documents in the markup
 language [Djot](https://djot.net) and build them into a PDF or an HTML page.
