@@ -12,9 +12,10 @@ pub fn build() -> Result<()> {
                 .map(|ext| ext.to_string_lossy() == "toml")
                 .unwrap_or_default()
         })
-        .try_for_each(|path| {
-            let manifest: Manifest = toml::from_str(&fs::read_to_string(path)?)?;
-            manifest.execute()?;
-            Ok(())
-        })
+        // NOTE: A TOML file must be UTF-8, but should we perhaps throw an error if any file is not
+        // UTF-8? That might be less confusing for users.
+        .filter_map(|path| toml::from_str(&fs::read_to_string(path).ok()?).ok())
+        .try_for_each(|manifest: Manifest| manifest.execute())?;
+
+    Ok(())
 }
