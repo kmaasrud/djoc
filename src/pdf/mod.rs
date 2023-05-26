@@ -244,7 +244,7 @@ pub enum PdfErrorKind {
     NoPdfCreated,
 }
 
-const DEFAULT_PACKAGES: [&str; 17] = [
+const DEFAULT_PACKAGES: [&str; 18] = [
     "amsmath",
     "authblk",
     "bookmark",
@@ -262,6 +262,7 @@ const DEFAULT_PACKAGES: [&str; 17] = [
     "polyglossia",
     "pifont",
     "enumitem",
+    "subcaption",
 ];
 
 const DEFAULT_PREAMBLE: &[u8] = br#"
