@@ -18,8 +18,27 @@ enum Emit {
 #[derive(Default)]
 pub struct Renderer {
     pub number_sections: bool,
-    emit: Emit,
-    first_line: bool,
+}
+
+impl Render for Renderer {
+    fn push<'s, I, W>(&self, mut events: I, mut out: W) -> fmt::Result
+    where
+        I: Iterator<Item = Event<'s>>,
+        W: fmt::Write,
+    {
+        let mut w = Writer::from(self);
+        events.try_for_each(|e| w.render_event(&e, &mut out))
+    }
+
+    fn push_borrowed<'s, E, I, W>(&self, mut events: I, mut out: W) -> fmt::Result
+    where
+        E: AsRef<Event<'s>>,
+        I: Iterator<Item = E>,
+        W: fmt::Write,
+    {
+        let mut w = Writer::from(self);
+        events.try_for_each(|e| w.render_event(e.as_ref(), &mut out))
+    }
 }
 
 impl Renderer {
@@ -32,8 +51,25 @@ impl Renderer {
     }
 }
 
-impl Render for Renderer {
-    fn render_event<W>(&mut self, e: &Event, mut out: W) -> fmt::Result
+#[derive(Default)]
+struct Writer<'s> {
+    pub number_sections: bool,
+    emit: Emit,
+    first_line: bool,
+    fnrefs: Vec<&'s str>,
+}
+
+impl From<&Renderer> for Writer<'_> {
+    fn from(r: &Renderer) -> Self {
+        Self {
+            number_sections: r.number_sections,
+            ..Self::default()
+        }
+    }
+}
+
+impl<'s> Writer<'s> {
+    fn render_event<W>(&mut self, e: &Event<'s>, mut out: W) -> fmt::Result
     where
         W: fmt::Write,
     {
@@ -58,7 +94,13 @@ impl Render for Renderer {
             Event::ThematicBreak(_attrs) => {
                 out.write_str("\n\\begin{center}\\rule{0.5\\linewidth}{0.5pt}\\end{center}")?
             }
-            Event::FootnoteReference(_, number) => write!(out, r"\footnotemark[{}]", number)?,
+            Event::FootnoteReference(label) => {
+                if !self.fnrefs.contains(label) {
+                    self.fnrefs.push(label);
+                }
+                let number = self.fnrefs.iter().position(|l| l == label).unwrap();
+                write!(out, r"\footnotemark[{}]", number)?
+            }
             Event::Start(c, _attrs) => {
                 if self.first_line {
                     self.first_line = false;
@@ -82,7 +124,8 @@ impl Render for Renderer {
                     Container::Mark => out.write_str(r"\hl{")?,
                     Container::Link(dest, _) => write!(out, r"\href{{{}}}{{", dest)?,
                     Container::DescriptionTerm => write!(out, r"\item[")?,
-                    Container::Footnote { number, .. } => {
+                    Container::Footnote { label } => {
+                        let number = self.fnrefs.iter().position(|l| l == label).unwrap();
                         write!(out, r"\footnotetext[{}]{{", number)?
                     }
                     Container::Image(dest, _) => {
@@ -155,7 +198,7 @@ impl Render for Renderer {
                     }
                     Container::ListItem => out.write_str(r"\item")?,
                     Container::Verbatim => write!(out, r"\texttt{{")?,
-                    Container::CodeBlock { lang: _ } => {
+                    Container::CodeBlock { language: _ } => {
                         self.emit = Emit::Raw;
                         write!(out, r"\begin{{verbatim}}")?;
                         writeln!(out)?;
