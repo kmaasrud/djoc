@@ -15,7 +15,7 @@ use std::{
     time::SystemTime,
 };
 
-use hayagriva::style::{Citation, Database, Ieee, Numerical};
+use hayagriva::style::{Citation, Database, ChicagoAuthorDate};
 use jotdown::{Container, Event, Parser, Render};
 use rayon::prelude::*;
 
@@ -144,7 +144,7 @@ impl Builder {
             }
 
             let db = Arc::new(Mutex::new(Database::from_entries(self.bib.iter())));
-            let bib_style = Arc::new(Mutex::new(Numerical::new()));
+            let bib_style = Arc::new(Mutex::new(ChicagoAuthorDate::new()));
             writeln!(w, r"\begin{{document}}")?;
 
             if self.add_title {
@@ -189,9 +189,15 @@ impl Builder {
                 .into_iter()
                 .try_for_each(|s| w.write_all(&s))?;
 
-            for reference in db.lock().unwrap().bibliography(&Ieee::new(), None) {
-                writeln!(w, "{}", reference.display.value)?;
+            writeln!(w, r"\begin{{itemize}}")?;
+            for reference in db.lock().unwrap().bibliography(&ChicagoAuthorDate::new(), None) {
+                write!(w, r"\item")?;
+                if let Some(prefix) = reference.prefix {
+                    write!(w, r"[{}]", prefix.value.replace('[', "\\["))?;
+                }
+                writeln!(w, r" {}", reference.display.value)?;
             }
+            writeln!(w, r"\end{{itemize}}")?;
 
             writeln!(w, r"\end{{document}}")?;
 
