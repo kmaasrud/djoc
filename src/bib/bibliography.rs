@@ -1,17 +1,17 @@
-use std::{io, path::Path};
+use std::io;
 
-use hayagriva::Entry;
+use hayagriva::{io::from_biblatex_str, Entry};
 
-use crate::{utils::find_root, walk::Walker};
+use crate::walk::Walker;
 
-pub fn get_bib_entries<P: AsRef<Path>>(path: Option<P>) -> io::Result<Vec<Entry>> {
-    let bibtex_content = match path {
-        Some(path) => Walker::new(path)?.filter_extensions(&["bib", "bibtex"]),
-        _ => Walker::new(".")?.filter_extensions(&["bib", "bibtex"]),
-    }
-    .map(std::fs::read_to_string)
-    .collect::<Result<String, io::Error>>()?;
+pub fn get_bib_entries() -> io::Result<Vec<Entry>> {
+    let bibtex_content = Walker::new(".")?
+        .max_nesting(5)
+        .filter_extensions(&["bib", "bibtex"])
+        .map(std::fs::read_to_string)
+        .collect::<Result<String, io::Error>>()?;
 
     // TODO: Handle error(s)
-    Ok(hayagriva::io::from_biblatex_str(&bibtex_content).unwrap())
+    let entries = from_biblatex_str(&bibtex_content).unwrap();
+    Ok(entries)
 }

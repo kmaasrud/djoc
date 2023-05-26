@@ -1,6 +1,8 @@
 use std::path::PathBuf;
 
-use crate::manifest::BuilderManifest;
+use hayagriva::Entry;
+
+use crate::{bib, manifest::BuilderManifest};
 
 const DEFAULT_LOCALE: &str = "en_US";
 
@@ -13,6 +15,7 @@ pub struct Builder {
     pub(crate) build_dir: Option<PathBuf>,
     pub(crate) locale: String,
     pub(crate) add_title: bool,
+    pub(crate) bib: Vec<Entry>,
 }
 
 impl Default for Builder {
@@ -22,6 +25,7 @@ impl Default for Builder {
             build_dir: None,
             locale: DEFAULT_LOCALE.to_string(),
             add_title: false,
+            bib: Vec::new(),
         }
     }
 }
@@ -33,6 +37,7 @@ impl Builder {
             locale: manifest.locale.clone().unwrap_or(DEFAULT_LOCALE.into()),
             build_dir: manifest.build_dir.clone(),
             add_title: manifest.add_title.unwrap_or(false),
+            bib: bib::get_bib_entries().unwrap(),
         }
     }
 

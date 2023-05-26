@@ -31,6 +31,7 @@
 //! ```
 
 mod author;
+mod bib;
 mod builder;
 mod date;
 mod document;
