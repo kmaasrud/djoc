@@ -209,6 +209,7 @@ impl<'s> Writer<'s> {
                             out.write_str(r"[\done]")?;
                         }
                     }
+                    Container::LinkDefinition { label: _ } => self.emit = Emit::None,
                     _ => {}
                 }
             }
@@ -260,6 +261,7 @@ impl<'s> Writer<'s> {
                     self.emit = Emit::Escaped;
                     writeln!(out, r"\end{{verbatim}}")?;
                 }
+                Container::LinkDefinition { label: _ } => self.emit = Emit::Escaped,
                 _ => {}
             },
         }
