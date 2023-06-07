@@ -37,18 +37,25 @@ impl Builder {
         mut w: W,
     ) -> Result<(), HtmlError> {
         let mut inner = || -> Result<(), HtmlError> {
-            writeln!(w, "<!DOCTYPE html>\n<html lang=\"en\">\n<head>")?;
-            writeln!(w, "<style>")?;
-            w.write_all(MAIN_CSS)?;
-            writeln!(w, "</style>")?;
-            w.write_all(KATEX_CSS)?;
-            writeln!(w, "<body>")?;
+            if self.standalone {
+                writeln!(w, "<!DOCTYPE html>\n<html lang=\"en\">\n<head>")?;
+                writeln!(w, "<style>")?;
+                w.write_all(MAIN_CSS)?;
+                writeln!(w, "</style>")?;
+                w.write_all(KATEX_CSS)?;
+
+                writeln!(w, "</head>")?;
+                writeln!(w, "<body>")?;
+            }
 
             document
                 .texts
                 .par_iter()
                 .try_fold_with(Vec::new(), |mut buf, text| {
-                    let mut opts = katex::Opts::default();
+                    let mut opts = katex::Opts::builder()
+                        .throw_on_error(false)
+                        .build()
+                        .unwrap();
                     let mut in_math = false;
                     let events = Parser::new(text).map(|event| match event {
                         Event::Start(Container::Math { display }, attrs) => {
@@ -73,7 +80,10 @@ impl Builder {
                 .into_iter()
                 .try_for_each(|s| w.write_all(&s))?;
 
-            writeln!(w, "</body>\n</html>")?;
+            if self.standalone {
+                writeln!(w, "</body>\n</html>")?;
+            }
+
             Ok(())
         };
 
