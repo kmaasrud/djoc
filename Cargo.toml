@@ -10,11 +10,10 @@ include = ["src/html/katex.css", "src/html/main.css"]
 
 
 [dependencies]
-anyhow = "1.0.69"
+anyhow = { version = "1.0.69", optional = true }
 dirs = "4.0.0"
 hayagriva = "0.3.0"
 jotdown = "0.3.0"
-katex = { version = "0.4.6", default-features = false, features = ["duktape"] }
 log = { version = "0.4.17", features = ["std"] }
 rayon = "1.6.1"
 serde = { version = "1.0.152", features = ["derive"] }
@@ -22,18 +21,31 @@ toml = "0.7.2"
 ureq = "2.6.2"
 url = "2.3.1"
 [dependencies.chrono]
-version = "0.4.24"
+version = "0.4.26"
 default-features = false
 features = ["std", "unstable-locales"]
 [dependencies.clap]
 version = "4.1.4"
 default-features = false
 features = ["cargo", "derive", "error-context", "help", "usage", "std"]
+optional = true
+[dependencies.katex]
+version = "0.4.6"
+default-features = false
+optional = true
 [dependencies.tectonic]
 version = "0.13.0"
 default-features = false
 features = ["geturl-reqwest", "native-tls-vendored"]
+optional = true
 
+[features]
+default = ["cli", "html", "latex", "pdf"]
+cli = ["anyhow", "clap", "chrono/clock"]
+html = ["katex/duktape"]
+html-wasm = ["katex/wasm-js"]
+latex = []
+pdf = ["anyhow", "latex", "tectonic"]
 
 # VCPKG
 [package.metadata.vcpkg]

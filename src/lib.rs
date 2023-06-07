@@ -30,18 +30,22 @@
 //! assert!(latex.contains("This is some text"));
 //! ```
 
+pub(crate) mod walk;
+
+pub mod manifest;
+
+#[cfg(any(feature = "html", feature = "html-wasm"))]
+pub mod html;
+#[cfg(feature = "latex")]
+pub mod latex;
+#[cfg(feature = "pdf")]
+pub mod pdf;
+
 mod author;
 mod builder;
 mod date;
 mod document;
 mod utils;
-
-pub(crate) mod latex;
-pub(crate) mod walk;
-
-pub mod html;
-pub mod manifest;
-pub mod pdf;
 
 pub use author::Author;
 pub use builder::Builder;

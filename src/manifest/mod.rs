@@ -42,6 +42,9 @@ pub struct Manifest {
 }
 
 impl Manifest {
+    // NOTE: Allow unused variables to avoid compiler warnings when all features are
+    // disabled
+    #[allow(unused_variables)]
     /// Executes the build process as specified for all documents defined in the
     /// manifest.
     pub fn execute(self) -> Result<(), ExecutionError> {
@@ -59,9 +62,15 @@ impl Manifest {
                         .with_extension(output.format.as_ref());
                     let file = File::create(path)?;
                     match output.format {
+                        #[cfg(feature = "pdf")]
                         OutputFormat::Pdf => builder.write_pdf(&document, file)?,
+                        #[cfg(feature = "latex")]
                         OutputFormat::Latex => builder.write_latex(&document, file)?,
+                        #[cfg(any(feature = "html", feature = "html-wasm"))]
                         OutputFormat::Html => builder.write_html(&document, file)?,
+                        OutputFormat::Unknown(format) => {
+                            return Err(ExecutionError::UnknownFormat(format))
+                        }
                     };
                 }
 
@@ -73,17 +82,17 @@ impl Manifest {
 /// Represents an error that occurred during the execution of a manifest.
 #[derive(Debug)]
 pub enum ExecutionError {
-    Pdf(crate::pdf::PdfError),
+    #[cfg(any(feature = "html", feature = "html-wasm"))]
     Html(crate::html::HtmlError),
     Io(std::io::Error),
+    #[cfg(feature = "latex")]
+    Latex(crate::latex::LatexError),
+    #[cfg(feature = "pdf")]
+    Pdf(crate::pdf::PdfError),
+    UnknownFormat(String),
 }
 
-impl From<crate::pdf::PdfError> for ExecutionError {
-    fn from(e: crate::pdf::PdfError) -> Self {
-        Self::Pdf(e)
-    }
-}
-
+#[cfg(any(feature = "html", feature = "html-wasm"))]
 impl From<crate::html::HtmlError> for ExecutionError {
     fn from(e: crate::html::HtmlError) -> Self {
         Self::Html(e)
@@ -96,12 +105,31 @@ impl From<std::io::Error> for ExecutionError {
     }
 }
 
+#[cfg(feature = "latex")]
+impl From<crate::latex::LatexError> for ExecutionError {
+    fn from(e: crate::latex::LatexError) -> Self {
+        Self::Latex(e)
+    }
+}
+
+#[cfg(feature = "pdf")]
+impl From<crate::pdf::PdfError> for ExecutionError {
+    fn from(e: crate::pdf::PdfError) -> Self {
+        Self::Pdf(e)
+    }
+}
+
 impl Display for ExecutionError {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         match self {
-            Self::Pdf(e) => write!(f, "failed during pdf build: {e}"),
-            Self::Io(e) => write!(f, "io error: {e}"),
+            #[cfg(any(feature = "html", feature = "html-wasm"))]
             Self::Html(e) => write!(f, "failed during html build: {e}"),
+            Self::Io(e) => write!(f, "io error: {e}"),
+            #[cfg(feature = "latex")]
+            Self::Latex(e) => write!(f, "failed during latex build: {e}"),
+            #[cfg(feature = "pdf")]
+            Self::Pdf(e) => write!(f, "failed during pdf build: {e}"),
+            Self::UnknownFormat(e) => write!(f, "unknown output format: {e}"),
         }
     }
 }
@@ -109,9 +137,14 @@ impl Display for ExecutionError {
 impl Error for ExecutionError {
     fn source(&self) -> Option<&(dyn Error + 'static)> {
         match self {
-            Self::Pdf(e) => Some(e),
-            Self::Io(e) => Some(e),
+            #[cfg(any(feature = "html", feature = "html-wasm"))]
             Self::Html(e) => Some(e),
+            Self::Io(e) => Some(e),
+            #[cfg(feature = "latex")]
+            Self::Latex(e) => Some(e),
+            #[cfg(feature = "pdf")]
+            Self::Pdf(e) => Some(e),
+            Self::UnknownFormat(_) => None,
         }
     }
 }

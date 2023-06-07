@@ -14,11 +14,8 @@ use std::{
     time::SystemTime,
 };
 
-use jotdown::{Parser, Render};
-use rayon::prelude::*;
-
 use super::Builder;
-use crate::{latex, Document};
+use crate::{latex::LatexError, Document};
 
 impl Builder {
     /// Build the document as PDF and write it to the given writer.
@@ -87,82 +84,6 @@ impl Builder {
         }
         Ok(())
     }
-
-    /// Build the document as LaTeX and write it to the given writer.
-    ///
-    /// # Examples
-    ///
-    /// ```
-    /// use djoc::{Builder, Document};
-    ///
-    /// let mut builder = Builder::default();
-    /// let document = Document::from("Hello, world!".to_string());
-    /// builder
-    ///     .write_latex(&document, &mut std::io::stdout())
-    ///     .unwrap();
-    /// ```
-    pub fn write_latex<W: Write>(&self, document: &Document, mut w: W) -> Result<(), PdfError> {
-        let mut inner = || -> Result<(), PdfError> {
-            writeln!(w, r"\documentclass{{{}}}", document.document_type.as_ref())?;
-
-            DEFAULT_PACKAGES
-                .iter()
-                .try_for_each(|package| writeln!(w, r"\usepackage{{{package}}}"))?;
-            w.write_all(DEFAULT_PREAMBLE)?;
-
-            let lang = self
-                .locale
-                .split_once('_')
-                .map_or(self.locale.as_str(), |(s, _)| s);
-            writeln!(w, r"\setdefaultlanguage{{{lang}}}")?;
-
-            write!(w, r"\title{{")?;
-            latex::Renderer::default().write(Parser::new(&document.title), &mut w)?;
-            writeln!(w, "}}")?;
-
-            match document.date.format_with_locale(&self.locale) {
-                Some(date) => writeln!(w, r"\date{{{date}}}")?,
-                None => writeln!(w, r"\predate{{}}\date{{}}\postdate{{}}")?,
-            }
-
-            if document.authors.is_empty() {
-                writeln!(w, r"\preauthor{{}}\author{{}}\postauthor{{}}")?;
-            }
-
-            for author in &document.authors {
-                write!(w, r"\author{{{}", author.name)?;
-                if let Some(ref email) = author.email {
-                    write!(w, r" \thanks{{\href{{mailto:{email}}}{{{email}}}}}")?;
-                }
-                writeln!(w, "}}")?;
-            }
-
-            writeln!(w, r"\begin{{document}}")?;
-
-            if self.add_title {
-                writeln!(w, r"\maketitle")?;
-            }
-
-            document
-                .texts
-                .par_iter()
-                .try_fold_with(Vec::new(), |mut buf, text| {
-                    latex::Renderer::default()
-                        .number_sections(self.number_sections)
-                        .write(Parser::new(text), &mut buf)?;
-                    Ok(buf)
-                })
-                .collect::<Result<Vec<Vec<u8>>, PdfError>>()?
-                .into_iter()
-                .try_for_each(|s| w.write_all(&s))?;
-
-            writeln!(w, r"\end{{document}}")?;
-
-            Ok(())
-        };
-
-        inner().map_err(|e| e.document_name(&document.title))
-    }
 }
 
 /// An error that can occur when building a PDF.
@@ -204,6 +125,15 @@ impl From<tectonic::Error> for PdfError {
     }
 }
 
+impl From<LatexError> for PdfError {
+    fn from(e: LatexError) -> Self {
+        Self {
+            document_name: None,
+            kind: PdfErrorKind::Latex(e),
+        }
+    }
+}
+
 impl Display for PdfError {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         if let Some(name) = &self.document_name {
@@ -213,6 +143,7 @@ impl Display for PdfError {
         match &self.kind {
             PdfErrorKind::Tectonic(_) => write!(f, "tectonic errored during pdf build"),
             PdfErrorKind::Io(e) => write!(f, "io error: {e}"),
+            PdfErrorKind::Latex(e) => write!(f, "djot to latex error: {e}"),
             PdfErrorKind::CreateDir { path, .. } => {
                 write!(f, "failed to create directory {path:?}")
             }
@@ -226,6 +157,7 @@ impl Error for PdfError {
         match &self.kind {
             PdfErrorKind::Tectonic(source) => Some(source),
             PdfErrorKind::Io(source) => Some(source),
+            PdfErrorKind::Latex(source) => Some(source),
             PdfErrorKind::CreateDir { source, .. } => Some(source),
             PdfErrorKind::NoPdfCreated => None,
         }
@@ -240,51 +172,7 @@ unsafe impl Sync for PdfError {}
 pub enum PdfErrorKind {
     Tectonic(tectonic::Error),
     Io(io::Error),
+    Latex(LatexError),
     CreateDir { path: PathBuf, source: io::Error },
     NoPdfCreated,
 }
-
-const DEFAULT_PACKAGES: [&str; 18] = [
-    "amsmath",
-    "authblk",
-    "bookmark",
-    "graphicx",
-    "hyperref",
-    "microtype",
-    "parskip",
-    "soul",
-    "titling",
-    "upquote",
-    "xurl",
-    "xcolor",
-    "lmodern",
-    "unicode-math",
-    "polyglossia",
-    "pifont",
-    "enumitem",
-    "subcaption",
-];
-
-const DEFAULT_PREAMBLE: &[u8] = br#"
-\defaultfontfeatures{Scale=MatchLowercase}
-\defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
-
-% Task lists
-\newcommand{\checkbox}{\text{\fboxsep=-.15pt\fbox{\rule{0pt}{1.5ex}\rule{1.5ex}{0pt}}}}
-\newcommand{\done}{\rlap{\checkbox}{\raisebox{2pt}{\large\hspace{1pt}\ding{51}}}\hspace{-2.5pt}}
-\newlist{tasklist}{itemize}{2}
-\setlist[tasklist]{label=\checkbox}
-
-% Other settings
-\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
-\setlength{\emergencystretch}{3em} % prevent overfull lines
-\providecommand{\tightlist}{%
-  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
-\urlstyle{same} % disable monospaced font for URLs
-\hypersetup{
-  colorlinks=true,
-  allcolors=.,
-  urlcolor=blue,
-  linktocpage,
-  pdfcreator={djoc}}
-"#;
