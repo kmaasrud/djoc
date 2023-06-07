@@ -1,0 +1,183 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+html {
+  overflow-x: hidden;
+  color: #1a1a1a;
+  text-rendering: optimizeLegibility;
+  hyphens: auto;
+  overflow-wrap: break-word;
+  font-kerning: normal;
+}
+
+body {
+  height: calc(100vh - 40px - 80px - 60px);
+  margin: 40px auto 80px;
+  width: 90%;
+}
+
+#djoc-sandbox-header h1 {
+  height: 60px;
+  margin: 0;
+}
+
+#djoc-sandbox {
+  height: 100%;
+}
+
+#djoc-sandbox nav {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+#djoc-panes {
+  display: flex;
+  height: 100%;
+  gap: 1rem;
+}
+
+#djoc-input {
+  width: 50%;
+  height: 100%;
+  overflow: scroll;
+  resize: none;
+  box-sizing: border-box;
+  margin: 0;
+  border: 1px solid;
+  padding: 1em;
+  background-color: #eee;
+}
+
+#djoc-output {
+  width: 50%;
+  height: 100%;
+  overflow: scroll;
+  box-sizing: border-box;
+  margin: 0;
+  border: 1px solid;
+  border-radius: 4px;
+  padding: 1em;
+}
+
+#djoc-output *:first-child {
+  margin-top: 0;
+}
+
+#djoc-output.verbatim {
+  font-family: monospace;
+  white-space: pre;
+}
+
+[data-placeholder]:empty:before {
+  content: attr(data-placeholder);
+  color: #888;
+  font-style: italic;
+}
+
+header * {
+  text-align: center;
+}
+
+h1 {
+  font-size: 2rem;
+  line-height: 3.25rem;
+  margin-bottom: 1rem;
+}
+
+h2 {
+  font-size: 1.7rem;
+  line-height: 2rem;
+  margin-top: 3rem;
+}
+
+h3 {
+  font-size: 1.4rem;
+  margin-top: 2.5rem;
+}
+
+h4 {
+  font-size: 1.2rem;
+  margin-top: 2rem;
+}
+
+h5 {
+  font-size: 1rem;
+  margin-top: 1.8rem;
+}
+
+h6 {
+  font-size: 1rem;
+  font-style: italic;
+  font-weight: normal;
+  margin-top: 2.5rem;
+}
+
+h3,
+h4,
+h5,
+h6 {
+  line-height: 1.625rem;
+}
+
+h1+h2 {
+  margin-top: 1.625rem;
+}
+
+h2+h3,
+h3+h4,
+h4+h5 {
+  margin-top: 0.8rem;
+}
+
+h5+h6 {
+  margin-top: -0.8rem;
+}
+
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-bottom: 0.8rem;
+}
+
+a {
+  color: #1a1a1a;
+}
+
+a:visited {
+  color: #414141;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: auto;
+}
+
+code {
+  font-family: monospace;
+}
+
+pre {
+  padding: 1rem 1.4rem;
+  max-width: 100%;
+  overflow: auto;
+  border-radius: 4px;
+  background: #eee;
+}
+
+pre code {
+  position: relative;
+}
