@@ -48,6 +48,24 @@ impl Builder {
                 writeln!(w, "<body>")?;
             }
 
+            if self.add_title {
+                writeln!(w, "<header>")?;
+                writeln!(w, "<h1>{}</h1>", document.title)?;
+                if !document.authors.is_empty() {
+                    write!(w, "<p>")?;
+                    for (i, author) in document.authors.iter().enumerate() {
+                        match i {
+                            0 => (),
+                            i if i == document.authors.len() - 1 => write!(w, " and ")?,
+                            _ => write!(w, ", ")?,
+                        }
+                        write!(w, "{}", author)?;
+                    }
+                    writeln!(w, "</p>")?;
+                }
+                writeln!(w, "</header>")?;
+            }
+
             document
                 .texts
                 .par_iter()
