@@ -3,9 +3,11 @@
 
 <head>
   <title>djoc sandbox</title>
-  <link rel="stylesheet" href="main.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/katex.min.css"
     integrity="sha384-3UiQGuEI4TTMaFmGIZumfRPtfKQ3trwQE2JgosJxCnGmQpL/lJdjpcHkaaFwHlcI" crossorigin="anonymous">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+  <link rel="stylesheet" href="main.css">
 </head>
 
 <body>
@@ -14,46 +16,7 @@
   </header>
 
   <div id="djoc-sandbox">
-    <script type="module">
-      import init, {Djoc} from './djoc_sandbox.js';
-      await init();
-
-      let title = document.getElementById("djoc-title");
-      let author = document.getElementById("djoc-author");
-      let format = document.getElementById("djoc-format");
-      let input = document.getElementById("djoc-input");
-      let output = document.getElementById("djoc-output");
-
-      console.log("hello world");
-      let djoc = Djoc.new();
-
-      function render() {
-        djoc.update_doc(input.innerText);
-        djoc.set_title(title.value);
-        djoc.set_author(author.value);
-
-        if (format.value == "preview") {
-          output.classList.remove("verbatim")
-          output.innerHTML = djoc.render();
-        } else if (format.value == "latex") {
-          output.classList.add("verbatim")
-          output.innerText = djoc.render_latex();
-        } else if (format.value == "html") {
-          output.classList.add("verbatim")
-          output.innerText = djoc.render();
-        }
-      }
-
-      render();
-
-      input.onkeyup = render;
-      format.onchange = render;
-      title.onkeyup = render;
-      author.onkeyup = render;
-
-      // auto focus on input on load
-      setTimeout(() => {input.focus();}, 0);
-    </script>
+    <script type="module" src="index.js"></script>
     <nav>
       <input id="djoc-title" placeholder="Document title">
       <input id="djoc-author" placeholder="Author">

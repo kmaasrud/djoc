@@ -47,6 +47,7 @@ body {
 }
 
 #djoc-input {
+  font-family: monospace;
   width: 50%;
   height: 100%;
   overflow: scroll;
@@ -73,9 +74,13 @@ body {
   margin-top: 0;
 }
 
-#djoc-output.verbatim {
+#djoc-output.html {
   font-family: monospace;
   white-space: pre;
+}
+
+#djoc-output.latex {
+  font-family: monospace;
 }
 
 [data-placeholder]:empty:before {
@@ -180,4 +185,9 @@ pre {
 
 pre code {
   position: relative;
+}
+
+.hljs {
+  padding: 0 !important;
+  background: none;
 }
