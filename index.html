@@ -1,166 +1,74 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-	<meta name="generator" content="Hugo 0.101.0" />
-    <title>MDoc</title>
-    <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<html>
 
+<head>
+  <title>djoc sandbox</title>
+  <link rel="stylesheet" href="main.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.7/dist/katex.min.css"
+    integrity="sha384-3UiQGuEI4TTMaFmGIZumfRPtfKQ3trwQE2JgosJxCnGmQpL/lJdjpcHkaaFwHlcI" crossorigin="anonymous">
+</head>
 
-<link rel="stylesheet" href="/mdoc/normalize.min.6dec53ee20f5bc2905289325994cab42171978d2d264472563bf2e1eab0da1cd.css" />
+<body>
+  <header id="djoc-sandbox-header">
+    <h1>djoc sandbox</h1>
+  </header>
 
+  <div id="djoc-sandbox">
+    <script type="module">
+      import init, {Djoc} from './djoc_sandbox.js';
+      await init();
 
-<link rel="stylesheet" href="/mdoc/main.min.2783f0724f814acb071aab731d45fd1d237e28c178f4f597d9231937bc78d8b3.css" />
+      let title = document.getElementById("djoc-title");
+      let author = document.getElementById("djoc-author");
+      let format = document.getElementById("djoc-format");
+      let input = document.getElementById("djoc-input");
+      let output = document.getElementById("djoc-output");
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.css" integrity="sha384-ZPe7yZ91iWxYumsBEOn7ieg8q/o+qh/hQpSaPow8T6BwALcXSCS6C6fSRPIAnTQs" crossorigin="anonymous">
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/katex.min.js" integrity="sha384-ljao5I1l+8KYFXG7LNEA7DyaFvuvSCmedUf6Y6JI7LJqiu8q5dEivP2nDdFH31V4" crossorigin="anonymous"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.15.6/dist/contrib/auto-render.min.js" integrity="sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR" crossorigin="anonymous"></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        renderMathInElement(document.body, {
-          delimiters: [
-              {left: '$$', right: '$$', display: true},
-              {left: '$', right: '$', display: false},
-              {left: '\\(', right: '\\)', display: false},
-              {left: '\\[', right: '\\]', display: true}
-          ],
-          throwOnError : false,
-        });
-    });
-</script>
+      console.log("hello world");
+      let djoc = Djoc.new();
 
+      function render() {
+        djoc.update_doc(input.innerText);
+        djoc.set_title(title.value);
+        djoc.set_author(author.value);
 
-  </head>
-  <body>
+        if (format.value == "preview") {
+          output.classList.remove("verbatim")
+          output.innerHTML = djoc.render();
+        } else if (format.value == "latex") {
+          output.classList.add("verbatim")
+          output.innerText = djoc.render_latex();
+        } else if (format.value == "html") {
+          output.classList.add("verbatim")
+          output.innerText = djoc.render();
+        }
+      }
+
+      render();
+
+      input.onkeyup = render;
+      format.onchange = render;
+      title.onkeyup = render;
+      author.onkeyup = render;
+
+      // auto focus on input on load
+      setTimeout(() => {input.focus();}, 0);
+    </script>
     <nav>
-  <h1><a href="/mdoc">MDoc</a></h1>
-  <ul>
-    
-    
-      
-        <li class="">
-          <a href="/mdoc/installing/">
-            
-            <span>Installing</span>
-          </a>
-        </li>
-      
-    
-      
-        <details >
-          <summary class="">
-            Usage
-          </summary>
-          <ul class="sub-menu">
-            
-              <li class="">
-                <a href="/mdoc/usage/getting-started/">Getting started</a>
-              </li>
-            
-              <li class="">
-                <a href="/mdoc/usage/workflow/">The MDoc workflow</a>
-              </li>
-            
-              <li class="">
-                <a href="/mdoc/usage/commands/">Commands</a>
-              </li>
-            
-              <li class="">
-                <a href="/mdoc/usage/config/">Configuring MDoc</a>
-              </li>
-            
-              <li class="">
-                <a href="/mdoc/usage/bibliography/">Handling your bibliography</a>
-              </li>
-            
-          </ul>
-        </details>
-      
-    
-      
-        <details >
-          <summary class="">
-            Markup
-          </summary>
-          <ul class="sub-menu">
-            
-              <li class="">
-                <a href="/mdoc/markdown/why-markdown/">Why Markdown?</a>
-              </li>
-            
-              <li class="">
-                <a href="/mdoc/markdown/paragraphs/">Paragraphs</a>
-              </li>
-            
-              <li class="">
-                <a href="/mdoc/markdown/headings/">Headings</a>
-              </li>
-            
-              <li class="">
-                <a href="/mdoc/markdown/formatting/">General formatting</a>
-              </li>
-            
-              <li class="">
-                <a href="/mdoc/markdown/code/">Code</a>
-              </li>
-            
-              <li class="">
-                <a href="/mdoc/markdown/math/">Math</a>
-              </li>
-            
-              <li class="">
-                <a href="/mdoc/markdown/lists/">Lists</a>
-              </li>
-            
-              <li class="">
-                <a href="/mdoc/markdown/images-and-figures/">Images and figures</a>
-              </li>
-            
-              <li class="">
-                <a href="/mdoc/markdown/block-quotes/">Block quotes</a>
-              </li>
-            
-          </ul>
-        </details>
-      
-    
-  </ul>
-</nav>
+      <input id="djoc-title" placeholder="Document title">
+      <input id="djoc-author" placeholder="Author">
+      <select id="djoc-format">
+        <option value="preview">Preview</option>
+        <option value="html">HTML</option>
+        <option value="latex">LaTeX</option>
+      </select>
+    </nav>
+    <div id="djoc-panes">
+      <pre id="djoc-input" contenteditable="true" data-placeholder="Input djot here"></pre>
+      <div id="djoc-output" readonly>
+      </div>
+    </div>
+  </div>
+</body>
 
-    <main>
-      <h2 class="post-title">
-        
-      </h2>
-      <article>
-        <p>It is time for academic writing to step out of it&rsquo;s archaic ways and into the modern world! With the rise of Markdown as the de facto markup language of the internet, why should academia lag behind. You should be able to write scientific content, confident that it is publishable both physically and on the web. Additionally, you should have the comfort of knowing your content is readable in it&rsquo;s raw form; this will help it stand the test of time.</p>
-<h3 id="the-issue-with-latex">The issue with $\LaTeX$</h3>
-<p><a href="https://www.latex-project.org/">LaTeX</a> is incredible, but it has three key flaws:</p>
-<ul>
-<li>It&rsquo;s tooling is bloated and fractioned (to say the least);</li>
-<li>Handling bigger projects is a hastle;</li>
-<li>The syntax is obscure.</li>
-</ul>
-<p>The latter issue is exemplified on it&rsquo;s own introduction page<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>. Consider this example:</p>
-<pre tabindex="0"><code>\documentclass{article}
-\begin{document}
-   Hello world!
-\end{document}
-</code></pre><p>Four lines for a simple hello world? The situation gets much hairier when we start to introduce macros to the preamble, and insert environments to get different content displayed. Compare the above with the same document written in Markdown:</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-markdown" data-lang="markdown"><span style="display:flex;"><span>Hello world!
-</span></span></code></pre></div><p>Much better!</p>
-<h3 id="the-solution">The solution</h3>
-<p>What if we used TeX/LaTeX only as an intermediate step when producing a document? It would then function like an <em>assembly language</em> of sorts, and we could opt for a <em>higher level</em> markup language that is simpler to both read and write. With this, we gain simplicity, without abandoning the centuries of typesetting expertise that is TeX/LaTeX.</p>
-<p>This is the solution MDoc proposes as a way into the modern world. Through the help of the incredible document converter <a href="https://pandoc.org/">Pandoc</a> and the amazing TeX/LaTeX engine made by the <a href="https://github.com/tectonic-typesetting/tectonic">Tectonic</a> team, we have a solid foundation for acheiving this goal. With MDoc, we also provide tooling for handling all the nitty gritty of maintaining bigger documents, like bibliography handling, metadata and styling.</p>
-<div class="footnotes" role="doc-endnotes">
-<hr>
-<ol>
-<li id="fn:1">
-<p>You can find the page <a href="https://www.latex-project.org/about/">here</a>. I&rsquo;ve modified the example a bit, for brevity.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
-</li>
-</ol>
-</div>
-
-      </article>
-    </main>
-  </body>
 </html>
