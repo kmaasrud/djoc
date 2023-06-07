@@ -81,4 +81,9 @@ impl Builder {
         self.standalone = standalone;
         self
     }
+
+    pub fn add_title(&mut self, add_title: bool) -> &mut Self {
+        self.add_title = add_title;
+        self
+    }
 }
