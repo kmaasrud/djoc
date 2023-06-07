@@ -28,16 +28,22 @@ pub fn compile(
         let file = File::create(&output)?;
         debug!("Writing to {output:?}");
         match format.as_str() {
+            #[cfg(any(feature = "html", feature = "html-wasm"))]
             "html" => builder.write_html(&doc, file)?,
-            "tex" => builder.write_latex(&doc, file)?,
+            #[cfg(feature = "latex")]
+            "tex" | "latex" => builder.write_latex(&doc, file)?,
+            #[cfg(feature = "pdf")]
             "pdf" => builder.write_pdf(&doc, file)?,
             _ => bail!("Unknown format `{}`", format),
         };
     } else {
         let stdout = std::io::stdout();
         match format.as_str() {
+            #[cfg(any(feature = "html", feature = "html-wasm"))]
             "html" => builder.write_html(&doc, stdout)?,
-            "tex" => builder.write_latex(&doc, stdout)?,
+            #[cfg(feature = "latex")]
+            "tex" | "latex" => builder.write_latex(&doc, stdout)?,
+            #[cfg(feature = "pdf")]
             "pdf" => builder.write_pdf(&doc, stdout)?,
             _ => bail!("Unknown format `{}`", format),
         };

@@ -32,20 +32,42 @@ pub struct Output {
 }
 
 #[derive(Clone, Deserialize)]
-#[serde(rename_all = "kebab-case")]
+#[serde(rename_all = "kebab-case", from = "String")]
 pub enum OutputFormat {
+    #[cfg(feature = "pdf")]
     Pdf,
+    #[cfg(any(feature = "html", feature = "html-wasm"))]
     Html,
     #[serde(alias = "tex")]
+    #[cfg(feature = "latex")]
     Latex,
+    Unknown(String),
+}
+
+impl From<String> for OutputFormat {
+    fn from(s: String) -> Self {
+        match s.as_str() {
+            #[cfg(feature = "pdf")]
+            "pdf" => OutputFormat::Pdf,
+            #[cfg(any(feature = "html", feature = "html-wasm"))]
+            "html" => OutputFormat::Html,
+            #[cfg(feature = "latex")]
+            "tex" => OutputFormat::Latex,
+            _ => OutputFormat::Unknown(s),
+        }
+    }
 }
 
 impl AsRef<str> for OutputFormat {
     fn as_ref(&self) -> &str {
         match self {
+            #[cfg(feature = "pdf")]
             OutputFormat::Pdf => "pdf",
+            #[cfg(any(feature = "html", feature = "html-wasm"))]
             OutputFormat::Html => "html",
-            OutputFormat::Latex => "tex",
+            #[cfg(feature = "latex")]
+            OutputFormat::Latex => "latex",
+            OutputFormat::Unknown(_) => "unknown",
         }
     }
 }

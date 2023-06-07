@@ -1,7 +1,9 @@
+#[cfg(feature = "cli")]
 mod cli;
 
 use std::io::{self, Stderr, Write};
 
+#[cfg(feature = "cli")]
 use anyhow::Result;
 use log::{LevelFilter, Log};
 
@@ -36,6 +38,12 @@ impl Log for Logger {
     }
 }
 
+#[cfg(feature = "cli")]
 fn main() -> Result<()> {
     cli::run()
+}
+
+#[cfg(not(feature = "cli"))]
+fn main() {
+    println!("Build with the `cli` feature to enable the CLI")
 }

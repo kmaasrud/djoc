@@ -4,6 +4,9 @@ use crate::manifest::BuilderManifest;
 
 const DEFAULT_LOCALE: &str = "en_US";
 
+// NOTE: Allow dead code to avoid compiler warnings when all features are
+// disabled
+#[allow(dead_code)]
 /// Struct responsible for building a document.
 ///
 /// It is usually constructed by using the [`Builder::default`] method.
