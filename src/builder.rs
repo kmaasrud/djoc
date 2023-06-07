@@ -16,6 +16,7 @@ pub struct Builder {
     pub(crate) build_dir: Option<PathBuf>,
     pub(crate) locale: String,
     pub(crate) add_title: bool,
+    pub(crate) standalone: bool,
 }
 
 impl Default for Builder {
@@ -25,6 +26,7 @@ impl Default for Builder {
             build_dir: None,
             locale: DEFAULT_LOCALE.to_string(),
             add_title: false,
+            standalone: true,
         }
     }
 }
@@ -36,6 +38,7 @@ impl Builder {
             locale: manifest.locale.clone().unwrap_or(DEFAULT_LOCALE.into()),
             build_dir: manifest.build_dir.clone(),
             add_title: manifest.add_title.unwrap_or(false),
+            standalone: true,
         }
     }
 
@@ -71,6 +74,11 @@ impl Builder {
     /// [BCP 47]: https://tools.ietf.org/html/bcp47
     pub fn locale(&mut self, locale: impl Into<String>) -> &mut Self {
         self.locale = locale.into();
+        self
+    }
+
+    pub fn standalone(&mut self, standalone: bool) -> &mut Self {
+        self.standalone = standalone;
         self
     }
 }
