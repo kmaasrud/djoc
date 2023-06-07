@@ -29,41 +29,43 @@ impl Builder {
     /// ```
     pub fn write_latex<W: Write>(&self, document: &Document, mut w: W) -> Result<(), LatexError> {
         let mut inner = || -> Result<(), LatexError> {
-            writeln!(w, r"\documentclass{{{}}}", document.document_type.as_ref())?;
+            if self.standalone {
+                writeln!(w, r"\documentclass{{{}}}", document.document_type.as_ref())?;
 
-            DEFAULT_PACKAGES
-                .iter()
-                .try_for_each(|package| writeln!(w, r"\usepackage{{{package}}}"))?;
-            w.write_all(DEFAULT_PREAMBLE)?;
+                DEFAULT_PACKAGES
+                    .iter()
+                    .try_for_each(|package| writeln!(w, r"\usepackage{{{package}}}"))?;
+                w.write_all(DEFAULT_PREAMBLE)?;
 
-            let lang = self
-                .locale
-                .split_once('_')
-                .map_or(self.locale.as_str(), |(s, _)| s);
-            writeln!(w, r"\setdefaultlanguage{{{lang}}}")?;
+                let lang = self
+                    .locale
+                    .split_once('_')
+                    .map_or(self.locale.as_str(), |(s, _)| s);
+                writeln!(w, r"\setdefaultlanguage{{{lang}}}")?;
 
-            write!(w, r"\title{{")?;
-            latex::Renderer::default().write(Parser::new(&document.title), &mut w)?;
-            writeln!(w, "}}")?;
-
-            match document.date.format_with_locale(&self.locale) {
-                Some(date) => writeln!(w, r"\date{{{date}}}")?,
-                None => writeln!(w, r"\predate{{}}\date{{}}\postdate{{}}")?,
-            }
-
-            if document.authors.is_empty() {
-                writeln!(w, r"\preauthor{{}}\author{{}}\postauthor{{}}")?;
-            }
-
-            for author in &document.authors {
-                write!(w, r"\author{{{}", author.name)?;
-                if let Some(ref email) = author.email {
-                    write!(w, r" \thanks{{\href{{mailto:{email}}}{{{email}}}}}")?;
-                }
+                write!(w, r"\title{{")?;
+                latex::Renderer::default().write(Parser::new(&document.title), &mut w)?;
                 writeln!(w, "}}")?;
-            }
 
-            writeln!(w, r"\begin{{document}}")?;
+                match document.date.format_with_locale(&self.locale) {
+                    Some(date) => writeln!(w, r"\date{{{date}}}")?,
+                    None => writeln!(w, r"\predate{{}}\date{{}}\postdate{{}}")?,
+                }
+
+                if document.authors.is_empty() {
+                    writeln!(w, r"\preauthor{{}}\author{{}}\postauthor{{}}")?;
+                }
+
+                for author in &document.authors {
+                    write!(w, r"\author{{{}", author.name)?;
+                    if let Some(ref email) = author.email {
+                        write!(w, r" \thanks{{\href{{mailto:{email}}}{{{email}}}}}")?;
+                    }
+                    writeln!(w, "}}")?;
+                }
+
+                writeln!(w, r"\begin{{document}}")?;
+            }
 
             if self.add_title {
                 writeln!(w, r"\maketitle")?;
@@ -82,7 +84,9 @@ impl Builder {
                 .into_iter()
                 .try_for_each(|s| w.write_all(&s))?;
 
-            writeln!(w, r"\end{{document}}")?;
+            if self.standalone {
+                writeln!(w, r"\end{{document}}")?;
+            }
 
             Ok(())
         };
