@@ -32,6 +32,10 @@ article>*+* {
   margin-top: 1em;
 }
 
+header * {
+  text-align: center;
+}
+
 h1 {
   font-size: 2rem;
   line-height: 3.25rem;
