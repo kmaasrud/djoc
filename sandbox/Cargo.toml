@@ -1,0 +1,20 @@
+[package]
+name = "djoc_sandbox"
+description = "WebAssembly sandbox for djoc"
+authors = ["Knut Magnus Aasrud <km@aasrud.com>"]
+license = "MIT"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+console_error_panic_hook = { version = "0.1.6", optional = true }
+djoc = { path = "../", default-features = false, features = ["html-wasm", "latex"] }
+wasm-bindgen = { version = "0.2.86", default-features = false }
+web-sys = "0.3.63"
+[dependencies.katex]
+version = "0.4.6"
+default-features = false
+features = ["wasm-js"]
